@@ -35,13 +35,16 @@ const eventCreator = (tableName: string) => async (input: EventInput) => {
     // Get the table name from the environment variable
     TableName: tableName,
     Item: {
+      // add keys
       PK: `EVENT#${uuid}`,
       SK: `EVENT#${uuid}`,
       GSI1PK: `EVENT#FUTURE`,
       GSI1SK: `DATE#${input.dateStart}#${uuid.substring(0, 8)}`,
+      // add props
       createdAt: `${new Date().toDateString()}`,
       createdBy: input.createdBy,
       dateStart: input.dateStart,
+      eventId: uuid,
       title: input.title,
     },
   }
