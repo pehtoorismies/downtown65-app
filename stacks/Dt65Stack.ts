@@ -28,6 +28,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
     routes: {
       'GET /events': 'functions/get-events.main',
+      'GET /event/{id}': 'functions/get-event.main',
       'POST /event': 'functions/create-event.main',
     },
   })

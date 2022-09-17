@@ -1,81 +1,87 @@
 import { DynamoDB } from 'aws-sdk'
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
 import { v4 as uuidv4 } from 'uuid'
+import Ajv, { JSONSchemaType } from 'ajv'
+import addFormats from 'ajv-formats'
+
+const ajv = new Ajv()
+addFormats(ajv, ['date-time'])
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
-export const main: APIGatewayProxyHandlerV2 = async (event) => {
-  console.log('proces')
-  // console.log(process.env)
-  console.log('/proces')
+interface EventInput {
+  title: string
+  createdBy: string
+  dateStart: string
+}
 
-  if (!event) {
+const schema: JSONSchemaType<EventInput> = {
+  type: 'object',
+  properties: {
+    title: { type: 'string' },
+    createdBy: { type: 'string' },
+    dateStart: { type: 'string', format: 'date-time' },
+  },
+  required: ['title', 'createdBy', 'dateStart'],
+  additionalProperties: false,
+}
+
+const validate = ajv.compile(schema)
+
+const eventCreator = (tableName: string) => async (input: EventInput) => {
+  const uuid = uuidv4()
+
+  const params = {
+    // Get the table name from the environment variable
+    TableName: tableName,
+    Item: {
+      PK: `EVENT#${uuid}`,
+      SK: `EVENT#${uuid}`,
+      GSI1PK: `EVENT#FUTURE`,
+      GSI1SK: `DATE#${input.dateStart}#${uuid.substring(0, 8)}`,
+      createdAt: `${new Date().toDateString()}`,
+      createdBy: input.createdBy,
+      dateStart: input.dateStart,
+      title: input.title,
+    },
+  }
+
+  await dynamoDb.put(params).promise()
+
+  return params.Item
+}
+
+export const main: APIGatewayProxyHandlerV2 = async (event) => {
+  const tableName = process.env.tableName
+  if (!tableName) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: 'Config error process.env.tableName' }),
+    }
+  }
+
+  if (!event.body) {
     return {
       statusCode: 400,
       body: JSON.stringify({ error: 'No JSON body present' }),
     }
   }
 
-  if (!process.env.tableName) {
+  const data = JSON.parse(event.body)
+
+  const valid = validate(data)
+
+  if (!valid) {
     return {
-      statusCode: 500,
-      body: JSON.stringify({ errpr: 'Config error process.env.tableName' }),
+      statusCode: 400,
+      body: JSON.stringify(validate.errors),
     }
   }
 
-  const uuid = uuidv4()
-
-  const dateStart = '2022-07-21T09:35:31.820Z'
-  const title = 'Some title'
-  const createdBy = 'Nurja'
-
-  // const data = JSON.parse(event.body)
-  const params = {
-    // Get the table name from the environment variable
-    TableName: process.env.tableName,
-    Item: {
-      PK: `EVENT#${uuid}`,
-      SK: `EVENT#${uuid}`,
-      GSI1PK: `EVENT#FUTURE`,
-      GSI1SK: `DATE#${dateStart}#${uuid.substring(0, 8)}`,
-      dateStart,
-      title,
-      createdBy,
-      createdAt: `${new Date().toDateString()}`,
-    },
-  }
-  await dynamoDb.put(params).promise()
-
+  const createEvent = eventCreator(tableName)
+  const retValue = await createEvent(data)
   return {
     statusCode: 200,
-    body: JSON.stringify(params.Item),
+    body: JSON.stringify(retValue),
   }
-
-  // const getParams = {
-  //   // Get the table name from the environment variable
-  //   TableName: process.env.tableName,
-  //   // Get the row where the counter is called "hits"
-  //   Key: {
-  //     counter: "eventId",
-  //   },
-  // };
-  // const results = await dynamoDb.get(getParams).promise();
-  //
-  // // If there is a row, then get the value of the
-  // // column called "tally"
-  // let count = results.Item ? results.Item.tally : 0;
-  //
-  // const putParams = {
-  //   TableName: process.env.tableName,
-  //   Key: {
-  //     counter: "eventId",
-  //   },
-  //   // Update the "tally" column
-  //   UpdateExpression: "SET tally = :count",
-  //   ExpressionAttributeValues: {
-  //     // Increase the count
-  //     ":count": ++count,
-  //   },
-  // };
-  // await dynamoDb.update(putParams).promise();
 }
