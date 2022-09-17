@@ -1,0 +1,45 @@
+Arguments: 
+  /Users/pehtoorismies/.nvm/versions/node/v16.14.2/bin/node /Users/pehtoorismies/.nvm/versions/node/v16.14.2/bin/yarn lint
+
+PATH: 
+  /Users/pehtoorismies/.nvm/versions/node/v16.14.2/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.22.18
+
+Node version: 
+  16.14.2
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  SyntaxError: /Users/pehtoorismies/projects/code/downtown65-app/package.json: Unexpected token } in JSON at position 1056
+      at JSON.parse (<anonymous>)
+      at /Users/pehtoorismies/.nvm/versions/node/v16.14.2/lib/node_modules/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/Users/pehtoorismies/.nvm/versions/node/v16.14.2/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /Users/pehtoorismies/.nvm/versions/node/v16.14.2/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  {
+    "name": "@downtown65-app/services",
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {},
+    "dependencies": {
+      "aws-lambda": "1.0.7",
+      "aws-sdk": "^2.1218.0",
+      "uuid": "^9.0.0"
+    },
+    "devDependencies": {
+      "@types/aws-lambda": "^8.10.104",
+      "@types/uuid": "^8.3.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
