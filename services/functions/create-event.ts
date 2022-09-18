@@ -1,8 +1,8 @@
-import { DynamoDB } from 'aws-sdk'
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
-import { v4 as uuidv4 } from 'uuid'
 import Ajv, { JSONSchemaType } from 'ajv'
 import addFormats from 'ajv-formats'
+import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
+import { DynamoDB } from 'aws-sdk'
+import { v4 as uuidv4 } from 'uuid'
 
 const ajv = new Ajv()
 addFormats(ajv, ['date-time'])
@@ -39,7 +39,7 @@ const eventCreator = (tableName: string) => async (input: EventInput) => {
       PK: `EVENT#${uuid}`,
       SK: `EVENT#${uuid}`,
       GSI1PK: `EVENT#FUTURE`,
-      GSI1SK: `DATE#${input.dateStart}#${uuid.substring(0, 8)}`,
+      GSI1SK: `DATE#${input.dateStart}#${uuid.slice(0, 8)}`,
       // add props
       createdAt: `${new Date().toDateString()}`,
       createdBy: input.createdBy,
@@ -82,9 +82,9 @@ export const main: APIGatewayProxyHandlerV2 = async (event) => {
   }
 
   const createEvent = eventCreator(tableName)
-  const retValue = await createEvent(data)
+  const createdEvent = await createEvent(data)
   return {
     statusCode: 200,
-    body: JSON.stringify(retValue),
+    body: JSON.stringify(createdEvent),
   }
 }

@@ -4,6 +4,7 @@
   "plugins": [
     "@typescript-eslint",
     "import",
+    "unicorn",
     "prettier"
   ],
   "extends": [
@@ -12,11 +13,35 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
+    "plugin:unicorn/recommended",
     "prettier"
   ],
   "rules": {
-    "prettier/prettier": ["error"],
     "import/no-unresolved": "off",
-    "import/named": "off"
+    "import/named": "off",
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "unicorn/prevent-abbreviations": [
+      "error",
+      {
+        "replacements": {
+          "db": {
+            "database": false
+          },
+          "res": false,
+          "params": false
+        }
+      }
+    ],
+    "prettier/prettier": [
+      "error"
+    ]
   }
 }

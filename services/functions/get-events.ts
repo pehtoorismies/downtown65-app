@@ -1,5 +1,5 @@
-import { DynamoDB } from 'aws-sdk'
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
+import { DynamoDB } from 'aws-sdk'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
@@ -12,7 +12,7 @@ export const main: APIGatewayProxyHandlerV2 = async () => {
     }
   }
 
-  const queryParams = {
+  const queryParameters = {
     TableName: tableName,
     IndexName: 'events',
     KeyConditionExpression: 'GSI1PK = :gsi1pk',
@@ -20,7 +20,7 @@ export const main: APIGatewayProxyHandlerV2 = async () => {
       ':gsi1pk': 'EVENT#FUTURE',
     },
   }
-  const results = await dynamoDb.query(queryParams).promise()
+  const results = await dynamoDb.query(queryParameters).promise()
 
   return {
     statusCode: 200,
