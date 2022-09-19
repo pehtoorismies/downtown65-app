@@ -1,10 +1,16 @@
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
+import middy from '@middy/core'
+import httpErrorHandler from '@middy/http-error-handler'
+import httpHeaderNormalizer from '@middy/http-header-normalizer'
+import {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyHandlerV2,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda'
 import { DynamoDB } from 'aws-sdk'
-import { itemToEvent } from './support/item-to-event'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
-export const main: APIGatewayProxyHandlerV2 = async (event) => {
+export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const tableName = process.env.tableName
   if (!tableName) {
     return {
@@ -44,3 +50,8 @@ export const main: APIGatewayProxyHandlerV2 = async (event) => {
     body: JSON.stringify(results.Item),
   }
 }
+
+export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
+  .use(httpHeaderNormalizer())
+  .use(httpErrorHandler())
+  .handler(lambdaHandler)

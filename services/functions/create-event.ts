@@ -1,15 +1,22 @@
-import Ajv, { JSONSchemaType } from 'ajv'
-import addFormats from 'ajv-formats'
-import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
+import middy from '@middy/core'
+
+import httpErrorHandler from '@middy/http-error-handler'
+import httpHeaderNormalizer from '@middy/http-header-normalizer'
+import jsonBodyParser from '@middy/http-json-body-parser'
+
+import validator from '@middy/validator'
+import {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyHandlerV2,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda'
+
 import { DynamoDB } from 'aws-sdk'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 
 import { Dt65Event } from './support/dt65-event'
 import { itemToEvent } from './support/item-to-event'
-
-const ajv = new Ajv()
-addFormats(ajv, ['date-time'])
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
@@ -19,18 +26,23 @@ interface EventInput {
   dateStart: string
 }
 
-const schema: JSONSchemaType<EventInput> = {
-  type: 'object',
-  properties: {
-    title: { type: 'string' },
-    createdBy: { type: 'string' },
-    dateStart: { type: 'string', format: 'date-time' },
+const eventSchema = {
+  input: {
+    type: 'object',
+    properties: {
+      body: {
+        type: 'object',
+        required: ['title'],
+        properties: {
+          title: { type: 'string' },
+          dateStart: { type: 'string', format: 'date-time' },
+          createdBy: { type: 'string' },
+        },
+      },
+    },
+    required: ['body'],
   },
-  required: ['title', 'createdBy', 'dateStart'],
-  additionalProperties: false,
 }
-
-const validate = ajv.compile(schema)
 
 const eventCreator =
   (tableName: string) =>
@@ -64,7 +76,7 @@ const eventCreator =
     return itemToEvent(params.Item)
   }
 
-export const main: APIGatewayProxyHandlerV2 = async (event) => {
+export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const tableName = process.env.tableName
   if (!tableName) {
     return {
@@ -73,22 +85,13 @@ export const main: APIGatewayProxyHandlerV2 = async (event) => {
     }
   }
 
-  if (!event.body) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'No JSON body present' }),
-    }
-  }
+  console.log('event.body')
+  const { title, dateStart, createdBy } = event.body as unknown as EventInput
 
-  const data = JSON.parse(event.body)
-
-  const valid = validate(data)
-
-  if (!valid) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify(validate.errors),
-    }
+  const data = {
+    title,
+    dateStart,
+    createdBy,
   }
 
   const createEvent = eventCreator(tableName)
@@ -99,3 +102,10 @@ export const main: APIGatewayProxyHandlerV2 = async (event) => {
     body: JSON.stringify(createdEvent),
   }
 }
+
+export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
+  .use(httpHeaderNormalizer())
+  .use(jsonBodyParser())
+  .use(validator({ eventSchema }))
+  .use(httpErrorHandler())
+  .handler(lambdaHandler)

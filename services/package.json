@@ -5,8 +5,10 @@
   "scripts": {},
   "dependencies": {
     "@middy/core": "3.3.4",
-    "ajv": "^8.11.0",
-    "ajv-formats": "2.1.1",
+    "@middy/http-error-handler": "3.3.4",
+    "@middy/http-header-normalizer": "3.3.4",
+    "@middy/http-json-body-parser": "3.3.4",
+    "@middy/validator": "3.3.4",
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1218.0",
     "date-fns": "2.29.3",
