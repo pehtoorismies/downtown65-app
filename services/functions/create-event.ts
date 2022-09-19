@@ -4,7 +4,9 @@ import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
 import { DynamoDB } from 'aws-sdk'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
-import { Dt65Event } from '../interface/dt65-event'
+
+import { Dt65Event } from './support/dt65-event'
+import { itemToEvent } from './support/item-to-event'
 
 const ajv = new Ajv()
 addFormats(ajv, ['date-time'])
@@ -59,13 +61,7 @@ const eventCreator =
 
     const item = params.Item
 
-    return {
-      id: item.eventId,
-      createdAt: item.createdAt,
-      createdBy: item.createdBy,
-      dateStart: item.dateStart,
-      title: item.title,
-    }
+    return itemToEvent(params.Item)
   }
 
 export const main: APIGatewayProxyHandlerV2 = async (event) => {

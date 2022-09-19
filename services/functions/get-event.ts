@@ -1,5 +1,6 @@
 import { APIGatewayProxyHandlerV2 } from 'aws-lambda'
 import { DynamoDB } from 'aws-sdk'
+import { itemToEvent } from './support/item-to-event'
 
 const dynamoDb = new DynamoDB.DocumentClient()
 
@@ -27,6 +28,7 @@ export const main: APIGatewayProxyHandlerV2 = async (event) => {
       PK: `EVENT#${eventId}`,
       SK: `EVENT#${eventId}`,
     },
+    AttributesToGet: ['eventId', 'title', 'createdAt', 'createdBy'],
   }
   const results = await dynamoDb.get(getParams).promise()
 
