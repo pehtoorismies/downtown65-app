@@ -11,7 +11,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
     primaryIndex: { partitionKey: 'PK', sortKey: 'SK' },
     globalIndexes: {
-      events: { partitionKey: 'GSI1PK', sortKey: 'GSI1SK' },
+      GSI1: { partitionKey: 'GSI1PK', sortKey: 'GSI1SK' },
     },
   })
 

@@ -11,14 +11,10 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
-import { DynamoDB } from 'aws-sdk'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 
-import { Dt65Event } from './support/dt65-event'
-import { itemToEvent } from './support/item-to-event'
-
-const dynamoDb = new DynamoDB.DocumentClient()
+import { getDtEventEntity } from './support/dao'
 
 interface EventInput {
   title: string
@@ -27,80 +23,53 @@ interface EventInput {
 }
 
 const eventSchema = {
-  input: {
-    type: 'object',
-    properties: {
-      body: {
-        type: 'object',
-        required: ['title'],
-        properties: {
-          title: { type: 'string' },
-          dateStart: { type: 'string', format: 'date-time' },
-          createdBy: { type: 'string' },
-        },
+  type: 'object',
+  properties: {
+    body: {
+      type: 'object',
+      required: ['title'],
+      properties: {
+        title: { type: 'string' },
+        dateStart: { type: 'string', format: 'date-time' },
+        createdBy: { type: 'string' },
       },
     },
-    required: ['body'],
   },
+  required: ['body'],
 }
 
-const eventCreator =
-  (tableName: string) =>
-  async (input: EventInput): Promise<Dt65Event> => {
-    const uuid = uuidv4()
-
-    const startDate = formatISO(new Date(input.dateStart))
-
-    const params = {
-      // Get the table name from the environment variable
-      TableName: tableName,
-      Item: {
-        // add keys
-        PK: `EVENT#${uuid}`,
-        SK: `EVENT#${uuid}`,
-        GSI1PK: `EVENT#FUTURE`,
-        GSI1SK: `DATE#${startDate}#${uuid.slice(0, 8)}`,
-        // add props
-        createdAt: formatISO(new Date()),
-        createdBy: input.createdBy,
-        dateStart: startDate,
-        eventId: uuid,
-        title: input.title,
-      },
-    }
-
-    await dynamoDb.put(params).promise()
-
-    const item = params.Item
-
-    return itemToEvent(params.Item)
-  }
-
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
-  const tableName = process.env.tableName
-  if (!tableName) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Config error process.env.tableName' }),
-    }
-  }
-
-  console.log('event.body')
+  const { DtEvent } = getDtEventEntity()
+  console.log('Data', event.body)
   const { title, dateStart, createdBy } = event.body as unknown as EventInput
 
-  const data = {
+  const input = {
     title,
     dateStart,
     createdBy,
   }
 
-  const createEvent = eventCreator(tableName)
-  const createdEvent = await createEvent(data)
+  const uuid = uuidv4()
+  const startDate = formatISO(new Date(input.dateStart))
+
+  const result = await DtEvent.put({
+    // add keys
+    PK: `EVENT#${uuid}`,
+    SK: `EVENT#${uuid}`,
+    GSI1PK: `EVENT#FUTURE`,
+    GSI1SK: `DATE#${startDate}#${uuid.slice(0, 8)}`,
+    // add props
+    createdAt: formatISO(new Date()),
+    createdBy: input.createdBy,
+    dateStart: startDate,
+    id: uuid,
+    title: input.title,
+  })
 
   return {
     statusCode: 200,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(createdEvent),
+    body: JSON.stringify(result),
   }
 }
 

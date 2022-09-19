@@ -12,6 +12,7 @@
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1218.0",
     "date-fns": "2.29.3",
+    "dynamodb-toolbox": "0.4.3",
     "uuid": "9.0.0"
   },
   "devDependencies": {

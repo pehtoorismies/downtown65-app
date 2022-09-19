@@ -1282,6 +1282,13 @@ dotenv@^16.0.1:
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.2.tgz#0b0f8652c016a3858ef795024508cddc4bffc5bf"
   integrity sha512-JvpYKUmzQhYoIFgK2MOnF3bciIZoItIIoryihy0rIA+H4Jy0FmgyKYAHCTN98P5ybGSJcIFbh6QKeJdtZd1qhA==
 
+dynamodb-toolbox@0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/dynamodb-toolbox/-/dynamodb-toolbox-0.4.3.tgz#a8273138fc6b0efe469396dc07931a5969f47c51"
+  integrity sha512-z5WuDj+g5ZBKiDrNRbxg5hEpTDwR/9MsnE2A3+t0FuRyPbEegmUmauHWcnK/JxwTE2JcUMQvDzMgCAJW5BAj/g==
+  dependencies:
+    ts-toolbelt "^6.15.5"
+
 ee-first@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
@@ -3976,6 +3983,11 @@ toidentifier@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.1.tgz#3be34321a88a820ed1bd80dfaa33e479fbb8dd35"
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
+
+ts-toolbelt@^6.15.5:
+  version "6.15.5"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-6.15.5.tgz#cb3b43ed725cb63644782c64fbcad7d8f28c0a83"
+  integrity sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==
 
 tsconfig-paths@^3.14.1:
   version "3.14.1"

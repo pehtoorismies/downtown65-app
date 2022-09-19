@@ -6,28 +6,15 @@ import {
   APIGatewayProxyHandlerV2,
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
-import { DynamoDB } from 'aws-sdk'
 
-const dynamoDb = new DynamoDB.DocumentClient()
+import { getDtEventEntity } from './support/dao'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
-  const tableName = process.env.tableName
-  if (!tableName) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: 'Config error process.env.tableName' }),
-    }
-  }
+  const { DtEvent } = getDtEventEntity()
 
-  const queryParameters = {
-    TableName: tableName,
-    IndexName: 'events',
-    KeyConditionExpression: 'GSI1PK = :gsi1pk',
-    ExpressionAttributeValues: {
-      ':gsi1pk': 'EVENT#FUTURE',
-    },
-  }
-  const results = await dynamoDb.query(queryParameters).promise()
+  const results = await DtEvent.query(`EVENT#FUTURE`, {
+    index: 'GSI1',
+  })
 
   return {
     statusCode: 200,
