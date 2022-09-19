@@ -13,21 +13,21 @@
     "lint": "eslint . --ext .ts"
   },
   "devDependencies": {
-    "@serverless-stack/cli": "^1.14.4",
-    "@serverless-stack/resources": "^1.14.4",
-    "@tsconfig/node16": "^1.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.37.0",
-    "@typescript-eslint/parser": "^5.37.0",
+    "@serverless-stack/cli": "1.14.4",
+    "@serverless-stack/resources": "1.14.4",
+    "@tsconfig/node16": "1.0.3",
+    "@typescript-eslint/eslint-plugin": "5.37.0",
+    "@typescript-eslint/parser": "5.37.0",
     "aws-cdk-lib": "2.39.1",
-    "eslint": "^8.23.1",
+    "eslint": "8.23.1",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-unicorn": "43.0.2",
     "prettier": "2.7.1",
     "prettier-eslint": "15.0.1",
-    "typescript": "^4.8.3",
-    "vitest": "^0.23.2"
+    "typescript": "4.8.3",
+    "vitest": "0.23.2"
   },
   "workspaces": [
     "services"
