@@ -23,16 +23,11 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
 
   const { DtEvent } = getDtEventEntity()
 
-  const results = await DtEvent.get(getPrimaryKey(eventId))
+  const results = await DtEvent.delete(getPrimaryKey(eventId), {
+    returnValues: 'ALL_OLD',
+  })
 
-  if (!results.Item) {
-    return {
-      statusCode: 404,
-      body: JSON.stringify({ error: 'Not found' }),
-    }
-  }
-
-  return successResponse(results.Item)
+  return successResponse(results.Attributes)
 }
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()

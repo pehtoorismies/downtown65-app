@@ -8,6 +8,7 @@ import {
 } from 'aws-lambda'
 
 import { getDtEventEntity } from './support/dao'
+import { successResponse } from './support/success-response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
   const { DtEvent } = getDtEventEntity()
@@ -16,11 +17,7 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
     index: 'GSI1',
   })
 
-  return {
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(results.Items),
-  }
+  return successResponse(results.Items)
 }
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()

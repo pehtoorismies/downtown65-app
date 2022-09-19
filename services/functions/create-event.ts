@@ -15,6 +15,7 @@ import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getDtEventEntity } from './support/dao'
+import { successResponse } from './support/success-response'
 
 interface EventInput {
   title: string
@@ -66,11 +67,7 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
     title: input.title,
   })
 
-  return {
-    statusCode: 200,
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(result),
-  }
+  return successResponse(result)
 }
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
