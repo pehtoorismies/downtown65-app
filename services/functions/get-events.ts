@@ -8,7 +8,7 @@ import {
 } from 'aws-lambda'
 
 import { getDtEventEntity } from './support/dao'
-import { successResponse } from './support/success-response'
+import { successResponse } from './support/response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
   const { DtEvent } = getDtEventEntity()

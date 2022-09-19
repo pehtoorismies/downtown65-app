@@ -15,7 +15,7 @@ import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getDtEventEntity } from './support/dao'
-import { successResponse } from './support/success-response'
+import { successResponse } from './support/response'
 
 interface EventInput {
   title: string

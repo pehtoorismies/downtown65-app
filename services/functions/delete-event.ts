@@ -9,16 +9,13 @@ import {
 
 import { getDtEventEntity } from './support/dao'
 import { getPrimaryKey } from './support/get-primary-key'
-import { successResponse } from './support/success-response'
+import { badRequestResponse, successResponse } from './support/response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const eventId = event?.pathParameters?.id
 
   if (eventId === undefined) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Missing eventId' }),
-    }
+    return badRequestResponse({ error: 'Missing eventId' })
   }
 
   const { DtEvent } = getDtEventEntity()
@@ -26,6 +23,10 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const results = await DtEvent.delete(getPrimaryKey(eventId), {
     returnValues: 'ALL_OLD',
   })
+
+  if (!results.Attributes) {
+    return badRequestResponse({ error: 'Not found' })
+  }
 
   return successResponse(results.Attributes)
 }
