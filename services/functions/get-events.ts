@@ -31,6 +31,7 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
 
   return {
     statusCode: 200,
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(results.Items),
   }
 }
