@@ -14,8 +14,9 @@ import {
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getDtEventEntity } from './support/dao'
-import { successResponse } from './support/response'
+import { getTable } from './db/table'
+import { getPrimaryKey } from './support/event-primary-key'
+import { createdResponse } from './support/response'
 
 interface EventInput {
   title: string
@@ -40,8 +41,7 @@ const eventSchema = {
 }
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
-  const { DtEvent } = getDtEventEntity()
-  console.log('Data', event.body)
+  const Table = getTable()
   const { title, dateStart, createdBy } = event.body as unknown as EventInput
 
   const input = {
@@ -50,24 +50,24 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
     createdBy,
   }
 
-  const uuid = uuidv4()
+  const eventId = uuidv4()
   const startDate = formatISO(new Date(input.dateStart))
 
-  const result = await DtEvent.put({
+  await Table.Dt65Event.put({
     // add keys
-    PK: `EVENT#${uuid}`,
-    SK: `EVENT#${uuid}`,
+    ...getPrimaryKey(eventId),
     GSI1PK: `EVENT#FUTURE`,
-    GSI1SK: `DATE#${startDate}#${uuid.slice(0, 8)}`,
+    GSI1SK: `DATE#${startDate}#${eventId.slice(0, 8)}`,
     // add props
     createdAt: formatISO(new Date()),
     createdBy: input.createdBy,
     dateStart: startDate,
-    id: uuid,
+    id: eventId,
     title: input.title,
+    participants: {},
   })
 
-  return successResponse(result)
+  return createdResponse({ id: eventId })
 }
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()

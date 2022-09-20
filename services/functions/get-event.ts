@@ -7,13 +7,8 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
-import { getDtEventEntity } from './support/dao'
-import { getPrimaryKey } from './support/get-primary-key'
-import {
-  badRequestResponse,
-  notFoundResponse,
-  successResponse,
-} from './support/response'
+import { getTable } from './db/table'
+import { badRequestResponse, successResponse } from './support/response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const eventId = event?.pathParameters?.id
@@ -22,15 +17,12 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
     return badRequestResponse({ error: 'Missing eventId' })
   }
 
-  const { DtEvent } = getDtEventEntity()
+  const Table = getTable()
 
-  const results = await DtEvent.get(getPrimaryKey(eventId))
-
-  if (!results.Item) {
-    return notFoundResponse({ error: 'Not found' })
-  }
-
-  return successResponse(results.Item)
+  const results = await Table.query(`EVENT#${eventId}`, {
+    attributes: [{ Dt65Event: ['title'] }, { Participant: ['nick'] }],
+  })
+  return successResponse(results.Items)
 }
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()

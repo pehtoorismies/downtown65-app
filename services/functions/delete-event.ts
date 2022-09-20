@@ -7,8 +7,8 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
-import { getDtEventEntity } from './support/dao'
-import { getPrimaryKey } from './support/get-primary-key'
+import { getTable } from './db/table'
+import { getPrimaryKey } from './support/event-primary-key'
 import { badRequestResponse, successResponse } from './support/response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
@@ -18,9 +18,9 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
     return badRequestResponse({ error: 'Missing eventId' })
   }
 
-  const { DtEvent } = getDtEventEntity()
+  const Table = getTable()
 
-  const results = await DtEvent.delete(getPrimaryKey(eventId), {
+  const results = await Table.Dt65Event.delete(getPrimaryKey(eventId), {
     returnValues: 'ALL_OLD',
   })
 

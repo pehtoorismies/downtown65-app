@@ -6,6 +6,14 @@ export const successResponse = (payload: unknown) => {
   }
 }
 
+export const createdResponse = (payload: unknown) => {
+  return {
+    statusCode: 201,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }
+}
+
 export const badRequestResponse = (payload: unknown) => {
   return {
     statusCode: 400,
@@ -17,6 +25,14 @@ export const badRequestResponse = (payload: unknown) => {
 export const notFoundResponse = (payload: unknown) => {
   return {
     statusCode: 404,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }
+}
+
+export const internalErrorResponse = (payload: unknown) => {
+  return {
+    statusCode: 500,
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   }

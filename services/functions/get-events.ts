@@ -7,13 +7,13 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
-import { getDtEventEntity } from './support/dao'
+import { getTable } from './db/table'
 import { successResponse } from './support/response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
-  const { DtEvent } = getDtEventEntity()
+  const Table = getTable()
 
-  const results = await DtEvent.query(`EVENT#FUTURE`, {
+  const results = await Table.Dt65Event.query(`EVENT#FUTURE`, {
     index: 'GSI1',
   })
 
