@@ -35,7 +35,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       'DELETE /event/{id}': 'functions/delete-event.main',
       'POST /event': 'functions/create-event.main',
       'PUT /event/{id}/join': 'functions/join-event.main',
-      // 'PUT /event/{id}/leave': 'functions/leave-event.main',
+      'PUT /event/{id}/leave': 'functions/leave-event.main',
     },
   })
 

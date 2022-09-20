@@ -9,7 +9,9 @@ import {
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 import { getTable } from './db/table'
+import { isAWSError } from './support/aws-error'
 import { getPrimaryKey } from './support/event-primary-key'
+import { nickMiddleware } from './support/nick-middleware'
 import {
   badRequestResponse,
   internalErrorResponse,
@@ -17,15 +19,10 @@ import {
   successResponse,
 } from './support/response'
 
-interface AWSError {
-  name: string
-}
-
-const isAWSError = (object: unknown): object is AWSError => {
-  return typeof object === 'object' && object !== null && 'name' in object
-}
-
-export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
+export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
+  event,
+  context
+) => {
   const eventId = event?.pathParameters?.id
 
   if (eventId === undefined) {
@@ -34,7 +31,9 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
 
   const Table = getTable()
 
-  const nick = `lepakko${uuidv4().slice(0, 4)}`
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const nick = context.extras.nick
 
   const createdAt = formatISO(new Date())
 
@@ -80,5 +79,6 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
   .use(httpHeaderNormalizer())
+  .use(nickMiddleware())
   .use(httpErrorHandler())
   .handler(lambdaHandler)
