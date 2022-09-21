@@ -7,9 +7,9 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
-import { getTable } from './db/table'
+import { getTable } from '../db/table'
+import { badRequestResponse, successResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
-import { badRequestResponse, successResponse } from './support/response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const eventId = event?.pathParameters?.id

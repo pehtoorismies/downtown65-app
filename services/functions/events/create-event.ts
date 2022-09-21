@@ -14,9 +14,9 @@ import {
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 
-import { getTable } from './db/table'
+import { getTable } from '../db/table'
+import { createdResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
-import { createdResponse } from './support/response'
 
 interface EventInput {
   title: string

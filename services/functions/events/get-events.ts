@@ -7,21 +7,16 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
-import { getTable } from './db/table'
-import { badRequestResponse, successResponse } from './support/response'
+import { getTable } from '../db/table'
+import { successResponse } from '../support/response'
 
-export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
-  const eventId = event?.pathParameters?.id
-
-  if (eventId === undefined) {
-    return badRequestResponse({ error: 'Missing eventId' })
-  }
-
+export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
   const Table = getTable()
 
-  const results = await Table.query(`EVENT#${eventId}`, {
-    attributes: [{ Dt65Event: ['title'] }, { Participant: ['nick'] }],
+  const results = await Table.Dt65Event.query(`EVENT#FUTURE`, {
+    index: 'GSI1',
   })
+
   return successResponse(results.Items)
 }
 

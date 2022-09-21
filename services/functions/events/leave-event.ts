@@ -6,13 +6,12 @@ import {
   APIGatewayProxyHandlerV2,
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
-import formatISO from 'date-fns/formatISO'
-import { v4 as uuidv4 } from 'uuid'
-import { getTable } from './db/table'
-import { isAWSError } from './support/aws-error'
+
+import { getTable } from '../db/table'
+
+import { badRequestResponse, successResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
 import { nickMiddleware } from './support/nick-middleware'
-import { badRequestResponse, successResponse } from './support/response'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
   event,

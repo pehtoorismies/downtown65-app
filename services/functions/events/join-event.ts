@@ -7,17 +7,16 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 import formatISO from 'date-fns/formatISO'
-import { v4 as uuidv4 } from 'uuid'
-import { getTable } from './db/table'
-import { isAWSError } from './support/aws-error'
-import { getPrimaryKey } from './support/event-primary-key'
-import { nickMiddleware } from './support/nick-middleware'
+import { getTable } from '../db/table'
+import { isAWSError } from '../support/aws-error'
 import {
   badRequestResponse,
   internalErrorResponse,
   notFoundResponse,
   successResponse,
-} from './support/response'
+} from '../support/response'
+import { getPrimaryKey } from './support/event-primary-key'
+import { nickMiddleware } from './support/nick-middleware'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
   event,
