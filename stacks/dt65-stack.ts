@@ -30,12 +30,12 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       },
     },
     routes: {
-      'GET /events': 'functions/get-events.main',
-      'GET /event/{id}': 'functions/get-event.main',
-      'DELETE /event/{id}': 'functions/delete-event.main',
-      'POST /event': 'functions/create-event.main',
-      'PUT /event/{id}/join': 'functions/join-event.main',
-      'PUT /event/{id}/leave': 'functions/leave-event.main',
+      'GET /events': 'functions/events/get-events.main',
+      'GET /event/{id}': 'functions/events/get-event.main',
+      'DELETE /event/{id}': 'functions/events/delete-event.main',
+      'POST /event': 'functions/events/create-event.main',
+      'PUT /event/{id}/join': 'functions/events/join-event.main',
+      'PUT /event/{id}/leave': 'functions/events/leave-event.main',
     },
   })
 
