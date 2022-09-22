@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "AWS_PROFILE=downtown65-app-dev sst start",
-    "build": "AWS_PROFILE=downtown65-app-dev sst build",
-    "deploy": "AWS_PROFILE=downtown65-app-dev sst deploy",
-    "remove": "AWS_PROFILE=downtown65-app-dev sst remove",
-    "console": "AWS_PROFILE=downtown65-app-dev sst console",
+    "start": "sst start",
+    "build": "sst build",
+    "deploy": "sst deploy",
+    "remove": "sst remove",
+    "console": "sst console",
     "typecheck": "tsc --noEmit",
     "test": "sst load-config -- vitest run",
     "lint": "eslint . --ext .ts"

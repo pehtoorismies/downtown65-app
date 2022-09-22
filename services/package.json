@@ -9,13 +9,20 @@
     "@middy/http-header-normalizer": "3.3.4",
     "@middy/http-json-body-parser": "3.3.4",
     "@middy/validator": "3.3.4",
+    "@serverless-stack/node": "1.14.4",
+    "add": "2.0.6",
+    "ajv": "8.11.0",
+    "auth0": "2.42.0",
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1218.0",
     "date-fns": "2.29.3",
     "dynamodb-toolbox": "0.4.3",
-    "uuid": "9.0.0"
+    "superagent-proxy": "^3.0.0",
+    "uuid": "9.0.0",
+    "yarn": "1.22.19"
   },
   "devDependencies": {
+    "@types/auth0": "^2.35.3",
     "@types/aws-lambda": "8.10.104",
     "@types/uuid": "8.3.4"
   }

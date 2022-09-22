@@ -1,6 +1,16 @@
-import { Api, StackContext, Table } from '@serverless-stack/resources'
+import { Api, StackContext, Table, use } from '@serverless-stack/resources'
+import { ConfigStack } from './config-stack'
 
 export const Dt65Stack = ({ stack }: StackContext) => {
+  // Config
+  const {
+    AUTH_CLIENT_ID,
+    AUTH_CLIENT_SECRET,
+    AUTH_DOMAIN,
+    JWT_AUDIENCE,
+    REGISTER_SECRET,
+  } = use(ConfigStack)
+
   // Create the table
   const table = new Table(stack, 'downtown65', {
     fields: {
@@ -26,16 +36,26 @@ export const Dt65Stack = ({ stack }: StackContext) => {
         environment: {
           tableName: table.tableName,
         },
+        config: [
+          AUTH_CLIENT_ID,
+          AUTH_CLIENT_SECRET,
+          AUTH_DOMAIN,
+          JWT_AUDIENCE,
+          REGISTER_SECRET,
+        ],
         permissions: [table],
       },
     },
     routes: {
+      // events
       'GET /events': 'functions/events/get-events.main',
       'GET /event/{id}': 'functions/events/get-event.main',
       'DELETE /event/{id}': 'functions/events/delete-event.main',
       'POST /event': 'functions/events/create-event.main',
       'PUT /event/{id}/join': 'functions/events/join-event.main',
       'PUT /event/{id}/leave': 'functions/events/leave-event.main',
+      // auth
+      'POST /auth/login': 'functions/auth/login.main',
     },
   })
 
