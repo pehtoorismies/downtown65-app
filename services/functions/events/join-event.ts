@@ -34,8 +34,6 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
   // @ts-ignore
   const nick = context.extras.nick
 
-  const createdAt = formatISO(new Date())
-
   try {
     const result = await Table.transactWrite(
       [
@@ -51,7 +49,7 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
             ...getPrimaryKey(eventId),
             participants: {
               $set: {
-                [nick]: createdAt,
+                [nick]: formatISO(new Date()),
               },
             },
           },

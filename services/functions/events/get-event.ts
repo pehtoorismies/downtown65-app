@@ -8,7 +8,12 @@ import {
 } from 'aws-lambda'
 
 import { getTable } from '../db/table'
-import { badRequestResponse, successResponse } from '../support/response'
+import {
+  badRequestResponse,
+  notFoundResponse,
+  successResponse,
+} from '../support/response'
+import { getPrimaryKey } from './support/event-primary-key'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const eventId = event?.pathParameters?.id
@@ -19,10 +24,11 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
 
   const Table = getTable()
 
-  const results = await Table.query(`EVENT#${eventId}`, {
-    attributes: [{ Dt65Event: ['title'] }, { Participant: ['nick'] }],
-  })
-  return successResponse(results.Items)
+  const result = await Table.Dt65Event.get(getPrimaryKey(eventId))
+  if (result.Item) {
+    return successResponse(result.Item)
+  }
+  return notFoundResponse({ message: 'Event not found' })
 }
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()

@@ -27,11 +27,13 @@ export const getTable = () => {
       GSI2SK: 'string',
       // Dt65Event properties
       eventId: 'string',
-      createdAt: 'string',
       createdBy: 'string',
       dateStart: 'string',
       title: 'string',
+      subtitle: 'string',
       participants: 'map',
+      race: 'boolean',
+      type: 'string',
       // Participant properties
       nick: 'string',
     },
@@ -44,12 +46,14 @@ export const getTable = () => {
       SK: { hidden: true, sortKey: true }, // flag as sortKey and mark hidden
       GSI1PK: { hidden: true },
       GSI1SK: { hidden: true },
-      id: { type: 'string', map: 'eventId' }, // map 'id' to table attribute 'eventId'
-      createdAt: { type: 'string', required: true },
       createdBy: { type: 'string', required: true },
       dateStart: { type: 'string', required: true },
+      id: { type: 'string', map: 'eventId' }, // map 'id' to table attribute 'eventId'
       participants: { type: 'map', required: true },
+      race: { type: 'boolean', default: false },
+      subtitle: { type: 'string' },
       title: { type: 'string', required: true },
+      type: { type: 'string', required: true },
     },
   } as const)
 

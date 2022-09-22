@@ -18,10 +18,31 @@ import { getTable } from '../db/table'
 import { createdResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
 
+const EVENT_TYPES = [
+  'KARONKKA',
+  'MEETING',
+  'NORDIC_WALKING',
+  'ORIENTEERING',
+  'OTHER',
+  'RUNNING',
+  'SKIING',
+  'SPINNING',
+  'SWIMMING',
+  'TRACK_RUNNING',
+  'TRAIL_RUNNING',
+  'TRIATHLON',
+  'ULTRAS',
+] as const
+
+type EventType = typeof EVENT_TYPES[number]
+
 interface EventInput {
-  title: string
   createdBy: string
   dateStart: string
+  race: boolean
+  subtitle?: string
+  title: string
+  type: EventType
 }
 
 const eventSchema = {
@@ -31,9 +52,12 @@ const eventSchema = {
       type: 'object',
       required: ['title'],
       properties: {
-        title: { type: 'string' },
-        dateStart: { type: 'string', format: 'date-time' },
         createdBy: { type: 'string' },
+        dateStart: { type: 'string', format: 'date-time' },
+        race: { type: 'boolean' },
+        subtitle: { type: 'string' },
+        title: { type: 'string' },
+        type: { type: 'string', enum: EVENT_TYPES },
       },
     },
   },
@@ -42,16 +66,11 @@ const eventSchema = {
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const Table = getTable()
-  const { title, dateStart, createdBy } = event.body as unknown as EventInput
-
-  const input = {
-    title,
-    dateStart,
-    createdBy,
-  }
+  const { title, dateStart, createdBy, type } =
+    event.body as unknown as EventInput
 
   const eventId = uuidv4()
-  const startDate = formatISO(new Date(input.dateStart))
+  const startDate = formatISO(new Date(dateStart))
 
   await Table.Dt65Event.put({
     // add keys
@@ -59,12 +78,12 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
     GSI1PK: `EVENT#FUTURE`,
     GSI1SK: `DATE#${startDate}#${eventId.slice(0, 8)}`,
     // add props
-    createdAt: formatISO(new Date()),
-    createdBy: input.createdBy,
+    createdBy,
     dateStart: startDate,
     id: eventId,
-    title: input.title,
+    title,
     participants: {},
+    type,
   })
 
   return createdResponse({ id: eventId })
