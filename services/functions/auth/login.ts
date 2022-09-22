@@ -6,7 +6,6 @@ import validator from '@middy/validator'
 
 import { Config } from '@serverless-stack/node/config'
 import { JSONSchemaType } from 'ajv'
-import { AuthenticationClient } from 'auth0'
 import {
   APIGatewayProxyEventV2,
   APIGatewayProxyHandlerV2,
@@ -14,12 +13,9 @@ import {
 } from 'aws-lambda'
 
 import { successResponse } from '../support/response'
+import { getClient } from './support/get-client'
 
-const auth0 = new AuthenticationClient({
-  domain: Config.AUTH_DOMAIN,
-  clientId: Config.AUTH_CLIENT_ID,
-  clientSecret: Config.AUTH_CLIENT_SECRET,
-})
+const auth0 = getClient()
 
 type LoginInput = {
   email: string

@@ -56,6 +56,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       'PUT /event/{id}/leave': 'functions/events/leave-event.main',
       // auth
       'POST /auth/login': 'functions/auth/login.main',
+      'POST /auth/signup': 'functions/auth/signup.main',
     },
   })
 

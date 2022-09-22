@@ -1,7 +1,7 @@
 import middy from '@middy/core'
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'
 
-import { HttpRequestError } from './errors'
+import { HttpRequestError } from '../../support/errors'
 
 const before: middy.MiddlewareFn<
   APIGatewayProxyEventV2,
