@@ -12,8 +12,8 @@ import {
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
+import { getClient } from '../support/auth'
 import { successResponse } from '../support/response'
-import { getClient } from './support/get-client'
 
 const auth0 = getClient()
 

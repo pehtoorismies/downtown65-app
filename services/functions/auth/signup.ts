@@ -6,15 +6,15 @@ import validator from '@middy/validator'
 
 import { Config } from '@serverless-stack/node/config'
 import { JSONSchemaType } from 'ajv'
-import { ManagementClient } from 'auth0'
+
 import {
   APIGatewayProxyEventV2,
   APIGatewayProxyHandlerV2,
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
 
+import { getAuth0Management } from '../support/auth'
 import { badRequestResponse, successResponse } from '../support/response'
-import { getClient } from './support/get-client'
 
 type SignupInput = {
   email: string
@@ -44,21 +44,6 @@ const eventSchema: JSONSchemaType<BodyInput> = {
     },
   },
   required: ['body'],
-}
-
-const auth0 = getClient()
-
-const getAuth0Management = async () => {
-  const client = await auth0.clientCredentialsGrant({
-    audience: `https://${Config.AUTH_DOMAIN}/api/v2/`,
-
-    scope: 'read:users update:users',
-  })
-  const management = new ManagementClient({
-    token: client.access_token,
-    domain: Config.AUTH_DOMAIN,
-  })
-  return management
 }
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {

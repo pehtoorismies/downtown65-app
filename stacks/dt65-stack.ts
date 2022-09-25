@@ -1,4 +1,10 @@
-import { Api, StackContext, Table, use } from '@serverless-stack/resources'
+import {
+  Api,
+  Function,
+  StackContext,
+  Table,
+  use,
+} from '@serverless-stack/resources'
 import { ConfigStack } from './config-stack'
 
 export const Dt65Stack = ({ stack }: StackContext) => {
@@ -10,6 +16,12 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     JWT_AUDIENCE,
     REGISTER_SECRET,
   } = use(ConfigStack)
+
+  // Dynamo stream functions
+  const eventCreatedFun = new Function(stack, 'EventCreated', {
+    handler: 'functions/events/streams/event-created.main',
+    config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
+  })
 
   // Create the table
   const table = new Table(stack, 'downtown65', {
@@ -25,6 +37,28 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     globalIndexes: {
       GSI1: { partitionKey: 'GSI1PK', sortKey: 'GSI1SK' },
       GSI2: { partitionKey: 'GSI2PK', sortKey: 'GSI2SK' },
+    },
+    stream: true,
+    consumers: {
+      eventCreated: {
+        function: eventCreatedFun,
+        // https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-examples
+        filters: [
+          {
+            eventName: ['INSERT'],
+            dynamodb: {
+              // "Keys": {...},
+              // "NewImage": {...},
+              // "OldImage": {...}
+              NewImage: {
+                _et: {
+                  S: ['Dt65Event'],
+                },
+              },
+            },
+          },
+        ],
+      },
     },
   })
 
