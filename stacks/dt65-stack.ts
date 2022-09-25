@@ -1,5 +1,6 @@
 import {
   Api,
+  Cron,
   Function,
   StackContext,
   Table,
@@ -21,6 +22,18 @@ export const Dt65Stack = ({ stack }: StackContext) => {
   const eventCreatedFun = new Function(stack, 'EventCreated', {
     handler: 'functions/events/streams/event-created.main',
     config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
+  })
+
+  const weeklyEmailFun = new Function(stack, 'WeeklyEmail', {
+    handler: 'functions/scheduled/send-weekly-email.main',
+    config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
+  })
+
+  new Cron(stack, 'WeeklyEmailCron', {
+    // https://crontab.guru/#0_10_*_*_1
+    schedule: 'cron(0 10 * * 1)',
+    job: weeklyEmailFun,
+    enabled: false,
   })
 
   // Create the table
