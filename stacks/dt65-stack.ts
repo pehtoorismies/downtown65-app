@@ -30,8 +30,8 @@ export const Dt65Stack = ({ stack }: StackContext) => {
   })
 
   new Cron(stack, 'WeeklyEmailCron', {
-    // https://crontab.guru/#0_10_*_*_1
-    schedule: 'cron(0 10 * * 1)',
+    // https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
+    schedule: 'cron(0 10 ? * MON *)',
     job: weeklyEmailFun,
     enabled: false,
   })

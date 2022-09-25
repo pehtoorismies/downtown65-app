@@ -16,7 +16,6 @@ export const main = async () => {
 
   const results = await Table.Dt65Event.query(`EVENT#FUTURE`, {
     lt: lt,
-    // 2021-11-11T10:00:00+02:00
     index: 'GSI1',
   })
 

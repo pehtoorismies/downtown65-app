@@ -1,7 +1,3 @@
-import { format } from 'date-fns'
-import formatISO from 'date-fns/formatISO'
-import startOfToday from 'date-fns/startOfToday'
-import { getTable } from '../db/table'
 import { getAuth0Management } from '../support/auth'
 
 const fetchWeeklyEmailSubscribers = async () => {
