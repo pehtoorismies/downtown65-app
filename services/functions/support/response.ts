@@ -22,6 +22,14 @@ export const badRequestResponse = (payload: unknown) => {
   }
 }
 
+export const unauthorizedRequestResponse = (payload: unknown) => {
+  return {
+    statusCode: 401,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }
+}
+
 export const notFoundResponse = (payload: unknown) => {
   return {
     statusCode: 404,

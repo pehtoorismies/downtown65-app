@@ -1,5 +1,6 @@
 import {
   Api,
+  AppSyncApi,
   Cron,
   Function,
   StackContext,
@@ -124,11 +125,38 @@ export const Dt65Stack = ({ stack }: StackContext) => {
         function: 'functions/auth/signup.main',
         authorizer: 'none',
       },
+      // users
+      'GET /users/{id}': 'functions/users/get-user.main',
     },
   })
+
+  //  Create the AppSync GraphQL API
+  const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {
+    schema: 'services/graphql/schema.graphql',
+    dataSources: {
+      events: 'functions/gql/gql.main',
+    },
+    defaults: {
+      function: {
+        environment: {
+          tableName: table.tableName,
+        },
+      },
+    },
+    resolvers: {
+      'Query    getEventById': 'events',
+    },
+  })
+
+  gqlApi.attachPermissions([table])
 
   // Show the API endpoint in the output
   stack.addOutputs({
     ApiEndpoint: api.url,
+  })
+  stack.addOutputs({
+    ApiId: gqlApi.apiId,
+    ApiKey: gqlApi.cdk.graphqlApi.apiKey || '',
+    APiUrl: gqlApi.url,
   })
 }

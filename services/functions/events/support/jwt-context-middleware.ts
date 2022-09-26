@@ -9,6 +9,7 @@ const NICK_PROPERTY = 'https://graphql.downtown65.com/nickname'
 interface Dt65JwtToken {
   [NICK_PROPERTY]: string
   scope: string
+  sub: string
 }
 
 const isDt65JwtToken = (object: unknown): object is Dt65JwtToken => {
@@ -16,8 +17,9 @@ const isDt65JwtToken = (object: unknown): object is Dt65JwtToken => {
 
   const nick = token[NICK_PROPERTY]
   const scope = token['scope']
+  const sub = token['sub']
 
-  if (!nick || !scope) {
+  if (!nick || !scope || !sub) {
     return false
   }
 
@@ -37,6 +39,7 @@ const getContext = (
       extras: {
         nickname: token[NICK_PROPERTY],
         scope: token['scope'],
+        sub: token['sub'],
       },
     }
   }

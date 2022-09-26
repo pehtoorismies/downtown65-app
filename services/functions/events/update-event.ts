@@ -32,6 +32,7 @@ const eventSchema = {
   properties: {
     body: {
       type: 'object',
+      additionalProperties: false,
       properties: {
         dateStart: { type: 'string', format: 'date-time' },
         race: { type: 'boolean' },
@@ -60,20 +61,6 @@ const getUpdateObject = (
   return input
 }
 
-const pickUpdateProperties = ({
-  dateStart,
-  race,
-  subtitle,
-  title,
-  type,
-}: EventInput) => ({
-  dateStart,
-  race,
-  subtitle,
-  title,
-  type,
-})
-
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const eventId = event?.pathParameters?.id
 
@@ -87,7 +74,7 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
     return badRequestResponse({ error: 'No fields to update' })
   }
 
-  const updated = getUpdateObject(pickUpdateProperties(input), eventId)
+  const updated = getUpdateObject(input, eventId)
 
   const Table = getTable()
 
