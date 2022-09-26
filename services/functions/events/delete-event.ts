@@ -10,6 +10,7 @@ import {
 import { getTable } from '../db/table'
 import { badRequestResponse, successResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
+import { jwtContextMiddleware } from './support/jwt-context-middleware'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
   const eventId = event?.pathParameters?.id
@@ -33,5 +34,6 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (event) => {
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
   .use(httpHeaderNormalizer())
+  .use(jwtContextMiddleware())
   .use(httpErrorHandler())
   .handler(lambdaHandler)

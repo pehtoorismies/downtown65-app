@@ -14,8 +14,9 @@ import {
   internalErrorResponse,
   successResponse,
 } from '../support/response'
+import { isDt65Context } from './support/dt65-context'
 import { getPrimaryKey } from './support/event-primary-key'
-import { isNickContext, nickMiddleware } from './support/nick-middleware'
+import { jwtContextMiddleware } from './support/jwt-context-middleware'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
   event,
@@ -27,7 +28,7 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
     return badRequestResponse({ error: 'Missing eventId' })
   }
 
-  if (!isNickContext(context)) {
+  if (!isDt65Context(context)) {
     return internalErrorResponse({
       error: 'Middleware context has incorrect configuration',
     })
@@ -80,6 +81,6 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
 
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
   .use(httpHeaderNormalizer())
-  .use(nickMiddleware())
+  .use(jwtContextMiddleware())
   .use(httpErrorHandler())
   .handler(lambdaHandler)

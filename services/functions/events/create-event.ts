@@ -17,6 +17,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { getTable } from '../db/table'
 import { createdResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
+import { jwtContextMiddleware } from './support/jwt-context-middleware'
 
 const EVENT_TYPES = [
   'KARONKKA',
@@ -93,5 +94,6 @@ export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
   .use(httpHeaderNormalizer())
   .use(jsonBodyParser())
   .use(validator({ eventSchema }))
+  .use(jwtContextMiddleware())
   .use(httpErrorHandler())
   .handler(lambdaHandler)
