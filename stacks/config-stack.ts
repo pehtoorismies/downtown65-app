@@ -1,12 +1,5 @@
 import { Config, Stack, StackContext } from '@serverless-stack/resources'
-
-const getEnvironmentVariable = (name: string): string => {
-  const value = process.env[name]
-  if (!value) {
-    throw new Error(`Environment value 'process.env.${name}' is not set`)
-  }
-  return value
-}
+import { getEnvironmentVariable } from './get-environment'
 
 const createConfigFromEnvironment = (stack: Stack, name: string) => {
   const config = new Config.Parameter(stack, name, {

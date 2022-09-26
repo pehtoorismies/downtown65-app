@@ -7,6 +7,7 @@ import {
   use,
 } from '@serverless-stack/resources'
 import { ConfigStack } from './config-stack'
+import { getEnvironmentVariable } from './get-environment'
 
 export const Dt65Stack = ({ stack }: StackContext) => {
   // Config
@@ -75,9 +76,21 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
   })
 
+  const jwt = {
+    issuer: `https://${getEnvironmentVariable('AUTH_DOMAIN')}/`,
+    audience: [getEnvironmentVariable('JWT_AUDIENCE')],
+  }
+
   // Create the HTTP API
   const api = new Api(stack, 'Api', {
+    authorizers: {
+      auth0: {
+        type: 'jwt',
+        jwt,
+      },
+    },
     defaults: {
+      authorizer: 'auth0',
       function: {
         // Pass in the table name to our API
         environment: {
@@ -102,8 +115,14 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       'PUT /event/{id}/join': 'functions/events/join-event.main',
       'PUT /event/{id}/leave': 'functions/events/leave-event.main',
       // auth
-      'POST /auth/login': 'functions/auth/login.main',
-      'POST /auth/signup': 'functions/auth/signup.main',
+      'POST /auth/login': {
+        function: 'functions/auth/login.main',
+        authorizer: 'none',
+      },
+      'POST /auth/signup': {
+        function: 'functions/auth/signup.main',
+        authorizer: 'none',
+      },
     },
   })
 
