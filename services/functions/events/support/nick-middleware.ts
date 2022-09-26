@@ -1,22 +1,58 @@
 import middy from '@middy/core'
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'
-
+import jwtDecode from 'jwt-decode'
 import { HttpRequestError } from '../../support/errors'
+
+export type NickContext = { extras: { nickname: string } }
+
+export const isNickContext = (object: unknown): object is NickContext => {
+  const nick = (object as NickContext)['extras']['nickname']
+  return !!nick
+}
+
+const NICK_PROPERTY = 'https://graphql.downtown65.com/nickname'
+
+interface Nicknameable {
+  [NICK_PROPERTY]: string
+}
+
+const isNicknameable = (object: unknown): object is Nicknameable => {
+  const nick = (object as Nicknameable)[NICK_PROPERTY]
+  return !!nick
+}
+
+const getNickname = (accessToken: string | undefined): string | undefined => {
+  if (!accessToken) {
+    return undefined
+  }
+
+  const token = jwtDecode(accessToken)
+  if (isNicknameable(token)) {
+    return token[NICK_PROPERTY]
+  }
+
+  return undefined
+}
 
 const before: middy.MiddlewareFn<
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2
 > = (request): void => {
-  const nick = request.event.headers['x-nick']
+  const nickname = getNickname(request.event.headers['authorization'])
 
-  if (!nick) {
+  if (!nickname) {
     throw new HttpRequestError(
-      422,
-      JSON.stringify({ message: 'x-nick header missing' })
+      500,
+      JSON.stringify({
+        message:
+          'Misconfiguration error. Api end point should have jwt token with nickname',
+      })
     )
   }
 
-  Object.assign(request.context, { extras: { nick } }, request)
+  const nickContext: NickContext = { extras: { nickname } }
+
+  Object.assign(request.context, nickContext, request)
 
   return
 }

@@ -9,9 +9,13 @@ import {
 
 import { getTable } from '../db/table'
 
-import { badRequestResponse, successResponse } from '../support/response'
+import {
+  badRequestResponse,
+  internalErrorResponse,
+  successResponse,
+} from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
-import { nickMiddleware } from './support/nick-middleware'
+import { isNickContext, nickMiddleware } from './support/nick-middleware'
 
 export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
   event,
@@ -23,9 +27,13 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async (
     return badRequestResponse({ error: 'Missing eventId' })
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const nick = context.extras.nick
+  if (!isNickContext(context)) {
+    return internalErrorResponse({
+      error: 'Middleware context has incorrect configuration',
+    })
+  }
+
+  const nick = context.extras.nickname
 
   const Table = getTable()
 
