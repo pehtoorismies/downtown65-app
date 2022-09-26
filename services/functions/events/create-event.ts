@@ -15,28 +15,11 @@ import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 
 import { getTable } from '../db/table'
+import { EVENT_TYPES, EventType } from '../support/event-type'
 import { createdResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
 import { jwtContextMiddleware } from './support/jwt-context-middleware'
 import { scopeMiddleware } from './support/scope-middleware'
-
-const EVENT_TYPES = [
-  'KARONKKA',
-  'MEETING',
-  'NORDIC_WALKING',
-  'ORIENTEERING',
-  'OTHER',
-  'RUNNING',
-  'SKIING',
-  'SPINNING',
-  'SWIMMING',
-  'TRACK_RUNNING',
-  'TRAIL_RUNNING',
-  'TRIATHLON',
-  'ULTRAS',
-] as const
-
-type EventType = typeof EVENT_TYPES[number]
 
 interface EventInput {
   createdBy: string
