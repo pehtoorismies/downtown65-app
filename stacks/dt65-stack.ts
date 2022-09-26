@@ -112,6 +112,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       'GET /event/{id}': 'functions/events/get-event.main',
       'DELETE /event/{id}': 'functions/events/delete-event.main',
       'POST /event': 'functions/events/create-event.main',
+      'PUT /event/{id}': 'functions/events/update-event.main',
       'PUT /event/{id}/join': 'functions/events/join-event.main',
       'PUT /event/{id}/leave': 'functions/events/leave-event.main',
       // auth
