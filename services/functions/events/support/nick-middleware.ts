@@ -12,12 +12,12 @@ export const isNickContext = (object: unknown): object is NickContext => {
 
 const NICK_PROPERTY = 'https://graphql.downtown65.com/nickname'
 
-interface Nicknameable {
+interface Dt65JwtToken {
   [NICK_PROPERTY]: string
 }
 
-const isNicknameable = (object: unknown): object is Nicknameable => {
-  const nick = (object as Nicknameable)[NICK_PROPERTY]
+const isDt65JwtToken = (object: unknown): object is Dt65JwtToken => {
+  const nick = (object as Dt65JwtToken)[NICK_PROPERTY]
   return !!nick
 }
 
@@ -27,7 +27,7 @@ const getNickname = (accessToken: string | undefined): string | undefined => {
   }
 
   const token = jwtDecode(accessToken)
-  if (isNicknameable(token)) {
+  if (isDt65JwtToken(token)) {
     return token[NICK_PROPERTY]
   }
 
