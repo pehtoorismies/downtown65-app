@@ -12,6 +12,7 @@ import startOfToday from 'date-fns/startOfToday'
 import { getTable } from '../db/table'
 import { successResponse } from '../support/response'
 import { jwtContextMiddleware } from './support/jwt-context-middleware'
+import { scopeMiddleware } from './support/scope-middleware'
 
 type Participants = {
   [name: string]: string
@@ -57,5 +58,6 @@ export const lambdaHandler: APIGatewayProxyHandlerV2 = async () => {
 export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
   .use(httpHeaderNormalizer())
   .use(jwtContextMiddleware())
+  .use(scopeMiddleware({ scopes: ['read:events'] }))
   .use(httpErrorHandler())
   .handler(lambdaHandler)

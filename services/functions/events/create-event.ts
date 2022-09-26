@@ -18,6 +18,7 @@ import { getTable } from '../db/table'
 import { createdResponse } from '../support/response'
 import { getPrimaryKey } from './support/event-primary-key'
 import { jwtContextMiddleware } from './support/jwt-context-middleware'
+import { scopeMiddleware } from './support/scope-middleware'
 
 const EVENT_TYPES = [
   'KARONKKA',
@@ -95,5 +96,6 @@ export const main = middy<APIGatewayProxyEventV2, APIGatewayProxyResultV2>()
   .use(jsonBodyParser())
   .use(validator({ eventSchema }))
   .use(jwtContextMiddleware())
+  .use(scopeMiddleware({ scopes: ['write:events'] }))
   .use(httpErrorHandler())
   .handler(lambdaHandler)
