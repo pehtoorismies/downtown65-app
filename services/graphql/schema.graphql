@@ -1,8 +1,34 @@
+enum EventType {
+  KARONKKA
+  MEETING
+  NORDIC_WALKING
+  ORIENTEERING
+  OTHER
+  RUNNING
+  SKIING
+  SPINNING
+  SWIMMING
+  TRACK_RUNNING
+  TRAIL_RUNNING
+  TRIATHLON
+  ULTRAS
+}
+
 type Event {
   id: ID!
   title: String!
+  subtitle: String
+  type: EventType!
+  race: Boolean!
+  exactDate: Boolean @deprecated(reason: "exactDate is deprecated. Legacy.")
 }
 
 type Query {
-  getEventById(eventId: String!): Event
+  event(eventId: String!): Event
+  # Future events
+  events: [Event!]!
+  findEvent(eventId: String!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
+  findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")
 }
+
+

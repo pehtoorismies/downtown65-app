@@ -134,7 +134,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
   const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {
     schema: 'services/graphql/schema.graphql',
     dataSources: {
-      events: 'functions/gql/gql.main',
+      events: 'graphql/gql.main',
     },
     defaults: {
       function: {
@@ -144,7 +144,11 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       },
     },
     resolvers: {
-      'Query    getEventById': 'events',
+      'Query event': 'events',
+      'Query events': 'events',
+      // LEGACY
+      'Query findEvent': 'events',
+      'Query findManyEvents': 'events',
     },
   })
 
