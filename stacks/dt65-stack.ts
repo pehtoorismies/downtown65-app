@@ -146,6 +146,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     resolvers: {
       'Query event': 'events',
       'Query events': 'events',
+      'Mutation createEvent': 'events',
       // LEGACY
       'Query findEvent': 'events',
       'Query findManyEvents': 'events',

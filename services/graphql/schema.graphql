@@ -26,9 +26,27 @@ type Event {
 type Query {
   event(eventId: String!): Event
   # Future events
-  events: [Event!]!
+  events: [Event!]
   findEvent(eventId: String!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
   findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")
+}
+
+input EventData {
+  title: String!
+  subtitle: String
+  race: Boolean
+  type: String!
+  date: String!
+  exactTime: Boolean = false
+}
+
+
+type Mutation {
+  createEvent(
+    event: EventData!
+    addMe: Boolean = false
+    notifySubscribers: Boolean = true
+  ): Event!
 }
 
 

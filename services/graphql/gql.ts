@@ -1,36 +1,46 @@
-import { EventType } from '../functions/support/event-type'
-import { getEventById } from './get-event-by-id'
+import { createEvent, CreateEventArguments } from './create-event'
+import { EventArguments, getEventById } from './get-event-by-id'
 import { getEvents } from './get-events'
 import { LegacyEvent } from './support/event'
 
-type AppSyncEvent = {
+type FieldName =
+  | 'event'
+  | 'events'
+  | 'createEvent'
+  | 'findEvent'
+  | 'findManyEvents'
+
+type Arguments = EventArguments & CreateEventArguments
+
+interface AppSyncEvent {
   info: {
-    fieldName: string
+    fieldName: FieldName
   }
-  arguments: {
-    eventId: string
-  }
+  arguments: Arguments
+}
+
+function assertUnreachable(x: never): never {
+  throw new Error(`Didn't expect to get here ${x}`)
 }
 
 export const main = (
   event: AppSyncEvent
 ): Promise<LegacyEvent | LegacyEvent[] | undefined> => {
+  console.log('INPUT', event.info.fieldName)
+
   switch (event.info.fieldName) {
+    case 'findEvent': // Legacy query
     case 'event': {
-      return getEventById(event.arguments.eventId)
+      return getEventById(event.arguments as EventArguments)
     }
+    case 'findManyEvents':
     case 'events': {
       // add some filter
       return getEvents()
     }
-    // Legacy
-    case 'findEvent': {
-      return getEventById(event.arguments.eventId)
+    case 'createEvent': {
+      return createEvent(event.arguments as CreateEventArguments)
     }
-    case 'findManyEvents': {
-      return getEvents()
-    }
-    default:
-      return Promise.resolve(void 0)
   }
+  return assertUnreachable(event.info.fieldName)
 }
