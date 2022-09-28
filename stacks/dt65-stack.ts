@@ -1,5 +1,5 @@
+import * as appsync from '@aws-cdk/aws-appsync-alpha'
 import {
-  Api,
   AppSyncApi,
   Cron,
   Function,
@@ -7,8 +7,11 @@ import {
   Table,
   use,
 } from '@serverless-stack/resources'
+import * as cdk from 'aws-cdk-lib'
+import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
 import { getEnvironmentVariable } from './get-environment'
+// import { getEnvironmentVariable } from './get-environment'
 
 export const Dt65Stack = ({ stack }: StackContext) => {
   // Config
@@ -77,58 +80,10 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
   })
 
-  const jwt = {
-    issuer: `https://${getEnvironmentVariable('AUTH_DOMAIN')}/`,
-    audience: [getEnvironmentVariable('JWT_AUDIENCE')],
-  }
-
-  // Create the HTTP API
-  const api = new Api(stack, 'Api', {
-    authorizers: {
-      auth0: {
-        type: 'jwt',
-        jwt,
-      },
-    },
-    defaults: {
-      authorizer: 'auth0',
-      function: {
-        // Pass in the table name to our API
-        environment: {
-          tableName: table.tableName,
-        },
-        config: [
-          AUTH_CLIENT_ID,
-          AUTH_CLIENT_SECRET,
-          AUTH_DOMAIN,
-          JWT_AUDIENCE,
-          REGISTER_SECRET,
-        ],
-        permissions: [table],
-      },
-    },
-    routes: {
-      // events
-      'GET /events': 'functions/events/get-events.main',
-      'GET /event/{id}': 'functions/events/get-event.main',
-      'DELETE /event/{id}': 'functions/events/delete-event.main',
-      'POST /event': 'functions/events/create-event.main',
-      'PUT /event/{id}': 'functions/events/update-event.main',
-      'PUT /event/{id}/join': 'functions/events/join-event.main',
-      'PUT /event/{id}/leave': 'functions/events/leave-event.main',
-      // auth
-      'POST /auth/login': {
-        function: 'functions/auth/login.main',
-        authorizer: 'none',
-      },
-      'POST /auth/signup': {
-        function: 'functions/auth/signup.main',
-        authorizer: 'none',
-      },
-      // users
-      'GET /users/{id}': 'functions/users/get-user.main',
-    },
-  })
+  // const jwt = {
+  //   issuer: `https://${getEnvironmentVariable('AUTH_DOMAIN')}/`,
+  //   audience: [getEnvironmentVariable('JWT_AUDIENCE')],
+  // }
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
     handler: 'graphql/gql.main',
@@ -147,6 +102,32 @@ export const Dt65Stack = ({ stack }: StackContext) => {
   //  Create the AppSync GraphQL API
   const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {
     schema: 'services/graphql/schema.graphql',
+    cdk: {
+      graphqlApi: {
+        logConfig: {
+          excludeVerboseContent: false,
+          fieldLogLevel: appsync.FieldLogLevel.ALL,
+          retention: RetentionDays.ONE_WEEK,
+        },
+        xrayEnabled: false,
+        authorizationConfig: {
+          defaultAuthorization: {
+            authorizationType: appsync.AuthorizationType.OIDC,
+            openIdConnectConfig: {
+              oidcProvider: `https://${getEnvironmentVariable('AUTH_DOMAIN')}`,
+            },
+          },
+          additionalAuthorizationModes: [
+            {
+              authorizationType: appsync.AuthorizationType.API_KEY,
+              apiKeyConfig: {
+                expires: cdk.Expiration.after(cdk.Duration.days(365)),
+              },
+            },
+          ],
+        },
+      },
+    },
     dataSources: {
       gql: gqlFunction,
     },
@@ -166,12 +147,12 @@ export const Dt65Stack = ({ stack }: StackContext) => {
   gqlApi.attachPermissions([table])
 
   // Show the API endpoint in the output
-  stack.addOutputs({
-    ApiEndpoint: api.url,
-  })
+  // stack.addOutputs({
+  //   ApiEndpoint: api.url,
+  // })
   stack.addOutputs({
     ApiId: gqlApi.apiId,
-    ApiKey: gqlApi.cdk.graphqlApi.apiKey || '',
+    ApiKey: gqlApi.cdk.graphqlApi.apiKey || 'No api key received',
     APiUrl: gqlApi.url,
   })
 }

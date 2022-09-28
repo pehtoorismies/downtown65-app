@@ -21,11 +21,14 @@ type Arguments = EventArguments &
   LoginArguments &
   SignupArguments
 
-interface AppSyncEvent {
+export interface AppSyncEvent {
   info: {
     fieldName: FieldName
   }
   arguments: Arguments
+  request: {
+    headers: Record<string, string>
+  }
 }
 
 function assertUnreachable(x: never): never {

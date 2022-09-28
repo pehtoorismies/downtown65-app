@@ -1,5 +1,7 @@
 scalar AWSDateTime
 
+directive @aws_api_key on OBJECT | FIELD_DEFINITION
+
 enum EventType {
   KARONKKA
   MEETING
@@ -25,7 +27,7 @@ type Event {
   exactDate: Boolean @deprecated(reason: "exactDate is deprecated. Legacy.")
 }
 
-type User {
+type User @aws_api_key {
   id: String!
   email: String!
   name: String!
@@ -53,7 +55,7 @@ input EventData {
   exactTime: Boolean = false
 }
 
-type AuthPayload {
+type AuthPayload @aws_api_key {
   accessToken: String!
   idToken: String!
   expiresIn: String!
@@ -74,7 +76,7 @@ type Mutation {
   login(
     email: String!
     password: String!
-  ): AuthPayload!
+  ): AuthPayload! @aws_api_key
 
   signup(
     email: String!
@@ -82,7 +84,7 @@ type Mutation {
     password: String!
     name: String!
     registerSecret: String!
-  ): User!
+  ): User! @aws_api_key
 
 }
 
