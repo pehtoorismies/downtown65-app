@@ -1,5 +1,4 @@
 import { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
-import { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import {
   QueryEventArgs as QueryEventArguments,
   Event as Dt65Event,
@@ -9,12 +8,14 @@ import {
   User,
   MutationForgotPasswordArgs,
   AuthPayload,
+  BaseUser,
 } from '../appsync'
 import { createEvent } from './create-event'
 import { forgotPassword } from './forgot-password'
 import { getEventById } from './get-event-by-id'
 import { getEvents } from './get-events'
 import { getMe } from './get-me'
+import { getUsers } from './get-users'
 import { login } from './login'
 import { signup } from './signup'
 
@@ -57,6 +58,7 @@ type Outputs =
   | AuthPayload
   | User
   | boolean
+  | BaseUser[]
 
 export const main: AppSyncResolverHandler<Inputs, Outputs> = (
   event,
@@ -112,8 +114,8 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
     case 'users': {
-      return forgotPassword(
-        event as AppSyncResolverEvent<MutationForgotPasswordArgs>,
+      return getUsers(
+        event as AppSyncResolverEvent<EmptyArgs>,
         context,
         callback
       )

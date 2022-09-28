@@ -28,7 +28,14 @@ type Event {
   exactTime: Boolean @deprecated(reason: "exactTime is deprecated. Legacy.")
 }
 
-type User @aws_api_key @aws_oidc {
+interface Auth0User {
+  id: ID!
+  email: String!
+  name: String!
+  nickname: String
+}
+
+type User implements Auth0User @aws_api_key @aws_oidc {
   id: ID!
   email: String!
   name: String!
@@ -38,11 +45,11 @@ type User @aws_api_key @aws_oidc {
   updatedAt: AWSDateTime
 }
 
-type BaseUser {
+type BaseUser implements Auth0User{
   id: ID!
+  email: String!
   name: String!
   nickname: String!
-  email: String!
   picture: String!
 }
 

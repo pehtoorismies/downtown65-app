@@ -1,11 +1,11 @@
 import { AppSyncResolverHandler } from 'aws-lambda'
-// import { z } from 'zod'
+import { z } from 'zod'
 import { BaseUser } from '../appsync'
 import { getAuth0Management } from '../functions/support/auth'
 import { EmptyArgs } from './gql'
-// import { Auth0UserResponse, toUser } from './support/auth0-user'
+import { Auth0UserResponse, toBaseUser, toUser } from './support/auth0-user'
 
-// const Auth0Users = z.array(Auth0UserResponse)
+const Auth0Users = z.array(Auth0UserResponse)
 
 export const getUsers: AppSyncResolverHandler<
   EmptyArgs,
@@ -13,10 +13,7 @@ export const getUsers: AppSyncResolverHandler<
 > = async () => {
   const management = await getAuth0Management()
   const users = await management.getUsers()
-  console.log(users)
+  const auth0Users = Auth0Users.parse(users)
 
-  return []
-  // const auth0Users = Auth0Users.parse(users)
-
-  // return auth0Users.map((user) => toUser(user))
+  return auth0Users.map((user) => toBaseUser(user))
 }
