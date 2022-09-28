@@ -135,9 +135,11 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       'Query    event': 'gql',
       'Query    events': 'gql',
       'Query    me': 'gql',
+      'Query    users': 'gql',
       'Mutation createEvent': 'gql',
       'Mutation login': 'gql',
       'Mutation signup': 'gql',
+      'Mutation forgotPassword': 'gql',
       // LEGACY
       'Query    findEvent': 'gql',
       'Query    findManyEvents': 'gql',

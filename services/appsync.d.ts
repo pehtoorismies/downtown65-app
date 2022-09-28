@@ -20,6 +20,15 @@ export type AuthPayload = {
   idToken: Scalars['String'];
 };
 
+export type BaseUser = {
+  __typename?: 'BaseUser';
+  email: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  nickname: Scalars['String'];
+  picture: Scalars['String'];
+};
+
 export type Event = {
   __typename?: 'Event';
   /** @deprecated exactTime is deprecated. Legacy. */
@@ -105,6 +114,7 @@ export type Query = {
   /** @deprecated findManyEvents is deprecated. Use events instead. */
   findManyEvents: Array<Event>;
   me: User;
+  users: Array<BaseUser>;
 };
 
 
@@ -126,7 +136,7 @@ export type User = {
   __typename?: 'User';
   createdAt: Scalars['AWSDateTime'];
   email: Scalars['String'];
-  id: Scalars['String'];
+  id: Scalars['ID'];
   name: Scalars['String'];
   nickname?: Maybe<Scalars['String']>;
   preferences: Preferences;

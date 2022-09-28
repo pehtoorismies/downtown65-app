@@ -29,7 +29,7 @@ type Event {
 }
 
 type User @aws_api_key @aws_oidc {
-  id: String!
+  id: ID!
   email: String!
   name: String!
   nickname: String
@@ -38,11 +38,20 @@ type User @aws_api_key @aws_oidc {
   updatedAt: AWSDateTime
 }
 
+type BaseUser {
+  id: ID!
+  name: String!
+  nickname: String!
+  email: String!
+  picture: String!
+}
+
 type Query {
   event(eventId: String!): Event
   # Future events
   events: [Event!]!
   me: User!
+  users: [BaseUser!]!
   findEvent(eventId: String!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
   findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")
 }

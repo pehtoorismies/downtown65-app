@@ -111,5 +111,12 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
         callback
       )
     }
+    case 'users': {
+      return forgotPassword(
+        event as AppSyncResolverEvent<MutationForgotPasswordArgs>,
+        context,
+        callback
+      )
+    }
   }
 }
