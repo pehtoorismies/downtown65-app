@@ -130,26 +130,36 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
   })
 
+  const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
+    handler: 'graphql/gql.main',
+    config: [
+      AUTH_CLIENT_ID,
+      AUTH_CLIENT_SECRET,
+      AUTH_DOMAIN,
+      JWT_AUDIENCE,
+      REGISTER_SECRET,
+    ],
+    environment: {
+      tableName: table.tableName,
+    },
+  })
+
   //  Create the AppSync GraphQL API
   const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {
     schema: 'services/graphql/schema.graphql',
     dataSources: {
-      events: 'graphql/gql.main',
-    },
-    defaults: {
-      function: {
-        environment: {
-          tableName: table.tableName,
-        },
-      },
+      gql: gqlFunction,
     },
     resolvers: {
-      'Query event': 'events',
-      'Query events': 'events',
-      'Mutation createEvent': 'events',
+      'Query    event': 'gql',
+      'Query    events': 'gql',
+      'Query    me': 'gql',
+      'Mutation createEvent': 'gql',
+      'Mutation login': 'gql',
+      'Mutation signup': 'gql',
       // LEGACY
-      'Query findEvent': 'events',
-      'Query findManyEvents': 'events',
+      'Query    findEvent': 'gql',
+      'Query    findManyEvents': 'gql',
     },
   })
 

@@ -21,7 +21,8 @@
     "npm": "8.19.2",
     "superagent-proxy": "^3.0.0",
     "uuid": "9.0.0",
-    "yarn": "1.22.19"
+    "yarn": "1.22.19",
+    "zod": "3.19.1"
   },
   "devDependencies": {
     "@types/auth0": "^2.35.3",

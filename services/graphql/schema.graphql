@@ -1,3 +1,5 @@
+scalar AWSDateTime
+
 enum EventType {
   KARONKKA
   MEETING
@@ -23,10 +25,21 @@ type Event {
   exactDate: Boolean @deprecated(reason: "exactDate is deprecated. Legacy.")
 }
 
+type User {
+  id: String!
+  email: String!
+  name: String!
+  nickname: String
+  preferences: Preferences!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime
+}
+
 type Query {
   event(eventId: String!): Event
   # Future events
   events: [Event!]
+  me: User!
   findEvent(eventId: String!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
   findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")
 }
@@ -40,6 +53,16 @@ input EventData {
   exactTime: Boolean = false
 }
 
+type AuthPayload {
+  accessToken: String!
+  idToken: String!
+  expiresIn: String!
+}
+
+type Preferences {
+  subscribeWeeklyEmail: Boolean!
+  subscribeEventCreationEmail: Boolean!
+}
 
 type Mutation {
   createEvent(
@@ -47,6 +70,20 @@ type Mutation {
     addMe: Boolean = false
     notifySubscribers: Boolean = true
   ): Event!
+
+  login(
+    email: String!
+    password: String!
+  ): AuthPayload!
+
+  signup(
+    email: String!
+    nickname: String!
+    password: String!
+    name: String!
+    registerSecret: String!
+  ): User!
+
 }
 
 
