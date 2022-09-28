@@ -1,6 +1,7 @@
 scalar AWSDateTime
 
 directive @aws_api_key on OBJECT | FIELD_DEFINITION
+directive @aws_oidc on OBJECT
 
 enum EventType {
   KARONKKA
@@ -24,10 +25,10 @@ type Event {
   subtitle: String
   type: EventType!
   race: Boolean!
-  exactDate: Boolean @deprecated(reason: "exactDate is deprecated. Legacy.")
+  exactTime: Boolean @deprecated(reason: "exactTime is deprecated. Legacy.")
 }
 
-type User @aws_api_key {
+type User @aws_api_key @aws_oidc {
   id: String!
   email: String!
   name: String!
@@ -40,7 +41,7 @@ type User @aws_api_key {
 type Query {
   event(eventId: String!): Event
   # Future events
-  events: [Event!]
+  events: [Event!]!
   me: User!
   findEvent(eventId: String!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
   findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")

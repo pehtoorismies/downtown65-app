@@ -1,5 +1,11 @@
+import { AppSyncResolverHandler } from 'aws-lambda'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
+import {
+  QueryEventArgs as QueryEventArguments,
+  Event as Dt65Event,
+  MutationCreateEventArgs,
+} from '../appsync'
 import { getTable } from '../functions/db/table'
 import { getPrimaryKey } from '../functions/events/support/event-primary-key'
 import { EventType } from '../functions/support/event-type'
@@ -21,11 +27,13 @@ export type CreateEventArguments = {
   notifySubscribers: boolean
 }
 
-export const createEvent = async (
-  input: CreateEventArguments
-): Promise<LegacyEvent | undefined> => {
+export const createEvent: AppSyncResolverHandler<
+  MutationCreateEventArgs,
+  Dt65Event
+> = async (event) => {
   const Table = getTable()
-  const { title, date, type, subtitle, race } = input.event
+
+  const { title, date, type, subtitle, race } = event.arguments.event
 
   const eventId = uuidv4()
   const startDate = formatISO(new Date(date))
@@ -52,8 +60,8 @@ export const createEvent = async (
   return toLegacyEvent({
     id: eventId,
     title,
-    subtitle,
+    subtitle: subtitle ?? undefined,
     race: race ?? false,
-    type,
+    type: type as EventType,
   })
 }

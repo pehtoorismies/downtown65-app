@@ -36,7 +36,8 @@
             "database": false
           },
           "res": false,
-          "params": false
+          "params": false,
+          "args": false
         }
       }
     ],

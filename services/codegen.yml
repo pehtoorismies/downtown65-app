@@ -1,0 +1,10 @@
+overwrite: true
+schema:
+  - 'graphql/schema.graphql'
+
+generates:
+  appsync.d.ts:
+    plugins:
+      - typescript
+    config:
+      enumsAsTypes: true

@@ -1,5 +1,7 @@
 import { Config } from '@serverless-stack/node/config'
+import { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
+import { MutationLoginArgs } from '../appsync'
 import { getClient } from '../functions/support/auth'
 
 export type LoginArguments = {
@@ -21,12 +23,13 @@ export type AuthPayload = {
 
 const auth0 = getClient()
 
-export const login = async (
-  input: LoginArguments
-): Promise<AuthPayload | undefined> => {
+export const login: AppSyncResolverHandler<
+  MutationLoginArgs,
+  AuthPayload
+> = async (event) => {
   const auth0Response = await auth0.passwordGrant({
-    username: input.email,
-    password: input.password,
+    username: event.arguments.email,
+    password: event.arguments.password,
     scope:
       'read:events write:events read:me write:me read:users openid profile',
     audience: Config.JWT_AUDIENCE,

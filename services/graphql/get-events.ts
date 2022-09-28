@@ -1,6 +1,9 @@
+import { AppSyncResolverHandler } from 'aws-lambda'
 import { format } from 'date-fns'
 import startOfToday from 'date-fns/startOfToday'
+import { Event as Dt65Event } from '../appsync'
 import { getTable } from '../functions/db/table'
+import { EmptyArgs } from './gql'
 import { Event } from './support/event'
 import { toLegacyEvent } from './support/legacy-api'
 
@@ -12,7 +15,10 @@ const getExpression = (d: Date) => {
   return `DATE#${lt}`
 }
 
-export const getEvents = async (): Promise<Event[] | undefined> => {
+export const getEvents: AppSyncResolverHandler<
+  EmptyArgs,
+  Dt65Event[]
+> = async () => {
   const Table = getTable()
 
   const query = getExpression(startOfToday())

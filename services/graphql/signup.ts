@@ -1,9 +1,9 @@
 import { Config } from '@serverless-stack/node/config'
-import { z } from 'zod'
+import { AppSyncResolverHandler } from 'aws-lambda'
+
+import { MutationSignupArgs, User } from '../appsync'
 import { getAuth0Management } from '../functions/support/auth'
 import { Auth0UserResponse, toUser } from './support/auth0-user'
-
-type Datetime = string
 
 export type SignupArguments = {
   email: string
@@ -13,31 +13,20 @@ export type SignupArguments = {
   registerSecret: string
 }
 
-export type User = {
-  id: string
-  email: string
-  name: string
-  nickname: string
-  preferences: {
-    subscribeWeeklyEmail: boolean
-    subscribeEventCreationEmail: boolean
-  }
-  createdAt: Datetime
-  updatedAt?: Datetime
-}
+export const signup: AppSyncResolverHandler<MutationSignupArgs, User> = async (
+  event
+) => {
+  const args = event.arguments
 
-export const signup = async (
-  input: SignupArguments
-): Promise<User | undefined> => {
-  if (input.registerSecret !== Config.REGISTER_SECRET) {
+  if (args.registerSecret !== Config.REGISTER_SECRET) {
     throw new Error('Invalid register secret')
   }
 
   const user = {
-    email: input.email,
-    password: input.password,
-    name: input.name,
-    nickname: input.nickname,
+    email: args.email,
+    password: args.password,
+    name: args.name,
+    nickname: args.nickname,
   }
 
   const management = await getAuth0Management()
