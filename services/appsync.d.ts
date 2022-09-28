@@ -13,6 +13,13 @@ export type Scalars = {
   AWSDateTime: any;
 };
 
+export type Auth0User = {
+  email: Scalars['String'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  nickname?: Maybe<Scalars['String']>;
+};
+
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   accessToken: Scalars['String'];
@@ -20,7 +27,7 @@ export type AuthPayload = {
   idToken: Scalars['String'];
 };
 
-export type BaseUser = {
+export type BaseUser = Auth0User & {
   __typename?: 'BaseUser';
   email: Scalars['String'];
   id: Scalars['ID'];
@@ -64,10 +71,18 @@ export type EventType =
   | 'TRIATHLON'
   | 'ULTRAS';
 
+export type IdPayload = {
+  __typename?: 'IDPayload';
+  id: Scalars['ID'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createEvent: Event;
+  deleteEvent?: Maybe<IdPayload>;
   forgotPassword: Scalars['Boolean'];
+  joinEvent?: Maybe<Event>;
+  leaveEvent?: Maybe<Event>;
   login: AuthPayload;
   signup: User;
 };
@@ -80,8 +95,23 @@ export type MutationCreateEventArgs = {
 };
 
 
+export type MutationDeleteEventArgs = {
+  eventId: Scalars['ID'];
+};
+
+
 export type MutationForgotPasswordArgs = {
   email: Scalars['String'];
+};
+
+
+export type MutationJoinEventArgs = {
+  eventId: Scalars['ID'];
+};
+
+
+export type MutationLeaveEventArgs = {
+  eventId: Scalars['ID'];
 };
 
 
@@ -119,12 +149,12 @@ export type Query = {
 
 
 export type QueryEventArgs = {
-  eventId: Scalars['String'];
+  eventId: Scalars['ID'];
 };
 
 
 export type QueryFindEventArgs = {
-  eventId: Scalars['String'];
+  eventId: Scalars['ID'];
 };
 
 
@@ -132,7 +162,7 @@ export type QueryFindManyEventsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
 };
 
-export type User = {
+export type User = Auth0User & {
   __typename?: 'User';
   createdAt: Scalars['AWSDateTime'];
   email: Scalars['String'];

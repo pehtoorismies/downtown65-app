@@ -6,23 +6,23 @@ import { getAuth0Management } from '../functions/support/auth'
 import { EmptyArgs } from './gql'
 import { Auth0UserResponse, toUser } from './support/auth0-user'
 
-// type Identity = {
-//   identity: {
-//     claims: {
-//       sub: string
-//       aud: string[]
-//       azp: string
-//       scope: string
-//       iss: string
-//       ['https://graphql.downtown65.com/nickname']: string
-//       exp: number
-//       iat: number
-//       gty: string
-//     }
-//     issuer: string
-//     sub: string
-//   }
-// }
+type Identity = {
+  identity: {
+    claims: {
+      sub: string
+      aud: string[]
+      azp: string
+      scope: string
+      iss: string
+      ['https://graphql.downtown65.com/nickname']: string
+      exp: number
+      iat: number
+      gty: string
+    }
+    issuer: string
+    sub: string
+  }
+}
 
 export const getMe: AppSyncResolverHandler<EmptyArgs, User> = async (event) => {
   const identity = event.identity as AppSyncIdentityOIDC

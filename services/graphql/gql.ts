@@ -9,13 +9,20 @@ import {
   MutationForgotPasswordArgs,
   AuthPayload,
   BaseUser,
+  MutationDeleteEventArgs,
+  IdPayload,
+  MutationLeaveEventArgs,
+  MutationJoinEventArgs,
 } from '../appsync'
 import { createEvent } from './create-event'
+import { deleteEvent } from './delete-event'
 import { forgotPassword } from './forgot-password'
 import { getEventById } from './get-event-by-id'
 import { getEvents } from './get-events'
 import { getMe } from './get-me'
 import { getUsers } from './get-users'
+import { joinEvent } from './join-event'
+import { leaveEvent } from './leave-event'
 import { login } from './login'
 import { signup } from './signup'
 
@@ -50,6 +57,7 @@ type Inputs =
   | MutationSignupArgs
   | EmptyArgs
   | MutationForgotPasswordArgs
+  | MutationDeleteEventArgs
 
 type Outputs =
   | Dt65Event
@@ -59,6 +67,7 @@ type Outputs =
   | User
   | boolean
   | BaseUser[]
+  | IdPayload
 
 export const main: AppSyncResolverHandler<Inputs, Outputs> = (
   event,
@@ -85,6 +94,27 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
     case 'createEvent': {
       return createEvent(
         event as AppSyncResolverEvent<MutationCreateEventArgs>,
+        context,
+        callback
+      )
+    }
+    case 'deleteEvent': {
+      return deleteEvent(
+        event as AppSyncResolverEvent<MutationDeleteEventArgs>,
+        context,
+        callback
+      )
+    }
+    case 'leaveEvent': {
+      return leaveEvent(
+        event as AppSyncResolverEvent<MutationLeaveEventArgs>,
+        context,
+        callback
+      )
+    }
+    case 'joinEvent': {
+      return joinEvent(
+        event as AppSyncResolverEvent<MutationJoinEventArgs>,
         context,
         callback
       )

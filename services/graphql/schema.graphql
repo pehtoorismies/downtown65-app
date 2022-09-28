@@ -53,15 +53,6 @@ type BaseUser implements Auth0User{
   picture: String!
 }
 
-type Query {
-  event(eventId: String!): Event
-  # Future events
-  events: [Event!]!
-  me: User!
-  users: [BaseUser!]!
-  findEvent(eventId: String!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
-  findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")
-}
 
 input EventData {
   title: String!
@@ -82,6 +73,21 @@ type Preferences {
   subscribeWeeklyEmail: Boolean!
   subscribeEventCreationEmail: Boolean!
 }
+
+type IDPayload {
+  id: ID!
+}
+
+type Query {
+  event(eventId: ID!): Event @aws_api_key
+  # Future events
+  events: [Event!]!
+  me: User!
+  users: [BaseUser!]!
+  findEvent(eventId: ID!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
+  findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")
+}
+
 
 type Mutation {
   createEvent(
@@ -106,6 +112,11 @@ type Mutation {
   forgotPassword(
     email: String!
   ): Boolean!
+
+  deleteEvent(eventId: ID!): IDPayload
+
+  leaveEvent(eventId: ID!): Event
+  joinEvent(eventId: ID!): Event
 
 }
 
