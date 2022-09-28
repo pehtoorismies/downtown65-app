@@ -87,6 +87,10 @@ type Mutation {
     registerSecret: String!
   ): User! @aws_api_key
 
+  forgotPassword(
+    email: String!
+  ): Boolean!
+
 }
 
 

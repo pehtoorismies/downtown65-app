@@ -2,7 +2,9 @@
   "name": "@downtown65-app/services",
   "version": "0.0.0",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "codegen": "graphql-codegen"
+  },
   "dependencies": {
     "@graphql-codegen/cli": "2.13.0",
     "@graphql-codegen/typescript": "2.7.3",

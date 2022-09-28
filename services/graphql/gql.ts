@@ -7,14 +7,16 @@ import {
   MutationLoginArgs,
   MutationSignupArgs,
   User,
+  MutationForgotPasswordArgs,
+  AuthPayload,
 } from '../appsync'
-import { createEvent, CreateEventArguments } from './create-event'
+import { createEvent } from './create-event'
+import { forgotPassword } from './forgot-password'
 import { getEventById } from './get-event-by-id'
 import { getEvents } from './get-events'
 import { getMe } from './get-me'
-import { AuthPayload, login, LoginArguments } from './login'
-import { signup, SignupArguments } from './signup'
-import { LegacyEvent } from './support/event'
+import { login } from './login'
+import { signup } from './signup'
 
 type Identity = {
   identity: {
@@ -46,8 +48,15 @@ type Inputs =
   | MutationLoginArgs
   | MutationSignupArgs
   | EmptyArgs
+  | MutationForgotPasswordArgs
 
-type Outputs = Dt65Event | Dt65Event[] | undefined | AuthPayload | User
+type Outputs =
+  | Dt65Event
+  | Dt65Event[]
+  | undefined
+  | AuthPayload
+  | User
+  | boolean
 
 export const main: AppSyncResolverHandler<Inputs, Outputs> = (
   event,
@@ -94,6 +103,13 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
     }
     case 'me': {
       return getMe(event as AppSyncResolverEvent<EmptyArgs>, context, callback)
+    }
+    case 'forgotPassword': {
+      return forgotPassword(
+        event as AppSyncResolverEvent<MutationForgotPasswordArgs>,
+        context,
+        callback
+      )
     }
   }
 }

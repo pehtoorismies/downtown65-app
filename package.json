@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "sst load-config -- vitest run",
     "lint": "eslint . --ext .ts",
-    "codegen": "graphql-codegen -c services/"
+    "codegen": "yarn workspaces run codegen"
   },
   "devDependencies": {
     "@serverless-stack/cli": "1.14.4",

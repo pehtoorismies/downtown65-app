@@ -58,6 +58,7 @@ export type EventType =
 export type Mutation = {
   __typename?: 'Mutation';
   createEvent: Event;
+  forgotPassword: Scalars['Boolean'];
   login: AuthPayload;
   signup: User;
 };
@@ -67,6 +68,11 @@ export type MutationCreateEventArgs = {
   addMe?: InputMaybe<Scalars['Boolean']>;
   event: EventData;
   notifySubscribers?: InputMaybe<Scalars['Boolean']>;
+};
+
+
+export type MutationForgotPasswordArgs = {
+  email: Scalars['String'];
 };
 
 

@@ -21,12 +21,6 @@ interface EventData {
   exactTime: boolean
 }
 
-export type CreateEventArguments = {
-  event: EventData
-  addMe: boolean
-  notifySubscribers: boolean
-}
-
 export const createEvent: AppSyncResolverHandler<
   MutationCreateEventArgs,
   Dt65Event
