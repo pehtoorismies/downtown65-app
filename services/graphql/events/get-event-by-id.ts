@@ -3,7 +3,7 @@ import type {
   QueryEventArgs as QueryEventArguments,
   Event as Dt65Event,
 } from '../../appsync'
-import { getTable } from '../../functions/db/table'
+import { getTable } from '../../db/table'
 import { toLegacyEvent } from '../support/legacy-api'
 import { getPrimaryKey } from './support/event-primary-key'
 

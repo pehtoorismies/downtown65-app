@@ -2,7 +2,7 @@ import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 
 import type { Event as Dt65Event, MutationLeaveEventArgs } from '../../appsync'
-import { getTable } from '../../functions/db/table'
+import { getTable } from '../../db/table'
 
 import { getPrimaryKey } from './support/event-primary-key'
 
