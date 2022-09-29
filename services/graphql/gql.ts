@@ -25,6 +25,7 @@ import { getEvents } from './events/get-events'
 import { joinEvent } from './events/join-event'
 import { leaveEvent } from './events/leave-event'
 import { updateEvent } from './events/update-event'
+import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
 import { getUsers } from './users/get-users'
 
@@ -64,6 +65,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
     case 'events': {
+      verifyScope(event.identity, ['read:event'])
       return getEvents(
         event as AppSyncResolverEvent<Record<string, never>>,
         context,
@@ -71,6 +73,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
     case 'createEvent': {
+      verifyScope(event.identity, ['write:event'])
       return createEvent(
         event as AppSyncResolverEvent<MutationCreateEventArgs>,
         context,
@@ -78,6 +81,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
     case 'updateEvent': {
+      verifyScope(event.identity, ['write:event'])
       return updateEvent(
         event as AppSyncResolverEvent<MutationUpdateEventArgs>,
         context,
@@ -85,6 +89,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
     case 'deleteEvent': {
+      verifyScope(event.identity, ['write:event'])
       return deleteEvent(
         event as AppSyncResolverEvent<MutationDeleteEventArgs>,
         context,
@@ -92,6 +97,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
     case 'leaveEvent': {
+      verifyScope(event.identity, ['write:event'])
       return leaveEvent(
         event as AppSyncResolverEvent<MutationLeaveEventArgs>,
         context,
@@ -99,6 +105,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
     case 'joinEvent': {
+      verifyScope(event.identity, ['write:event'])
       return joinEvent(
         event as AppSyncResolverEvent<MutationJoinEventArgs>,
         context,
@@ -119,9 +126,6 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
         callback
       )
     }
-    case 'me': {
-      return getMe(event as AppSyncResolverEvent<EmptyArgs>, context, callback)
-    }
     case 'forgotPassword': {
       return forgotPassword(
         event as AppSyncResolverEvent<MutationForgotPasswordArgs>,
@@ -129,7 +133,12 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
         callback
       )
     }
+    case 'me': {
+      verifyScope(event.identity, ['read:me'])
+      return getMe(event as AppSyncResolverEvent<EmptyArgs>, context, callback)
+    }
     case 'users': {
+      verifyScope(event.identity, ['read:users'])
       return getUsers(
         event as AppSyncResolverEvent<EmptyArgs>,
         context,

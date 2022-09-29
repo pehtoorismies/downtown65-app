@@ -3,9 +3,9 @@ import type {
   APIGatewayProxyEventV2,
   APIGatewayProxyResultV2,
 } from 'aws-lambda'
+import { matchScopes } from '../../../graphql/support/match-scopes'
 import { HttpRequestError } from '../../support/errors'
 import { isDt65Context } from './dt65-context'
-import { matchScopes } from './match-scopes'
 
 interface Options {
   scopes: string[]
