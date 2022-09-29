@@ -1,11 +1,11 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
-import type { Event as Dt65Event, MutationCreateEventArgs } from '../appsync'
-import { getTable } from '../functions/db/table'
-import { getPrimaryKey } from '../functions/events/support/event-primary-key'
-import type { EventType } from '../functions/support/event-type'
-import { toLegacyEvent } from './support/legacy-api'
+import type { Event as Dt65Event, MutationCreateEventArgs } from '../../appsync'
+import { getTable } from '../../functions/db/table'
+import { getPrimaryKey } from '../../functions/events/support/event-primary-key'
+import type { EventType } from '../../functions/support/event-type'
+import { toLegacyEvent } from '../support/legacy-api'
 
 export const createEvent: AppSyncResolverHandler<
   MutationCreateEventArgs,
@@ -13,10 +13,10 @@ export const createEvent: AppSyncResolverHandler<
 > = async (event) => {
   const Table = getTable()
 
-  const { title, date, type, subtitle, race } = event.arguments.event
+  const { title, dateStart, type, subtitle, race } = event.arguments.event
 
   const eventId = uuidv4()
-  const startDate = formatISO(new Date(date))
+  const startDate = formatISO(new Date(dateStart))
 
   await Table.Dt65Event.put(
     {

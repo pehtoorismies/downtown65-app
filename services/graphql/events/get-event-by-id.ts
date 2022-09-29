@@ -2,11 +2,11 @@ import type { AppSyncResolverHandler } from 'aws-lambda'
 import type {
   QueryEventArgs as QueryEventArguments,
   Event as Dt65Event,
-} from '../appsync'
-import { getTable } from '../functions/db/table'
-import { getPrimaryKey } from '../functions/events/support/event-primary-key'
+} from '../../appsync'
+import { getTable } from '../../functions/db/table'
+import { getPrimaryKey } from '../../functions/events/support/event-primary-key'
 
-import { toLegacyEvent } from './support/legacy-api'
+import { toLegacyEvent } from '../support/legacy-api'
 
 export const getEventById: AppSyncResolverHandler<
   QueryEventArguments,

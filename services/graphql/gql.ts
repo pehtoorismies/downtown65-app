@@ -14,21 +14,19 @@ import type {
   MutationLeaveEventArgs,
   MutationJoinEventArgs,
   MutationUpdateEventArgs,
-  Query,
-  Mutation,
 } from '../appsync'
-import { createEvent } from './create-event'
-import { deleteEvent } from './delete-event'
+import { createEvent } from './events/create-event'
+import { deleteEvent } from './events/delete-event'
+import { getEventById } from './events/get-event-by-id'
+import { getEvents } from './events/get-events'
+import { joinEvent } from './events/join-event'
+import { leaveEvent } from './events/leave-event'
+import { updateEvent } from './events/update-event'
 import { forgotPassword } from './forgot-password'
-import { getEventById } from './get-event-by-id'
-import { getEvents } from './get-events'
 import { getMe } from './get-me'
 import { getUsers } from './get-users'
-import { joinEvent } from './join-event'
-import { leaveEvent } from './leave-event'
 import { login } from './login'
 import { signup } from './signup'
-import { updateEvent } from './update-event'
 
 export type EmptyArgs = Record<string, never>
 
@@ -139,4 +137,5 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
   }
+  throw new Error('Mismatch in schema and implementation')
 }
