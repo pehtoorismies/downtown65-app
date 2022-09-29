@@ -15,6 +15,9 @@ import type {
   MutationJoinEventArgs,
   MutationUpdateEventArgs,
 } from '../appsync'
+import { forgotPassword } from './auth/forgot-password'
+import { login } from './auth/login'
+import { signup } from './auth/signup'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
 import { getEventById } from './events/get-event-by-id'
@@ -22,11 +25,8 @@ import { getEvents } from './events/get-events'
 import { joinEvent } from './events/join-event'
 import { leaveEvent } from './events/leave-event'
 import { updateEvent } from './events/update-event'
-import { forgotPassword } from './forgot-password'
-import { getMe } from './get-me'
-import { getUsers } from './get-users'
-import { login } from './login'
-import { signup } from './signup'
+import { getMe } from './users/get-me'
+import { getUsers } from './users/get-users'
 
 export type EmptyArgs = Record<string, never>
 
