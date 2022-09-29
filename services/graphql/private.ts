@@ -65,7 +65,7 @@ export const privateResolver = (
 
     switch (field) {
       case 'events': {
-        allowScopes(['read:event'])
+        allowScopes(['read:events'])
         return getEvents(
           event as AppSyncResolverEvent<Record<string, never>>,
           context,
@@ -73,7 +73,7 @@ export const privateResolver = (
         )
       }
       case 'createEvent': {
-        allowScopes(['write:event'])
+        allowScopes(['write:events'])
         return createEvent(
           event as AppSyncResolverEvent<MutationCreateEventArgs>,
           context,
@@ -81,7 +81,7 @@ export const privateResolver = (
         )
       }
       case 'updateEvent': {
-        allowScopes(['write:event'])
+        allowScopes(['write:events'])
         return updateEvent(
           event as AppSyncResolverEvent<MutationUpdateEventArgs>,
           context,
@@ -89,7 +89,7 @@ export const privateResolver = (
         )
       }
       case 'deleteEvent': {
-        allowScopes(['write:event'])
+        allowScopes(['write:events'])
         return deleteEvent(
           event as AppSyncResolverEvent<MutationDeleteEventArgs>,
           context,
@@ -97,7 +97,7 @@ export const privateResolver = (
         )
       }
       case 'leaveEvent': {
-        allowScopes(['write:event'])
+        allowScopes(['write:events'])
         return leaveEvent(
           event as AppSyncResolverEvent<MutationLeaveEventArgs>,
           context,
@@ -105,7 +105,7 @@ export const privateResolver = (
         )
       }
       case 'joinEvent': {
-        allowScopes(['write:event'])
+        allowScopes(['write:events'])
         return joinEvent(
           event as AppSyncResolverEvent<MutationJoinEventArgs>,
           context,
