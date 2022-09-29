@@ -20,7 +20,7 @@ enum EventType {
 }
 
 type Event {
-  exactTime: Boolean @deprecated(reason: "exactTime is deprecated. Legacy.")
+  dateStart: AWSDateTime!
   id: ID!
   race: Boolean!
   subtitle: String
@@ -36,18 +36,18 @@ interface Auth0User {
 }
 
 type User implements Auth0User @aws_api_key @aws_oidc {
-  id: ID!
+  createdAt: AWSDateTime!
   email: String!
+  id: ID!
   name: String!
   nickname: String
   preferences: Preferences!
-  createdAt: AWSDateTime!
   updatedAt: AWSDateTime
 }
 
 type BaseUser implements Auth0User{
-  id: ID!
   email: String!
+  id: ID!
   name: String!
   nickname: String!
   picture: String!
@@ -55,27 +55,35 @@ type BaseUser implements Auth0User{
 
 
 input CreateEventInput {
-  title: String!
-  subtitle: String
+  dateStart: AWSDateTime!
   race: Boolean
+  subtitle: String
+  title: String!
   type: String!
-  date: String!
-  exactTime: Boolean = false
 }
 
 type AuthPayload @aws_api_key {
   accessToken: String!
+  expiresIn: Int!
   idToken: String!
-  expiresIn: String!
 }
 
 type Preferences {
-  subscribeWeeklyEmail: Boolean!
   subscribeEventCreationEmail: Boolean!
+  subscribeWeeklyEmail: Boolean!
 }
 
 type IDPayload {
   id: ID!
+}
+
+input UpdateEventInput {
+  dateStart: AWSDateTime
+  id: ID!
+  race: Boolean
+  subtitle: String
+  title: String
+  type: String
 }
 
 type Query {
@@ -84,19 +92,6 @@ type Query {
   events: [Event!]!
   me: User!
   users: [BaseUser!]!
-  findEvent(eventId: ID!): Event @deprecated(reason: "findEvent is deprecated. Use event instead.")
-  findManyEvents(limit: Int): [Event!]! @deprecated(reason: "findManyEvents is deprecated. Use events instead.")
-}
-
-
-input UpdateEventInput {
-  date: String
-  id: ID!
-  exactTime: Boolean
-  race: Boolean
-  subtitle: String
-  title: String
-  type: String
 }
 
 type Mutation {
@@ -105,14 +100,16 @@ type Mutation {
     addMe: Boolean = false
     notifySubscribers: Boolean = true
   ): Event!
+  updateEvent(input: UpdateEventInput!): Event!
+  deleteEvent(eventId: ID!): IDPayload
+  leaveEvent(eventId: ID!): Event
+  joinEvent(eventId: ID!): Event
 
-  updateEvent(input: UpdateEventInput): Event!
 
   login(
     email: String!
     password: String!
   ): AuthPayload! @aws_api_key
-
   signup(
     email: String!
     nickname: String!
@@ -120,15 +117,11 @@ type Mutation {
     name: String!
     registerSecret: String!
   ): User! @aws_api_key
-
   forgotPassword(
     email: String!
   ): Boolean!
 
-  deleteEvent(eventId: ID!): IDPayload
 
-  leaveEvent(eventId: ID!): Event
-  joinEvent(eventId: ID!): Event
 
 }
 

@@ -23,7 +23,7 @@ export type Auth0User = {
 export type AuthPayload = {
   __typename?: 'AuthPayload';
   accessToken: Scalars['String'];
-  expiresIn: Scalars['String'];
+  expiresIn: Scalars['Int'];
   idToken: Scalars['String'];
 };
 
@@ -37,8 +37,7 @@ export type BaseUser = Auth0User & {
 };
 
 export type CreateEventInput = {
-  date: Scalars['String'];
-  exactTime?: InputMaybe<Scalars['Boolean']>;
+  dateStart: Scalars['AWSDateTime'];
   race?: InputMaybe<Scalars['Boolean']>;
   subtitle?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
@@ -47,8 +46,7 @@ export type CreateEventInput = {
 
 export type Event = {
   __typename?: 'Event';
-  /** @deprecated exactTime is deprecated. Legacy. */
-  exactTime?: Maybe<Scalars['Boolean']>;
+  dateStart: Scalars['AWSDateTime'];
   id: Scalars['ID'];
   race: Scalars['Boolean'];
   subtitle?: Maybe<Scalars['String']>;
@@ -132,7 +130,7 @@ export type MutationSignupArgs = {
 
 
 export type MutationUpdateEventArgs = {
-  input?: InputMaybe<UpdateEventInput>;
+  input: UpdateEventInput;
 };
 
 export type Preferences = {
@@ -145,10 +143,6 @@ export type Query = {
   __typename?: 'Query';
   event?: Maybe<Event>;
   events: Array<Event>;
-  /** @deprecated findEvent is deprecated. Use event instead. */
-  findEvent?: Maybe<Event>;
-  /** @deprecated findManyEvents is deprecated. Use events instead. */
-  findManyEvents: Array<Event>;
   me: User;
   users: Array<BaseUser>;
 };
@@ -158,19 +152,8 @@ export type QueryEventArgs = {
   eventId: Scalars['ID'];
 };
 
-
-export type QueryFindEventArgs = {
-  eventId: Scalars['ID'];
-};
-
-
-export type QueryFindManyEventsArgs = {
-  limit?: InputMaybe<Scalars['Int']>;
-};
-
 export type UpdateEventInput = {
-  date?: InputMaybe<Scalars['String']>;
-  exactTime?: InputMaybe<Scalars['Boolean']>;
+  dateStart?: InputMaybe<Scalars['AWSDateTime']>;
   id: Scalars['ID'];
   race?: InputMaybe<Scalars['Boolean']>;
   subtitle?: InputMaybe<Scalars['String']>;

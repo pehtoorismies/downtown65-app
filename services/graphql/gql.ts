@@ -13,6 +13,9 @@ import {
   IdPayload,
   MutationLeaveEventArgs,
   MutationJoinEventArgs,
+  MutationUpdateEventArgs,
+  Query,
+  Mutation,
 } from '../appsync'
 import { createEvent } from './create-event'
 import { deleteEvent } from './delete-event'
@@ -25,6 +28,7 @@ import { joinEvent } from './join-event'
 import { leaveEvent } from './leave-event'
 import { login } from './login'
 import { signup } from './signup'
+import { updateEvent } from './update-event'
 
 export type EmptyArgs = Record<string, never>
 
@@ -35,6 +39,7 @@ type Inputs =
   | MutationForgotPasswordArgs
   | MutationLoginArgs
   | MutationSignupArgs
+  | MutationUpdateEventArgs
   | QueryEventArguments
 
 type Outputs =
@@ -47,13 +52,24 @@ type Outputs =
   | boolean
   | undefined
 
+// type QueryFields = keyof Query
+// type MutationFields = keyof Mutation
+// type Fields = Omit<QueryFields & MutationFields, '__typename'>
+
+// type Fields = 'event' | 'events' | 'createEvent' | 'updateEvent'
+
+// function assertUnreachable(x: never): never {
+//   throw new Error(`Didn't expect to get here ${x}`)
+// }
+
 export const main: AppSyncResolverHandler<Inputs, Outputs> = (
   event,
   context,
   callback
 ) => {
+  // const type = event.info.fieldName as Fields
+
   switch (event.info.fieldName) {
-    case 'findEvent':
     case 'event': {
       return getEventById(
         event as AppSyncResolverEvent<QueryEventArguments>,
@@ -61,8 +77,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
         callback
       )
     }
-    case 'events':
-    case 'findManyEvents': {
+    case 'events': {
       return getEvents(
         event as AppSyncResolverEvent<Record<string, never>>,
         context,
@@ -72,6 +87,13 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
     case 'createEvent': {
       return createEvent(
         event as AppSyncResolverEvent<MutationCreateEventArgs>,
+        context,
+        callback
+      )
+    }
+    case 'updateEvent': {
+      return updateEvent(
+        event as AppSyncResolverEvent<MutationUpdateEventArgs>,
         context,
         callback
       )
@@ -129,4 +151,5 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
   }
+  // return assertUnreachable(type)
 }

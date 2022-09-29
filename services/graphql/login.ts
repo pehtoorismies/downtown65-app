@@ -29,6 +29,6 @@ export const login: AppSyncResolverHandler<
   return {
     accessToken: tokens.access_token,
     idToken: tokens.id_token,
-    expiresIn: `${tokens.expires_in}`,
+    expiresIn: tokens.expires_in,
   }
 }
