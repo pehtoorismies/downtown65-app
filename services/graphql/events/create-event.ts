@@ -3,9 +3,9 @@ import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
 import type { Event as Dt65Event, MutationCreateEventArgs } from '../../appsync'
 import { getTable } from '../../functions/db/table'
-import { getPrimaryKey } from '../../functions/events/support/event-primary-key'
 import type { EventType } from '../../functions/support/event-type'
 import { toLegacyEvent } from '../support/legacy-api'
+import { getPrimaryKey } from './support/event-primary-key'
 
 export const createEvent: AppSyncResolverHandler<
   MutationCreateEventArgs,

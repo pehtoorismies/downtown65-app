@@ -3,9 +3,8 @@ import formatISO from 'date-fns/formatISO'
 
 import type { Event as Dt65Event, MutationUpdateEventArgs } from '../../appsync'
 import { getTable } from '../../functions/db/table'
-import { getPrimaryKey } from '../../functions/events/support/event-primary-key'
-
 import { toLegacyEvent } from '../support/legacy-api'
+import { getPrimaryKey } from './support/event-primary-key'
 
 // : EventInput & { GSI1SK?: string }
 

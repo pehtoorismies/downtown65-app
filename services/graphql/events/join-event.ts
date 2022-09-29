@@ -4,9 +4,8 @@ import formatISO from 'date-fns/formatISO'
 import type { MutationJoinEventArgs, Event as Dt65Event } from '../../appsync'
 import { getTable } from '../../functions/db/table'
 
-import { getPrimaryKey } from '../../functions/events/support/event-primary-key'
-
 import { isAWSError } from '../../functions/support/aws-error'
+import { getPrimaryKey } from './support/event-primary-key'
 
 type Claims = {
   sub: string

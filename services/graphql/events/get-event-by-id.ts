@@ -4,9 +4,8 @@ import type {
   Event as Dt65Event,
 } from '../../appsync'
 import { getTable } from '../../functions/db/table'
-import { getPrimaryKey } from '../../functions/events/support/event-primary-key'
-
 import { toLegacyEvent } from '../support/legacy-api'
+import { getPrimaryKey } from './support/event-primary-key'
 
 export const getEventById: AppSyncResolverHandler<
   QueryEventArguments,
