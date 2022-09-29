@@ -1,4 +1,4 @@
-import { getAuth0Management } from '../../support/auth'
+import { getAuth0Management } from '../../support/auth0'
 
 const fetchWeeklyEmailSubscribers = async () => {
   const management = await getAuth0Management()

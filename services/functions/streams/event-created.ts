@@ -2,7 +2,7 @@ import type {
   DynamoDBStreamEvent,
   DynamoDBStreamHandler,
 } from 'aws-lambda/trigger/dynamodb-stream'
-import { getAuth0Management } from '../../support/auth'
+import { getAuth0Management } from '../../support/auth0'
 
 const fetchCreateEventSubscribers = async () => {
   const management = await getAuth0Management()
