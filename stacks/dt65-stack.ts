@@ -24,8 +24,8 @@ export const Dt65Stack = ({ stack }: StackContext) => {
   } = use(ConfigStack)
 
   // Dynamo stream functions
-  const eventCreatedFun = new Function(stack, 'EventCreated', {
-    handler: 'functions/events/streams/event-created.main',
+  const eventCreatedFunction = new Function(stack, 'EventCreated', {
+    handler: 'functions/streams/event-created.main',
     config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
   })
 
@@ -59,7 +59,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     stream: true,
     consumers: {
       eventCreated: {
-        function: eventCreatedFun,
+        function: eventCreatedFunction,
         // https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-examples
         filters: [
           {

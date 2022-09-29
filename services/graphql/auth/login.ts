@@ -2,7 +2,7 @@ import { Config } from '@serverless-stack/node/config'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
 import type { AuthPayload, MutationLoginArgs } from '../../appsync'
-import { getClient } from '../../functions/support/auth'
+import { getClient } from '../../support/auth'
 
 const Auth0Response = z.object({
   access_token: z.string(),
