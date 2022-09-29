@@ -1,25 +1,11 @@
 import { AppSyncResolverHandler } from 'aws-lambda'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
-import {
-  QueryEventArgs as QueryEventArguments,
-  Event as Dt65Event,
-  MutationCreateEventArgs,
-} from '../appsync'
+import { Event as Dt65Event, MutationCreateEventArgs } from '../appsync'
 import { getTable } from '../functions/db/table'
 import { getPrimaryKey } from '../functions/events/support/event-primary-key'
 import { EventType } from '../functions/support/event-type'
-import { LegacyEvent } from './support/event'
 import { toLegacyEvent } from './support/legacy-api'
-
-interface EventData {
-  title: string
-  subtitle?: string
-  race?: boolean
-  type: EventType
-  date: string
-  exactTime: boolean
-}
 
 export const createEvent: AppSyncResolverHandler<
   MutationCreateEventArgs,

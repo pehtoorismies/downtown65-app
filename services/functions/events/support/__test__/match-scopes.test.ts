@@ -1,4 +1,4 @@
-import { assert, expect, test } from 'vitest'
+import { expect, test } from 'vitest'
 import { matchScopes } from '../match-scopes'
 
 test('Match scopes', () => {

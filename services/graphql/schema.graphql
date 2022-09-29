@@ -20,12 +20,12 @@ enum EventType {
 }
 
 type Event {
-  id: ID!
-  title: String!
-  subtitle: String
-  type: EventType!
-  race: Boolean!
   exactTime: Boolean @deprecated(reason: "exactTime is deprecated. Legacy.")
+  id: ID!
+  race: Boolean!
+  subtitle: String
+  title: String!
+  type: EventType!
 }
 
 interface Auth0User {
@@ -54,7 +54,7 @@ type BaseUser implements Auth0User{
 }
 
 
-input EventData {
+input CreateEventInput {
   title: String!
   subtitle: String
   race: Boolean
@@ -89,12 +89,24 @@ type Query {
 }
 
 
+input UpdateEventInput {
+  date: String
+  id: ID!
+  exactTime: Boolean
+  race: Boolean
+  subtitle: String
+  title: String
+  type: String
+}
+
 type Mutation {
   createEvent(
-    event: EventData!
+    event: CreateEventInput!
     addMe: Boolean = false
     notifySubscribers: Boolean = true
   ): Event!
+
+  updateEvent(input: UpdateEventInput): Event!
 
   login(
     email: String!

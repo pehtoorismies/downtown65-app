@@ -8,3 +8,6 @@ generates:
       - typescript
     config:
       enumsAsTypes: true
+
+
+

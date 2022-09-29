@@ -36,6 +36,15 @@ export type BaseUser = Auth0User & {
   picture: Scalars['String'];
 };
 
+export type CreateEventInput = {
+  date: Scalars['String'];
+  exactTime?: InputMaybe<Scalars['Boolean']>;
+  race?: InputMaybe<Scalars['Boolean']>;
+  subtitle?: InputMaybe<Scalars['String']>;
+  title: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type Event = {
   __typename?: 'Event';
   /** @deprecated exactTime is deprecated. Legacy. */
@@ -45,15 +54,6 @@ export type Event = {
   subtitle?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: EventType;
-};
-
-export type EventData = {
-  date: Scalars['String'];
-  exactTime?: InputMaybe<Scalars['Boolean']>;
-  race?: InputMaybe<Scalars['Boolean']>;
-  subtitle?: InputMaybe<Scalars['String']>;
-  title: Scalars['String'];
-  type: Scalars['String'];
 };
 
 export type EventType =
@@ -85,12 +85,13 @@ export type Mutation = {
   leaveEvent?: Maybe<Event>;
   login: AuthPayload;
   signup: User;
+  updateEvent: Event;
 };
 
 
 export type MutationCreateEventArgs = {
   addMe?: InputMaybe<Scalars['Boolean']>;
-  event: EventData;
+  event: CreateEventInput;
   notifySubscribers?: InputMaybe<Scalars['Boolean']>;
 };
 
@@ -129,6 +130,11 @@ export type MutationSignupArgs = {
   registerSecret: Scalars['String'];
 };
 
+
+export type MutationUpdateEventArgs = {
+  input?: InputMaybe<UpdateEventInput>;
+};
+
 export type Preferences = {
   __typename?: 'Preferences';
   subscribeEventCreationEmail: Scalars['Boolean'];
@@ -160,6 +166,16 @@ export type QueryFindEventArgs = {
 
 export type QueryFindManyEventsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
+};
+
+export type UpdateEventInput = {
+  date?: InputMaybe<Scalars['String']>;
+  exactTime?: InputMaybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  race?: InputMaybe<Scalars['Boolean']>;
+  subtitle?: InputMaybe<Scalars['String']>;
+  title?: InputMaybe<Scalars['String']>;
+  type?: InputMaybe<Scalars['String']>;
 };
 
 export type User = Auth0User & {

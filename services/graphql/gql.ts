@@ -26,48 +26,26 @@ import { leaveEvent } from './leave-event'
 import { login } from './login'
 import { signup } from './signup'
 
-type Identity = {
-  identity: {
-    claims: {
-      sub: string
-      aud: string[]
-      azp: string
-      scope: string
-      iss: string
-      ['https://graphql.downtown65.com/nickname']: string
-      exp: number
-      iat: number
-      gty: string
-    }
-    issuer: string
-    sub: string
-  }
-}
-
-// function assertUnreachable(x: never): never {
-//   throw new Error(`Didn't expect to get here ${x}`)
-// }
-
 export type EmptyArgs = Record<string, never>
 
 type Inputs =
+  | EmptyArgs
   | MutationCreateEventArgs
-  | QueryEventArguments
+  | MutationDeleteEventArgs
+  | MutationForgotPasswordArgs
   | MutationLoginArgs
   | MutationSignupArgs
-  | EmptyArgs
-  | MutationForgotPasswordArgs
-  | MutationDeleteEventArgs
+  | QueryEventArguments
 
 type Outputs =
+  | AuthPayload
+  | BaseUser[]
   | Dt65Event
   | Dt65Event[]
-  | undefined
-  | AuthPayload
+  | IdPayload
   | User
   | boolean
-  | BaseUser[]
-  | IdPayload
+  | undefined
 
 export const main: AppSyncResolverHandler<Inputs, Outputs> = (
   event,

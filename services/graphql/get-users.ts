@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { BaseUser } from '../appsync'
 import { getAuth0Management } from '../functions/support/auth'
 import { EmptyArgs } from './gql'
-import { Auth0UserResponse, toBaseUser, toUser } from './support/auth0-user'
+import { Auth0UserResponse, toBaseUser } from './support/auth0-user'
 
 const Auth0Users = z.array(Auth0UserResponse)
 

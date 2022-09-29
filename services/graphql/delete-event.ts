@@ -1,18 +1,7 @@
 import { AppSyncResolverHandler } from 'aws-lambda'
-import {
-  QueryEventArgs as QueryEventArguments,
-  Event as Dt65Event,
-  MutationDeleteEventArgs,
-  IdPayload,
-} from '../appsync'
+import { MutationDeleteEventArgs, IdPayload } from '../appsync'
 import { getTable } from '../functions/db/table'
 import { getPrimaryKey } from '../functions/events/support/event-primary-key'
-
-import {
-  badRequestResponse,
-  successResponse,
-} from '../functions/support/response'
-import { toLegacyEvent } from './support/legacy-api'
 
 export const deleteEvent: AppSyncResolverHandler<
   MutationDeleteEventArgs,

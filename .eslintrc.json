@@ -16,6 +16,7 @@
     "plugin:unicorn/recommended",
     "prettier"
   ],
+  "ignorePatterns": ["services/appsync.d.ts"],
   "rules": {
     "import/no-unresolved": "off",
     "import/named": "off",

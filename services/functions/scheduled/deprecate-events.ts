@@ -1,5 +1,4 @@
 import { format } from 'date-fns'
-import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
 import { getTable } from '../db/table'
 

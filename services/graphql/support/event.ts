@@ -7,7 +7,3 @@ export interface Event {
   subtitle?: string
   race: boolean
 }
-
-export interface LegacyEvent extends Event {
-  exactTime?: boolean
-}
