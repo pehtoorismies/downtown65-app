@@ -1,4 +1,4 @@
-import type { EventType } from '../../functions/support/event-type'
+import type { EventType } from '../events/support/event-type'
 
 export interface Event {
   id: string
