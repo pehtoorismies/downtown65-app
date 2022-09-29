@@ -15,16 +15,19 @@ import { signup } from './auth/signup'
 import { getEventById } from './events/get-event-by-id'
 import { assertUnreachable } from './support/assert-unreachable'
 
-export type EmptyArgs = Record<string, never>
-
-type Inputs =
-  | EmptyArgs
+export type Inputs =
   | MutationForgotPasswordArgs
   | MutationLoginArgs
   | MutationSignupArgs
   | QueryEventArguments
 
-type Outputs = AuthPayload | Dt65Event | IdPayload | User | boolean | undefined
+export type Outputs =
+  | AuthPayload
+  | Dt65Event
+  | IdPayload
+  | User
+  | boolean
+  | undefined
 
 const PUBLIC_FIELDS = ['event', 'login', 'signup', 'forgotPassword'] as const
 type PublicField = typeof PUBLIC_FIELDS[number]

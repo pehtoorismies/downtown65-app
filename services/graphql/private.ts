@@ -18,27 +18,25 @@ import { getEvents } from './events/get-events'
 import { joinEvent } from './events/join-event'
 import { leaveEvent } from './events/leave-event'
 import { updateEvent } from './events/update-event'
+import type { EmptyArgs } from './gql'
 import { assertUnreachable } from './support/assert-unreachable'
 import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
 import { getUsers } from './users/get-users'
 
-export type EmptyArgs = Record<string, never>
-
-type Inputs =
+export type Inputs =
   | EmptyArgs
   | MutationCreateEventArgs
   | MutationDeleteEventArgs
   | MutationUpdateEventArgs
   | QueryEventArguments
 
-type Outputs =
+export type Outputs =
   | BaseUser[]
   | Dt65Event
   | Dt65Event[]
   | IdPayload
   | User
-  | boolean
   | undefined
 
 const PRIVATE_FIELDS = [

@@ -2,6 +2,7 @@ import type {
   AppSyncIdentity,
   AppSyncIdentityOIDC,
 } from 'aws-lambda/trigger/appsync-resolver'
+import type { AllowedScope } from './match-scopes'
 import { matchScopes } from './match-scopes'
 
 interface Dt65Identity extends AppSyncIdentityOIDC {
@@ -20,7 +21,7 @@ interface Dt65Identity extends AppSyncIdentityOIDC {
 
 export const verifyScope =
   (identity: AppSyncIdentity | undefined | null) =>
-  (allowedScopes: string[]) => {
+  (allowedScopes: AllowedScope[]) => {
     if (!identity) {
       throw new Error('No OpenIDConnect identity provide. JWT token missing.')
     }

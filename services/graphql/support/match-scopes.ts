@@ -1,4 +1,4 @@
-type AllowedScope =
+export type AllowedScope =
   | 'openid'
   | 'profile'
   | 'read:events'

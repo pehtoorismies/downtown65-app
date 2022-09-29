@@ -4,8 +4,6 @@ import startOfToday from 'date-fns/startOfToday'
 import type { Event as Dt65Event } from '../../appsync'
 import { getTable } from '../../db/table'
 import type { EmptyArgs } from '../gql'
-import type { Event } from '../support/event'
-import { toLegacyEvent } from '../support/legacy-api'
 
 const getExpression = (d: Date) => {
   const lt = format(
@@ -28,5 +26,5 @@ export const getEvents: AppSyncResolverHandler<
     gt: query,
   })
 
-  return results.Items.map((item: Event) => toLegacyEvent(item))
+  return results.Items
 }
