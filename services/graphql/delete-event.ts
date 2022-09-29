@@ -1,5 +1,5 @@
-import { AppSyncResolverHandler } from 'aws-lambda'
-import { MutationDeleteEventArgs, IdPayload } from '../appsync'
+import type { AppSyncResolverHandler } from 'aws-lambda'
+import type { MutationDeleteEventArgs, IdPayload } from '../appsync'
 import { getTable } from '../functions/db/table'
 import { getPrimaryKey } from '../functions/events/support/event-primary-key'
 

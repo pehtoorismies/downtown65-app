@@ -1,9 +1,9 @@
 import * as appsync from '@aws-cdk/aws-appsync-alpha'
+import type { StackContext } from '@serverless-stack/resources'
 import {
   AppSyncApi,
   Cron,
   Function,
-  StackContext,
   Table,
   use,
 } from '@serverless-stack/resources'

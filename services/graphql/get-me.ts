@@ -1,9 +1,9 @@
-import { AppSyncResolverHandler } from 'aws-lambda'
-import { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import { User } from '../appsync'
+import type { AppSyncResolverHandler } from 'aws-lambda'
+import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
+import type { User } from '../appsync'
 import { getAuth0Management } from '../functions/support/auth'
 
-import { EmptyArgs } from './gql'
+import type { EmptyArgs } from './gql'
 import { Auth0UserResponse, toUser } from './support/auth0-user'
 
 export const getMe: AppSyncResolverHandler<EmptyArgs, User> = async (event) => {

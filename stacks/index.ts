@@ -1,4 +1,4 @@
-import { App } from '@serverless-stack/resources'
+import type { App } from '@serverless-stack/resources'
 import { ConfigStack } from './config-stack'
 import { Dt65Stack } from './dt65-stack'
 

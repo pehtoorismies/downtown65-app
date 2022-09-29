@@ -1,4 +1,4 @@
-import {
+import type {
   DynamoDBStreamEvent,
   DynamoDBStreamHandler,
 } from 'aws-lambda/trigger/dynamodb-stream'

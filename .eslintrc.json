@@ -18,6 +18,7 @@
   ],
   "ignorePatterns": ["services/appsync.d.ts"],
   "rules": {
+    "@typescript-eslint/consistent-type-imports": "error",
     "import/no-unresolved": "off",
     "import/named": "off",
     "import/order": [

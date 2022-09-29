@@ -1,10 +1,10 @@
-import { AppSyncResolverHandler } from 'aws-lambda'
+import type { AppSyncResolverHandler } from 'aws-lambda'
 import { format } from 'date-fns'
 import startOfToday from 'date-fns/startOfToday'
-import { Event as Dt65Event } from '../appsync'
+import type { Event as Dt65Event } from '../appsync'
 import { getTable } from '../functions/db/table'
-import { EmptyArgs } from './gql'
-import { Event } from './support/event'
+import type { EmptyArgs } from './gql'
+import type { Event } from './support/event'
 import { toLegacyEvent } from './support/legacy-api'
 
 const getExpression = (d: Date) => {

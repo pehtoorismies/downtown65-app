@@ -1,5 +1,8 @@
-import middy from '@middy/core'
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'
+import type middy from '@middy/core'
+import type {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda'
 import { HttpRequestError } from '../../support/errors'
 import { isDt65Context } from './dt65-context'
 import { matchScopes } from './match-scopes'

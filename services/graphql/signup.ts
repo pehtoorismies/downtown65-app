@@ -1,7 +1,7 @@
 import { Config } from '@serverless-stack/node/config'
-import { AppSyncResolverHandler } from 'aws-lambda'
+import type { AppSyncResolverHandler } from 'aws-lambda'
 
-import { MutationSignupArgs, User } from '../appsync'
+import type { MutationSignupArgs, User } from '../appsync'
 import { getAuth0Management } from '../functions/support/auth'
 import { Auth0UserResponse, toUser } from './support/auth0-user'
 

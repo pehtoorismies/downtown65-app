@@ -1,5 +1,5 @@
-import { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
-import {
+import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
+import type {
   QueryEventArgs as QueryEventArguments,
   Event as Dt65Event,
   MutationCreateEventArgs,
@@ -52,23 +52,11 @@ type Outputs =
   | boolean
   | undefined
 
-// type QueryFields = keyof Query
-// type MutationFields = keyof Mutation
-// type Fields = Omit<QueryFields & MutationFields, '__typename'>
-
-// type Fields = 'event' | 'events' | 'createEvent' | 'updateEvent'
-
-// function assertUnreachable(x: never): never {
-//   throw new Error(`Didn't expect to get here ${x}`)
-// }
-
 export const main: AppSyncResolverHandler<Inputs, Outputs> = (
   event,
   context,
   callback
 ) => {
-  // const type = event.info.fieldName as Fields
-
   switch (event.info.fieldName) {
     case 'event': {
       return getEventById(
@@ -151,5 +139,4 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
       )
     }
   }
-  // return assertUnreachable(type)
 }

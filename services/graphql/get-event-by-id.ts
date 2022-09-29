@@ -1,5 +1,5 @@
-import { AppSyncResolverHandler } from 'aws-lambda'
-import {
+import type { AppSyncResolverHandler } from 'aws-lambda'
+import type {
   QueryEventArgs as QueryEventArguments,
   Event as Dt65Event,
 } from '../appsync'

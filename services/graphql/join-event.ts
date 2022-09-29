@@ -1,7 +1,7 @@
-import { AppSyncResolverHandler } from 'aws-lambda'
-import { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
+import type { AppSyncResolverHandler } from 'aws-lambda'
+import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import formatISO from 'date-fns/formatISO'
-import { MutationJoinEventArgs, Event as Dt65Event } from '../appsync'
+import type { MutationJoinEventArgs, Event as Dt65Event } from '../appsync'
 import { getTable } from '../functions/db/table'
 
 import { getPrimaryKey } from '../functions/events/support/event-primary-key'

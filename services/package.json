@@ -6,8 +6,6 @@
     "codegen": "graphql-codegen"
   },
   "dependencies": {
-    "@graphql-codegen/cli": "2.13.0",
-    "@graphql-codegen/typescript": "2.7.3",
     "@middy/core": "3.3.4",
     "@middy/http-error-handler": "3.3.4",
     "@middy/http-header-normalizer": "3.3.4",
@@ -30,8 +28,9 @@
     "zod": "3.19.1"
   },
   "devDependencies": {
-    "@graphql-codegen/typescript-operations": "^2.5.3",
-    "@types/auth0": "^2.35.3",
+    "@graphql-codegen/cli": "2.13.0",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@types/auth0": "2.35.3",
     "@types/aws-lambda": "8.10.104",
     "@types/uuid": "8.3.4"
   }

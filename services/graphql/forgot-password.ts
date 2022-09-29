@@ -1,6 +1,6 @@
-import { AppSyncResolverHandler } from 'aws-lambda'
+import type { AppSyncResolverHandler } from 'aws-lambda'
 
-import { MutationForgotPasswordArgs } from '../appsync'
+import type { MutationForgotPasswordArgs } from '../appsync'
 
 export const forgotPassword: AppSyncResolverHandler<
   MutationForgotPasswordArgs,

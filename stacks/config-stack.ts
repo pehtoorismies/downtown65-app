@@ -1,4 +1,5 @@
-import { Config, Stack, StackContext } from '@serverless-stack/resources'
+import type { Stack, StackContext } from '@serverless-stack/resources'
+import { Config } from '@serverless-stack/resources'
 import { getEnvironmentVariable } from './get-environment'
 
 const createConfigFromEnvironment = (stack: Stack, name: string) => {

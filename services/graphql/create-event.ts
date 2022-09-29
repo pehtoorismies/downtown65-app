@@ -1,10 +1,10 @@
-import { AppSyncResolverHandler } from 'aws-lambda'
+import type { AppSyncResolverHandler } from 'aws-lambda'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
-import { Event as Dt65Event, MutationCreateEventArgs } from '../appsync'
+import type { Event as Dt65Event, MutationCreateEventArgs } from '../appsync'
 import { getTable } from '../functions/db/table'
 import { getPrimaryKey } from '../functions/events/support/event-primary-key'
-import { EventType } from '../functions/support/event-type'
+import type { EventType } from '../functions/support/event-type'
 import { toLegacyEvent } from './support/legacy-api'
 
 export const createEvent: AppSyncResolverHandler<

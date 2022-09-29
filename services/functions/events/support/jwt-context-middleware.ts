@@ -1,8 +1,11 @@
-import middy from '@middy/core'
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda'
+import type middy from '@middy/core'
+import type {
+  APIGatewayProxyEventV2,
+  APIGatewayProxyResultV2,
+} from 'aws-lambda'
 import jwtDecode from 'jwt-decode'
 import { HttpRequestError } from '../../support/errors'
-import { Dt65Context } from './dt65-context'
+import type { Dt65Context } from './dt65-context'
 
 const NICK_PROPERTY = 'https://graphql.downtown65.com/nickname'
 
