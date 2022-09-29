@@ -18,17 +18,18 @@ interface Dt65Identity extends AppSyncIdentityOIDC {
   }
 }
 
-export const verifyScope = (
-  identity: AppSyncIdentity | undefined | null,
-  allowedScopes: string[]
-) => {
-  if (!identity) {
-    throw new Error('No OpenIDConnect identity provide. JWT token missing.')
+export const verifyScope =
+  (identity: AppSyncIdentity | undefined | null) =>
+  (allowedScopes: string[]) => {
+    if (!identity) {
+      throw new Error('No OpenIDConnect identity provide. JWT token missing.')
+    }
+    const { claims } = identity as Dt65Identity
+    if (!matchScopes(allowedScopes)(claims.scope)) {
+      throw new Error(
+        `Unauthorized request not enough scope. Needs: ${allowedScopes.join(
+          ','
+        )}`
+      )
+    }
   }
-  const { claims } = identity as Dt65Identity
-  if (!matchScopes(allowedScopes)(claims.scope)) {
-    throw new Error(
-      `Unauthorized request not enough scope. Needs: ${allowedScopes.join(' ')}`
-    )
-  }
-}
