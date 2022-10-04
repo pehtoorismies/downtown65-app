@@ -1,17 +1,35 @@
-# How to use DynamoDB in your serverless app
+# Downtown 65 App
 
 An example serverless app created with SST.
 
-## Getting Started
+## Infra
 
-[**Read the tutorial**](https://sst.dev/examples/how-to-use-dynamodb-in-your-serverless-app.html)
+[**Infra is deployed with Serverless Stack**](https://sst.dev/)
 
-Install the example.
+## Dynamo single table design
+
+
+### Getting started
+
 
 ```bash
-$ npx create-sst@latest --template=examples/rest-api-dynamodb
-# Or with Yarn
-$ yarn create sst --template=examples/rest-api-dynamodb
+$ yarn
+$ yarn start  
+```
+
+Give your local dev environment some name like: `downtown65-app-yourusername`. This will be your default stage. All the AWS resources will be named after
+
+This name can be changed in `.sst/stage` 
+
+### Add secrets
+
+[https://docs.sst.dev/environment-variables#sst-secrets](https://docs.sst.dev/environment-variables#sst-secrets)
+
+```bash
+# secret value used in registration form
+$ npx sst secrets set REGISTER_SECRET <secret_here>
+# secret value to use with Auth0 Client
+$ npx sst secrets set AUTH_CLIENT_SECRET <secret_here>
 ```
 
 ## Commands
