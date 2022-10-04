@@ -8,6 +8,7 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
+    "production:build": "sst build --stage production",
     "typecheck": "tsc --noEmit",
     "test": "sst load-config -- vitest run",
     "lint": "eslint . --ext .ts",
