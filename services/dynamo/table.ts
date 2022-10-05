@@ -4,9 +4,9 @@ import { Entity, Table } from 'dynamodb-toolbox'
 const DocumentClient = new DynamoDB.DocumentClient({})
 
 export const getTable = () => {
-  const tableName = process.env.tableName
+  const tableName = process.env.DYNAMO_TABLE_NAME
   if (!tableName) {
-    throw new Error('process.env.tableName missing')
+    throw new Error('process.env.DYNAMO_TABLE_NAME missing')
   }
 
   const table = new Table({

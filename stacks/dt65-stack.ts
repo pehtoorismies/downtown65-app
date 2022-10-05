@@ -11,7 +11,6 @@ import * as cdk from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
 import { getEnvironmentVariable } from './get-environment'
-// import { getEnvironmentVariable } from './get-environment'
 
 export const Dt65Stack = ({ stack }: StackContext) => {
   // Config
@@ -42,7 +41,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
   })
 
   // Create the table
-  const table = new Table(stack, 'downtown65', {
+  const dt65Table = new Table(stack, 'downtown65', {
     fields: {
       PK: 'string',
       SK: 'string',
@@ -80,11 +79,6 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
   })
 
-  // const jwt = {
-  //   issuer: `https://${getEnvironmentVariable('AUTH_DOMAIN')}/`,
-  //   audience: [getEnvironmentVariable('JWT_AUDIENCE')],
-  // }
-
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
     handler: 'graphql/gql.main',
     config: [
@@ -95,7 +89,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       REGISTER_SECRET,
     ],
     environment: {
-      tableName: table.tableName,
+      DYNAMO_TABLE_NAME: dt65Table.tableName,
     },
   })
 
@@ -145,7 +139,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
   })
 
-  gqlApi.attachPermissions([table])
+  gqlApi.attachPermissions([dt65Table])
 
   // Show the API endpoint in the output
   // stack.addOutputs({

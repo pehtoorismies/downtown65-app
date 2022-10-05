@@ -1,19 +1,14 @@
-import type { AppSyncResolverHandler } from 'aws-lambda'
 import formatISO from 'date-fns/formatISO'
 import { v4 as uuidv4 } from 'uuid'
-import type { Event as Dt65Event, MutationCreateEventArgs } from '../../appsync'
-import { getTable } from '../../dynamo/table'
-import { getPrimaryKey } from './support/event-primary-key'
-import type { EventType } from './support/event-type'
+import type { MutationCreateEventArgs } from '../appsync'
+import { getTable } from '../dynamo/table'
+import { getPrimaryKey } from '../graphql/events/support/event-primary-key'
+import type { EventType } from '../graphql/events/support/event-type'
 
-export const createEvent: AppSyncResolverHandler<
-  MutationCreateEventArgs,
-  Dt65Event
-> = async (event) => {
-  const Table = getTable()
+const Table = getTable()
 
-  const { title, dateStart, type, subtitle, race } = event.arguments.event
-
+export const create = async (input: MutationCreateEventArgs['event']) => {
+  const { title, dateStart, type, subtitle, race } = input
   const eventId = uuidv4()
   const startDate = formatISO(new Date(dateStart))
 
@@ -35,7 +30,6 @@ export const createEvent: AppSyncResolverHandler<
     },
     { returnValues: 'none' }
   )
-
   return {
     id: eventId,
     title,
