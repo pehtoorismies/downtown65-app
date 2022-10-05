@@ -3,7 +3,7 @@ import type {
   QueryEventArgs as QueryEventArguments,
   Event as Dt65Event,
 } from '../../appsync'
-import { getTable } from '../../db/table'
+import { getTable } from '../../dynamo/table'
 import { getPrimaryKey } from './support/event-primary-key'
 
 export const getEventById: AppSyncResolverHandler<
