@@ -1,15 +1,22 @@
 import formatISO from 'date-fns/formatISO'
-import { v4 as uuidv4 } from 'uuid'
-import type { MutationCreateEventArgs } from '../appsync'
+import { ulid } from 'ulid'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from '../graphql/events/support/event-primary-key'
-import type { EventType } from '../graphql/events/support/event-type'
+import type { EventType } from './event-type'
 
 const Table = getTable()
 
-export const create = async (input: MutationCreateEventArgs['event']) => {
-  const { title, dateStart, type, subtitle, race } = input
-  const eventId = uuidv4()
+interface CreatableEvent {
+  title: string
+  dateStart: string
+  type: EventType
+  subtitle?: string
+  race: boolean
+}
+
+export const create = async (creatableEvent: CreatableEvent) => {
+  const { title, dateStart, type, subtitle, race } = creatableEvent
+  const eventId = ulid()
   const startDate = formatISO(new Date(dateStart))
 
   await Table.Dt65Event.put(

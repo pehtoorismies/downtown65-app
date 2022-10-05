@@ -15,3 +15,7 @@ export const EVENT_TYPES = [
 ] as const
 
 export type EventType = typeof EVENT_TYPES[number]
+
+export const isEventType = (eventType: string): eventType is EventType => {
+  return EVENT_TYPES.includes(eventType as EventType)
+}
