@@ -28,6 +28,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - run: yarn install --immutable --immutable-cache --check-cache
-      - name: Build infra
+      - name: Deploy infra
         run: |
           yarn production:deploy

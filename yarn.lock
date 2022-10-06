@@ -1775,10 +1775,10 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@graphql-codegen/cli@2.13.2":
-  version "2.13.2"
-  resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-2.13.2.tgz#4fb28405895601877e822ed4f9aeee98ec917a3e"
-  integrity sha512-hGz5v/jFjhEQ/RkN1folL6WvdW4q9gMy/E8hD+28AuD8iYijYuU+Rx8dheXxTtO7UPOWFHIeFiwBuAHPJxTA5A==
+"@graphql-codegen/cli@2.13.4":
+  version "2.13.4"
+  resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-2.13.4.tgz#77b251971364b99be11d37d618de5d4e91216a81"
+  integrity sha512-HhaLumR9/rov2WzDchZmIarD/MteNQOCiwgrOdS+A3WcUYBomeL8t5CoRsarFTc6McKoQIAdAqSl+eiNJ5oxJw==
   dependencies:
     "@babel/generator" "^7.18.13"
     "@babel/template" "^7.18.10"
@@ -1800,7 +1800,7 @@
     chalk "^4.1.0"
     chokidar "^3.5.2"
     cosmiconfig "^7.0.0"
-    cosmiconfig-typescript-loader "4.0.0"
+    cosmiconfig-typescript-loader "4.1.1"
     debounce "^1.2.0"
     detect-indent "^6.0.0"
     graphql-config "^4.3.5"
@@ -2425,10 +2425,10 @@
   resolved "https://registry.yarnpkg.com/@tsconfig/node16/-/node16-1.0.3.tgz#472eaab5f15c1ffdd7f8628bd4c4f753995ec79e"
   integrity sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==
 
-"@types/auth0@2.35.5":
-  version "2.35.5"
-  resolved "https://registry.yarnpkg.com/@types/auth0/-/auth0-2.35.5.tgz#05e61e5b38caa21842c002342f617231dfc3543a"
-  integrity sha512-RuUftoI8p8BLF+wwjNB+IpLUm/fikl1zVLDUhKP+rBUZcm0GcES2GKRUs+DVt1n1c2Vz+LHlMEwENlFVI4eaLA==
+"@types/auth0@2.35.6":
+  version "2.35.6"
+  resolved "https://registry.yarnpkg.com/@types/auth0/-/auth0-2.35.6.tgz#33235422ed2af90b9ce25f37ad7c7972b2193b2d"
+  integrity sha512-ghys5KhcFS3Kt2QP5T0LIhezAUalVPYgtcmu+akKGIL9TQNXW9WvlOlnFIjyOlKIpH2+plGg0RlrtEtxGYCUeA==
 
 "@types/aws-lambda@8.10.106":
   version "8.10.106"
@@ -3783,10 +3783,10 @@ cosmiconfig-toml-loader@1.0.0:
   dependencies:
     "@iarna/toml" "^2.2.5"
 
-cosmiconfig-typescript-loader@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-4.0.0.tgz#4a6d856c1281135197346a6f64dfa73a9cd9fefa"
-  integrity sha512-cVpucSc2Tf+VPwCCR7SZzmQTQkPbkk4O01yXsYqXBIbjE1bhwqSyAgYQkRK1un4i0OPziTleqFhdkmOc4RQ/9g==
+cosmiconfig-typescript-loader@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-4.1.1.tgz#38dd3578344038dae40fdf09792bc2e9df529f78"
+  integrity sha512-9DHpa379Gp0o0Zefii35fcmuuin6q92FnLDffzdZ0l9tVd3nEobG3O+MZ06+kuBvFTSVScvNb/oHA13Nd4iipg==
 
 cosmiconfig-typescript-loader@^4.0.0:
   version "4.1.0"
@@ -4526,10 +4526,10 @@ eslint-plugin-prettier@4.2.1:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-unicorn@44.0.0:
-  version "44.0.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-44.0.0.tgz#ddb2d7bf3674077d6f3b227b9a0ce22dfc1e3ceb"
-  integrity sha512-GbkxkdNzY7wNEfZnraAP+oA+aqqzSrNZmO37kjW1DyqnSK/ah08ySDdIecObpx46twv+zcQvH8i0CHP98Wo64w==
+eslint-plugin-unicorn@44.0.1:
+  version "44.0.1"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-44.0.1.tgz#e5171368ffadd9f5d5434342edd1fd39aad817d3"
+  integrity sha512-ly6Ye9OfgYBCw/FfsdycCzAztcRd+pOA0F6xZwtUsUkgOBjtNR0684xC7u+0RmE3SKr3y7z8MaIWunw36tbZdg==
   dependencies:
     "@babel/helper-validator-identifier" "^7.19.1"
     ci-info "^3.4.0"
