@@ -1,19 +1,14 @@
 import * as appsync from '@aws-cdk/aws-appsync-alpha'
 import type { StackContext } from '@serverless-stack/resources'
-import {
-  AppSyncApi,
-  Cron,
-  Function,
-  Table,
-  use,
-} from '@serverless-stack/resources'
+import { AppSyncApi, Config, Function, use } from '@serverless-stack/resources'
 import * as cdk from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
+import { DynamoStack } from './dynamo-stack'
 import { getEnvironmentVariable } from './get-environment'
 
-export const Dt65Stack = ({ stack }: StackContext) => {
-  // Config
+export const GraphqlStack = ({ stack }: StackContext) => {
+  const dynamoStack = use(DynamoStack)
   const {
     AUTH_CLIENT_ID,
     AUTH_CLIENT_SECRET,
@@ -21,63 +16,6 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     JWT_AUDIENCE,
     REGISTER_SECRET,
   } = use(ConfigStack)
-
-  // Dynamo stream functions
-  const eventCreatedFunction = new Function(stack, 'EventCreated', {
-    handler: 'functions/streams/event-created.main',
-    config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
-  })
-
-  const weeklyEmailFun = new Function(stack, 'WeeklyEmail', {
-    handler: 'functions/scheduled/send-weekly-email.main',
-    config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
-  })
-
-  new Cron(stack, 'WeeklyEmailCron', {
-    // https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
-    schedule: 'cron(0 10 ? * MON *)',
-    job: weeklyEmailFun,
-    enabled: false,
-  })
-
-  // Create the table
-  const dt65Table = new Table(stack, 'downtown65', {
-    fields: {
-      PK: 'string',
-      SK: 'string',
-      GSI1PK: 'string',
-      GSI1SK: 'string',
-      GSI2PK: 'string',
-      GSI2SK: 'string',
-    },
-    primaryIndex: { partitionKey: 'PK', sortKey: 'SK' },
-    globalIndexes: {
-      GSI1: { partitionKey: 'GSI1PK', sortKey: 'GSI1SK' },
-      GSI2: { partitionKey: 'GSI2PK', sortKey: 'GSI2SK' },
-    },
-    stream: true,
-    consumers: {
-      eventCreated: {
-        function: eventCreatedFunction,
-        // https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-examples
-        filters: [
-          {
-            eventName: ['INSERT'],
-            dynamodb: {
-              // "Keys": {...},
-              // "NewImage": {...},
-              // "OldImage": {...}
-              NewImage: {
-                _et: {
-                  S: ['Dt65Event'],
-                },
-              },
-            },
-          },
-        ],
-      },
-    },
-  })
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
     handler: 'graphql/gql.main',
@@ -89,7 +27,7 @@ export const Dt65Stack = ({ stack }: StackContext) => {
       REGISTER_SECRET,
     ],
     environment: {
-      DYNAMO_TABLE_NAME: dt65Table.tableName,
+      DYNAMO_TABLE_NAME: dynamoStack.table.tableName,
     },
   })
 
@@ -139,12 +77,16 @@ export const Dt65Stack = ({ stack }: StackContext) => {
     },
   })
 
-  gqlApi.attachPermissions([dt65Table])
+  gqlApi.attachPermissions([dynamoStack.table])
+
+  new Config.Parameter(stack, 'API_URL', {
+    value: gqlApi.url,
+  })
+  new Config.Parameter(stack, 'API_ACCESS_KEY', {
+    value: gqlApi.cdk.graphqlApi.apiKey || 'No api key received',
+  })
 
   // Show the API endpoint in the output
-  // stack.addOutputs({
-  //   ApiEndpoint: api.url,
-  // })
   stack.addOutputs({
     ApiId: gqlApi.apiId,
     ApiKey: gqlApi.cdk.graphqlApi.apiKey || 'No api key received',
