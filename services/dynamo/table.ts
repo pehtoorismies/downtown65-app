@@ -1,13 +1,11 @@
+import { Config } from '@serverless-stack/node/config'
 import { DynamoDB } from 'aws-sdk'
 import { Entity, Table } from 'dynamodb-toolbox'
 
-const DocumentClient = new DynamoDB.DocumentClient({})
+const DocumentClient = new DynamoDB.DocumentClient()
 
 export const getTable = () => {
-  const tableName = process.env.DYNAMO_TABLE_NAME
-  if (!tableName) {
-    throw new Error('process.env.DYNAMO_TABLE_NAME missing')
-  }
+  const tableName = Config.TABLE_NAME
 
   const table = new Table({
     name: tableName,

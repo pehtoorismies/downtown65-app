@@ -16,7 +16,6 @@
     "jwt-decode": "3.1.2",
     "superagent-proxy": "^3.0.0",
     "ulid": "2.3.0",
-    "uuid": "9.0.0",
     "zod": "3.19.1"
   },
   "devDependencies": {

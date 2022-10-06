@@ -8,6 +8,7 @@ const Table = getTable()
 
 interface CreatableEvent {
   title: string
+  // https://javascript.plainenglish.io/type-safe-date-strings-66b6dc58658a
   dateStart: string
   type: EventType
   subtitle?: string
