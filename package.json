@@ -11,6 +11,7 @@
     "development:build": "sst build --stage development",
     "development:test": "sst load-config --stage development -- vitest run",
     "development:deploy": "sst deploy --stage development",
+    "production:deploy": "sst deploy --stage production",
     "typecheck": "tsc --noEmit",
     "test": "sst load-config -- vitest run",
     "lint": "eslint . --ext .ts",
