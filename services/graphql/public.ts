@@ -1,13 +1,13 @@
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import type {
-  QueryEventArgs as QueryEventArguments,
+  AuthPayload,
   Event as Dt65Event,
+  IdPayload,
+  MutationForgotPasswordArgs,
   MutationLoginArgs,
   MutationSignupArgs,
+  QueryEventArgs as QueryEventArguments,
   User,
-  MutationForgotPasswordArgs,
-  AuthPayload,
-  IdPayload,
 } from '../appsync'
 import { forgotPassword } from './auth/forgot-password'
 import { login } from './auth/login'

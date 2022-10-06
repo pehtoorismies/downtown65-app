@@ -1,5 +1,5 @@
 import type { StackContext } from '@serverless-stack/resources'
-import { Table, Config } from '@serverless-stack/resources'
+import { Config, Table } from '@serverless-stack/resources'
 
 export const DynamoStack = ({ stack }: StackContext) => {
   const table = new Table(stack, 'dt65Table', {
