@@ -21,27 +21,24 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: 'eu-north-1'
+      AWS_DEFAULT_REGION: eu-north-1
+      AWS_REGION: eu-north-1
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - run: yarn install --immutable --immutable-cache --check-cache
-      - run: yarn run development:build
-      # Runs a single command using the runners shell
+      - name: Install
+        run: yarn install --immutable --immutable-cache --check-cache
+      - name: Build
+        run: yarn run development:build
       - name: Lint and typecheck
         run: |
           yarn lint
           yarn typecheck
-      # Runs a set of commands using the runners shell
-      - name: Build infra
+      - name: Deploy infra
         run: |
           yarn development:deploy
       - name: Test
         run: |
           yarn development:test
-      # Runs a set of commands using the runners shell
-      - name: Deploy
-        run: |
-          echo Deploy.
-          echo Deploy.
+      
