@@ -1,7 +1,7 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import type { Outputs as PrivateOut, Inputs as PrivateIn } from './private'
+import type { Inputs as PrivateIn, Outputs as PrivateOut } from './private'
 import { isPrivateField, privateResolver } from './private'
-import type { Outputs as PublicOut, Inputs as PublicIn } from './public'
+import type { Inputs as PublicIn, Outputs as PublicOut } from './public'
 import { isPublicField, publicResolver } from './public'
 
 export type EmptyArgs = Record<string, never>
