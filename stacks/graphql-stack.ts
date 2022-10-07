@@ -18,22 +18,20 @@ export const GraphqlStack = ({ stack }: StackContext) => {
   } = use(ConfigStack)
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
-    handler: 'graphql/gql.main',
+    handler: 'services/graphql/gql.main',
     config: [
       AUTH_CLIENT_ID,
       AUTH_CLIENT_SECRET,
       AUTH_DOMAIN,
       JWT_AUDIENCE,
       REGISTER_SECRET,
+      dynamoStack.TABLE_NAME,
     ],
-    environment: {
-      DYNAMO_TABLE_NAME: dynamoStack.table.tableName,
-    },
   })
 
   //  Create the AppSync GraphQL API
   const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {
-    schema: 'services/graphql/schema.graphql',
+    schema: 'packages/services/graphql/schema.graphql',
     cdk: {
       graphqlApi: {
         logConfig: {

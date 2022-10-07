@@ -16,7 +16,7 @@
     "plugin:unicorn/recommended",
     "prettier"
   ],
-  "ignorePatterns": ["services/appsync.d.ts"],
+  "ignorePatterns": ["packages/services/appsync.d.ts"],
   "rules": {
     "@typescript-eslint/consistent-type-imports": "error",
     "import/no-unresolved": "off",

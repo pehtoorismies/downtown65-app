@@ -4,14 +4,6 @@ import type { MutationSignupArgs, User } from '../../appsync'
 import { getAuth0Management } from '../../support/auth0'
 import { Auth0UserResponse, toUser } from '../support/auth0-user'
 
-export type SignupArguments = {
-  email: string
-  name: string
-  nickname: string
-  password: string
-  registerSecret: string
-}
-
 export const signup: AppSyncResolverHandler<MutationSignupArgs, User> = async (
   event
 ) => {

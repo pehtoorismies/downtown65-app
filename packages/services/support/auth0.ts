@@ -12,7 +12,6 @@ export const getClient = () => {
 export const getAuth0Management = async () => {
   const client = await getClient().clientCredentialsGrant({
     audience: `https://${Config.AUTH_DOMAIN}/api/v2/`,
-
     scope: 'read:users update:users',
   })
   const management = new ManagementClient({
