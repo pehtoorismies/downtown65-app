@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "../../tsconfig.json",
   "include": ["functions", "graphql"],
   "compilerOptions": {
     "module": "esnext",
