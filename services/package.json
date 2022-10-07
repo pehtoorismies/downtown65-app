@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "codegen": "graphql-codegen"
+    "codegen": "graphql-codegen",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@serverless-stack/node": "1.15.8",

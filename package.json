@@ -10,7 +10,8 @@
     "console": "sst console",
     "development:build": "sst build --stage development",
     "development:test": "sst load-config --stage development -- vitest run",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "yarn workspaces run typecheck && yarn typecheck:infra",
+    "typecheck:infra": "tsc --noEmit",
     "test": "sst load-config -- vitest run",
     "lint": "eslint . --ext .ts",
     "codegen": "yarn workspaces run codegen"
