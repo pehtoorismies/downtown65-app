@@ -6,7 +6,7 @@ export const CronStack = ({ stack }: StackContext) => {
   const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
 
   const weeklyEmailFun = new Function(stack, 'WeeklyEmail', {
-    handler: 'functions/scheduled/send-weekly-email.main',
+    handler: 'services/functions/scheduled/send-weekly-email.main',
     config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
   })
 

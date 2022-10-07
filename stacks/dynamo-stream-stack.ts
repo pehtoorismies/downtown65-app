@@ -8,7 +8,7 @@ export const DynamoStreamStack = ({ stack }: StackContext) => {
   const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
 
   const eventCreatedFunction = new Function(stack, 'EventCreated', {
-    handler: 'functions/streams/event-created.main',
+    handler: 'services/functions/streams/event-created.main',
     config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
   })
 
