@@ -12,7 +12,8 @@
     "development:test": "sst load-config --stage development -- vitest run",
     "development:deploy": "sst deploy --stage development",
     "production:deploy": "sst deploy --stage production",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "yarn workspaces run typecheck && yarn typecheck:infra",
+    "typecheck:infra": "tsc --noEmit",
     "test": "sst load-config -- vitest run",
     "lint": "eslint . --ext .ts",
     "codegen": "yarn workspaces run codegen"
