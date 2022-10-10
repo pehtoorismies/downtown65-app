@@ -11,6 +11,9 @@ export default function (app: App) {
     srcPath: 'packages',
     bundle: {
       format: 'esm',
+      loader: {
+        '.mjml': 'text',
+      },
     },
   })
   app

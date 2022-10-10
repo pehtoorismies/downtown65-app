@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["functions", "graphql"],
+  "include": ["functions", "graphql", "types.d.ts"],
   "compilerOptions": {
     "module": "esnext",
     "target": "es2017",
