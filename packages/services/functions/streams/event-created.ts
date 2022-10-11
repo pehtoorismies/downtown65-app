@@ -26,9 +26,9 @@ export const main: DynamoDBStreamHandler = async (
   context
 ): Promise<void> => {
   console.log('Event:')
-  console.log(JSON.stringify(event, null, 2))
+  console.log(JSON.stringify(event, undefined, 2))
   console.log('Context:')
-  console.log(JSON.stringify(context, null, 2))
+  console.log(JSON.stringify(context, undefined, 2))
   if (Config.EMAIL_SENDING_ENABLED !== 'true') {
     console.log('EMAIL_SENDING_ENABLED: false')
     return
