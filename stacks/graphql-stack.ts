@@ -18,7 +18,8 @@ export const GraphqlStack = ({ stack }: StackContext) => {
   } = use(ConfigStack)
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
-    handler: 'services/graphql/gql.main',
+    srcPath: 'packages/services',
+    handler: 'graphql/gql.main',
     config: [
       AUTH_CLIENT_ID,
       AUTH_CLIENT_SECRET,

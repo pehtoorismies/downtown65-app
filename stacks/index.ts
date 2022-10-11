@@ -8,7 +8,6 @@ import { GraphqlStack } from './graphql-stack'
 export default function (app: App) {
   app.setDefaultFunctionProps({
     runtime: 'nodejs16.x',
-    srcPath: 'packages',
     bundle: {
       format: 'esm',
       loader: {
