@@ -1,12 +1,12 @@
+import { Config } from '@serverless-stack/node/config'
 import type {
   DynamoDBStreamEvent,
   DynamoDBStreamHandler,
 } from 'aws-lambda/trigger/dynamodb-stream'
 import { getAuth0Management } from '../../support/auth0'
 
-const management = await getAuth0Management()
-
 const fetchCreateEventSubscribers = async () => {
+  const management = await getAuth0Management()
   try {
     const users = await management.getUsers({
       fields: 'email,name',
@@ -25,20 +25,23 @@ export const main: DynamoDBStreamHandler = async (
   event: DynamoDBStreamEvent,
   context
 ): Promise<void> => {
-  console.log('Send email to participants')
   console.log('Event:')
   console.log(JSON.stringify(event, null, 2))
   console.log('Context:')
   console.log(JSON.stringify(context, null, 2))
+  if (Config.EMAIL_SENDING_ENABLED !== 'true') {
+    console.log('EMAIL_SENDING_ENABLED: false')
+    return
+  }
 
-  // const users = await fetchCreateEventSubscribers()
-  // console.log(users)
-  //
-  // const createdRecord = event.Records[0]
-  // console.log(createdRecord)
-  //
-  // console.log(event)
-  // for (const r of event.Records) {
-  //   console.log(r.dynamodb)
-  // }
+  const users = await fetchCreateEventSubscribers()
+  console.log(users)
+
+  const createdRecord = event.Records[0]
+  console.log(createdRecord)
+
+  console.log(event)
+  for (const r of event.Records) {
+    console.log(r.dynamodb)
+  }
 }
