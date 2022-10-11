@@ -5,12 +5,22 @@ import { DynamoStack } from './dynamo-stack'
 
 export const DynamoStreamStack = ({ stack }: StackContext) => {
   const dynamo = use(DynamoStack)
-  const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
+  const {
+    AUTH_CLIENT_ID,
+    AUTH_CLIENT_SECRET,
+    AUTH_DOMAIN,
+    EMAIL_SENDING_ENABLED,
+  } = use(ConfigStack)
 
   const eventCreatedFunction = new Function(stack, 'EventCreated', {
     srcPath: 'packages/services',
     handler: 'functions/streams/event-created.main',
-    config: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
+    config: [
+      AUTH_CLIENT_ID,
+      AUTH_CLIENT_SECRET,
+      AUTH_DOMAIN,
+      EMAIL_SENDING_ENABLED,
+    ],
   })
 
   dynamo.table.addConsumers(stack, {
