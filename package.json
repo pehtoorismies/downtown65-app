@@ -15,7 +15,7 @@
     "typecheck": "lerna run typecheck --no-sort",
     "test": "sst load-config -- vitest run",
     "lint": "lerna run lint --no-sort",
-    "codegen": "yarn workspace @downtown65-app/services run codegen"
+    "codegen": "lerna run codegen --scope=@downtown65-app/services"
   },
   "devDependencies": {
     "@serverless-stack/cli": "1.15.8",
