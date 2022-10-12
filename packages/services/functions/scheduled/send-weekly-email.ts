@@ -1,23 +1,23 @@
 import { getWeeklyEmail } from '../../email/get-weekly-email'
 import { sendEmail } from '../../email/send-email'
-import { getAuth0Management } from '../../support/auth0'
+// import { getAuth0Management } from '../../support/auth0'
 
-const management = await getAuth0Management()
+// const management = await getAuth0Management()
 
-const fetchWeeklyEmailSubscribers = async () => {
-  try {
-    const users = await management.getUsers({
-      fields: 'email,name',
-      search_engine: 'v3',
-      q: `user_metadata.subscribeWeeklyEmail:true`,
-    })
-
-    return users
-  } catch (error) {
-    console.error(error)
-    return []
-  }
-}
+// const fetchWeeklyEmailSubscribers = async () => {
+//   try {
+//     const users = await management.getUsers({
+//       fields: 'email,name',
+//       search_engine: 'v3',
+//       q: `user_metadata.subscribeWeeklyEmail:true`,
+//     })
+//
+//     return users
+//   } catch (error) {
+//     console.error(error)
+//     return []
+//   }
+// }
 
 export const main = async () => {
   const { plain, html } = getWeeklyEmail({

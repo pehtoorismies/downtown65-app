@@ -1,0 +1,17 @@
+{
+  "name": "@downtown65-app/infra",
+  "version": "0.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "codegen": "graphql-codegen",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@serverless-stack/resources": "1.15.8",
+    "aws-cdk-lib": "2.39.1"
+  }
+}

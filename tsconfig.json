@@ -1,6 +1,5 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
-  "include": ["stacks/index.ts"],
   "compilerOptions": {
     "noUnusedParameters": true
   }
