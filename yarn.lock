@@ -4191,6 +4191,15 @@
   optionalDependencies:
     graphql "^16.5.0"
 
+"@serverless-stack/static-site-env@1.15.11":
+  version "1.15.11"
+  resolved "https://registry.yarnpkg.com/@serverless-stack/static-site-env/-/static-site-env-1.15.11.tgz#9eeba0d384fc5c697f378fbe8237417ab0fd39b3"
+  integrity sha512-H0nGDMMnS/7HRK9gbwTsll5IzF0845RnTEUNcmywqM+ASPplD6ntodPAnzY9gXMTWuztCDmDk7IY+/I472kCQw==
+  dependencies:
+    cross-spawn "^7.0.3"
+    fs-extra "^9.0.1"
+    minimist "^1.2.5"
+
 "@sindresorhus/is@^4.0.0":
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.6.0.tgz#3c7c9c46e678feefe7a2e5bb609d3dbd665ffb3f"
@@ -10306,7 +10315,7 @@ lazystream@^1.0.0:
   dependencies:
     readable-stream "^2.0.5"
 
-lerna@^5.6.2:
+lerna@5.6.2:
   version "5.6.2"
   resolved "https://registry.yarnpkg.com/lerna/-/lerna-5.6.2.tgz#cdcdfe4e8bf07eccb4ecff1c216def9c67e62af2"
   integrity sha512-Y0yMPslvnBnTZi7Nrs/gDyYZYauNf61xWNCehISHIORxZmmpoluNkcWTfcyb47is5uJQCv5QJX5xKKubbs+a6w==

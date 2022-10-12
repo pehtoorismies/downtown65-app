@@ -3,6 +3,7 @@ import { ConfigStack } from './config-stack'
 import { CronStack } from './cron-stack'
 import { DynamoStack } from './dynamo-stack'
 import { DynamoStreamStack } from './dynamo-stream-stack'
+import { FrontendStack } from './frontend-stack'
 import { GraphqlStack } from './graphql-stack'
 
 export default function (app: App) {
@@ -22,4 +23,5 @@ export default function (app: App) {
     .stack(DynamoStreamStack)
     .stack(CronStack)
     .stack(GraphqlStack)
+    .stack(FrontendStack)
 }
