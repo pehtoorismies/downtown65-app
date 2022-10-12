@@ -2,7 +2,7 @@ import type { AppSyncResolverHandler } from 'aws-lambda'
 import type {
   Event as Dt65Event,
   QueryEventArgs as QueryEventArguments,
-} from '../../../appsync'
+} from '../../appsync'
 import { getTable } from '../../dynamo/table'
 import { getPrimaryKey } from './support/event-primary-key'
 

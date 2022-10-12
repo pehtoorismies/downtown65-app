@@ -1,7 +1,7 @@
-import { mapToData } from '@downtown65-app/services/src/core/event-type-util'
 import { Container, SimpleGrid } from '@mantine/core'
-import type { EventCardProperties } from '~/components/card'
-import { EventCard } from '~/components/card'
+import type { EventCardProperties } from '~/components/event-card'
+import { EventCard } from '~/components/event-card'
+import { mapToData } from '~/util/event-type'
 
 const mocks: EventCardProperties[] = [
   {

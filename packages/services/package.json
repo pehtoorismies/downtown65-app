@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "codegen": "graphql-codegen",
-    "find-deadcode": "ts-prune --ignore 'functions|appsync.d.ts|src/test/global-setup.ts'",
+    "find-deadcode": "ts-prune --ignore 'functions|src/appsync.d.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts"
   },

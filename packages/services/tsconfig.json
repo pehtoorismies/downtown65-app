@@ -2,9 +2,7 @@
   "extends": "../../tsconfig.json",
   "include": [
     "functions/**/*",
-    "src/**/*",
-    "appsync.d.ts",
-    "types.d.ts"
+    "src/**/*"
   ],
   "compilerOptions": {
     "module": "esnext",
