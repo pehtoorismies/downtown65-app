@@ -8,7 +8,8 @@
     "dev": "sst-env -- remix dev",
     "start": "remix-serve build",
     "lint": "eslint . --ext .ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx'"
   },
   "dependencies": {
     "@remix-run/node": "1.7.2",

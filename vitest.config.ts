@@ -5,7 +5,7 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     testTimeout: 30_000,
-    globalSetup: ['./packages/services/test/global-setup.ts'],
+    globalSetup: ['./packages/services/src/test/global-setup.ts'],
   },
   logLevel: 'info',
   esbuild: {
