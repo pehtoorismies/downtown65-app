@@ -54,21 +54,23 @@ export type Event = {
   type: EventType;
 };
 
-export type EventType =
-  | 'KARONKKA'
-  | 'MEETING'
-  | 'NORDIC_WALKING'
-  | 'ORIENTEERING'
-  | 'OTHER'
-  | 'RUNNING'
-  | 'SKIING'
-  | 'SPINNING'
-  | 'SWIMMING'
-  | 'TRACK_RUNNING'
-  | 'TRAIL_RUNNING'
-  | 'TRIATHLON'
-  | 'ULTRAS';
+export const EventType = {
+  Karonkka: 'KARONKKA',
+  Meeting: 'MEETING',
+  NordicWalking: 'NORDIC_WALKING',
+  Orienteering: 'ORIENTEERING',
+  Other: 'OTHER',
+  Running: 'RUNNING',
+  Skiing: 'SKIING',
+  Spinning: 'SPINNING',
+  Swimming: 'SWIMMING',
+  TrackRunning: 'TRACK_RUNNING',
+  TrailRunning: 'TRAIL_RUNNING',
+  Triathlon: 'TRIATHLON',
+  Ultras: 'ULTRAS'
+} as const;
 
+export type EventType = typeof EventType[keyof typeof EventType];
 export type IdPayload = {
   __typename?: 'IDPayload';
   id: Scalars['ID'];

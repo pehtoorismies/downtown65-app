@@ -4,7 +4,7 @@ import type {
   MutationCreateEventArgs,
 } from '../../../appsync'
 import * as Event from '../../core/event'
-import { EVENT_TYPES, isEventType } from '../../core/event-type'
+import { getEventValues, isEventType } from '../../core/event-type-util'
 
 export const createEvent: AppSyncResolverHandler<
   MutationCreateEventArgs,
@@ -14,7 +14,7 @@ export const createEvent: AppSyncResolverHandler<
 
   if (!isEventType(creatableEvent.type)) {
     throw new Error(
-      `Schema mismatch. 'type' is not within ${EVENT_TYPES.join(',')} `
+      `Schema mismatch. 'type' is not within ${getEventValues().join(',')} `
     )
   }
 
