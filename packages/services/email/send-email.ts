@@ -44,16 +44,16 @@ export const sendEmail = async ({ subject, body, to, from }: SendEmail) => {
           Body: {
             Html: {
               Data: body.html,
-              Charset: 'utf8',
+              Charset: 'UTF-8',
             },
             Text: {
               Data: body.text,
-              Charset: 'utf8',
+              Charset: 'UTF-8',
             },
           },
           Subject: {
             Data: subject,
-            Charset: 'utf8',
+            Charset: 'UTF-8',
           },
         },
       },
@@ -62,9 +62,9 @@ export const sendEmail = async ({ subject, body, to, from }: SendEmail) => {
       },
       FromEmailAddress: from,
       // ReplyToAddresses: [from],
-      ConfigurationSetName: 'Dt65Set',
+      // ConfigurationSetName: 'Dt65Set',
     }
-    await ses.sendEmail(params)
+    await ses.sendEmail(params).promise()
 
     return {
       success: true,
