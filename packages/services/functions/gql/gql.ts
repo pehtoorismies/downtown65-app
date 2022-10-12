@@ -1,8 +1,11 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import type { Inputs as PrivateIn, Outputs as PrivateOut } from './private'
-import { isPrivateField, privateResolver } from './private'
-import type { Inputs as PublicIn, Outputs as PublicOut } from './public'
-import { isPublicField, publicResolver } from './public'
+import type {
+  Inputs as PrivateIn,
+  Outputs as PrivateOut,
+} from 'graphql/private'
+import { isPrivateField, privateResolver } from 'graphql/private'
+import type { Inputs as PublicIn, Outputs as PublicOut } from 'graphql/public'
+import { isPublicField, publicResolver } from 'graphql/public'
 
 export type EmptyArgs = Record<string, never>
 

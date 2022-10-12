@@ -1,4 +1,4 @@
-export interface AWSError {
+interface AWSError {
   name: string
 }
 
