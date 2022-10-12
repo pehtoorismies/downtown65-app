@@ -12,6 +12,11 @@
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx'"
   },
   "dependencies": {
+    "@emotion/react": "11.10.4",
+    "@emotion/server": "11.10.0",
+    "@mantine/core": "5.5.5",
+    "@mantine/hooks": "5.5.5",
+    "@mantine/remix": "5.5.5",
     "@remix-run/node": "1.7.2",
     "@remix-run/react": "1.7.2",
     "@remix-run/serve": "1.7.2",
