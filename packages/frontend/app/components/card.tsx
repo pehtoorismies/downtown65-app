@@ -1,24 +1,15 @@
+import type { EventType } from '@downtown65-app/services/appsync'
 import {
   Box,
   Card,
-  Image,
   Text,
-  ActionIcon,
   Badge,
   Group,
   Center,
   Avatar,
-  Button,
+  BackgroundImage,
   createStyles,
 } from '@mantine/core'
-import {
-  IconBrandTwitter,
-  IconBookmark,
-  IconHeart,
-  IconShare,
-  IconBan,
-  IconHandStop,
-} from '@tabler/icons'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 
 const useStyles = createStyles((theme) => ({
@@ -36,7 +27,10 @@ const useStyles = createStyles((theme) => ({
   },
 
   heading: {
-    position: 'relative',
+    textShadow: 'black 2px 2px 5px',
+    fontWeight: 700,
+    letterSpacing: '4px',
+    textTransform: 'uppercase',
   },
 
   title: {
@@ -64,28 +58,44 @@ const useStyles = createStyles((theme) => ({
           : theme.colors.gray[1],
     }),
   },
-
-  footer: {
-    marginTop: theme.spacing.md,
-  },
 }))
 
-interface EventCardProperties {
-  title: string
+type Participant = {
+  id: string
+  nick: string
 }
 
-export const EventCard = ({ title }: EventCardProperties) => {
+export interface EventCardProperties {
+  id: string
+  title: string
+  type: EventType
+  me: Participant
+  participants: Participant[]
+  description: string
+}
+
+export const EventCard = ({
+  title,
+  type,
+  participants,
+  me,
+  description,
+}: EventCardProperties) => {
   const { classes, cx, theme } = useStyles()
 
   return (
     <Card withBorder radius="md" className={cx(classes.card)} shadow="sm">
       <Card.Section>
-        <Image
-          src="https://www.downtown65.events/static/media/events-spinning.6152d354.jpg"
-          height={150}
-        />
+        <Box>
+          <BackgroundImage src="https://www.downtown65.events/static/media/events-spinning.6152d354.jpg">
+            <Center p="md">
+              <Text color="#fff" size={30} py={36} className={classes.heading}>
+                {type}
+              </Text>
+            </Center>
+          </BackgroundImage>
+        </Box>
       </Card.Section>
-      <Text className={classes.heading}>Spinning</Text>
       <Center className={classes.creator}>
         <Text size="xs" inline color="white" mr="sm">
           by pehtoorismies
@@ -105,7 +115,7 @@ export const EventCard = ({ title }: EventCardProperties) => {
       >
         32
       </Badge>
-      <Group position="apart" className={classes.footer}>
+      <Group position="apart">
         <Box>
           <Text className={classes.title}>{title}</Text>
           <Text size="sm" color="dimmed" weight={400} lineClamp={4}>
@@ -118,24 +128,25 @@ export const EventCard = ({ title }: EventCardProperties) => {
         <ToggleJoinButton isParticipating />
       </Group>
 
-      <Group position="apart" className={classes.footer}>
-        <Text size="sm" lineClamp={3} weight={500}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin sed
-          ligula luctus, laoreet massa eget, dictum eros. In hac habitasse
-          platea dictumst. Curabitur vehicula sapien eget lectus semper
-          vehicula. Sed mattis fringilla euismod. Nullam mollis ultricies nisi,
-          eu vehicula tortor laoreet nec. Mauris ultrices erat vitae egestas
-          accumsan. Nullam imperdiet libero a ex tincidunt, et tincidunt magna
-          auctor. Donec suscipit nunc ac facilisis vulputate.
+      <Group position="apart">
+        <Text size="sm" lineClamp={3} weight={500} mt="xs">
+          {description}
         </Text>
 
         <Group spacing={8} mr={0}>
-          <Badge>Badge</Badge>
-          <Badge variant="gradient">Badge</Badge>
-          <Badge>Badge</Badge>
-          <Badge>Badge</Badge>
-          <Badge>Badge</Badge>
-          <Badge>....</Badge>
+          {participants.map((p) => {
+            const isParticipating = p.id === me.id
+
+            return (
+              <Text
+                key={p.id}
+                size="xs"
+                color={isParticipating ? 'red' : 'blue'}
+              >
+                {p.nick}
+              </Text>
+            )
+          })}
         </Group>
       </Group>
     </Card>
