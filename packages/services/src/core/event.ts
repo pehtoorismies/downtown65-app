@@ -1,8 +1,8 @@
 import formatISO from 'date-fns/formatISO'
 import { ulid } from 'ulid'
+import type { EventType } from '../../appsync'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from '../graphql/events/support/event-primary-key'
-import type { EventType } from './event-type'
 
 const Table = getTable()
 
