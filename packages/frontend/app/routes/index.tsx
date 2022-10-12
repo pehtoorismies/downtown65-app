@@ -1,3 +1,4 @@
+import { mapToData } from '@downtown65-app/services/src/core/event-type-util'
 import { Container, SimpleGrid } from '@mantine/core'
 import type { EventCardProperties } from '~/components/card'
 import { EventCard } from '~/components/card'
@@ -6,7 +7,7 @@ const mocks: EventCardProperties[] = [
   {
     id: '1',
     title: 'Kissa',
-    type: 'SPINNING',
+    type: mapToData('SPINNING'),
     me: { nick: 'pehtoorismies', id: '123' },
     participants: [{ nick: 'pehtoorismies', id: '123' }],
     description:
@@ -15,7 +16,7 @@ const mocks: EventCardProperties[] = [
   {
     id: '2',
     title: 'Kissa',
-    type: 'KARONKKA',
+    type: mapToData('KARONKKA'),
     me: { nick: 'pehtoorismies', id: '123' },
     participants: [{ nick: 'pehtoorismies', id: '123' }],
     description:
@@ -24,7 +25,7 @@ const mocks: EventCardProperties[] = [
   {
     id: '3',
     title: 'Kissa',
-    type: 'OTHER',
+    type: mapToData('OTHER'),
     me: { nick: 'pehtoorismies', id: '123' },
     participants: [
       { nick: 'pehtoorismies', id: '123' },

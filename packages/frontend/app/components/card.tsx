@@ -68,7 +68,10 @@ type Participant = {
 export interface EventCardProperties {
   id: string
   title: string
-  type: EventType
+  type: {
+    text: string
+    imageUrl: string
+  }
   me: Participant
   participants: Participant[]
   description: string
@@ -87,10 +90,10 @@ export const EventCard = ({
     <Card withBorder radius="md" className={cx(classes.card)} shadow="sm">
       <Card.Section>
         <Box>
-          <BackgroundImage src="https://www.downtown65.events/static/media/events-spinning.6152d354.jpg">
+          <BackgroundImage src={type.imageUrl}>
             <Center p="md">
               <Text color="#fff" size={30} py={36} className={classes.heading}>
-                {type}
+                {type.text}
               </Text>
             </Center>
           </BackgroundImage>

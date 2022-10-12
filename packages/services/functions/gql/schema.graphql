@@ -4,122 +4,123 @@ directive @aws_api_key on OBJECT | FIELD_DEFINITION
 directive @aws_oidc on OBJECT
 
 enum EventType {
-  KARONKKA
-  MEETING
-  NORDIC_WALKING
-  ORIENTEERING
-  OTHER
-  RUNNING
-  SKIING
-  SPINNING
-  SWIMMING
-  TRACK_RUNNING
-  TRAIL_RUNNING
-  TRIATHLON
-  ULTRAS
+    CYCLING
+    KARONKKA
+    MEETING
+    NORDIC_WALKING
+    ORIENTEERING
+    OTHER
+    RUNNING
+    SKIING
+    SPINNING
+    SWIMMING
+    TRACK_RUNNING
+    TRAIL_RUNNING
+    TRIATHLON
+    ULTRAS
 }
 
 type Event {
-  dateStart: AWSDateTime!
-  id: ID!
-  race: Boolean!
-  subtitle: String
-  title: String!
-  type: EventType!
+    dateStart: AWSDateTime!
+    id: ID!
+    race: Boolean!
+    subtitle: String
+    title: String!
+    type: EventType!
 }
 
 interface Auth0User {
-  id: ID!
-  email: String!
-  name: String!
-  nickname: String
+    id: ID!
+    email: String!
+    name: String!
+    nickname: String
 }
 
 type User implements Auth0User @aws_api_key @aws_oidc {
-  createdAt: AWSDateTime!
-  email: String!
-  id: ID!
-  name: String!
-  nickname: String
-  preferences: Preferences!
-  updatedAt: AWSDateTime
+    createdAt: AWSDateTime!
+    email: String!
+    id: ID!
+    name: String!
+    nickname: String
+    preferences: Preferences!
+    updatedAt: AWSDateTime
 }
 
 type BaseUser implements Auth0User{
-  email: String!
-  id: ID!
-  name: String!
-  nickname: String!
-  picture: String!
+    email: String!
+    id: ID!
+    name: String!
+    nickname: String!
+    picture: String!
 }
 
 
 input CreateEventInput {
-  dateStart: AWSDateTime!
-  race: Boolean
-  subtitle: String
-  title: String!
-  type: String!
+    dateStart: AWSDateTime!
+    race: Boolean
+    subtitle: String
+    title: String!
+    type: String!
 }
 
 type AuthPayload @aws_api_key {
-  accessToken: String!
-  expiresIn: Int!
-  idToken: String!
+    accessToken: String!
+    expiresIn: Int!
+    idToken: String!
 }
 
 type Preferences {
-  subscribeEventCreationEmail: Boolean!
-  subscribeWeeklyEmail: Boolean!
+    subscribeEventCreationEmail: Boolean!
+    subscribeWeeklyEmail: Boolean!
 }
 
 type IDPayload {
-  id: ID!
+    id: ID!
 }
 
 input UpdateEventInput {
-  dateStart: AWSDateTime
-  id: ID!
-  race: Boolean
-  subtitle: String
-  title: String
-  type: String
+    dateStart: AWSDateTime
+    id: ID!
+    race: Boolean
+    subtitle: String
+    title: String
+    type: String
 }
 
 type Query {
-  event(eventId: ID!): Event @aws_api_key
-  # Future events
-  events: [Event!]!
-  me: User!
-  users: [BaseUser!]!
+    event(eventId: ID!): Event @aws_api_key
+    # Future events
+    events: [Event!]!
+    me: User!
+    users: [BaseUser!]!
 }
 
 type Mutation {
-  createEvent(
-    event: CreateEventInput!
-    addMe: Boolean = false
-    notifySubscribers: Boolean = true
-  ): Event!
-  updateEvent(input: UpdateEventInput!): Event!
-  deleteEvent(eventId: ID!): IDPayload
-  leaveEvent(eventId: ID!): Event
-  joinEvent(eventId: ID!): Event
+    createEvent(
+        event: CreateEventInput!
+        addMe: Boolean = false
+        notifySubscribers: Boolean = true
+    ): Event!
+    updateEvent(input: UpdateEventInput!): Event!
+    deleteEvent(eventId: ID!): IDPayload
+    leaveEvent(eventId: ID!): Event
+    joinEvent(eventId: ID!): Event
 
 
-  login(
-    email: String!
-    password: String!
-  ): AuthPayload! @aws_api_key
-  signup(
-    email: String!
-    nickname: String!
-    password: String!
-    name: String!
-    registerSecret: String!
-  ): User! @aws_api_key
-  forgotPassword(
-    email: String!
-  ): Boolean!
+    login(
+        email: String!
+        password: String!
+    ): AuthPayload! @aws_api_key
+    signup(
+        email: String!
+        nickname: String!
+        password: String!
+        name: String!
+        registerSecret: String!
+    ): User! @aws_api_key
+    forgotPassword(
+        email: String!
+    ): Boolean!
 
 
 
