@@ -36,6 +36,7 @@ module.exports = {
           },
           res: false,
           params: false,
+          env: false,
           args: false,
         },
       },

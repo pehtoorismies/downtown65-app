@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "codegen": "graphql-codegen",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts"
   },
   "dependencies": {
     "@serverless-stack/node": "1.15.8",
