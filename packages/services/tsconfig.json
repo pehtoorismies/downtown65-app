@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "include": [
-    "functions",
-    "src",
+    "functions/**/*",
+    "src/**/*",
+    "appsync.d.ts",
     "types.d.ts"
   ],
   "compilerOptions": {

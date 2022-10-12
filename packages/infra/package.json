@@ -6,7 +6,8 @@
   "scripts": {
     "codegen": "graphql-codegen",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "find-deadcode": "ts-prune --ignore stacks/index.ts"
   },
   "dependencies": {
   },
