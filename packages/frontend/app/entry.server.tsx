@@ -1,10 +1,9 @@
-import { PassThrough } from 'node:stream'
+import { injectStyles, createStylesServer } from '@mantine/remix'
 import type { EntryContext } from '@remix-run/node'
-import { Response } from '@remix-run/node'
 import { RemixServer } from '@remix-run/react'
-import { renderToPipeableStream } from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
 
-const ABORT_DELAY = 5000
+const server = createStylesServer()
 
 export default function handleRequest(
   request: Request,
@@ -12,37 +11,13 @@ export default function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
-  return new Promise((resolve, reject) => {
-    let didError = false
+  const markup = renderToString(
+    <RemixServer context={remixContext} url={request.url} />
+  )
+  responseHeaders.set('Content-Type', 'text/html')
 
-    const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} />,
-      {
-        onShellReady: () => {
-          const body = new PassThrough()
-
-          responseHeaders.set('Content-Type', 'text/html')
-
-          resolve(
-            new Response(body, {
-              headers: responseHeaders,
-              status: didError ? 500 : responseStatusCode,
-            })
-          )
-
-          pipe(body)
-        },
-        onShellError: (error) => {
-          reject(error)
-        },
-        onError: (error) => {
-          didError = true
-
-          console.error(error)
-        },
-      }
-    )
-
-    setTimeout(abort, ABORT_DELAY)
+  return new Response(`<!DOCTYPE html>${injectStyles(markup, server)}`, {
+    status: responseStatusCode,
+    headers: responseHeaders,
   })
 }
