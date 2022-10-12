@@ -1,11 +1,15 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["functions", "graphql", "types.d.ts"],
+  "include": [
+    "functions",
+    "src",
+    "types.d.ts"
+  ],
   "compilerOptions": {
     "module": "esnext",
     "target": "es2017",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./"
+    "baseUrl": "./src"
   }
 }

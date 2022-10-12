@@ -1,5 +1,5 @@
-import { getWeeklyEmail } from '../../email/get-weekly-email'
-import { sendEmail } from '../../email/send-email'
+import { getWeeklyEmail } from '../../src/email/get-weekly-email'
+import { sendEmail } from '../../src/email/send-email'
 // import { getAuth0Management } from '../../support/auth0'
 
 // const management = await getAuth0Management()
