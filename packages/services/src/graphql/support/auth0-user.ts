@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { BaseUser, User } from '../../../appsync'
+import type { BaseUser, User } from '../../appsync'
 
 const ROLES = ['USER', 'ADMIN'] as const
 

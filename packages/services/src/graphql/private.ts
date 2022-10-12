@@ -1,4 +1,5 @@
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
+import type { EmptyArgs } from '../../functions/gql/gql'
 import type {
   BaseUser,
   Event as Dt65Event,
@@ -10,8 +11,7 @@ import type {
   MutationUpdateEventArgs,
   QueryEventArgs as QueryEventArguments,
   User,
-} from '../../appsync'
-import type { EmptyArgs } from '../../functions/gql/gql'
+} from '../appsync'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
 import { getEvents } from './events/get-events'

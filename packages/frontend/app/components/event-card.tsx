@@ -1,4 +1,3 @@
-import type { EventType } from '@downtown65-app/services/appsync'
 import {
   Box,
   Card,
@@ -86,6 +85,8 @@ export const EventCard = ({
 }: EventCardProperties) => {
   const { classes, cx, theme } = useStyles()
 
+  const isParticipating = participants.map(({ id }) => id).includes(me.id)
+
   return (
     <Card withBorder radius="md" className={cx(classes.card)} shadow="sm">
       <Card.Section>
@@ -128,7 +129,7 @@ export const EventCard = ({
             11.12.2022 (la)
           </Text>
         </Box>
-        <ToggleJoinButton isParticipating />
+        <ToggleJoinButton isParticipating={isParticipating} />
       </Group>
 
       <Group position="apart">
@@ -138,8 +139,6 @@ export const EventCard = ({
 
         <Group spacing={8} mr={0}>
           {participants.map((p) => {
-            const isParticipating = p.id === me.id
-
             return (
               <Text
                 key={p.id}

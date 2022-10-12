@@ -1,7 +1,7 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import type { User } from '../../../appsync'
 import type { EmptyArgs } from '../../../functions/gql/gql'
+import type { User } from '../../appsync'
 import { getAuth0Management } from '../../support/auth0'
 import { Auth0UserResponse, toUser } from '../support/auth0-user'
 
