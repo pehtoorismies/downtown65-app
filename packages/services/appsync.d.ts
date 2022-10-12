@@ -55,6 +55,7 @@ export type Event = {
 };
 
 export const EventType = {
+  Cycling: 'CYCLING',
   Karonkka: 'KARONKKA',
   Meeting: 'MEETING',
   NordicWalking: 'NORDIC_WALKING',
