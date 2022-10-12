@@ -16,6 +16,7 @@ export const CronStack = ({ stack }: StackContext) => {
         '.mjml': 'text',
       },
     },
+    permissions: ['ses:SendEmail', 'ses:SendRawEmail'],
   })
 
   new Cron(stack, 'WeeklyEmailCron', {
