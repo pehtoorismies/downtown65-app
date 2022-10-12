@@ -16,7 +16,7 @@
     "typecheck:infra": "tsc --noEmit",
     "test": "sst load-config -- vitest run",
     "lint": "eslint . --ext .ts",
-    "codegen": "yarn workspaces run codegen"
+    "codegen": "yarn workspace @downtown65-app/services run codegen"
   },
   "devDependencies": {
     "@serverless-stack/cli": "1.15.8",
