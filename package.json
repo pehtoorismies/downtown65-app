@@ -12,10 +12,9 @@
     "development:test": "sst load-config --stage development -- vitest run",
     "development:deploy": "sst deploy --stage development",
     "production:deploy": "sst deploy --stage production",
-    "typecheck": "yarn workspaces run typecheck && yarn typecheck:infra",
-    "typecheck:infra": "tsc --noEmit",
+    "typecheck": "lerna run typecheck --no-sort",
     "test": "sst load-config -- vitest run",
-    "lint": "lerna run lint",
+    "lint": "lerna run lint --no-sort",
     "codegen": "yarn workspace @downtown65-app/services run codegen"
   },
   "devDependencies": {
