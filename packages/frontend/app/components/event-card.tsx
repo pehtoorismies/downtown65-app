@@ -1,15 +1,18 @@
 import type { MantineNumberSize } from '@mantine/core'
 import {
-  Box,
-  Card,
-  Text,
-  Badge,
-  Group,
-  Center,
   Avatar,
   BackgroundImage,
+  Badge,
+  Box,
+  Button,
+  Card,
+  Center,
+  Group,
+  Text,
   createStyles,
 } from '@mantine/core'
+import { useNavigate, Link } from '@remix-run/react'
+import { IconArrowNarrowRight } from '@tabler/icons'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 
 const useStyles = createStyles((theme) => ({
@@ -61,26 +64,63 @@ type Participant = {
   nick: string
 }
 
-export interface EventCardProperties {
+interface ParticipantProperties {
+  participants: Participant[]
+  me: Participant
+}
+
+export interface EventCardProperties extends ParticipantProperties {
+  isExtended: boolean
   id: string
   title: string
   type: {
     text: string
     imageUrl: string
   }
-  me: Participant
-  participants: Participant[]
   description: string
 }
 
+const Participants = ({ participants, me }: ParticipantProperties) => {
+  const { classes, cx } = useStyles()
+
+  return (
+    <Group spacing={8} mr={0} mt="md">
+      {participants.map((p) => {
+        const isHighlighted = p.id === me.id
+        const size: MantineNumberSize = 11
+
+        const attributes = {
+          color: 'white',
+          px: 6,
+          py: 1,
+          size,
+        }
+
+        return isHighlighted ? (
+          <Text key={p.id} {...attributes} className={classes.pillHighlight}>
+            {p.nick}
+          </Text>
+        ) : (
+          <Text key={p.id} {...attributes} className={classes.pill}>
+            {p.nick}
+          </Text>
+        )
+      })}
+    </Group>
+  )
+}
+
 export const EventCard = ({
+  id,
   title,
   type,
   participants,
   me,
   description,
+  isExtended,
 }: EventCardProperties) => {
-  const { classes, cx, theme } = useStyles()
+  const navigate = useNavigate()
+  const { classes, cx } = useStyles()
 
   const isParticipating = participants.map(({ id }) => id).includes(me.id)
 
@@ -125,7 +165,7 @@ export const EventCard = ({
       <Group position="apart">
         <Box>
           <Text className={classes.title}>{title}</Text>
-          <Text size="sm" color="dimmed" weight={400} lineClamp={4}>
+          <Text size="sm" color="dimmed" weight={400}>
             Location
           </Text>
           <Text size="sm" lineClamp={4} weight={500}>
@@ -135,38 +175,31 @@ export const EventCard = ({
         <ToggleJoinButton isParticipating={isParticipating} />
       </Group>
 
+      <Text size="sm" lineClamp={isExtended ? 0 : 3} weight={500} mt="xs">
+        {description}
+      </Text>
       <Group position="apart">
-        <Text size="sm" lineClamp={3} weight={500} mt="xs">
-          {description}
-        </Text>
-
-        <Group spacing={8} mr={0}>
-          {participants.map((p) => {
-            const isHighlighted = p.id === me.id
-            const size: MantineNumberSize = 11
-
-            const attributes = {
-              color: 'white',
-              px: 6,
-              py: 1,
-              size,
-            }
-
-            return isHighlighted ? (
-              <Text
-                key={p.id}
-                {...attributes}
-                className={classes.pillHighlight}
-              >
-                {p.nick}
-              </Text>
-            ) : (
-              <Text key={p.id} {...attributes} className={classes.pill}>
-                {p.nick}
-              </Text>
-            )
-          })}
-        </Group>
+        {isExtended ? (
+          <Participants participants={participants} me={me} />
+        ) : (
+          <Center style={{ width: '100%' }}>
+            <Button
+              fullWidth
+              mt="xs"
+              compact
+              variant="outline"
+              rightIcon={<IconArrowNarrowRight size={18} />}
+              styles={() => ({
+                leftIcon: {
+                  marginRight: 15,
+                },
+              })}
+              onClick={() => navigate(`/events/${id}`)}
+            >
+              Näytä
+            </Button>
+          </Center>
+        )}
       </Group>
     </Card>
   )
