@@ -8,14 +8,10 @@ interface Properties {
 const InButton = () => {
   return (
     <Button
-      component="a"
-      target="_blank"
-      rel="noopener noreferrer"
-      href="https://twitter.com/mantinedev"
       leftIcon={<IconHandStop size={18} />}
       styles={(theme) => ({
         root: {
-          backgroundColor: '#00acee',
+          backgroundColor: theme.colors.blue,
           border: 0,
           height: 42,
           paddingLeft: 20,
@@ -39,14 +35,10 @@ const InButton = () => {
 const OutButton = () => {
   return (
     <Button
-      component="a"
-      target="_blank"
-      rel="noopener noreferrer"
-      href="https://twitter.com/mantinedev"
       leftIcon={<IconHandOff size={18} />}
       styles={(theme) => ({
         root: {
-          backgroundColor: '#FF80EA',
+          backgroundColor: theme.colors.dtPink,
           border: 0,
           height: 42,
           paddingLeft: 20,
