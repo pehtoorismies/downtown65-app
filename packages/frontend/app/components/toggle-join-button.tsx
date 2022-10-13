@@ -11,14 +11,14 @@ const InButton = () => {
       leftIcon={<IconHandStop size={18} />}
       styles={(theme) => ({
         root: {
-          backgroundColor: theme.colors.blue,
+          backgroundColor: theme.colors.blue[9],
           border: 0,
           height: 42,
           paddingLeft: 20,
           paddingRight: 20,
 
           '&:hover': {
-            backgroundColor: theme.fn.darken('#00acee', 0.05),
+            backgroundColor: theme.fn.darken(theme.colors.blue[9], 0.05),
           },
         },
 
@@ -38,14 +38,14 @@ const OutButton = () => {
       leftIcon={<IconHandOff size={18} />}
       styles={(theme) => ({
         root: {
-          backgroundColor: theme.colors.dtPink,
+          backgroundColor: theme.colors.dtPink[9],
           border: 0,
           height: 42,
           paddingLeft: 20,
           paddingRight: 20,
 
           '&:hover': {
-            backgroundColor: theme.fn.darken('#FF80EA', 0.05),
+            backgroundColor: theme.fn.darken(theme.colors.dtPink[9], 0.05),
           },
         },
 
