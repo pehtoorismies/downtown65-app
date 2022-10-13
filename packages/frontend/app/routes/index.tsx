@@ -54,6 +54,7 @@ export const loader: LoaderFunction = async () => {
 
 const Index = () => {
   const { eventItems } = useLoaderData<LoaderData>()
+
   return (
     <Container pt={12}>
       <SimpleGrid

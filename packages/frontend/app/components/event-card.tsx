@@ -1,4 +1,4 @@
-import type { MantineNumberSize, MantineSize } from '@mantine/core'
+import type { MantineNumberSize } from '@mantine/core'
 import {
   Box,
   Card,
@@ -27,7 +27,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   heading: {
-    textShadow: 'black 2px 2px 5px',
+    textShadow: 'black 2px 2px 10px',
     fontWeight: 700,
     letterSpacing: '4px',
     textTransform: 'uppercase',
@@ -44,6 +44,7 @@ const useStyles = createStyles((theme) => ({
     right: theme.spacing.xs,
     top: theme.spacing.xs + 110,
     pointerEvents: 'none',
+    textShadow: 'black 1px 1px 8px',
   },
 
   action: {
@@ -60,11 +61,11 @@ const useStyles = createStyles((theme) => ({
   },
   pillHighlight: {
     backgroundColor: theme.colors.dtPink,
-    borderRadius: 6,
+    borderRadius: 2,
   },
   pill: {
     backgroundColor: theme.colors.blue,
-    borderRadius: 6,
+    borderRadius: 2,
   },
 }))
 
@@ -102,7 +103,13 @@ export const EventCard = ({
         <Box>
           <BackgroundImage src={type.imageUrl}>
             <Center p="md">
-              <Text color="#fff" size={30} py={36} className={classes.heading}>
+              <Text
+                color="#fff"
+                size={30}
+                px="xs"
+                my={36}
+                className={classes.heading}
+              >
                 {type.text}
               </Text>
             </Center>
