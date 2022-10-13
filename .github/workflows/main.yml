@@ -27,7 +27,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - run: yarn install --immutable --immutable-cache --check-cache
+      - name: Install
+        run: yarn install --immutable --immutable-cache --check-cache
+      - name: Bootstrap
+        run: npx lerna bootstrap
       - name: Deploy infra
         run: |
           yarn production:deploy
