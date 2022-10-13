@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import startOfToday from 'date-fns/startOfToday'
-import { getTable } from 'dynamo/table'
+import { getTable } from '~/dynamo/table'
 
 export const main = async () => {
   const Table = getTable()
