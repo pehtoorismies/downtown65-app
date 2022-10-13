@@ -2,10 +2,12 @@
   "name": "@downtown65-app/services",
   "version": "0.0.1",
   "type": "module",
+  "main": "./dist/appsync.d.cjs",
   "private": true,
   "scripts": {
+    "build": "tsup src/appsync.ts",
     "codegen": "graphql-codegen",
-    "find-deadcode": "ts-prune --ignore 'functions|src/appsync.d.ts|src/test/global-setup.ts'",
+    "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts"
   },

@@ -1,9 +1,9 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { format } from 'date-fns'
 import startOfToday from 'date-fns/startOfToday'
-import type { EmptyArgs } from '../../../functions/gql/gql'
 import type { Event as Dt65Event } from '../../appsync'
-import { getTable } from '../../dynamo/table'
+import { getTable } from '~/dynamo/table'
+import type { EmptyArgs } from '~/graphql/support/empty-args'
 
 const getExpression = (d: Date) => {
   const lt = format(

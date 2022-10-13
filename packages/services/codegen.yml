@@ -1,9 +1,9 @@
 overwrite: true
 schema:
-  - 'functions/gql/schema.graphql'
+  - 'src/functions/gql/schema.graphql'
 
 generates:
-  src/appsync.d.ts:
+  src/appsync.ts:
     plugins:
       - typescript
     config:

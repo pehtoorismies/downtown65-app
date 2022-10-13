@@ -4,6 +4,8 @@ node_modules
 # sst
 .sst
 .build
+.dist
+dist
 
 # misc
 .DS_Store

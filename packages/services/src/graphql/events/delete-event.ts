@@ -1,7 +1,7 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import type { IdPayload, MutationDeleteEventArgs } from '../../appsync'
-import { getTable } from '../../dynamo/table'
 import { getPrimaryKey } from './support/event-primary-key'
+import type { IdPayload, MutationDeleteEventArgs } from '~/appsync'
+import { getTable } from '~/dynamo/table'
 
 export const deleteEvent: AppSyncResolverHandler<
   MutationDeleteEventArgs,
