@@ -1,3 +1,4 @@
+import type { MantineNumberSize, MantineSize } from '@mantine/core'
 import {
   Box,
   Card,
@@ -56,6 +57,14 @@ const useStyles = createStyles((theme) => ({
           ? theme.colors.dark[5]
           : theme.colors.gray[1],
     }),
+  },
+  pillHighlight: {
+    backgroundColor: theme.colors.dtPink,
+    borderRadius: 6,
+  },
+  pill: {
+    backgroundColor: theme.colors.blue,
+    borderRadius: 6,
   },
 }))
 
@@ -139,12 +148,26 @@ export const EventCard = ({
 
         <Group spacing={8} mr={0}>
           {participants.map((p) => {
-            return (
+            const isHighlighted = p.id === me.id
+            const size: MantineNumberSize = 11
+
+            const attributes = {
+              color: 'white',
+              px: 6,
+              py: 1,
+              size,
+            }
+
+            return isHighlighted ? (
               <Text
                 key={p.id}
-                size="xs"
-                color={isParticipating ? 'red' : 'blue'}
+                {...attributes}
+                className={classes.pillHighlight}
               >
+                {p.nick}
+              </Text>
+            ) : (
+              <Text key={p.id} {...attributes} className={classes.pill}>
                 {p.nick}
               </Text>
             )

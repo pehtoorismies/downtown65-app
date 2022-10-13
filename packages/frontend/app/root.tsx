@@ -41,10 +41,11 @@ export default function App() {
       theme={{
         colorScheme: 'light',
         colors: {
+          dtPink: ['#FF80EA'],
           // Add your color
-          deepBlue: ['#E9EDFC', '#C1CCF6', '#99ABF0' /* ... */],
+          // deepBlue: ['#E9EDFC', '#C1CCF6', '#99ABF0' /* ... */],
           // or replace default theme color
-          blue: ['#E9EDFC', '#C1CCF6', '#99ABF0' /* ... */],
+          // blue: ['#E9EDFC', '#C1CCF6', '#99ABF0' /* ... */],
         },
 
         shadows: {
