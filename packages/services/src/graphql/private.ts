@@ -1,5 +1,4 @@
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
-import type { EmptyArgs } from '../../functions/gql/gql'
 import type {
   BaseUser,
   Event as Dt65Event,
@@ -22,6 +21,7 @@ import { assertUnreachable } from './support/assert-unreachable'
 import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
 import { getUsers } from './users/get-users'
+import type { EmptyArgs } from '~/graphql/support/empty-args'
 
 export type Inputs =
   | EmptyArgs
