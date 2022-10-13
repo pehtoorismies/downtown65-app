@@ -15,11 +15,10 @@ import { ToggleJoinButton } from '~/components/toggle-join-button'
 const useStyles = createStyles((theme) => ({
   card: {
     position: 'relative',
-    backgroundColor:
-      theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+    backgroundColor: theme.colors.white,
   },
 
-  rating: {
+  count: {
     position: 'absolute',
     top: theme.spacing.xs,
     right: theme.spacing.xs + 2,
@@ -47,18 +46,6 @@ const useStyles = createStyles((theme) => ({
     textShadow: 'black 1px 1px 8px',
   },
 
-  action: {
-    backgroundColor:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[6]
-        : theme.colors.gray[0],
-    ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[5]
-          : theme.colors.gray[1],
-    }),
-  },
   pillHighlight: {
     backgroundColor: theme.colors.dtPink,
     borderRadius: 2,
@@ -129,11 +116,11 @@ export const EventCard = ({
       </Center>
       <Badge
         size="xl"
-        className={classes.rating}
-        variant="gradient"
-        gradient={{ from: '#FF80EA', to: '#FF80FF', deg: 105 }}
+        className={classes.count}
+        color={isParticipating ? 'dtPink.9' : 'blue.9'}
+        variant="filled"
       >
-        32
+        {participants.length}
       </Badge>
       <Group position="apart">
         <Box>
