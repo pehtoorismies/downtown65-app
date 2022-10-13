@@ -2,7 +2,6 @@ import { MantineProvider, createEmotionCache } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import type { MetaFunction } from '@remix-run/node'
 import {
-  Link,
   Links,
   LiveReload,
   Meta,

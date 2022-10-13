@@ -66,7 +66,7 @@ const Index = () => {
         ]}
       >
         {eventItems.map((m) => {
-          return <EventCard key={m.id} {...m} />
+          return <EventCard key={m.id} {...m} isExtended={false} />
         })}
       </SimpleGrid>
     </Container>
