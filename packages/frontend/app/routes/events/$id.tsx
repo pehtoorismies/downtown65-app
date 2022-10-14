@@ -30,35 +30,6 @@ import { mapToData } from '~/util/event-type'
 const gardan = { nick: 'gardan', id: '1234' }
 const pehtoorismies = { nick: 'pehtoorismies', id: '123' }
 
-const eventItems = [
-  {
-    id: '1',
-    title: 'Kissa',
-    type: mapToData('SPINNING'),
-    me: pehtoorismies,
-    participants: [gardan],
-    description:
-      'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam quam dolor, mattis vel faucibus molestie, semper eget sem. Donec mauris tellus, faucibus non purus quis, dictum finibus mauris. Donec ex dui, cursus ut vehicula a, laoreet suscipit enim. Vivamus gravida non mauris interdum finibus. Nullam eget risus eu augue semper tristique id nec magna. Nulla facilisi. Duis at risus ut velit mattis rhoncus. Proin congue odio et dapibus lacinia.',
-  },
-  {
-    id: '2',
-    title: 'Kissa',
-    type: mapToData('KARONKKA'),
-    me: pehtoorismies,
-    participants: [pehtoorismies, gardan],
-    description:
-      'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam quam dolor, mattis vel faucibus molestie, semper eget sem. Donec mauris tellus, faucibus non purus quis, dictum finibus mauris. Donec ex dui, cursus ut vehicula a, laoreet suscipit enim. Vivamus gravida non mauris interdum finibus. Nullam eget risus eu augue semper tristique id nec magna. Nulla facilisi. Duis at risus ut velit mattis rhoncus. Proin congue odio et dapibus lacinia.',
-  },
-  {
-    id: '3',
-    title: 'Kissa',
-    type: mapToData('OTHER'),
-    me: pehtoorismies,
-    participants: [pehtoorismies, gardan],
-    description: 'Pellentesque habitant morbi tristique senectus .',
-  },
-]
-
 export const meta: MetaFunction = () => {
   return {
     title: 'Dt65 incoming events',
@@ -85,20 +56,23 @@ export const loader: LoaderFunction = async ({ params }) => {
   const sdk = getSdk(client)
   const { event } = await sdk.GetEvent(
     {
-      eventId: '01GF5HQPY5H65DH9RVTSAKF7N9',
+      eventId: params.id,
     },
     {
       'x-api-key': getEnvironmentVariable('API_KEY'),
     }
   )
-  console.log(event)
 
-  const eventItem = eventItems.find((event) => {
-    return event.id === params.id
-  })
-
-  if (!eventItem) {
+  if (!event) {
     throw new Response('Not Found', { status: 404 })
+  }
+
+  const eventItem: Omit<EventCardProperties, 'isExtended'> = {
+    ...event,
+    participants: [pehtoorismies, gardan],
+    description: 'asdasd',
+    me: pehtoorismies,
+    type: mapToData(event.type),
   }
 
   return json({

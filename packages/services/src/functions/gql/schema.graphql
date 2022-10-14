@@ -20,7 +20,7 @@ enum EventType {
     ULTRAS
 }
 
-type Event {
+type Event @aws_api_key @aws_oidc {
     dateStart: AWSDateTime!
     id: ID!
     race: Boolean!

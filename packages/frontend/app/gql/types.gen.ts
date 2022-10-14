@@ -183,7 +183,7 @@ export type GetEventQueryVariables = Exact<{
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, title: string, dateStart: any } | null };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, title: string, dateStart: any, race: boolean, type: EventType } | null };
 
 
 export const GetEventDocument = gql`
@@ -192,6 +192,8 @@ export const GetEventDocument = gql`
     id
     title
     dateStart
+    race
+    type
   }
 }
     `;
