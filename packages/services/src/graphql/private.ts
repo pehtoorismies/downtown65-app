@@ -10,7 +10,7 @@ import type {
   MutationUpdateEventArgs,
   QueryEventArgs as QueryEventArguments,
   User,
-} from '../appsync'
+} from '../appsync.gen'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
 import { getEvents } from './events/get-events'

@@ -11,7 +11,7 @@ module.exports = {
     'plugin:unicorn/recommended',
     'prettier',
   ],
-  ignorePatterns: ['packages/services/appsync.d.ts'],
+  ignorePatterns: ['**/*/*.gen.ts'],
   rules: {
     '@typescript-eslint/consistent-type-imports': 'error',
     'import/no-unresolved': 'off',

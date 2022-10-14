@@ -1,6 +1,6 @@
 import formatISO from 'date-fns/formatISO'
 import { ulid } from 'ulid'
-import type { EventType } from '../appsync'
+import type { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from '../graphql/events/support/event-primary-key'
 

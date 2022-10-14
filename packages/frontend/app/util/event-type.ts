@@ -1,4 +1,4 @@
-import type { EventType } from '~/gql/types'
+import type { EventType } from '~/gql/types.gen'
 
 const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
   CYCLING: {

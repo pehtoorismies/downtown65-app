@@ -1,6 +1,6 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import { EventType } from '~/appsync'
-import type { Event as Dt65Event, MutationCreateEventArgs } from '~/appsync'
+import { EventType } from '~/appsync.gen'
+import type { Event as Dt65Event, MutationCreateEventArgs } from '~/appsync.gen'
 import * as Event from '~/core/event'
 
 const getEventValues = () => Object.values(EventType)
