@@ -5,6 +5,7 @@ import type {
   QueryEventArgs as QueryEventArguments,
 } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
+import { mapDynamoToEvent } from '~/graphql/events/support/map-dynamo-to-event'
 
 export const getEventById: AppSyncResolverHandler<
   QueryEventArguments,
@@ -14,5 +15,9 @@ export const getEventById: AppSyncResolverHandler<
   const result = await Table.Dt65Event.get(
     getPrimaryKey(event.arguments.eventId)
   )
-  return result.Item
+  if (!result.Item) {
+    return
+  }
+
+  return mapDynamoToEvent(result.Item)
 }

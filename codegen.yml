@@ -17,7 +17,3 @@ generates:
       - typescript-graphql-request
     config:
       enumsAsConst: true
-
-
-
-

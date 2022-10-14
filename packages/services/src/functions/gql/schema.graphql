@@ -20,6 +20,11 @@ enum EventType {
     ULTRAS
 }
 
+type Participant {
+    joinedAt: AWSDateTime!
+    nick: String!
+}
+
 type Event @aws_api_key @aws_oidc {
     dateStart: AWSDateTime!
     id: ID!
@@ -27,6 +32,7 @@ type Event @aws_api_key @aws_oidc {
     subtitle: String
     title: String!
     type: EventType!
+    participants: [Participant!]!
 }
 
 interface Auth0User {

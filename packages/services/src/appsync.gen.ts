@@ -48,6 +48,7 @@ export type Event = {
   __typename?: 'Event';
   dateStart: Scalars['AWSDateTime'];
   id: Scalars['ID'];
+  participants: Array<Participant>;
   race: Scalars['Boolean'];
   subtitle?: Maybe<Scalars['String']>;
   title: Scalars['String'];
@@ -134,6 +135,12 @@ export type MutationSignupArgs = {
 
 export type MutationUpdateEventArgs = {
   input: UpdateEventInput;
+};
+
+export type Participant = {
+  __typename?: 'Participant';
+  joinedAt: Scalars['AWSDateTime'];
+  nick: Scalars['String'];
 };
 
 export type Preferences = {
