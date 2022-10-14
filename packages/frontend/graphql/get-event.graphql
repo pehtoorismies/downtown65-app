@@ -3,5 +3,7 @@ query GetEvent($eventId: ID!) {
         id
         title
         dateStart
+        race
+        type
     }
 }
