@@ -11,7 +11,7 @@ import {
   Text,
   createStyles,
 } from '@mantine/core'
-import { useNavigate, Link } from '@remix-run/react'
+import { useNavigate } from '@remix-run/react'
 import { IconArrowNarrowRight } from '@tabler/icons'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 

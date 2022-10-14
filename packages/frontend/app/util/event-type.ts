@@ -1,4 +1,4 @@
-import type { EventType } from '@downtown65-app/services/src/appsync'
+import type { EventType } from '~/gql/types'
 
 const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
   CYCLING: {
