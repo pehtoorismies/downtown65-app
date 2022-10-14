@@ -1,4 +1,5 @@
 import {
+  Alert,
   Anchor,
   Button,
   Container,
@@ -9,9 +10,15 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import type { ActionFunction, MetaFunction } from '@remix-run/node'
-import { Form, useNavigate, useActionData } from '@remix-run/react'
+import {
+  Form,
+  useNavigate,
+  useActionData,
+  useTransition,
+} from '@remix-run/react'
+import { IconAlertCircle } from '@tabler/icons'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
 import { validateEmail } from '~/util/validation'
 
@@ -25,6 +32,7 @@ interface ActionData {
   errors?: {
     email?: string
     password?: string
+    general?: string
   }
 }
 
@@ -48,25 +56,35 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   try {
-    const result = await getGqlSdk().Login(
+    const { login } = await getGqlSdk().Login(
       { email, password },
       getPublicAuthHeaders()
     )
     console.log('Success!')
-    console.log(result)
-  } catch (error) {
-    console.log('Error!')
-    console.error(JSON.stringify(error, undefined, 2))
-  }
+    if (login.loginError && login.loginError.code === 'invalid_grant') {
+      return json<ActionData>(
+        { errors: { general: 'Email or password is invalid' } },
+        { status: 400 }
+      )
+      return json<ActionData>(
+        { errors: { general: login.loginError?.message } },
+        { status: 400 }
+      )
+    }
 
-  return json<ActionData>(
-    { errors: { email: 'Email is invalid' } },
-    { status: 400 }
-  )
+    return redirect('/')
+  } catch (error) {
+    console.log(error)
+    return json<ActionData>(
+      { errors: { general: 'Server error' } },
+      { status: 500 }
+    )
+  }
 }
 
 const Login = () => {
   const navigation = useNavigate()
+  const transition = useTransition()
   const actionData = useActionData() as ActionData
 
   return (
@@ -88,6 +106,17 @@ const Login = () => {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        {actionData?.errors?.general && (
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            title="Virhe kirjautumisessa"
+            color="red"
+            mb="sm"
+          >
+            {actionData?.errors?.general}
+          </Alert>
+        )}
+
         <Form method="post">
           <TextInput
             id="email"
@@ -116,7 +145,12 @@ const Login = () => {
               Unohditko salasanan?
             </Anchor>
           </Group>
-          <Button fullWidth mt="xl" type="submit">
+          <Button
+            fullWidth
+            mt="xl"
+            type="submit"
+            loading={transition.state === 'submitting'}
+          >
             Kirjaudu
           </Button>
         </Form>
