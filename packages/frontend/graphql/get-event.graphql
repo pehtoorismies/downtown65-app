@@ -1,5 +1,5 @@
-query GetEvent {
-    event(eventId: "123") {
+query GetEvent($eventId: ID!) {
+    event(eventId: $eventId) {
         id
         title
         dateStart
