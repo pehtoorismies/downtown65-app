@@ -2,11 +2,8 @@
   "name": "@downtown65-app/services",
   "version": "0.0.1",
   "type": "module",
-  "main": "./dist/appsync.d.cjs",
   "private": true,
   "scripts": {
-    "build": "tsup src/appsync.ts",
-    "codegen": "graphql-codegen",
     "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts"
@@ -25,8 +22,6 @@
     "zod": "3.19.1"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "2.13.4",
-    "@graphql-codegen/typescript": "2.7.3",
     "@types/auth0": "2.35.6",
     "@types/aws-lambda": "8.10.106",
     "@types/mjml": "4.7.0",

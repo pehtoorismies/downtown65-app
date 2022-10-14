@@ -16,9 +16,13 @@
     "test": "sst load-config -- vitest --dir packages/services run",
     "lint": "lerna run lint --no-sort",
     "find-deadcode": "yarn workspaces run find-deadcode",
-    "codegen": "lerna run codegen --scope=@downtown65-app/services"
+    "generate": "graphql-codegen"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.13.4",
+    "@graphql-codegen/typescript": "2.7.3",
+    "@graphql-codegen/typescript-graphql-request": "^4.5.6",
+    "@graphql-codegen/typescript-operations": "^2.5.4",
     "@serverless-stack/cli": "1.15.8",
     "@tsconfig/node16": "1.0.3",
     "@typescript-eslint/eslint-plugin": "5.39.0",

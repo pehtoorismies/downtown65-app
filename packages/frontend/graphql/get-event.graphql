@@ -1,0 +1,7 @@
+query GetEvent {
+    event(eventId: "123") {
+        id
+        title
+        dateStart
+    }
+}
