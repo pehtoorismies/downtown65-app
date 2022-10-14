@@ -85,10 +85,20 @@ export const GraphqlStack = ({ stack }: StackContext) => {
     value: gqlApi.cdk.graphqlApi.apiKey || 'No api key received',
   })
 
+  const ApiId = gqlApi.apiId
+  const ApiKey = gqlApi.cdk.graphqlApi.apiKey || 'No api key received'
+  const ApiUrl = gqlApi.url
+
   // Show the API endpoint in the output
   stack.addOutputs({
-    ApiId: gqlApi.apiId,
-    ApiKey: gqlApi.cdk.graphqlApi.apiKey || 'No api key received',
-    APiUrl: gqlApi.url,
+    ApiId,
+    ApiKey,
+    ApiUrl,
   })
+
+  return {
+    ApiId,
+    ApiKey,
+    ApiUrl,
+  }
 }
