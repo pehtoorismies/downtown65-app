@@ -44,6 +44,12 @@ export type CreateEventInput = {
   type: Scalars['String'];
 };
 
+export type Error = {
+  code: Scalars['String'];
+  message: Scalars['String'];
+  path: Scalars['String'];
+};
+
 export type Event = {
   __typename?: 'Event';
   dateStart: Scalars['AWSDateTime'];
@@ -78,6 +84,19 @@ export type IdPayload = {
   id: Scalars['ID'];
 };
 
+export type LoginError = Error & {
+  __typename?: 'LoginError';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  path: Scalars['String'];
+};
+
+export type LoginPayload = {
+  __typename?: 'LoginPayload';
+  loginError?: Maybe<LoginError>;
+  tokens?: Maybe<AuthPayload>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createEvent: Event;
@@ -85,7 +104,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   joinEvent?: Maybe<Event>;
   leaveEvent?: Maybe<Event>;
-  login: AuthPayload;
+  login: LoginPayload;
   signup: User;
   updateEvent: Event;
 };

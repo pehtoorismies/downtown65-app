@@ -47,6 +47,12 @@ export type CreateEventInput = {
   type: Scalars['String'];
 };
 
+export type Error = {
+  code: Scalars['String'];
+  message: Scalars['String'];
+  path: Scalars['String'];
+};
+
 export type Event = {
   __typename?: 'Event';
   dateStart: Scalars['AWSDateTime'];
@@ -81,6 +87,19 @@ export type IdPayload = {
   id: Scalars['ID'];
 };
 
+export type LoginError = Error & {
+  __typename?: 'LoginError';
+  code: Scalars['String'];
+  message: Scalars['String'];
+  path: Scalars['String'];
+};
+
+export type LoginPayload = {
+  __typename?: 'LoginPayload';
+  loginError?: Maybe<LoginError>;
+  tokens?: Maybe<AuthPayload>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createEvent: Event;
@@ -88,7 +107,7 @@ export type Mutation = {
   forgotPassword: Scalars['Boolean'];
   joinEvent?: Maybe<Event>;
   leaveEvent?: Maybe<Event>;
-  login: AuthPayload;
+  login: LoginPayload;
   signup: User;
   updateEvent: Event;
 };
@@ -192,6 +211,14 @@ export type GetEventQueryVariables = Exact<{
 
 export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, title: string, dateStart: any, race: boolean, type: EventType } | null };
 
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', tokens?: { __typename?: 'AuthPayload', accessToken: string, idToken: string } | null, loginError?: { __typename?: 'LoginError', message: string, path: string, code: string } | null } };
+
 
 export const GetEventDocument = gql`
     query GetEvent($eventId: ID!) {
@@ -201,6 +228,21 @@ export const GetEventDocument = gql`
     dateStart
     race
     type
+  }
+}
+    `;
+export const LoginDocument = gql`
+    mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    tokens {
+      accessToken
+      idToken
+    }
+    loginError {
+      message
+      path
+      code
+    }
   }
 }
     `;
@@ -214,6 +256,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
   return {
     GetEvent(variables: GetEventQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetEventQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetEventQuery>(GetEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEvent', 'query');
+    },
+    Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Login', 'mutation');
     }
   };
 }

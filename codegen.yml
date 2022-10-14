@@ -17,3 +17,5 @@ generates:
       - typescript-graphql-request
     config:
       enumsAsConst: true
+#      rawRequest: true
+#      extensionsType: 'unknown'
