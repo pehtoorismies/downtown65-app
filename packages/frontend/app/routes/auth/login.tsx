@@ -1,56 +1,59 @@
-// import type { LinksFunction } from '@remix-run/node'
-import { Link, useSearchParams } from '@remix-run/react'
+import {
+  Anchor,
+  Button,
+  Container,
+  Group,
+  Paper,
+  PasswordInput,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core'
+import { useNavigate } from '@remix-run/react'
 
-export default function Login() {
-  const [searchParams] = useSearchParams()
+const Login = () => {
+  const navigation = useNavigate()
   return (
-    <div className="container">
-      <div className="content" data-light="">
-        <h1>Login</h1>
-        <form method="post">
-          <input
-            type="hidden"
-            name="redirectTo"
-            value={searchParams.get('redirectTo') ?? undefined}
-          />
-          <fieldset>
-            <legend className="sr-only">Login or Register?</legend>
-            <label>
-              <input
-                type="radio"
-                name="loginType"
-                value="login"
-                defaultChecked
-              />{' '}
-              Login
-            </label>
-            <label>
-              <input type="radio" name="loginType" value="register" /> Register
-            </label>
-          </fieldset>
-          <div>
-            <label htmlFor="username-input">Username</label>
-            <input type="text" id="username-input" name="username" />
-          </div>
-          <div>
-            <label htmlFor="password-input">Password</label>
-            <input id="password-input" name="password" type="password" />
-          </div>
-          <button type="submit" className="button">
-            Submit
-          </button>
-        </form>
-      </div>
-      <div className="links">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/jokes">Jokes</Link>
-          </li>
-        </ul>
-      </div>
-    </div>
+    <Container size={420} my={40}>
+      <Title
+        align="center"
+        sx={(theme) => ({
+          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+          fontWeight: 900,
+        })}
+      >
+        Kirjaudu
+      </Title>
+      <Text color="dimmed" size="sm" align="center" mt={5}>
+        Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.{' '}
+        <Anchor<'a'> size="sm" onClick={() => navigation('/auth/signup')}>
+          Rekisteröidy tästä.
+        </Anchor>
+      </Text>
+
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <TextInput
+          label="Sähköposti"
+          placeholder="me@downtown65.com"
+          required
+        />
+        <PasswordInput
+          label="Salasana"
+          placeholder="Salasanasi"
+          required
+          mt="md"
+        />
+        <Group position="right" mt="md">
+          <Anchor onClick={() => navigation('/auth/forgot-password')} size="sm">
+            Unohditko salasanan?
+          </Anchor>
+        </Group>
+        <Button fullWidth mt="xl">
+          Kirjaudu
+        </Button>
+      </Paper>
+    </Container>
   )
 }
+
+export default Login
