@@ -2,6 +2,7 @@ import type { AppSyncResolverHandler } from 'aws-lambda'
 import { EventType } from '~/appsync.gen'
 import type { Event as Dt65Event, MutationCreateEventArgs } from '~/appsync.gen'
 import * as Event from '~/core/event'
+import { mapDynamoToEvent } from '~/graphql/events/support/map-dynamo-to-event'
 
 const getEventValues = () => Object.values(EventType)
 
@@ -21,10 +22,12 @@ export const createEvent: AppSyncResolverHandler<
     )
   }
 
-  return Event.create({
-    ...creatableEvent,
-    race: creatableEvent.race ?? false,
-    subtitle: creatableEvent.subtitle ?? undefined,
-    type: creatableEvent.type,
-  })
+  return mapDynamoToEvent(
+    Event.create({
+      ...creatableEvent,
+      race: creatableEvent.race ?? false,
+      subtitle: creatableEvent.subtitle ?? undefined,
+      type: creatableEvent.type,
+    })
+  )
 }
