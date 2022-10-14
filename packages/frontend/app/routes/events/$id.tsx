@@ -18,11 +18,13 @@ import {
   IconCircleX,
   IconPencil,
 } from '@tabler/icons'
+import { GraphQLClient } from 'graphql-request'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import invariant from 'tiny-invariant'
 import type { EventCardProperties } from '~/components/event-card'
 import { EventCard } from '~/components/event-card'
+import { getSdk } from '~/gql/types.gen'
 import { mapToData } from '~/util/event-type'
 
 const gardan = { nick: 'gardan', id: '1234' }
@@ -67,8 +69,29 @@ type LoaderData = {
   eventItem: Awaited<EventCardProperties>
 }
 
+const getEnvironmentVariable = (name: string): string => {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`Environment value 'process.env.${name}' is not set`)
+  }
+  return value
+}
+
+const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
+
 export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.id, 'Expected params.id')
+  console.log('api', getEnvironmentVariable('API_KEY'))
+  const sdk = getSdk(client)
+  const { event } = await sdk.GetEvent(
+    {
+      eventId: '01GF5HQPY5H65DH9RVTSAKF7N9',
+    },
+    {
+      'x-api-key': getEnvironmentVariable('API_KEY'),
+    }
+  )
+  console.log(event)
 
   const eventItem = eventItems.find((event) => {
     return event.id === params.id

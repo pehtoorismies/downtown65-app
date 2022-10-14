@@ -178,15 +178,17 @@ export type User = Auth0User & {
   updatedAt?: Maybe<Scalars['AWSDateTime']>;
 };
 
-export type GetEventQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetEventQueryVariables = Exact<{
+  eventId: Scalars['ID'];
+}>;
 
 
 export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, title: string, dateStart: any } | null };
 
 
 export const GetEventDocument = gql`
-    query GetEvent {
-  event(eventId: "123") {
+    query GetEvent($eventId: ID!) {
+  event(eventId: $eventId) {
     id
     title
     dateStart
@@ -201,7 +203,7 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    GetEvent(variables?: GetEventQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetEventQuery> {
+    GetEvent(variables: GetEventQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetEventQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetEventQuery>(GetEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEvent', 'query');
     }
   };
