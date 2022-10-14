@@ -3,6 +3,7 @@ import type {
   AuthPayload,
   Event as Dt65Event,
   IdPayload,
+  LoginPayload,
   MutationForgotPasswordArgs,
   MutationLoginArgs,
   MutationSignupArgs,
@@ -23,6 +24,7 @@ export type Inputs =
 
 export type Outputs =
   | AuthPayload
+  | LoginPayload
   | Dt65Event
   | IdPayload
   | User

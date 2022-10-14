@@ -93,6 +93,23 @@ input UpdateEventInput {
     type: String
 }
 
+interface Error {
+    message: String!
+    path: String!
+    code: String!
+}
+
+type LoginError implements Error @aws_api_key {
+    message: String!
+    path: String!
+    code: String!
+}
+
+type LoginPayload @aws_api_key {
+    tokens: AuthPayload
+    loginError: LoginError
+}
+
 type Query {
     event(eventId: ID!): Event @aws_api_key
     # Future events
@@ -116,7 +133,7 @@ type Mutation {
     login(
         email: String!
         password: String!
-    ): AuthPayload! @aws_api_key
+    ): LoginPayload! @aws_api_key
     signup(
         email: String!
         nickname: String!
@@ -127,9 +144,6 @@ type Mutation {
     forgotPassword(
         email: String!
     ): Boolean!
-
-
-
 }
 
 

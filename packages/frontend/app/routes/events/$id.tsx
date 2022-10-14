@@ -32,7 +32,7 @@ const pehtoorismies = { nick: 'pehtoorismies', id: '123' }
 
 export const meta: MetaFunction = () => {
   return {
-    title: 'Dt65 incoming events',
+    title: 'Dt65 - incoming events',
   }
 }
 
@@ -52,7 +52,7 @@ const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
 
 export const loader: LoaderFunction = async ({ params }) => {
   invariant(params.id, 'Expected params.id')
-  console.log('api', getEnvironmentVariable('API_KEY'))
+
   const sdk = getSdk(client)
   const { event } = await sdk.GetEvent(
     {
