@@ -3,7 +3,7 @@ import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import formatISO from 'date-fns/formatISO'
 import { isAWSError } from './support/aws-error'
 import { getPrimaryKey } from './support/event-primary-key'
-import type { Event as Dt65Event, MutationJoinEventArgs } from '~/appsync'
+import type { Event as Dt65Event, MutationJoinEventArgs } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
 
 type Claims = {

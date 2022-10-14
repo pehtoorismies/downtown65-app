@@ -1,7 +1,7 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { format } from 'date-fns'
 import startOfToday from 'date-fns/startOfToday'
-import type { Event as Dt65Event } from '../../appsync'
+import type { Event as Dt65Event } from '../../appsync.gen'
 import { getTable } from '~/dynamo/table'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
 

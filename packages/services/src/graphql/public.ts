@@ -8,7 +8,7 @@ import type {
   MutationSignupArgs,
   QueryEventArgs as QueryEventArguments,
   User,
-} from '../appsync'
+} from '../appsync.gen'
 import { forgotPassword } from './auth/forgot-password'
 import { login } from './auth/login'
 import { signup } from './auth/signup'

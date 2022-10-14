@@ -5,12 +5,12 @@ documents:
   - 'packages/frontend/graphql/**/*'
 
 generates:
-  packages/services/src/appsync.ts:
+  packages/services/src/appsync.gen.ts:
     plugins:
       - typescript
     config:
       enumsAsConst: true
-  packages/frontend/app/gql/types.ts:
+  packages/frontend/app/gql/types.gen.ts:
     plugins:
       - typescript
       - typescript-operations

@@ -1,7 +1,7 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { getPrimaryKey } from './support/event-primary-key'
-import type { Event as Dt65Event, MutationLeaveEventArgs } from '~/appsync'
+import type { Event as Dt65Event, MutationLeaveEventArgs } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
 
 type Claims = {

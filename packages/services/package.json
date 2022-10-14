@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.ts|src/test/global-setup.ts'",
+    "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts"
   },
