@@ -20,11 +20,12 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async () => {
+  console.log('I was called???')
   return json({
     eventItems: [
       {
         id: '1',
-        title: 'Kissa',
+        title: 'Kissa re',
         type: mapToData('SPINNING'),
         me: pehtoorismies,
         participants: [gardan],

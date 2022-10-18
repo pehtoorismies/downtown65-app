@@ -13,6 +13,7 @@ import {
   Drawer,
   Collapse,
   ScrollArea,
+  Avatar,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Link } from '@remix-run/react'
@@ -25,6 +26,12 @@ import {
   IconCoin,
   IconChevronDown,
 } from '@tabler/icons'
+import type { JwtPayload } from 'jwt-decode'
+import jwtDecode from 'jwt-decode'
+import { useEffect, useState } from 'react'
+import { z } from 'zod'
+import { Constants } from '~/constants'
+import { useUser } from '~/hooks/use-user'
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -129,6 +136,8 @@ const mockdata = [
 ]
 
 export function HeaderMegaMenu() {
+  const user = useUser()
+
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false)
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false)
@@ -162,7 +171,7 @@ export function HeaderMegaMenu() {
             className={classes.hiddenMobile}
           >
             <Link to="/" className={classes.link}>
-              Home
+              Desktop home
             </Link>
 
             <a href="#" className={classes.link}>
@@ -172,11 +181,26 @@ export function HeaderMegaMenu() {
               Academy
             </a>
           </Group>
+          {user && (
+            <Group spacing={7}>
+              <Avatar
+                src={user.picture}
+                alt={user.nickname}
+                radius="xl"
+                size={20}
+              />
+              <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
+                {user.nickname}
+              </Text>
+            </Group>
+          )}
 
-          <Group className={classes.hiddenMobile}>
-            <Button variant="default">Log in</Button>
-            <Button variant="default">Sign up</Button>
-          </Group>
+          {!user && (
+            <Group className={classes.hiddenMobile}>
+              <Button variant="default">Log in</Button>
+              <Button variant="default">Sign up</Button>
+            </Group>
+          )}
 
           <Burger
             opened={drawerOpened}
