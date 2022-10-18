@@ -11,7 +11,7 @@ import {
   Title,
 } from '@mantine/core'
 import type { ActionFunction, MetaFunction } from '@remix-run/node'
-import { json, redirect, createCookie } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import {
   Form,
   useNavigate,
@@ -20,6 +20,7 @@ import {
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
 import invariant from 'tiny-invariant'
+import { accessTokenCookie } from '~/cookies'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
 import { validateEmail } from '~/util/validation'
 
@@ -61,7 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
       { email, password },
       getPublicAuthHeaders()
     )
-    console.log('Success!')
+
     if (login.loginError && login.loginError.code === 'invalid_grant') {
       return json<ActionData>(
         { errors: { general: 'Email or password is invalid' } },
@@ -76,18 +77,12 @@ export const action: ActionFunction = async ({ request }) => {
     invariant(login.tokens?.idToken, 'Expected tokens.idToken')
     invariant(login.tokens?.accessToken, 'Expected tokens.idToken')
 
-    const cookie = createCookie('access-token', {
-      secrets: ['super-secret'],
-      sameSite: 'lax',
-      httpOnly: true,
-      secure: true,
-      maxAge: 60 * 60 * 24, // 1 day,
-    })
-
     // login.tokens.accessToken
     return redirect(`/auth/login-success?idToken=${login.tokens.idToken}`, {
       headers: {
-        'Set-Cookie': await cookie.serialize({ accessToken: cookie }),
+        'Set-Cookie': await accessTokenCookie.serialize(
+          login.tokens?.accessToken
+        ),
       },
     })
   } catch (error) {

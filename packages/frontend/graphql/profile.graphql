@@ -1,0 +1,11 @@
+query GetProfile {
+    me {
+        email
+        name
+        nickname
+        preferences {
+            subscribeEventCreationEmail
+            subscribeWeeklyEmail
+        }
+    }
+}

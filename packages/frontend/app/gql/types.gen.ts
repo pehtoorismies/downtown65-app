@@ -219,6 +219,11 @@ export type LoginMutationVariables = Exact<{
 
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', tokens?: { __typename?: 'AuthPayload', accessToken: string, idToken: string } | null, loginError?: { __typename?: 'LoginError', message: string, path: string, code: string } | null } };
 
+export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'User', email: string, name: string, nickname?: string | null, preferences: { __typename?: 'Preferences', subscribeEventCreationEmail: boolean, subscribeWeeklyEmail: boolean } } };
+
 
 export const GetEventDocument = gql`
     query GetEvent($eventId: ID!) {
@@ -246,6 +251,19 @@ export const LoginDocument = gql`
   }
 }
     `;
+export const GetProfileDocument = gql`
+    query GetProfile {
+  me {
+    email
+    name
+    nickname
+    preferences {
+      subscribeEventCreationEmail
+      subscribeWeeklyEmail
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -259,6 +277,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Login', 'mutation');
+    },
+    GetProfile(variables?: GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetProfileQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');
     }
   };
 }
