@@ -16,7 +16,7 @@ import {
   Avatar,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { Link } from '@remix-run/react'
+import { Link, NavLink } from '@remix-run/react'
 import {
   IconNotification,
   IconCode,
@@ -26,11 +26,6 @@ import {
   IconCoin,
   IconChevronDown,
 } from '@tabler/icons'
-import type { JwtPayload } from 'jwt-decode'
-import jwtDecode from 'jwt-decode'
-import { useEffect, useState } from 'react'
-import { z } from 'zod'
-import { Constants } from '~/constants'
 import { useUser } from '~/hooks/use-user'
 
 const useStyles = createStyles((theme) => ({
@@ -182,17 +177,19 @@ export function HeaderMegaMenu() {
             </a>
           </Group>
           {user && (
-            <Group spacing={7}>
-              <Avatar
-                src={user.picture}
-                alt={user.nickname}
-                radius="xl"
-                size={20}
-              />
-              <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
-                {user.nickname}
-              </Text>
-            </Group>
+            <NavLink to="/auth/profile">
+              <Group spacing={7}>
+                <Avatar
+                  src={user.picture}
+                  alt={user.nickname}
+                  radius="xl"
+                  size={20}
+                />
+                <Text weight={500} size="sm" sx={{ lineHeight: 1 }} mr={3}>
+                  {user.nickname}
+                </Text>
+              </Group>
+            </NavLink>
           )}
 
           {!user && (
