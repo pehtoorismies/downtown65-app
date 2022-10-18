@@ -10,8 +10,8 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
-import { json, redirect } from '@remix-run/node'
 import type { ActionFunction, MetaFunction } from '@remix-run/node'
+import { json, redirect, createCookie } from '@remix-run/node'
 import {
   Form,
   useNavigate,
@@ -19,6 +19,7 @@ import {
   useTransition,
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
+import invariant from 'tiny-invariant'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
 import { validateEmail } from '~/util/validation'
 
@@ -72,7 +73,23 @@ export const action: ActionFunction = async ({ request }) => {
       )
     }
 
-    return redirect('/')
+    invariant(login.tokens?.idToken, 'Expected tokens.idToken')
+    invariant(login.tokens?.accessToken, 'Expected tokens.idToken')
+
+    const cookie = createCookie('access-token', {
+      secrets: ['super-secret'],
+      sameSite: 'lax',
+      httpOnly: true,
+      secure: true,
+      maxAge: 60 * 60 * 24, // 1 day,
+    })
+
+    // login.tokens.accessToken
+    return redirect(`/auth/login-success?idToken=${login.tokens.idToken}`, {
+      headers: {
+        'Set-Cookie': await cookie.serialize({ accessToken: cookie }),
+      },
+    })
   } catch (error) {
     console.log(error)
     return json<ActionData>(
