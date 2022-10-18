@@ -8,6 +8,7 @@ import type {
   MutationJoinEventArgs,
   MutationLeaveEventArgs,
   MutationUpdateEventArgs,
+  MutationUpdateMeArgs,
   QueryEventArgs as QueryEventArguments,
   User,
 } from '../appsync.gen'
@@ -22,6 +23,7 @@ import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
 import { getUsers } from './users/get-users'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
+import { updateMe } from '~/graphql/users/update-me'
 
 export type Inputs =
   | EmptyArgs
@@ -47,6 +49,7 @@ const PRIVATE_FIELDS = [
   'leaveEvent',
   'me',
   'users',
+  'updateMe',
 ] as const
 type PrivateField = typeof PRIVATE_FIELDS[number]
 
@@ -121,6 +124,14 @@ export const privateResolver = (
         allowScopes(['read:users'])
         return getUsers(
           event as AppSyncResolverEvent<EmptyArgs>,
+          context,
+          callback
+        )
+      }
+      case 'updateMe': {
+        allowScopes(['write:me'])
+        return updateMe(
+          event as AppSyncResolverEvent<MutationUpdateMeArgs>,
           context,
           callback
         )

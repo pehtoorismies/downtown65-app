@@ -107,6 +107,7 @@ export type Mutation = {
   login: LoginPayload;
   signup: User;
   updateEvent: Event;
+  updateMe: User;
 };
 
 
@@ -156,6 +157,11 @@ export type MutationUpdateEventArgs = {
   input: UpdateEventInput;
 };
 
+
+export type MutationUpdateMeArgs = {
+  input: UpdateMeInput;
+};
+
 export type Participant = {
   __typename?: 'Participant';
   joinedAt: Scalars['AWSDateTime'];
@@ -164,6 +170,11 @@ export type Participant = {
 
 export type Preferences = {
   __typename?: 'Preferences';
+  subscribeEventCreationEmail: Scalars['Boolean'];
+  subscribeWeeklyEmail: Scalars['Boolean'];
+};
+
+export type PreferencesInput = {
   subscribeEventCreationEmail: Scalars['Boolean'];
   subscribeWeeklyEmail: Scalars['Boolean'];
 };
@@ -188,6 +199,12 @@ export type UpdateEventInput = {
   subtitle?: InputMaybe<Scalars['String']>;
   title?: InputMaybe<Scalars['String']>;
   type?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateMeInput = {
+  name?: InputMaybe<Scalars['String']>;
+  nickname?: InputMaybe<Scalars['String']>;
+  preferences: PreferencesInput;
 };
 
 export type User = Auth0User & {

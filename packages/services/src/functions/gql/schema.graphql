@@ -110,6 +110,17 @@ type LoginPayload @aws_api_key {
     loginError: LoginError
 }
 
+input PreferencesInput {
+    subscribeEventCreationEmail: Boolean!
+    subscribeWeeklyEmail: Boolean!
+}
+
+input UpdateMeInput {
+    name: String
+    nickname: String
+    preferences: PreferencesInput!
+}
+
 type Query {
     event(eventId: ID!): Event @aws_api_key
     # Future events
@@ -129,6 +140,7 @@ type Mutation {
     leaveEvent(eventId: ID!): Event
     joinEvent(eventId: ID!): Event
 
+    updateMe(input: UpdateMeInput!): User!
 
     login(
         email: String!
