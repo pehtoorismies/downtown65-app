@@ -3,7 +3,6 @@ import { RemixSite, use } from '@serverless-stack/resources'
 import { GraphqlStack } from './graphql-stack'
 
 export const FrontendStack = ({ stack }: StackContext) => {
-  // ... existing constructs
   const api = use(GraphqlStack)
 
   // Create the Remix site
