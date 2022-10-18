@@ -5,22 +5,44 @@ import {
   Paper,
   Group,
   Switch,
-  SimpleGrid,
   Divider,
 } from '@mantine/core'
+import type { LoaderFunction } from '@remix-run/node'
+import { json } from '@remix-run/node'
+import { useLoaderData } from '@remix-run/react'
 import { IconLogout } from '@tabler/icons'
+import { GraphQLClient } from 'graphql-request'
+import type { EventCardProperties } from '~/components/event-card'
+import { accessTokenCookie } from '~/cookies'
+import type { GetProfileQuery } from '~/gql/types.gen'
+import { getSdk } from '~/gql/types.gen'
+import { mapToData } from '~/util/event-type'
+
+const getEnvironmentVariable = (name: string): string => {
+  const value = process.env[name]
+  if (!value) {
+    throw new Error(`Environment value 'process.env.${name}' is not set`)
+  }
+  return value
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const cookieHeader = request.headers.get('Cookie')
+  const accessTokenJwt = await accessTokenCookie.parse(cookieHeader)
+
+  const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
+  const { me } = await getSdk(client).GetProfile(undefined, {
+    Authorization: `Bearer ${accessTokenJwt}`,
+  })
+
+  return json(me)
+}
 
 const Profile = () => {
+  const { name, nickname, preferences } = useLoaderData<GetProfileQuery['me']>()
+  console.log('pr', preferences)
   return (
-    <Paper
-      radius="md"
-      withBorder
-      p="lg"
-      sx={(theme) => ({
-        backgroundColor:
-          theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
-      })}
-    >
+    <Paper radius="md" withBorder p="lg" m="md">
       <Avatar
         src="https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png"
         size={120}
@@ -28,10 +50,10 @@ const Profile = () => {
         mx="auto"
       />
       <Text align="center" size="lg" weight={500} mt="md">
-        pehtoorismies
+        {nickname}
       </Text>
       <Text align="center" color="dimmed" size="sm">
-        Simo Salminen
+        {name}
       </Text>
       <Divider my="sm" />
       <Group position="center">
@@ -46,7 +68,7 @@ const Profile = () => {
           <Switch
             labelPosition="left"
             label="Lähetä sähköposti, kun uusi tapahtuma luodaan."
-            checked
+            checked={preferences.subscribeEventCreationEmail}
             onLabel="ON"
             offLabel="OFF"
           />
@@ -55,7 +77,7 @@ const Profile = () => {
             label="Lähetä viikon tapahtumat sähköpostitse."
             onLabel="ON"
             offLabel="OFF"
-            checked={false}
+            checked={preferences.subscribeWeeklyEmail}
           />
         </Switch.Group>
       </Group>

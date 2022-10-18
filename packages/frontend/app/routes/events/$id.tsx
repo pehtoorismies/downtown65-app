@@ -48,9 +48,8 @@ const getEnvironmentVariable = (name: string): string => {
   return value
 }
 
-const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
-
 export const loader: LoaderFunction = async ({ params }) => {
+  const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
   invariant(params.id, 'Expected params.id')
 
   const sdk = getSdk(client)
