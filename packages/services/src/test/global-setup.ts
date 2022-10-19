@@ -1,7 +1,3 @@
-export const setup = () => {
-  console.log('GLOBAL SETUP')
-}
+export const setup = () => {}
 
-export const teardown = () => {
-  console.log('GLOBAL TEARDOWN')
-}
+export const teardown = () => {}

@@ -102,8 +102,8 @@ export type Mutation = {
   createEvent: Event;
   deleteEvent?: Maybe<IdPayload>;
   forgotPassword: Scalars['Boolean'];
-  joinEvent?: Maybe<Event>;
-  leaveEvent?: Maybe<Event>;
+  joinEvent?: Maybe<Scalars['Boolean']>;
+  leaveEvent?: Maybe<Scalars['Boolean']>;
   login: LoginPayload;
   signup: User;
   updateEvent: Event;

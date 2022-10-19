@@ -84,7 +84,7 @@ export const action: ActionFunction = async ({ request }) => {
       redirectTo: `/auth/login-success?idToken=${login.tokens.idToken}`,
     })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return json<ActionData>(
       { errors: { general: 'Server error' } },
       { status: 500 }
