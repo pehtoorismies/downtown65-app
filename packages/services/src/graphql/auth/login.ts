@@ -2,6 +2,7 @@ import { Config } from '@serverless-stack/node/config'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
 import type { LoginPayload, MutationLoginArgs } from '~/appsync.gen'
+import { ErrorMessage, ErrorResponse } from '~/graphql/auth/support/error'
 import { getClient } from '~/support/auth0'
 
 const Auth0Response = z.object({
@@ -11,17 +12,6 @@ const Auth0Response = z.object({
 })
 
 const auth0 = getClient()
-
-const ErrorResponse = z.object({
-  name: z.string(),
-  message: z.string(),
-  statusCode: z.number(),
-})
-
-const ErrorMessage = z.object({
-  error: z.string(),
-  error_description: z.string(),
-})
 
 export const login: AppSyncResolverHandler<
   MutationLoginArgs,
