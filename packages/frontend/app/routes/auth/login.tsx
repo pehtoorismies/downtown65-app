@@ -75,7 +75,7 @@ export const action: ActionFunction = async ({ request }) => {
     }
 
     invariant(login.tokens?.idToken, 'Expected tokens.idToken')
-    invariant(login.tokens?.accessToken, 'Expected tokens.idToken')
+    invariant(login.tokens?.accessToken, 'Expected tokens.accessToken')
 
     return createUserSession({
       request,
