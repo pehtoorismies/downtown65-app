@@ -115,6 +115,37 @@ input PreferencesInput {
     subscribeWeeklyEmail: Boolean!
 }
 
+input SignupInput {
+    email: String!
+    nickname: String!
+    password: String!
+    name: String!
+    registerSecret: String!
+}
+
+interface UserError {
+    message: String!
+    path: String!
+}
+
+enum SignupField {
+    name
+    password
+    registerSecret
+    nickname
+    email
+}
+
+type FieldError @aws_api_key{
+    message: String!
+    path: SignupField!
+}
+
+type SignupPayload @aws_api_key {
+    user: User
+    errors: [FieldError!]
+}
+
 input UpdateMeInput {
     preferences: PreferencesInput!
 }
@@ -144,13 +175,9 @@ type Mutation {
         email: String!
         password: String!
     ): LoginPayload! @aws_api_key
-    signup(
-        email: String!
-        nickname: String!
-        password: String!
-        name: String!
-        registerSecret: String!
-    ): User! @aws_api_key
+
+    signup(input: SignupInput!): SignupPayload! @aws_api_key
+
     forgotPassword(
         email: String!
     ): Boolean! @aws_api_key
