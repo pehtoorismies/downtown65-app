@@ -7,6 +7,7 @@ import type {
   MutationSignupArgs,
   SignupPayload,
 } from '~/appsync.gen'
+import { ErrorMessage, ErrorResponse } from '~/graphql/auth/support/error'
 import { getAuth0Management } from '~/support/auth0'
 
 export const signup: AppSyncResolverHandler<
@@ -48,19 +49,33 @@ export const signup: AppSyncResolverHandler<
   }
 
   const management = await getAuth0Management()
-  const returnObject = await management.createUser({
-    connection: 'Username-Password-Authentication',
-    ...user,
-    verify_email: true,
-    email_verified: false,
-    user_metadata: {
-      subscribeWeeklyEmail: true,
-      subscribeEventCreationEmail: true,
-    },
-    app_metadata: { role: 'USER' },
-  })
 
-  const auth0User = Auth0UserResponse.parse(returnObject)
+  try {
+    const returnObject = await management.createUser({
+      connection: 'Username-Password-Authentication',
+      ...user,
+      verify_email: true,
+      email_verified: false,
+      user_metadata: {
+        subscribeWeeklyEmail: true,
+        subscribeEventCreationEmail: true,
+      },
+      app_metadata: { role: 'USER' },
+    })
 
-  return { user: toUser(auth0User) }
+    const auth0User = Auth0UserResponse.parse(returnObject)
+
+    return { user: toUser(auth0User) }
+  } catch (error: unknown) {
+    const errorResponse = ErrorResponse.parse(error)
+
+    return {
+      errors: [
+        {
+          message: errorResponse.message,
+          path: 'nickname',
+        },
+      ],
+    }
+  }
 }
