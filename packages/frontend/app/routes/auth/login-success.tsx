@@ -24,7 +24,7 @@ const LoginSuccess = () => {
     navigate('/')
   }, [])
 
-  return <h1>Success </h1>
+  return <></>
 }
 
 export default LoginSuccess

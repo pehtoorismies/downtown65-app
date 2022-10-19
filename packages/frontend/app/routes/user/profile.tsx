@@ -7,23 +7,17 @@ import {
   Switch,
   Divider,
   SimpleGrid,
-  LoadingOverlay,
 } from '@mantine/core'
 import type { LoaderFunction, ActionFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import {
-  useActionData,
-  useFetcher,
-  useLoaderData,
-  useTransition,
-  Form,
-} from '@remix-run/react'
-import { IconLogout } from '@tabler/icons'
+import { useLoaderData, useTransition, Form } from '@remix-run/react'
+import { IconLogout, IconX } from '@tabler/icons'
 import { GraphQLClient } from 'graphql-request'
-import { useEffect, useState } from 'react'
-import { accessTokenCookie } from '~/cookies'
+import { useState } from 'react'
+import { getGqlSdk } from '~/gql/get-gql-client'
 import type { GetProfileQuery } from '~/gql/types.gen'
 import { getSdk } from '~/gql/types.gen'
+import { getJwtFromSession } from '~/session.server'
 
 const getEnvironmentVariable = (name: string): string => {
   const value = process.env[name]
@@ -34,9 +28,7 @@ const getEnvironmentVariable = (name: string): string => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  console.log('Loader!!!')
-  const cookieHeader = request.headers.get('Cookie')
-  const accessTokenJwt = await accessTokenCookie.parse(cookieHeader)
+  const accessTokenJwt = await getJwtFromSession(request)
 
   const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
   const { me } = await getSdk(client).GetProfile(undefined, {
@@ -50,36 +42,42 @@ type Pref = {
   eventCreated: boolean
 }
 
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
 export const action: ActionFunction = async ({ request }) => {
-  console.log(
-    'Action: process.env.AUTH_CLIENT_ID',
-    process.env.AUTH_CLIENT_ID,
-    process.env.AUTH_CLIENT_SECRET
-  )
   const formData = await request.formData()
   const weekly = !!formData.get('weekly')
   const eventCreated = !!formData.get('eventCreated')
-  // save data
-  await sleep(4000)
+  const accessTokenJwt = await getJwtFromSession(request)
+
+  const { updateMe } = await getGqlSdk().UpdateMe(
+    {
+      subscribeEventCreationEmail: eventCreated,
+      subscribeWeeklyEmail: weekly,
+    },
+    {
+      Authorization: `Bearer ${accessTokenJwt}`,
+    }
+  )
+
   return json<Pref>({
-    weekly: true,
-    eventCreated: true,
+    weekly: updateMe.preferences.subscribeWeeklyEmail,
+    eventCreated: updateMe.preferences.subscribeEventCreationEmail,
   })
 }
 
 const Profile = () => {
-  // const actionData = useActionData<Pref>()
   const transition = useTransition()
-  console.log(transition)
   const { name, nickname, preferences } = useLoaderData<GetProfileQuery['me']>()
   const [emailSettings, setEmailSettings] = useState<Pref>({
     weekly: preferences.subscribeWeeklyEmail,
     eventCreated: preferences.subscribeEventCreationEmail,
   })
+
+  const resetEmailPreferences = () => {
+    setEmailSettings({
+      eventCreated: preferences.subscribeEventCreationEmail,
+      weekly: preferences.subscribeWeeklyEmail,
+    })
+  }
 
   return (
     <Paper radius="md" withBorder p="lg" m="md">
@@ -101,6 +99,7 @@ const Profile = () => {
           <Text size="lg" weight={500} mt="md">
             Sähköpostiasetukset:
           </Text>
+
           <Form method="post">
             <Switch
               name="eventCreated"
@@ -117,6 +116,7 @@ const Profile = () => {
               size="lg"
             />
             <Switch
+              my="md"
               name="weekly"
               label="Lähetä viikon tapahtumat sähköpostitse."
               onLabel="ON"
@@ -131,14 +131,79 @@ const Profile = () => {
               size="lg"
             />
 
+            <Group position="apart">
+              <Button
+                type="submit"
+                loading={transition.state === 'submitting'}
+                disabled={
+                  preferences.subscribeWeeklyEmail === emailSettings.weekly &&
+                  preferences.subscribeEventCreationEmail ===
+                    emailSettings.eventCreated
+                }
+                leftIcon={<IconLogout size={18} />}
+                styles={(theme) => ({
+                  root: {
+                    backgroundColor: theme.colors.dtPink[6],
+                    border: 0,
+                    height: 42,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+
+                    '&:hover': {
+                      backgroundColor: theme.fn.darken(
+                        theme.colors.dtPink[6],
+                        0.05
+                      ),
+                    },
+                  },
+
+                  leftIcon: {
+                    marginRight: 5,
+                  },
+                })}
+              >
+                Tallenna asetukset
+              </Button>
+              <Button
+                ml="md"
+                leftIcon={<IconX size={18} />}
+                styles={(theme) => ({
+                  root: {
+                    backgroundColor: theme.colors.blue[6],
+                    border: 0,
+                    height: 42,
+                    paddingLeft: 20,
+                    paddingRight: 20,
+
+                    '&:hover': {
+                      backgroundColor: theme.fn.darken(
+                        theme.colors.blue[6],
+                        0.05
+                      ),
+                    },
+                  },
+
+                  leftIcon: {
+                    marginRight: 5,
+                  },
+                })}
+                onClick={resetEmailPreferences}
+              >
+                Palauta muutokset
+              </Button>
+            </Group>
+          </Form>
+        </SimpleGrid>
+      </Group>
+      <Divider my="sm" />
+      <Group position="center">
+        <SimpleGrid cols={1} ml="lg">
+          <Text size="lg" weight={500} mt="md">
+            Uloskirjautuminen:
+          </Text>
+          <Form action="/auth/logout" method="post">
             <Button
               type="submit"
-              loading={transition.state === 'submitting'}
-              disabled={
-                preferences.subscribeWeeklyEmail === emailSettings.weekly &&
-                preferences.subscribeEventCreationEmail ===
-                  emailSettings.eventCreated
-              }
               leftIcon={<IconLogout size={18} />}
               styles={(theme) => ({
                 root: {
@@ -161,35 +226,10 @@ const Profile = () => {
                 },
               })}
             >
-              Tallenna
+              Kirjaudu ulos
             </Button>
           </Form>
         </SimpleGrid>
-      </Group>
-      <Divider my="sm" />
-      <Group position="right">
-        <Button
-          leftIcon={<IconLogout size={18} />}
-          styles={(theme) => ({
-            root: {
-              backgroundColor: theme.colors.blue[6],
-              border: 0,
-              height: 42,
-              paddingLeft: 20,
-              paddingRight: 20,
-
-              '&:hover': {
-                backgroundColor: theme.fn.darken(theme.colors.blue[6], 0.05),
-              },
-            },
-
-            leftIcon: {
-              marginRight: 5,
-            },
-          })}
-        >
-          Kirjaudu ulos
-        </Button>
       </Group>
     </Paper>
   )

@@ -11,7 +11,7 @@ import {
   Title,
 } from '@mantine/core'
 import type { ActionFunction, MetaFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import {
   Form,
   useNavigate,
@@ -20,8 +20,8 @@ import {
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
 import invariant from 'tiny-invariant'
-import { accessTokenCookie } from '~/cookies'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
+import { createUserSession } from '~/session.server'
 import { validateEmail } from '~/util/validation'
 
 export const meta: MetaFunction = () => {
@@ -77,13 +77,11 @@ export const action: ActionFunction = async ({ request }) => {
     invariant(login.tokens?.idToken, 'Expected tokens.idToken')
     invariant(login.tokens?.accessToken, 'Expected tokens.idToken')
 
-    // login.tokens.accessToken
-    return redirect(`/auth/login-success?idToken=${login.tokens.idToken}`, {
-      headers: {
-        'Set-Cookie': await accessTokenCookie.serialize(
-          login.tokens?.accessToken
-        ),
-      },
+    return createUserSession({
+      request,
+      authToken: login.tokens.accessToken,
+      nickname: 'kissa',
+      redirectTo: `/auth/login-success?idToken=${login.tokens.idToken}`,
     })
   } catch (error) {
     console.log(error)

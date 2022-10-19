@@ -31,6 +31,7 @@ export type Inputs =
   | MutationDeleteEventArgs
   | MutationUpdateEventArgs
   | QueryEventArguments
+  | MutationUpdateMeArgs
 
 export type Outputs =
   | BaseUser[]

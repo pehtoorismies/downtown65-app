@@ -202,8 +202,6 @@ export type UpdateEventInput = {
 };
 
 export type UpdateMeInput = {
-  name?: InputMaybe<Scalars['String']>;
-  nickname?: InputMaybe<Scalars['String']>;
   preferences: PreferencesInput;
 };
 

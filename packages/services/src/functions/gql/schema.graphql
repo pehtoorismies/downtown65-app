@@ -116,8 +116,6 @@ input PreferencesInput {
 }
 
 input UpdateMeInput {
-    name: String
-    nickname: String
     preferences: PreferencesInput!
 }
 

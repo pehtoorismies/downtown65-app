@@ -1,0 +1,18 @@
+mutation UpdateMe($subscribeWeeklyEmail: Boolean!, $subscribeEventCreationEmail: Boolean!) {
+    updateMe(
+        input: {
+            preferences: {
+                subscribeWeeklyEmail: $subscribeWeeklyEmail,
+                subscribeEventCreationEmail: $subscribeEventCreationEmail
+            }
+        }
+    ) {
+        id
+        nickname
+        name
+        preferences {
+            subscribeWeeklyEmail
+            subscribeEventCreationEmail
+        }
+    }
+}

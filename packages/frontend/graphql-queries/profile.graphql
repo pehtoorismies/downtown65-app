@@ -1,5 +1,6 @@
 query GetProfile {
     me {
+        id
         email
         name
         nickname

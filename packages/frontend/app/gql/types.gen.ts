@@ -205,8 +205,6 @@ export type UpdateEventInput = {
 };
 
 export type UpdateMeInput = {
-  name?: InputMaybe<Scalars['String']>;
-  nickname?: InputMaybe<Scalars['String']>;
   preferences: PreferencesInput;
 };
 
@@ -239,7 +237,15 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'User', email: string, name: string, nickname?: string | null, preferences: { __typename?: 'Preferences', subscribeEventCreationEmail: boolean, subscribeWeeklyEmail: boolean } } };
+export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, name: string, nickname?: string | null, preferences: { __typename?: 'Preferences', subscribeEventCreationEmail: boolean, subscribeWeeklyEmail: boolean } } };
+
+export type UpdateMeMutationVariables = Exact<{
+  subscribeWeeklyEmail: Scalars['Boolean'];
+  subscribeEventCreationEmail: Scalars['Boolean'];
+}>;
+
+
+export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename?: 'User', id: string, nickname?: string | null, name: string, preferences: { __typename?: 'Preferences', subscribeWeeklyEmail: boolean, subscribeEventCreationEmail: boolean } } };
 
 
 export const GetEventDocument = gql`
@@ -271,12 +277,28 @@ export const LoginDocument = gql`
 export const GetProfileDocument = gql`
     query GetProfile {
   me {
+    id
     email
     name
     nickname
     preferences {
       subscribeEventCreationEmail
       subscribeWeeklyEmail
+    }
+  }
+}
+    `;
+export const UpdateMeDocument = gql`
+    mutation UpdateMe($subscribeWeeklyEmail: Boolean!, $subscribeEventCreationEmail: Boolean!) {
+  updateMe(
+    input: {preferences: {subscribeWeeklyEmail: $subscribeWeeklyEmail, subscribeEventCreationEmail: $subscribeEventCreationEmail}}
+  ) {
+    id
+    nickname
+    name
+    preferences {
+      subscribeWeeklyEmail
+      subscribeEventCreationEmail
     }
   }
 }
@@ -297,6 +319,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetProfile(variables?: GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetProfileQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');
+    },
+    UpdateMe(variables: UpdateMeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMeMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateMeMutation>(UpdateMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateMe', 'mutation');
     }
   };
 }
