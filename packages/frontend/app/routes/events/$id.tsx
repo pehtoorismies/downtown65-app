@@ -100,7 +100,6 @@ const Dt65Event = () => {
   const onDeleteEvent = async () => {
     setIsDeleting(true)
     await sleep(3000)
-    console.log('Start delete event', eventItem.id)
     setIsDeleting(false)
     navigate('/')
   }
