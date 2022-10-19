@@ -1,6 +1,7 @@
 import { MantineProvider, createEmotionCache } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
-import type { MetaFunction } from '@remix-run/node'
+import type { LoaderFunction, MetaFunction } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -8,9 +9,37 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from '@remix-run/react'
 import type { PropsWithChildren } from 'react'
+import { useEffect } from 'react'
+import { Toaster, toast } from 'react-hot-toast'
 import { HeaderMegaMenu } from '~/header'
+import type { ToastMessage } from '~/message.server'
+import { commitSession, getSession } from '~/message.server'
+
+type LoaderData = {
+  toastMessage: ToastMessage | undefined
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const session = await getSession(request.headers.get('cookie'))
+
+  const toastMessage = session.get('toastMessage') as ToastMessage
+
+  if (!toastMessage) {
+    return json<LoaderData>({ toastMessage: undefined })
+  }
+
+  if (!toastMessage.type) {
+    throw new Error('Message should have a type')
+  }
+
+  return json<LoaderData>(
+    { toastMessage },
+    { headers: { 'Set-Cookie': await commitSession(session) } }
+  )
+}
 
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
@@ -35,6 +64,29 @@ const Layout = ({ children }: PropsWithChildren) => {
 }
 
 export default function App() {
+  const { toastMessage } = useLoaderData<LoaderData>()
+
+  useEffect(() => {
+    if (!toastMessage) {
+      return
+    }
+    const { message, type } = toastMessage
+
+    switch (type) {
+      case 'success': {
+        toast.success(message, { duration: 3000 })
+        break
+      }
+      case 'error': {
+        toast.error(message)
+        break
+      }
+      default: {
+        throw new Error(`${type} is not handled`)
+      }
+    }
+  }, [toastMessage])
+
   return (
     <MantineProvider
       theme={{
@@ -94,6 +146,7 @@ export default function App() {
         </head>
         <body>
           <Layout>
+            <Toaster />
             <Outlet />
           </Layout>
           <ScrollRestoration />

@@ -21,6 +21,7 @@ import {
 } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
+import { commitSession, getSession, setSuccessMessage } from '~/message.server'
 import { validateEmail } from '~/util/validation'
 
 interface ActionData {
@@ -40,7 +41,11 @@ export const action: ActionFunction = async ({ request }) => {
 
   await getGqlSdk().ForgotPassword({ email }, getPublicAuthHeaders())
 
-  return redirect('/auth/login')
+  const session = await getSession(request.headers.get('cookie'))
+  setSuccessMessage(session, `Ohjeet lähetetty osoitteeseen: ${email}`)
+  return redirect('/auth/login', {
+    headers: { 'Set-Cookie': await commitSession(session) },
+  })
 }
 
 const styles = createStyles((theme) => ({
