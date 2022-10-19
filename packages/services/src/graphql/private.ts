@@ -40,6 +40,7 @@ export type Outputs =
   | IdPayload
   | User
   | undefined
+  | boolean
 
 const PRIVATE_FIELDS = [
   'events',

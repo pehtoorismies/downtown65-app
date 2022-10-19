@@ -1,7 +1,7 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { getPrimaryKey } from './support/event-primary-key'
-import type { Event as Dt65Event, MutationLeaveEventArgs } from '~/appsync.gen'
+import type { MutationLeaveEventArgs } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
 
 type Claims = {
@@ -18,7 +18,7 @@ type Claims = {
 
 export const leaveEvent: AppSyncResolverHandler<
   MutationLeaveEventArgs,
-  Dt65Event | undefined
+  boolean | undefined
 > = async (event) => {
   const eventId = event.arguments.eventId
   const identity = event.identity as AppSyncIdentityOIDC
@@ -67,5 +67,5 @@ export const leaveEvent: AppSyncResolverHandler<
     })
     .promise()
 
-  return void 0
+  return true
 }

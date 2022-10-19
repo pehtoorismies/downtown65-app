@@ -3,7 +3,7 @@ import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import formatISO from 'date-fns/formatISO'
 import { isAWSError } from './support/aws-error'
 import { getPrimaryKey } from './support/event-primary-key'
-import type { Event as Dt65Event, MutationJoinEventArgs } from '~/appsync.gen'
+import type { MutationJoinEventArgs } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
 
 type Claims = {
@@ -20,7 +20,7 @@ type Claims = {
 
 export const joinEvent: AppSyncResolverHandler<
   MutationJoinEventArgs,
-  Dt65Event | undefined
+  boolean | undefined
 > = async (event) => {
   const eventId = event.arguments.eventId
   const identity = event.identity as AppSyncIdentityOIDC
@@ -32,7 +32,7 @@ export const joinEvent: AppSyncResolverHandler<
   const Table = getTable()
 
   try {
-    const result = await Table.transactWrite(
+    await Table.transactWrite(
       [
         Table.Participant.putTransaction({
           PK: `EVENT#${eventId}`,
@@ -58,9 +58,8 @@ export const joinEvent: AppSyncResolverHandler<
         metrics: 'size',
       }
     )
-    console.log(result)
 
-    return void 0
+    return true
   } catch (error: unknown) {
     console.error(error)
     if (isAWSError(error) && error.name === 'ConditionalCheckFailedException') {
