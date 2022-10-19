@@ -177,7 +177,7 @@ export function HeaderMegaMenu() {
             </a>
           </Group>
           {user && (
-            <NavLink to="/auth/profile">
+            <NavLink to="/user/profile">
               <Group spacing={7}>
                 <Avatar
                   src={user.picture}

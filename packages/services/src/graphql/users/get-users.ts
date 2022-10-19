@@ -1,9 +1,9 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
-import type { BaseUser } from '../../appsync.gen'
-import { getAuth0Management } from '../../support/auth0'
 import { Auth0UserResponse, toBaseUser } from '../support/auth0-user'
+import type { BaseUser } from '~/appsync.gen'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
+import { getAuth0Management } from '~/support/auth0'
 
 const Auth0Users = z.array(Auth0UserResponse)
 
