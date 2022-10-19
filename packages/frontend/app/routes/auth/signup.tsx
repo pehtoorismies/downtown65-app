@@ -30,29 +30,34 @@ const Signup = () => {
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <TextInput
+          name="email"
           label="Sähköposti"
           placeholder="me@downtown65.com"
           required
         />
         <PasswordInput
+          name="password"
           label="Salasana"
           placeholder="Salasanasi"
           required
           mt="md"
         />
         <TextInput
+          name="name"
           label="Nimi"
           placeholder="Etunimi Sukunimi"
           required
           mt="md"
         />
         <TextInput
+          name="nickname"
           label="Lempinimi / nickname"
           placeholder="setämies72"
           required
           mt="md"
         />
         <PasswordInput
+          name="registerSecret"
           label="Rekisteröintitunnus (kysy seuralta)"
           placeholder="supersecret"
           required
@@ -64,7 +69,7 @@ const Signup = () => {
             Kirjautumiseen
           </Anchor>
         </Group>
-        <Button fullWidth mt="xl">
+        <Button fullWidth mt="xl" type="submit">
           Rekisteröidy
         </Button>
       </Paper>
