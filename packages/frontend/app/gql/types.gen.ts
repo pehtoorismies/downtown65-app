@@ -82,6 +82,12 @@ export const EventType = {
 } as const;
 
 export type EventType = typeof EventType[keyof typeof EventType];
+export type FieldError = {
+  __typename?: 'FieldError';
+  message: Scalars['String'];
+  path: SignupField;
+};
+
 export type IdPayload = {
   __typename?: 'IDPayload';
   id: Scalars['ID'];
@@ -108,7 +114,7 @@ export type Mutation = {
   joinEvent?: Maybe<Scalars['Boolean']>;
   leaveEvent?: Maybe<Scalars['Boolean']>;
   login: LoginPayload;
-  signup: User;
+  signup: SignupPayload;
   updateEvent: Event;
   updateMe: User;
 };
@@ -148,11 +154,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationSignupArgs = {
-  email: Scalars['String'];
-  name: Scalars['String'];
-  nickname: Scalars['String'];
-  password: Scalars['String'];
-  registerSecret: Scalars['String'];
+  input: SignupInput;
 };
 
 
@@ -195,6 +197,29 @@ export type QueryEventArgs = {
   eventId: Scalars['ID'];
 };
 
+export const SignupField = {
+  Email: 'email',
+  Name: 'name',
+  Nickname: 'nickname',
+  Password: 'password',
+  RegisterSecret: 'registerSecret'
+} as const;
+
+export type SignupField = typeof SignupField[keyof typeof SignupField];
+export type SignupInput = {
+  email: Scalars['String'];
+  name: Scalars['String'];
+  nickname: Scalars['String'];
+  password: Scalars['String'];
+  registerSecret: Scalars['String'];
+};
+
+export type SignupPayload = {
+  __typename?: 'SignupPayload';
+  errors?: Maybe<Array<FieldError>>;
+  user?: Maybe<User>;
+};
+
 export type UpdateEventInput = {
   dateStart?: InputMaybe<Scalars['AWSDateTime']>;
   id: Scalars['ID'];
@@ -217,6 +242,11 @@ export type User = Auth0User & {
   nickname?: Maybe<Scalars['String']>;
   preferences: Preferences;
   updatedAt?: Maybe<Scalars['AWSDateTime']>;
+};
+
+export type UserError = {
+  message: Scalars['String'];
+  path: Scalars['String'];
 };
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -245,6 +275,17 @@ export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'User', id: string, email: string, name: string, nickname?: string | null, preferences: { __typename?: 'Preferences', subscribeEventCreationEmail: boolean, subscribeWeeklyEmail: boolean } } };
+
+export type SignupMutationVariables = Exact<{
+  name: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+  nickname: Scalars['String'];
+  registerSecret: Scalars['String'];
+}>;
+
+
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'User', id: string } | null, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> | null } };
 
 export type UpdateMeMutationVariables = Exact<{
   subscribeWeeklyEmail: Scalars['Boolean'];
@@ -300,6 +341,21 @@ export const GetProfileDocument = gql`
   }
 }
     `;
+export const SignupDocument = gql`
+    mutation Signup($name: String!, $email: String!, $password: String!, $nickname: String!, $registerSecret: String!) {
+  signup(
+    input: {name: $name, email: $email, password: $password, nickname: $nickname, registerSecret: $registerSecret}
+  ) {
+    user {
+      id
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+    `;
 export const UpdateMeDocument = gql`
     mutation UpdateMe($subscribeWeeklyEmail: Boolean!, $subscribeEventCreationEmail: Boolean!) {
   updateMe(
@@ -334,6 +390,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetProfile(variables?: GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetProfileQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');
+    },
+    Signup(variables: SignupMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SignupMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SignupMutation>(SignupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Signup', 'mutation');
     },
     UpdateMe(variables: UpdateMeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMeMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateMeMutation>(UpdateMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateMe', 'mutation');
