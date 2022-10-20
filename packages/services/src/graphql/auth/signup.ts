@@ -7,8 +7,12 @@ import type {
   MutationSignupArgs,
   SignupPayload,
 } from '~/appsync.gen'
-import { ErrorMessage, ErrorResponse } from '~/graphql/auth/support/error'
+import { ErrorResponse } from '~/graphql/auth/support/error'
 import { getAuth0Management } from '~/support/auth0'
+
+const hasWhiteSpace = (s: string) => {
+  return /\s/.test(s)
+}
 
 export const signup: AppSyncResolverHandler<
   MutationSignupArgs,
@@ -17,6 +21,30 @@ export const signup: AppSyncResolverHandler<
   const { input } = event.arguments
 
   const errors: FieldError[] = []
+
+  if (hasWhiteSpace(input.email)) {
+    errors.push({
+      message: 'White space characters. Please remove empty spaces.',
+      path: 'email',
+    })
+  }
+  if (hasWhiteSpace(input.nickname)) {
+    errors.push({
+      message: 'White space characters. Please remove empty spaces.',
+      path: 'nickname',
+    })
+  }
+  if (input.name.trim().length !== input.name.length) {
+    errors.push({
+      message:
+        'White space characters. Please remove empty spaces after or before.',
+      path: 'name',
+    })
+  }
+
+  if (errors.length > 0) {
+    return { errors }
+  }
 
   if (input.registerSecret !== Config.REGISTER_SECRET) {
     errors.push({
@@ -41,21 +69,46 @@ export const signup: AppSyncResolverHandler<
     return { errors }
   }
 
-  const user = {
-    email: input.email,
-    password: input.password,
-    name: input.name,
-    nickname: input.nickname,
-  }
-
   const management = await getAuth0Management()
+
+  const existingUsers = await management.getUsers({
+    fields: 'email,nickname',
+    search_engine: 'v3',
+    q: `email:"${input.email}" OR nickname:"${input.nickname}"`,
+  })
+
+  if (existingUsers.length > 0) {
+    if (existingUsers[0].email === input.email) {
+      errors.push({
+        message: 'Email already exists',
+        path: 'email',
+      })
+    }
+    if (existingUsers[0].nickname === input.nickname) {
+      errors.push({
+        message: 'Nickname already exists',
+        path: 'nickname',
+      })
+    }
+    if (errors.length === 0) {
+      console.error('Illegal state. Query results:', existingUsers)
+      throw new Error(
+        'Illegal state. Auth0 query returned matching users but they are not found.'
+      )
+    }
+    return { errors }
+  }
 
   try {
     const returnObject = await management.createUser({
       connection: 'Username-Password-Authentication',
-      ...user,
+      email: input.email,
+      password: input.password,
+      name: input.name,
+      nickname: input.nickname,
       verify_email: true,
       email_verified: false,
+      // switch user_metadata and app_metadata
       user_metadata: {
         subscribeWeeklyEmail: true,
         subscribeEventCreationEmail: true,
@@ -73,7 +126,7 @@ export const signup: AppSyncResolverHandler<
       errors: [
         {
           message: errorResponse.message,
-          path: 'nickname',
+          path: 'email',
         },
       ],
     }

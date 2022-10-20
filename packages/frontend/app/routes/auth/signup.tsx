@@ -126,7 +126,11 @@ const Signup = () => {
             mt="md"
             error={!!actionData?.errors?.name}
           />
-          {actionData?.errors?.name && <Text>{actionData.errors.name}</Text>}
+          {actionData?.errors?.name && (
+            <Text color="red" size="sm" weight={500}>
+              {actionData.errors.name}
+            </Text>
+          )}
           <TextInput
             name="nickname"
             label="Lempinimi / nickname"

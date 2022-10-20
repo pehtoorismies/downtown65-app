@@ -8,6 +8,7 @@ import type {
   MutationLoginArgs,
   MutationSignupArgs,
   QueryEventArgs as QueryEventArguments,
+  SignupPayload,
   User,
 } from '../appsync.gen'
 import { forgotPassword } from './auth/forgot-password'
@@ -25,6 +26,7 @@ export type Inputs =
 export type Outputs =
   | AuthPayload
   | LoginPayload
+  | SignupPayload
   | Dt65Event
   | IdPayload
   | User
