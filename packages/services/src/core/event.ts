@@ -1,49 +1,107 @@
 import formatISO from 'date-fns/formatISO'
 import { ulid } from 'ulid'
-import type { EventType } from '../appsync.gen'
+import type { MutationCreateEventArgs, UserInput, Event } from '../appsync.gen'
+import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
-import { getPrimaryKey } from '../graphql/events/support/event-primary-key'
+import { getPrimaryKey } from './event-primary-key'
+import { mapDynamoToEvent } from './map-dynamo-to-event'
 
 const Table = getTable()
 
-interface CreatableEvent {
-  title: string
-  // https://javascript.plainenglish.io/type-safe-date-strings-66b6dc58658a
+// use zod for date formats
+interface PersistableEvent {
+  PK: string
+  SK: string
+  GSI1PK: 'EVENT#FUTURE'
+  GSI1SK: string
+  createdBy: UserInput
   dateStart: string
-  type: EventType
-  subtitle?: string
+  id: string
+  participants: Record<
+    string,
+    | UserInput
+    | {
+        joinedAt: string
+      }
+  >
+  title: string
+  location: string
   race: boolean
+  type: EventType
 }
 
-export const create = async (creatableEvent: CreatableEvent) => {
-  const { title, dateStart, type, subtitle, race } = creatableEvent
-  const eventId = ulid()
-  const startDate = formatISO(new Date(dateStart))
+const isEventType = (event: string): event is EventType => {
+  return Object.values(EventType).includes(event as EventType)
+}
 
-  await Table.Dt65Event.put(
-    {
-      // add keys
-      ...getPrimaryKey(eventId),
-      GSI1PK: `EVENT#FUTURE`,
-      GSI1SK: `DATE#${startDate}#${eventId.slice(0, 8)}`,
-      // add props
-      createdBy: 'add later',
-      dateStart: startDate,
-      id: eventId,
-      title,
-      subtitle,
-      race: race ?? false,
-      participants: {},
-      type,
-    },
-    { returnValues: 'none' }
-  )
-  return {
-    id: eventId,
-    title,
-    subtitle: subtitle ?? undefined,
-    race: race ?? false,
-    type: type as EventType,
-    dateStart: startDate,
+export const create = async (
+  creatableEvent: MutationCreateEventArgs['event']
+): Promise<Event> => {
+  const { title, dateStart, type, location, race, createdBy, participants } =
+    creatableEvent
+  const eventId = ulid()
+  if (!isEventType(type)) {
+    throw new Error('Wrong event type provided')
   }
+  const startDate = formatISO(new Date(dateStart))
+  const now = formatISO(new Date())
+
+  const parts = participants ?? []
+  const participantHashMap = {}
+
+  for (const participant of parts) {
+    Object.assign(participantHashMap, {
+      [participant.id]: {
+        joinedAt: now,
+        nickname: participant.nickname,
+        picture: participant.picture,
+        id: participant.id,
+      },
+    })
+  }
+
+  const persistableEvent: PersistableEvent = {
+    // add keys
+    ...getPrimaryKey(eventId),
+    GSI1PK: `EVENT#FUTURE`,
+    GSI1SK: `DATE#${startDate}#${eventId.slice(0, 8)}`,
+    // add props
+    createdBy,
+    dateStart: startDate,
+    id: eventId,
+    participants: participantHashMap,
+    title,
+    location,
+    race: race ?? false,
+    type,
+  }
+
+  await Table.Dt65Event.put(persistableEvent, { returnValues: 'none' })
+  return {
+    ...persistableEvent,
+    participants:
+      participants?.map((p) => ({
+        ...p,
+        joinedAt: now,
+      })) ?? [],
+  }
+}
+
+export const remove = async (id: string): Promise<boolean> => {
+  const results = await Table.Dt65Event.delete(getPrimaryKey(id), {
+    returnValues: 'ALL_OLD',
+  })
+
+  if (!results.Attributes) {
+    throw new Error('Event not found')
+  }
+  return true
+}
+
+export const getById = async (id: string) => {
+  const result = await Table.Dt65Event.get(getPrimaryKey(id))
+  if (!result.Item) {
+    return
+  }
+  return mapDynamoToEvent(result.Item)
 }

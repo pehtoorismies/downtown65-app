@@ -1,6 +1,6 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import { getPrimaryKey } from './support/event-primary-key'
+import { getPrimaryKey } from '../../core/event-primary-key'
 import type { MutationLeaveEventArgs } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
 
@@ -25,7 +25,7 @@ export const leaveEvent: AppSyncResolverHandler<
 
   const claims = identity.claims as Claims
 
-  const nick = claims['https://graphql.downtown65.com/nickname']
+  const nickname = claims['https://graphql.downtown65.com/nickname']
 
   const Table = getTable()
 
@@ -44,7 +44,7 @@ export const leaveEvent: AppSyncResolverHandler<
             TableName: Table.name,
             Key: {
               PK: `EVENT#${eventId}`,
-              SK: `USER#${nick}`,
+              SK: `USER#${nickname}`,
             },
             ConditionExpression: `attribute_exists(#PK)`,
             ExpressionAttributeNames: {
@@ -56,10 +56,10 @@ export const leaveEvent: AppSyncResolverHandler<
           Update: {
             TableName: Table.name,
             Key: getPrimaryKey(eventId),
-            UpdateExpression: 'REMOVE #participants.#nick',
+            UpdateExpression: 'REMOVE #participants.#nickname',
             ExpressionAttributeNames: {
               '#participants': 'participants',
-              '#nick': nick,
+              '#nickname': nickname,
             },
           },
         },

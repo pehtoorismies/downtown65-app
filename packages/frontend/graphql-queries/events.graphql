@@ -1,0 +1,28 @@
+fragment baseFields on Event {
+    id
+    dateStart
+    description
+    location
+    participants {
+        id
+        joinedAt
+        nickname
+        picture
+    }
+    race
+    title
+    type
+
+}
+
+query GetEvent($eventId: ID!) {
+    event(eventId: $eventId) {
+        ...baseFields
+    }
+}
+
+query GetEvents {
+    events {
+        ...baseFields
+    }
+}

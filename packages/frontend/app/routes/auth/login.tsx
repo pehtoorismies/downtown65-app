@@ -10,8 +10,12 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
-import type { ActionFunction, MetaFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import type {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+} from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import {
   Form,
   useNavigate,
@@ -19,9 +23,8 @@ import {
   useTransition,
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
-import invariant from 'tiny-invariant'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
-import { createUserSession } from '~/session.server'
+import { createUserSession, getUser, Tokens } from '~/session.server'
 import { validateEmail } from '~/util/validation'
 
 export const meta: MetaFunction = () => {
@@ -30,12 +33,19 @@ export const meta: MetaFunction = () => {
   }
 }
 
-interface ActionData {
-  errors?: {
-    email?: string
-    password?: string
-    general?: string
+type ErrorData = {
+  type: 'error'
+  email?: string
+  password?: string
+  general?: string
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const user = await getUser(request)
+  if (user) {
+    return redirect('/events')
   }
+  return json({})
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -44,15 +54,15 @@ export const action: ActionFunction = async ({ request }) => {
   const password = formData.get('password')
 
   if (!validateEmail(email)) {
-    return json<ActionData>(
-      { errors: { email: 'Väärä sähköpostiosoite' } },
+    return json<ErrorData>(
+      { email: 'Väärä sähköpostiosoite', type: 'error' },
       { status: 400 }
     )
   }
 
   if (typeof password !== 'string') {
-    return json<ActionData>(
-      { errors: { password: 'Salasana tarvitaan' } },
+    return json<ErrorData>(
+      { password: 'Salasana tarvitaan', type: 'error' },
       { status: 400 }
     )
   }
@@ -64,29 +74,27 @@ export const action: ActionFunction = async ({ request }) => {
     )
 
     if (login.loginError && login.loginError.code === 'invalid_grant') {
-      return json<ActionData>(
-        { errors: { general: 'Email or password is invalid' } },
+      return json<ErrorData>(
+        { general: 'Email or password is invalid', type: 'error' },
         { status: 400 }
       )
-      return json<ActionData>(
-        { errors: { general: login.loginError?.message } },
+      return json<ErrorData>(
+        { general: login.loginError?.message, type: 'error' },
         { status: 400 }
       )
     }
 
-    invariant(login.tokens?.idToken, 'Expected tokens.idToken')
-    invariant(login.tokens?.accessToken, 'Expected tokens.accessToken')
+    const tokens = Tokens.parse(login.tokens)
 
     return createUserSession({
       request,
-      authToken: login.tokens.accessToken,
-      nickname: 'kissa',
-      redirectTo: `/auth/login-success?idToken=${login.tokens.idToken}`,
+      tokens,
+      redirectTo: '/',
     })
   } catch (error) {
     console.error(error)
-    return json<ActionData>(
-      { errors: { general: 'Server error' } },
+    return json<ErrorData>(
+      { general: 'Server error', type: 'error' },
       { status: 500 }
     )
   }
@@ -95,7 +103,8 @@ export const action: ActionFunction = async ({ request }) => {
 const Login = () => {
   const navigation = useNavigate()
   const transition = useTransition()
-  const actionData = useActionData() as ActionData
+
+  const actionData = useActionData<ErrorData>()
 
   return (
     <Container size={420} my={40}>
@@ -116,14 +125,14 @@ const Login = () => {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        {actionData?.errors?.general && (
+        {actionData?.type === 'error' && actionData.general && (
           <Alert
             icon={<IconAlertCircle size={16} />}
             title="Virhe kirjautumisessa"
             color="red"
             mb="sm"
           >
-            {actionData?.errors?.general}
+            {actionData.general}
           </Alert>
         )}
 
@@ -135,7 +144,11 @@ const Login = () => {
             autoComplete="email"
             label="Sähköposti"
             placeholder="me@downtown65.com"
-            aria-invalid={actionData?.errors?.email ? true : undefined}
+            aria-invalid={
+              actionData?.type === 'error' && actionData.email
+                ? true
+                : undefined
+            }
             aria-describedby="email-error"
             required
           />
@@ -144,8 +157,14 @@ const Login = () => {
             name="password"
             label="Salasana"
             placeholder="Salasanasi"
+            aria-invalid={
+              actionData?.type === 'error' && actionData.password
+                ? true
+                : undefined
+            }
             required
             mt="md"
+            aria-describedby="password-error"
           />
           <Group position="right" mt="md">
             <Anchor

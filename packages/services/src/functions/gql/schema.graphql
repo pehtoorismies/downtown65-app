@@ -22,24 +22,27 @@ enum EventType {
 
 type Participant {
     joinedAt: AWSDateTime!
-    nick: String!
+    id: ID!
+    picture: String!
+    nickname: String!
 }
 
 type Event @aws_api_key @aws_oidc {
     dateStart: AWSDateTime!
+    description: String
     id: ID!
+    location: String!
+    participants: [Participant!]!
     race: Boolean!
-    subtitle: String
     title: String!
     type: EventType!
-    participants: [Participant!]!
 }
 
 interface Auth0User {
     id: ID!
     email: String!
     name: String!
-    nickname: String
+    nickname: String!
 }
 
 type User implements Auth0User @aws_api_key @aws_oidc {
@@ -47,7 +50,7 @@ type User implements Auth0User @aws_api_key @aws_oidc {
     email: String!
     id: ID!
     name: String!
-    nickname: String
+    nickname: String!
     preferences: Preferences!
     updatedAt: AWSDateTime
 }
@@ -60,11 +63,19 @@ type BaseUser implements Auth0User{
     picture: String!
 }
 
+input UserInput {
+    id: ID!
+    picture: String!
+    nickname: String!
+}
 
 input CreateEventInput {
+    createdBy: UserInput!
     dateStart: AWSDateTime!
+    description: String
+    location: String!
+    participants: [UserInput!]
     race: Boolean
-    subtitle: String
     title: String!
     type: String!
 }
@@ -73,6 +84,7 @@ type AuthPayload @aws_api_key {
     accessToken: String!
     expiresIn: Int!
     idToken: String!
+    refreshToken: String!
 }
 
 type Preferences {
@@ -159,11 +171,7 @@ type Query {
 }
 
 type Mutation {
-    createEvent(
-        event: CreateEventInput!
-        addMe: Boolean = false
-        notifySubscribers: Boolean = true
-    ): Event!
+    createEvent(event: CreateEventInput!): Event!
     updateEvent(input: UpdateEventInput!): Event!
     deleteEvent(eventId: ID!): IDPayload
     leaveEvent(eventId: ID!): Boolean

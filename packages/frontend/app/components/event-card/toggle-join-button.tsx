@@ -1,27 +1,23 @@
 import { Button } from '@mantine/core'
 import { IconHandOff, IconHandStop } from '@tabler/icons'
+import { Gradient } from '~/components/colors'
 
-interface Properties {
-  isParticipating: boolean
+const commonProperties = {
+  border: 0,
+  height: 38,
+  paddingLeft: 20,
+  paddingRight: 20,
 }
 
 const InButton = () => {
   return (
     <Button
+      variant="gradient"
       leftIcon={<IconHandStop size={18} />}
-      styles={(theme) => ({
+      styles={() => ({
         root: {
-          backgroundColor: theme.colors.blue[9],
-          border: 0,
-          height: 42,
-          paddingLeft: 20,
-          paddingRight: 20,
-
-          '&:hover': {
-            backgroundColor: theme.fn.darken(theme.colors.blue[9], 0.05),
-          },
+          ...commonProperties,
         },
-
         leftIcon: {
           marginRight: 15,
         },
@@ -36,17 +32,11 @@ const OutButton = () => {
   return (
     <Button
       leftIcon={<IconHandOff size={18} />}
-      styles={(theme) => ({
+      variant="gradient"
+      gradient={Gradient.dtPink}
+      styles={() => ({
         root: {
-          backgroundColor: theme.colors.dtPink[9],
-          border: 0,
-          height: 42,
-          paddingLeft: 20,
-          paddingRight: 20,
-
-          '&:hover': {
-            backgroundColor: theme.fn.darken(theme.colors.dtPink[9], 0.05),
-          },
+          ...commonProperties,
         },
 
         leftIcon: {
@@ -57,6 +47,12 @@ const OutButton = () => {
       Poistu
     </Button>
   )
+}
+
+interface Properties {
+  isParticipating: boolean
+  onParticipate: () => void
+  onLeave: () => void
 }
 
 export const ToggleJoinButton = ({ isParticipating }: Properties) => {

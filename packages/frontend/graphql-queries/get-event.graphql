@@ -1,9 +1,0 @@
-query GetEvent($eventId: ID!) {
-    event(eventId: $eventId) {
-        id
-        title
-        dateStart
-        race
-        type
-    }
-}

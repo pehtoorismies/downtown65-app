@@ -17,7 +17,7 @@ export type Auth0User = {
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
-  nickname?: Maybe<Scalars['String']>;
+  nickname: Scalars['String'];
 };
 
 export type AuthPayload = {
@@ -25,6 +25,7 @@ export type AuthPayload = {
   accessToken: Scalars['String'];
   expiresIn: Scalars['Int'];
   idToken: Scalars['String'];
+  refreshToken: Scalars['String'];
 };
 
 export type BaseUser = Auth0User & {
@@ -37,9 +38,12 @@ export type BaseUser = Auth0User & {
 };
 
 export type CreateEventInput = {
+  createdBy: UserInput;
   dateStart: Scalars['AWSDateTime'];
+  description?: InputMaybe<Scalars['String']>;
+  location: Scalars['String'];
+  participants?: InputMaybe<Array<UserInput>>;
   race?: InputMaybe<Scalars['Boolean']>;
-  subtitle?: InputMaybe<Scalars['String']>;
   title: Scalars['String'];
   type: Scalars['String'];
 };
@@ -53,10 +57,11 @@ export type Error = {
 export type Event = {
   __typename?: 'Event';
   dateStart: Scalars['AWSDateTime'];
+  description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  location: Scalars['String'];
   participants: Array<Participant>;
   race: Scalars['Boolean'];
-  subtitle?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: EventType;
 };
@@ -118,9 +123,7 @@ export type Mutation = {
 
 
 export type MutationCreateEventArgs = {
-  addMe?: InputMaybe<Scalars['Boolean']>;
   event: CreateEventInput;
-  notifySubscribers?: InputMaybe<Scalars['Boolean']>;
 };
 
 
@@ -166,8 +169,10 @@ export type MutationUpdateMeArgs = {
 
 export type Participant = {
   __typename?: 'Participant';
+  id: Scalars['ID'];
   joinedAt: Scalars['AWSDateTime'];
-  nick: Scalars['String'];
+  nickname: Scalars['String'];
+  picture: Scalars['String'];
 };
 
 export type Preferences = {
@@ -236,7 +241,7 @@ export type User = Auth0User & {
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
-  nickname?: Maybe<Scalars['String']>;
+  nickname: Scalars['String'];
   preferences: Preferences;
   updatedAt?: Maybe<Scalars['AWSDateTime']>;
 };
@@ -244,4 +249,10 @@ export type User = Auth0User & {
 export type UserError = {
   message: Scalars['String'];
   path: Scalars['String'];
+};
+
+export type UserInput = {
+  id: Scalars['ID'];
+  nickname: Scalars['String'];
+  picture: Scalars['String'];
 };

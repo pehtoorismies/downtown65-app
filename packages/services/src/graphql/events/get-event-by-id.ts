@@ -1,11 +1,11 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import { getPrimaryKey } from './support/event-primary-key'
+import { getPrimaryKey } from '../../core/event-primary-key'
 import type {
   Event as Dt65Event,
   QueryEventArgs as QueryEventArguments,
 } from '~/appsync.gen'
+import { mapDynamoToEvent } from '~/core/map-dynamo-to-event'
 import { getTable } from '~/dynamo/table'
-import { mapDynamoToEvent } from '~/graphql/events/support/map-dynamo-to-event'
 
 export const getEventById: AppSyncResolverHandler<
   QueryEventArguments,

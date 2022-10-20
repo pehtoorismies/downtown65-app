@@ -1,34 +1,36 @@
 import {
+  Breadcrumbs,
   Button,
-  Center,
   Container,
   Group,
   LoadingOverlay,
   Modal,
+  Anchor,
   Text,
   TextInput,
   TypographyStylesProvider,
 } from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { useLoaderData, useNavigate } from '@remix-run/react'
-import {
-  IconArrowNarrowLeft,
-  IconCircleOff,
-  IconCircleX,
-  IconPencil,
-} from '@tabler/icons'
+import { Link, useLoaderData, useNavigate } from '@remix-run/react'
+import { IconCircleOff, IconCircleX, IconPencil } from '@tabler/icons'
 import { GraphQLClient } from 'graphql-request'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import invariant from 'tiny-invariant'
-import type { EventCardProperties } from '~/components/event-card'
-import { EventCard } from '~/components/event-card'
+import type { EventCardExtendedProps } from '~/components/event-card/event-card-extended'
+import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import { getSdk } from '~/gql/types.gen'
-import { mapToData } from '~/util/event-type'
+import { getUser } from '~/session.server'
 
-const gardan = { nick: 'gardan', id: '1234' }
-const pehtoorismies = { nick: 'pehtoorismies', id: '123' }
+// const users = [
+//   { nick: 'gardan', id: '1' },
+//   { nick: 'pehtoorismies1', id: '2' },
+//   { nick: 'tanker', id: '3' },
+//   { nick: 'koira', id: '4' },
+//   { nick: 'Buccis', id: '5' },
+//   { nick: 'kissa', id: '6' },
+// ]
 
 export const meta: MetaFunction = () => {
   return {
@@ -37,7 +39,7 @@ export const meta: MetaFunction = () => {
 }
 
 type LoaderData = {
-  eventItem: Awaited<EventCardProperties>
+  eventItem: Awaited<EventCardExtendedProps>
 }
 
 const getEnvironmentVariable = (name: string): string => {
@@ -48,7 +50,7 @@ const getEnvironmentVariable = (name: string): string => {
   return value
 }
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
   invariant(params.id, 'Expected params.id')
 
@@ -66,16 +68,21 @@ export const loader: LoaderFunction = async ({ params }) => {
     throw new Response('Not Found', { status: 404 })
   }
 
-  const eventItem: Omit<EventCardProperties, 'isExtended'> = {
-    ...event,
-    participants: [pehtoorismies, gardan],
-    description: 'asdasd',
-    me: pehtoorismies,
-    type: mapToData(event.type),
-  }
+  const user = await getUser(request)
 
-  return json({
-    eventItem,
+  return json<LoaderData>({
+    eventItem: {
+      ...event,
+      description: event.description ?? '',
+      creator: {
+        nickname: 'koira',
+        id: '123',
+        picture: 'asdasd',
+      },
+      isRace: event.race,
+      me: user,
+      participants: [],
+    },
   })
 }
 
@@ -87,6 +94,15 @@ const Dt65Event = () => {
   const [opened, setOpened] = useState(false)
   const [formValue, setFormValue] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
+
+  const items = [
+    { title: 'Tapahtumat', href: '/events' },
+    { title: eventItem.title, href: `/events/${eventItem.id}` },
+  ].map((item, index) => (
+    <Anchor component={Link} to={item.href} key={index}>
+      {item.title}
+    </Anchor>
+  ))
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormValue(event.target.value)
@@ -129,120 +145,35 @@ const Dt65Event = () => {
           Voit peruuttaa poiston sulkemalla dialogin tai klikkaamalla Peruuta.
         </Text>
         <Group position="apart" mt="lg">
-          <Button
-            onClick={onCloseModal}
-            leftIcon={<IconCircleX size={18} />}
-            styles={(theme) => ({
-              root: {
-                backgroundColor: theme.colors.gray[6],
-                border: 0,
-                height: 42,
-                paddingLeft: 20,
-                paddingRight: 20,
-
-                '&:hover': {
-                  backgroundColor: theme.fn.darken(theme.colors.gray[6], 0.05),
-                },
-              },
-
-              leftIcon: {
-                marginRight: 5,
-              },
-            })}
-          >
+          <Button onClick={onCloseModal} leftIcon={<IconCircleX size={18} />}>
             Peruuta
           </Button>
           <Button
+            color="red"
             disabled={formValue !== 'poista'}
             onClick={onDeleteEvent}
             rightIcon={<IconCircleOff size={18} />}
-            styles={(theme) => ({
-              root: {
-                backgroundColor: theme.colors.red[7],
-                border: 0,
-                height: 42,
-                paddingLeft: 20,
-                paddingRight: 20,
-
-                '&:hover': {
-                  backgroundColor: theme.fn.darken(theme.colors.red[7], 0.05),
-                },
-              },
-
-              leftIcon: {
-                marginRight: 15,
-              },
-            })}
           >
             Poista
           </Button>
         </Group>
       </Modal>
       <Container pt={12}>
-        <EventCard {...eventItem} isExtended />
+        <Breadcrumbs mb="xs">{items}</Breadcrumbs>
+        <EventCardExtended {...eventItem} />
+        <Text align="center" mt="xl" weight={600} color="dimmed">
+          Modification zone
+        </Text>
         <Group position="center" my="xl" spacing="xl">
+          <Button rightIcon={<IconPencil size={18} />}>Muokkaa</Button>
           <Button
-            rightIcon={<IconPencil size={18} />}
-            styles={(theme) => ({
-              root: {
-                backgroundColor: theme.colors.gray[6],
-                border: 0,
-                height: 42,
-                paddingLeft: 20,
-                paddingRight: 20,
-
-                '&:hover': {
-                  backgroundColor: theme.fn.darken(theme.colors.gray[6], 0.05),
-                },
-              },
-
-              leftIcon: {
-                marginRight: 15,
-              },
-            })}
-          >
-            Muokkaa
-          </Button>
-          <Button
+            color="grape"
             onClick={() => setOpened(true)}
             rightIcon={<IconCircleOff size={18} />}
-            styles={(theme) => ({
-              root: {
-                backgroundColor: theme.colors.red[7],
-                border: 0,
-                height: 42,
-                paddingLeft: 20,
-                paddingRight: 20,
-
-                '&:hover': {
-                  backgroundColor: theme.fn.darken(theme.colors.red[7], 0.05),
-                },
-              },
-
-              leftIcon: {
-                marginRight: 15,
-              },
-            })}
           >
-            Poista
+            Poista tapahtuma
           </Button>
         </Group>
-        <Center style={{ width: '100%' }}>
-          <Button
-            fullWidth
-            mt="xs"
-            variant="outline"
-            leftIcon={<IconArrowNarrowLeft size={18} />}
-            styles={() => ({
-              leftIcon: {
-                marginRight: 15,
-              },
-            })}
-            onClick={() => navigate(`/`)}
-          >
-            Näytä kaikki tapahtumat
-          </Button>
-        </Center>
       </Container>
     </>
   )
