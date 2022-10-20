@@ -3,6 +3,7 @@ mutation Login($email: String!, $password: String!) {
         tokens {
             accessToken
             idToken
+            refreshToken
         }
         loginError {
             message

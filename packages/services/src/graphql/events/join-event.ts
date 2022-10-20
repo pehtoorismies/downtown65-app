@@ -1,8 +1,8 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import formatISO from 'date-fns/formatISO'
+import { getPrimaryKey } from '../../core/event-primary-key'
 import { isAWSError } from './support/aws-error'
-import { getPrimaryKey } from './support/event-primary-key'
 import type { MutationJoinEventArgs } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
 
@@ -27,7 +27,7 @@ export const joinEvent: AppSyncResolverHandler<
 
   const claims = identity.claims as Claims
 
-  const nick = claims['https://graphql.downtown65.com/nickname']
+  const nickname = claims['https://graphql.downtown65.com/nickname']
 
   const Table = getTable()
 
@@ -36,9 +36,9 @@ export const joinEvent: AppSyncResolverHandler<
       [
         Table.Participant.putTransaction({
           PK: `EVENT#${eventId}`,
-          SK: `USER#${nick}`,
-          nick,
-          GSI2PK: `USER#${nick}`,
+          SK: `USER#${nickname}`,
+          nickname,
+          GSI2PK: `USER#${nickname}`,
           GSI2SK: `EVENT#${eventId}`,
         }),
         Table.Dt65Event.updateTransaction(
@@ -46,7 +46,7 @@ export const joinEvent: AppSyncResolverHandler<
             ...getPrimaryKey(eventId),
             participants: {
               $set: {
-                [nick]: formatISO(new Date()),
+                [nickname]: formatISO(new Date()),
               },
             },
           },

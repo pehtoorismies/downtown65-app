@@ -59,4 +59,6 @@ const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
   },
 }
 
-export const mapToData = (type: EventType) => EVENT_DATA_MAP[type]
+export const mapToData = (
+  type: EventType
+): { imageUrl: string; text: string } => EVENT_DATA_MAP[type]

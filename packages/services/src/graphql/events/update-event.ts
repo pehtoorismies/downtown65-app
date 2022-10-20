@@ -1,6 +1,6 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import formatISO from 'date-fns/formatISO'
-import { getPrimaryKey } from './support/event-primary-key'
+import { getPrimaryKey } from '../../core/event-primary-key'
 import type { Event as Dt65Event, MutationUpdateEventArgs } from '~/appsync.gen'
 import { getTable } from '~/dynamo/table'
 

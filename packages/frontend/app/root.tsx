@@ -23,6 +23,8 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  //  const url = new URL(request.url)
+
   const session = await getSession(request.headers.get('cookie'))
 
   const toastMessage = session.get('toastMessage') as ToastMessage
@@ -93,24 +95,19 @@ export default function App() {
         colorScheme: 'light',
         colors: {
           dtPink: [
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
-            '#FF80EA',
+            '#F7D9F2',
+            '#F6AFEA',
+            '#FF80EA', // original
+            '#EE6AD9',
+            '#DB5BC6',
+            '#C751B3',
+            '#B14AA0',
+            '#964C8A',
+            '#804B78',
+            '#804B78',
           ],
-          // blue: '#00acee'
-          // Add your color
-          // deepBlue: ['#E9EDFC', '#C1CCF6', '#99ABF0' /* ... */],
-          // or replace default theme color
-          // blue: ['#E9EDFC', '#C1CCF6', '#99ABF0' /* ... */],
         },
-
+        defaultGradient: { from: 'indigo', to: 'cyan', deg: 45 },
         shadows: {
           md: '1px 1px 3px rgba(0, 0, 0, .25)',
           xl: '5px 5px 3px rgba(0, 0, 0, .25)',

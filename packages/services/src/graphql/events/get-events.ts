@@ -2,8 +2,8 @@ import type { AppSyncResolverHandler } from 'aws-lambda'
 import { format } from 'date-fns'
 import startOfToday from 'date-fns/startOfToday'
 import type { Event as Dt65Event } from '../../appsync.gen'
+import { mapDynamoToEvent } from '~/core/map-dynamo-to-event'
 import { getTable } from '~/dynamo/table'
-import { mapDynamoToEvent } from '~/graphql/events/support/map-dynamo-to-event'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
 
 const getExpression = (d: Date) => {

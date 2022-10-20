@@ -9,7 +9,7 @@ import {
   SimpleGrid,
 } from '@mantine/core'
 import type { LoaderFunction, ActionFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { useLoaderData, useTransition, Form } from '@remix-run/react'
 import { IconLogout, IconX } from '@tabler/icons'
 import { GraphQLClient } from 'graphql-request'
@@ -29,6 +29,9 @@ const getEnvironmentVariable = (name: string): string => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const accessTokenJwt = await getJwtFromSession(request)
+  if (!accessTokenJwt) {
+    return redirect('/auth/login')
+  }
 
   const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
   const { me } = await getSdk(client).GetProfile(undefined, {

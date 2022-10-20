@@ -9,6 +9,7 @@ const Auth0Response = z.object({
   access_token: z.string(),
   id_token: z.string(),
   expires_in: z.number(),
+  refresh_token: z.string(),
 })
 
 const auth0 = getClient()
@@ -21,8 +22,13 @@ export const login: AppSyncResolverHandler<
     const auth0Response = await auth0.passwordGrant({
       username: event.arguments.email,
       password: event.arguments.password,
+      // Scope explanation:
+      // openid => get user profile
+      // email => add email to user profile
+      // offline_access => get a refresh token (enable in API settings)
+      // read:events etc. are custom scopes defined in Auth0
       scope:
-        'read:events write:events read:me write:me read:users openid profile',
+        'read:events write:events read:me write:me read:users openid profile email offline_access',
       audience: Config.JWT_AUDIENCE,
     })
 
@@ -33,6 +39,7 @@ export const login: AppSyncResolverHandler<
         accessToken: tokens.access_token,
         idToken: tokens.id_token,
         expiresIn: tokens.expires_in,
+        refreshToken: tokens.refresh_token,
       },
     }
   } catch (error: unknown) {
