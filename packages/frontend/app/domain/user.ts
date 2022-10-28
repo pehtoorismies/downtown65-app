@@ -1,20 +1,28 @@
 import jwtDecode from 'jwt-decode'
 import { z } from 'zod'
 
-export const User = z.object({
-  id: z.string(),
+const User = z.object({
   nickname: z.string(),
-  // name: z.string(),
+  sub: z.string(),
   picture: z.string(),
 })
 
-export type User = z.infer<typeof User>
+export type User = {
+  nickname: string
+  id: string
+  picture: string
+}
 
 export const userFromIdToken = (idToken: string): User | undefined => {
   try {
     const decoded = jwtDecode(idToken)
     const response = User.safeParse(decoded)
-    return response.success ? response.data : undefined
+    return response.success
+      ? {
+          ...response.data,
+          id: response.data.sub,
+        }
+      : undefined
   } catch {
     return undefined
   }

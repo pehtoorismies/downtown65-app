@@ -1,6 +1,6 @@
 import { Button, Container, Grid, Stepper, Group, Title } from '@mantine/core'
 import type { LoaderFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import {
   IconAlignLeft,
@@ -70,10 +70,16 @@ interface LoaderData {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request)
-  if (!user) {
-    return redirect('/auth/login')
-  }
-  return json<LoaderData>({ user })
+  // if (!user) {
+  //   return redirect('/auth/login')
+  // }
+  return json<LoaderData>({
+    user: {
+      id: '123',
+      nickname: 'koira',
+      picture: 'asd',
+    },
+  })
 }
 
 const NewEvent = () => {
