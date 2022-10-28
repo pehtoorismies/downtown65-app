@@ -1,4 +1,6 @@
+import { format } from 'date-fns'
 import formatISO from 'date-fns/formatISO'
+import startOfToday from 'date-fns/startOfToday'
 import { ulid } from 'ulid'
 import type { MutationCreateEventArgs, UserInput, Event } from '../appsync.gen'
 import { EventType } from '../appsync.gen'
@@ -28,6 +30,14 @@ interface PersistableEvent {
   location: string
   race: boolean
   type: EventType
+}
+
+const getExpression = (d: Date) => {
+  const lt = format(
+    new Date(d.getFullYear(), d.getMonth(), d.getDate()),
+    'yyyy-MM-dd'
+  )
+  return `DATE#${lt}`
 }
 
 const isEventType = (event: string): event is EventType => {
@@ -104,4 +114,17 @@ export const getById = async (id: string) => {
     return
   }
   return mapDynamoToEvent(result.Item)
+}
+
+export const getFutureEvents = async () => {
+  const query = getExpression(startOfToday())
+
+  const results = await Table.Dt65Event.query(`EVENT#FUTURE`, {
+    index: 'GSI1',
+    gt: query,
+  })
+
+  return results.Items.map((dynamoEvent: unknown) =>
+    mapDynamoToEvent(dynamoEvent)
+  )
 }
