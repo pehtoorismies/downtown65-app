@@ -1,7 +1,7 @@
 import { Button, Container, Grid, Stepper, Group, Title } from '@mantine/core'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunction, ActionFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { useFetcher, useLoaderData } from '@remix-run/react'
 import {
   IconAlignLeft,
   IconCalendar,
@@ -87,11 +87,22 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
 }
 
+export const action: ActionFunction = async ({ request }) => {
+  const body = await request.formData()
+  const name = body.get('visitorsName')
+  return json({ message: `Hello, ${name}` })
+}
+
 const NewEvent = () => {
+  const fetcher = useFetcher()
   const { user } = useLoaderData<LoaderData>()
   const [state, dispatch] = useReducer(reducer, INIT_STATE)
 
-  useEffect(() => {}, [state.submitEvent])
+  useEffect(() => {
+    if (state.submitEvent) {
+      // fetcher.submit(state)
+    }
+  }, [state.submitEvent])
 
   return (
     <Container pt={12}>
