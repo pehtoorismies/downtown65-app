@@ -15,7 +15,10 @@ import {
 import { IconMedal, IconUsers } from '@tabler/icons'
 import type { PropsWithChildren } from 'react'
 import { Gradient } from '~/components/colors'
-import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
+import {
+  DisabledInButton,
+  ToggleJoinButton,
+} from '~/components/event-card/toggle-join-button'
 import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
 import { mapToData } from '~/util/event-type'
@@ -66,6 +69,8 @@ interface ParticipantProps {
   me?: User
 }
 
+export type OnParticipateEvent = (me: User, eventId?: string) => void
+
 export interface EventCardRootProps extends ParticipantProps {
   isRace: boolean
   id?: string
@@ -74,6 +79,8 @@ export interface EventCardRootProps extends ParticipantProps {
   location: string
   creator: User
   shadow?: MantineShadow
+  onParticipate: OnParticipateEvent
+  onLeave: OnParticipateEvent
 }
 
 export const EventCardRoot = ({
@@ -87,6 +94,8 @@ export const EventCardRoot = ({
   title,
   type,
   shadow,
+  onParticipate,
+  onLeave,
 }: PropsWithChildren<EventCardRootProps>) => {
   const { classes, cx } = useStyles()
   const meAttending =
@@ -171,15 +180,18 @@ export const EventCardRoot = ({
               11.12.2022 (la)
             </Text>
           </Stack>
-          <ToggleJoinButton
-            isParticipating={meAttending}
-            onParticipate={() => {
-              alert(`Join ${id}`)
-            }}
-            onLeave={() => {
-              alert(`Leave ${id}`)
-            }}
-          />
+          {!me && <DisabledInButton />}
+          {me && (
+            <ToggleJoinButton
+              isParticipating={meAttending}
+              onParticipate={() => {
+                onParticipate(me, id)
+              }}
+              onLeave={() => {
+                onLeave(me, id)
+              }}
+            />
+          )}
         </Group>
       </Card.Section>
       {children}

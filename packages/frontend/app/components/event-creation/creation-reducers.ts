@@ -1,3 +1,4 @@
+import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
 
 export const ActiveStep = {
@@ -52,6 +53,13 @@ type DescriptionAction = {
   kind: 'description'
   description: string
 }
+type ParticipateEventAction = {
+  kind: 'participateEvent'
+  me: User
+}
+type LeaveEventAction = {
+  kind: 'leaveEvent'
+}
 
 type Action =
   | TitleAction
@@ -64,6 +72,8 @@ type Action =
   | DateAction
   | TimeAction
   | DescriptionAction
+  | ParticipateEventAction
+  | LeaveEventAction
 
 export interface State {
   eventType?: EventType
@@ -77,6 +87,7 @@ export interface State {
     minutes?: number
   }
   description: string
+  participants: User[]
 }
 
 export const reducer = (state: State, action: Action): State => {
@@ -134,6 +145,18 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         description: action.description,
+      }
+    }
+    case 'participateEvent': {
+      return {
+        ...state,
+        participants: [action.me],
+      }
+    }
+    case 'leaveEvent': {
+      return {
+        ...state,
+        participants: [],
       }
     }
   }
