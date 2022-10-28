@@ -1,6 +1,6 @@
 import { Button, Container, Grid, Stepper, Group, Title } from '@mantine/core'
 import type { LoaderFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import {
   IconAlignLeft,
@@ -35,6 +35,7 @@ const INIT_STATE = {
   isRace: false,
   time: {},
   description: 'asdadsjdasladskj adlkjadsladksj adlskj',
+  participants: [],
 }
 
 const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
@@ -70,9 +71,9 @@ interface LoaderData {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getUser(request)
-  // if (!user) {
-  //   return redirect('/auth/login')
-  // }
+  if (!user) {
+    return redirect('/auth/login')
+  }
   return json<LoaderData>({
     user: {
       id: '123',
@@ -173,7 +174,16 @@ const NewEvent = () => {
         />
       )}
       {state.activeStep === ActiveStep.STEP_REVIEW && (
-        <StepReview state={state} me={user} />
+        <StepReview
+          state={state}
+          me={user}
+          onLeave={() => {
+            dispatch({ kind: 'leaveEvent' })
+          }}
+          onParticipate={(me) => {
+            dispatch({ kind: 'participateEvent', me })
+          }}
+        />
       )}
       <Buttons
         state={state}

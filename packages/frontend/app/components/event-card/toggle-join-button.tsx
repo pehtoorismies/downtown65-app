@@ -9,9 +9,17 @@ const commonProperties = {
   paddingRight: 20,
 }
 
-const InButton = () => {
+const InButton = ({
+  disabled,
+  onClick,
+}: {
+  disabled: boolean
+  onClick: () => void
+}) => {
   return (
     <Button
+      onClick={onClick}
+      disabled={disabled}
       variant="gradient"
       leftIcon={<IconHandStop size={18} />}
       styles={() => ({
@@ -28,9 +36,10 @@ const InButton = () => {
   )
 }
 
-const OutButton = () => {
+const OutButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <Button
+      onClick={onClick}
       leftIcon={<IconHandOff size={18} />}
       variant="gradient"
       gradient={Gradient.dtPink}
@@ -49,12 +58,24 @@ const OutButton = () => {
   )
 }
 
+export const DisabledInButton = () => (
+  <InButton onClick={() => {}} disabled={true} />
+)
+
 interface Properties {
   isParticipating: boolean
   onParticipate: () => void
   onLeave: () => void
 }
 
-export const ToggleJoinButton = ({ isParticipating }: Properties) => {
-  return isParticipating ? <OutButton /> : <InButton />
+export const ToggleJoinButton = ({
+  isParticipating,
+  onParticipate,
+  onLeave,
+}: Properties) => {
+  return isParticipating ? (
+    <OutButton onClick={onLeave} />
+  ) : (
+    <InButton onClick={onParticipate} disabled={false} />
+  )
 }
