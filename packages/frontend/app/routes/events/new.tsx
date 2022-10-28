@@ -10,9 +10,12 @@ import {
   IconRocket,
   IconRun,
 } from '@tabler/icons'
-import { useReducer } from 'react'
+import { useEffect, useReducer } from 'react'
 import { Buttons } from '~/components/event-creation/buttons'
-import type { StepNumber } from '~/components/event-creation/creation-reducers'
+import type {
+  State,
+  StepNumber,
+} from '~/components/event-creation/creation-reducers'
 import {
   ActiveStep,
   reducer,
@@ -28,7 +31,7 @@ import { getUser } from '~/session.server'
 
 const iconSize = 20
 
-const INIT_STATE = {
+const INIT_STATE: State = {
   activeStep: ActiveStep.STEP_EVENT_TYPE,
   title: '',
   location: '',
@@ -36,6 +39,7 @@ const INIT_STATE = {
   time: {},
   description: 'asdadsjdasladskj adlkjadsladksj adlskj',
   participants: [],
+  submitEvent: false,
 }
 
 const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
@@ -86,6 +90,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 const NewEvent = () => {
   const { user } = useLoaderData<LoaderData>()
   const [state, dispatch] = useReducer(reducer, INIT_STATE)
+
+  useEffect(() => {}, [state.submitEvent])
 
   return (
     <Container pt={12}>
