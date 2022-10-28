@@ -21,33 +21,13 @@ const isNextVisible = (state: State): boolean => {
       return true
     }
     case ActiveStep.STEP_REVIEW: {
-      return false
+      return true
     }
   }
 }
 
-const isPreviousVisible = (state: State): boolean => {
-  switch (state.activeStep) {
-    case ActiveStep.STEP_EVENT_TYPE: {
-      return false
-    }
-    case ActiveStep.STEP_TITLE: {
-      return true
-    }
-    case ActiveStep.STEP_DATE: {
-      return true
-    }
-    case ActiveStep.STEP_TIME: {
-      return true
-    }
-    case ActiveStep.STEP_DESCRIPTION: {
-      return true
-    }
-    case ActiveStep.STEP_REVIEW: {
-      return true
-    }
-  }
-}
+const isPreviousVisible = (state: State): boolean =>
+  state.activeStep !== ActiveStep.STEP_EVENT_TYPE
 
 interface Properties {
   state: State
@@ -56,6 +36,7 @@ interface Properties {
 }
 
 export const Buttons = ({ state, onPreviousStep, onNextStep }: Properties) => {
+  const isReviewStep = state.activeStep === ActiveStep.STEP_REVIEW
   return (
     <>
       <Grid justify="center" mt="xl">
@@ -86,9 +67,10 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Properties) => {
                     marginRight: 15,
                   },
                 })}
+                color={isReviewStep ? 'dtPink.3' : 'blue'}
                 onClick={onNextStep}
               >
-                Seuraava
+                {isReviewStep ? 'Luo tapahtuma' : 'Seuraava'}
               </Button>
             </Group>
           )}

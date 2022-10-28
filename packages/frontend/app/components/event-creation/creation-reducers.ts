@@ -88,6 +88,7 @@ export interface State {
   }
   description: string
   participants: User[]
+  submitEvent: boolean
 }
 
 export const reducer = (state: State, action: Action): State => {
@@ -112,6 +113,12 @@ export const reducer = (state: State, action: Action): State => {
       return { ...state, activeStep: action.step }
     }
     case 'nextStep': {
+      if (state.activeStep === ActiveStep.STEP_REVIEW) {
+        return {
+          ...state,
+          submitEvent: true,
+        }
+      }
       return {
         ...state,
         activeStep: (state.activeStep + 1) as StepNumber,
