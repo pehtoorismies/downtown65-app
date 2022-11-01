@@ -22,11 +22,11 @@ export type AuthPayload = {
 };
 
 export type CreateEventInput = {
-  createdBy: UserInput;
+  createdBy: MeInput;
   dateStart: Scalars['AWSDateTime'];
   description?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
-  participants?: InputMaybe<Array<UserInput>>;
+  participants?: InputMaybe<Array<MeInput>>;
   race: Scalars['Boolean'];
   title: Scalars['String'];
   type: Scalars['String'];
@@ -112,6 +112,12 @@ export type LoginPayload = {
   __typename?: 'LoginPayload';
   loginError?: Maybe<LoginError>;
   tokens?: Maybe<AuthPayload>;
+};
+
+export type MeInput = {
+  id: Scalars['ID'];
+  nickname: Scalars['String'];
+  picture: Scalars['String'];
 };
 
 export type MeUser = DetailedUser & User & {
@@ -260,10 +266,4 @@ export type User = {
 export type UserError = {
   message: Scalars['String'];
   path: Scalars['String'];
-};
-
-export type UserInput = {
-  id: Scalars['ID'];
-  nickname: Scalars['String'];
-  picture: Scalars['String'];
 };

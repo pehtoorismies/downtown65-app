@@ -75,18 +75,18 @@ type OtherUser implements User & DetailedUser {
 }
 
 
-input UserInput {
+input MeInput {
     id: ID!
     picture: String!
     nickname: String!
 }
 
 input CreateEventInput {
-    createdBy: UserInput!
+    createdBy: MeInput!
     dateStart: AWSDateTime!
     description: String
     location: String!
-    participants: [UserInput!]
+    participants: [MeInput!]
     race: Boolean!
     title: String!
     type: String!

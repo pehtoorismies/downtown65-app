@@ -1,4 +1,5 @@
-import { Button, Title, SimpleGrid } from '@mantine/core'
+import { Button, SimpleGrid } from '@mantine/core'
+import { Gradient } from '~/components/colors'
 import { EventType } from '~/gql/types.gen'
 import { mapToData } from '~/util/event-type'
 
@@ -34,6 +35,16 @@ export const StepType = ({ selectedEventType, onSelect }: Properties) => {
           onClick={() => {
             onSelect(type)
           }}
+          variant="gradient"
+          gradient={
+            selectedEventType === type
+              ? Gradient.dtPink
+              : {
+                  from: 'indigo',
+                  to: 'cyan',
+                  deg: Math.floor(Math.random() * 360),
+                }
+          }
         >
           {text}
         </Button>
