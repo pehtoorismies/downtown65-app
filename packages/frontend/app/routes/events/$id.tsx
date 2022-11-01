@@ -10,8 +10,12 @@ import {
   TextInput,
   TypographyStylesProvider,
 } from '@mantine/core'
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import type {
+  LoaderFunction,
+  MetaFunction,
+  ActionFunction,
+} from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
 import { IconCircleOff, IconCircleX, IconPencil } from '@tabler/icons'
 import type { ChangeEvent } from 'react'
@@ -22,15 +26,6 @@ import type { User } from '~/domain/user'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
 import type { EventType } from '~/gql/types.gen'
 import { validateSessionUser } from '~/session.server'
-
-// const users = [
-//   { nick: 'gardan', id: '1' },
-//   { nick: 'pehtoorismies1', id: '2' },
-//   { nick: 'tanker', id: '3' },
-//   { nick: 'koira', id: '4' },
-//   { nick: 'Buccis', id: '5' },
-//   { nick: 'kissa', id: '6' },
-// ]
 
 export const meta: MetaFunction = () => {
   return {
@@ -76,6 +71,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       me: result.hasSession ? result.user : undefined,
     },
   })
+}
+
+export const action: ActionFunction = async ({ request, params }) => {
+  invariant(params.id, 'Expected params.id')
+  const result = await validateSessionUser(request)
+  if (!result.hasSession) {
+    return redirect('/auth/login')
+  }
+  const body = await request.formData()
+  const action = body.get('action')
+  return json({})
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -152,11 +158,7 @@ const Dt65Event = () => {
       </Modal>
       <Container pt={12}>
         <Breadcrumbs mb="xs">{items}</Breadcrumbs>
-        <EventCardExtended
-          {...eventItem}
-          onLeave={() => {}}
-          onParticipate={() => {}}
-        />
+        <EventCardExtended {...eventItem} />
         <Text align="center" mt="xl" weight={600} color="dimmed">
           Modification zone
         </Text>

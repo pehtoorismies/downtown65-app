@@ -69,8 +69,6 @@ interface ParticipantProps {
   me?: User
 }
 
-export type OnParticipateEvent = (me: User, eventId?: string) => void
-
 export interface EventCardRootProps extends ParticipantProps {
   isRace: boolean
   id?: string
@@ -79,8 +77,6 @@ export interface EventCardRootProps extends ParticipantProps {
   location: string
   createdBy: User
   shadow?: MantineShadow
-  onParticipate: OnParticipateEvent
-  onLeave: OnParticipateEvent
 }
 
 export const EventCardRoot = ({
@@ -94,8 +90,6 @@ export const EventCardRoot = ({
   title,
   type,
   shadow,
-  onParticipate,
-  onLeave,
 }: PropsWithChildren<EventCardRootProps>) => {
   const { classes, cx } = useStyles()
   const meAttending =
@@ -182,15 +176,7 @@ export const EventCardRoot = ({
           </Stack>
           {!me && <DisabledInButton />}
           {me && (
-            <ToggleJoinButton
-              isParticipating={meAttending}
-              onParticipate={() => {
-                onParticipate(me, id)
-              }}
-              onLeave={() => {
-                onLeave(me, id)
-              }}
-            />
+            <ToggleJoinButton isParticipating={meAttending} eventId={id} />
           )}
         </Group>
       </Card.Section>
