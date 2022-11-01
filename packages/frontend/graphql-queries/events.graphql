@@ -28,7 +28,7 @@ query GetEvents {
 }
 
 mutation CreateEvent($input: CreateEventInput!) {
-    createEvent(event: $input) {
-        ...baseFields
+    createEvent(input: $input) {
+        id
     }
 }

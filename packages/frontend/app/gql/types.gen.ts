@@ -26,7 +26,7 @@ export type AuthPayload = {
 
 export type CreateEventInput = {
   createdBy: MeInput;
-  dateStart: Scalars['AWSDateTime'];
+  dateStart: Scalars['String'];
   description?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
@@ -57,7 +57,7 @@ export type Error = {
 export type Event = {
   __typename?: 'Event';
   createdBy: Creator;
-  dateStart: Scalars['AWSDateTime'];
+  dateStart: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   location: Scalars['String'];
@@ -135,7 +135,7 @@ export type MeUser = DetailedUser & User & {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createEvent: Event;
+  createEvent: IdPayload;
   deleteEvent?: Maybe<IdPayload>;
   forgotPassword: Scalars['Boolean'];
   joinEvent?: Maybe<Scalars['Boolean']>;
@@ -148,7 +148,7 @@ export type Mutation = {
 
 
 export type MutationCreateEventArgs = {
-  event: CreateEventInput;
+  input: CreateEventInput;
 };
 
 
@@ -249,7 +249,7 @@ export type SignupPayload = {
 };
 
 export type UpdateEventInput = {
-  dateStart?: InputMaybe<Scalars['AWSDateTime']>;
+  dateStart?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   race?: InputMaybe<Scalars['Boolean']>;
   subtitle?: InputMaybe<Scalars['String']>;
@@ -271,26 +271,26 @@ export type UserError = {
   path: Scalars['String'];
 };
 
-export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: any, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
+export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
 
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID'];
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: any, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } | null };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } | null };
 
 export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: any, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> }> };
+export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> }> };
 
 export type CreateEventMutationVariables = Exact<{
   input: CreateEventInput;
 }>;
 
 
-export type CreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'Event', id: string, dateStart: any, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } };
+export type CreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'IDPayload', id: string } };
 
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
@@ -364,11 +364,11 @@ export const GetEventsDocument = gql`
     ${BaseFieldsFragmentDoc}`;
 export const CreateEventDocument = gql`
     mutation CreateEvent($input: CreateEventInput!) {
-  createEvent(event: $input) {
-    ...baseFields
+  createEvent(input: $input) {
+    id
   }
 }
-    ${BaseFieldsFragmentDoc}`;
+    `;
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($email: String!) {
   forgotPassword(email: $email)
