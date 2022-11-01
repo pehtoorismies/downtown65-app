@@ -8,7 +8,7 @@ export const meta: MetaFunction = () => {
 }
 
 const Index = () => {
-  return <Container pt={12}>Index</Container>
+  return <Container pt={12}>HOME PAGE</Container>
 }
 
 export default Index

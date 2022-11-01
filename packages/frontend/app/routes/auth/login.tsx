@@ -29,7 +29,6 @@ import {
   Tokens,
   validateSessionUser,
 } from '~/session.server'
-import { exhaustCheck } from '~/util/exhaust-check'
 import { validateEmail } from '~/util/validation.server'
 
 export const meta: MetaFunction = () => {
@@ -48,25 +47,11 @@ type ErrorData = {
 export const loader: LoaderFunction = async ({ request }) => {
   const result = await validateSessionUser(request)
 
-  switch (result.kind) {
-    case 'error': {
-      console.error(result.error)
-      return redirect('/events')
-    }
-    case 'no-session': {
-      return json({})
-    }
-    case 'valid': {
-      return redirect('/events')
-    }
-    case 'renewed': {
-      return redirect('/events', {
-        headers: result.headers,
-      })
-    }
-    default: {
-      exhaustCheck(result)
-    }
+  if (result.hasSession) {
+    const headers = result.headers ?? {}
+    return redirect('/events', { headers })
+  } else {
+    return json({})
   }
 }
 
@@ -111,7 +96,7 @@ export const action: ActionFunction = async ({ request }) => {
     return createUserSession({
       request,
       tokens,
-      redirectTo: '/',
+      redirectTo: '/events',
     })
   } catch (error) {
     console.error(error)

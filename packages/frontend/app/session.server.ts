@@ -80,26 +80,16 @@ const Jwt = z.object({
 })
 
 type ValidSession = {
-  kind: 'valid'
+  hasSession: true
   user: User
   accessToken: string
+  headers?: { 'Set-Cookie': string }
 }
 type NoSession = {
-  kind: 'no-session'
+  hasSession: false
 }
-type RenewedSession = {
-  kind: 'renewed'
-  headers: { 'Set-Cookie': string }
-  user: User
-  accessToken: string
-}
-type ErrorSession = { kind: 'error'; error: unknown }
 
-type SessionReturnValue =
-  | ValidSession
-  | NoSession
-  | RenewedSession
-  | ErrorSession
+type SessionReturnValue = ValidSession | NoSession
 
 const getUserFromJwt = (idTokenJWT: string): User => {
   const decoded = jwtDecode(idTokenJWT)
@@ -119,7 +109,7 @@ export const validateSessionUser = async (
   const tokens = getTokens(session)
   if (tokens === undefined) {
     return {
-      kind: 'no-session',
+      hasSession: false,
     }
   }
   try {
@@ -128,7 +118,7 @@ export const validateSessionUser = async (
     const isExpired = Date.now() >= exp * 1000
     if (!isExpired) {
       return {
-        kind: 'valid',
+        hasSession: true,
         user: getUserFromJwt(tokens.idToken),
         accessToken: tokens.accessToken,
       }
@@ -139,21 +129,21 @@ export const validateSessionUser = async (
     session.set(ACCESS_TOKEN_KEY, renewed.accessToken)
 
     return {
-      kind: 'renewed',
+      hasSession: true,
+      user: getUserFromJwt(renewed.idToken),
+      accessToken: renewed.accessToken,
       headers: {
         // TODO: Do something!
         'Set-Cookie': await commitSession(session, {
-          // maxAge: 60 * 60 * 24 * 7, // 7 days
-          maxAge: 20, // 20 seconds
+          maxAge: 60 * 60 * 24 * 7, // 7 days
+          // maxAge: 20, // 20 seconds
         }),
       },
-      user: getUserFromJwt(renewed.idToken),
-      accessToken: renewed.accessToken,
     }
   } catch (error) {
+    console.error(error)
     return {
-      kind: 'error',
-      error,
+      hasSession: false,
     }
   }
 }
@@ -171,8 +161,8 @@ export const createUserSession = async ({
   return redirect(redirectTo, {
     headers: {
       'Set-Cookie': await sessionStorage.commitSession(session, {
-        // maxAge: 60 * 60 * 24 * 7, // 7 days
-        maxAge: 20, // 20 seconds
+        maxAge: 60 * 60 * 24 * 7, // 7 days
+        // maxAge: 20, // 20 seconds
       }),
     },
   })

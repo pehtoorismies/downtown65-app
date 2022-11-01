@@ -14,16 +14,20 @@ import {
 import type { PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
-import { HeaderMegaMenu } from '~/header'
+import type { User } from '~/domain/user'
+import { HeaderMenu } from '~/header'
 import type { ToastMessage } from '~/message.server'
 import { commitSession, getSession } from '~/message.server'
+import { validateSessionUser } from '~/session.server'
 
 type LoaderData = {
-  toastMessage: ToastMessage | undefined
+  toastMessage?: ToastMessage
+  user?: User
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  //  const url = new URL(request.url)
+  const result = await validateSessionUser(request)
+  const user = result.hasSession ? result.user : undefined
 
   const session = await getSession(request.headers.get('cookie'))
 
@@ -38,7 +42,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   return json<LoaderData>(
-    { toastMessage },
+    { toastMessage, user },
     { headers: { 'Set-Cookie': await commitSession(session) } }
   )
 }
@@ -51,10 +55,14 @@ export const meta: MetaFunction = () => ({
 
 createEmotionCache({ key: 'mantine' })
 
-const Layout = ({ children }: PropsWithChildren) => {
+interface LayoutProps {
+  user?: User
+}
+
+const Layout = ({ children, user }: PropsWithChildren<LayoutProps>) => {
   return (
     <div className="remix-app">
-      <HeaderMegaMenu />
+      <HeaderMenu user={user} />
       <div>{children}</div>
       <footer className="remix-app__footer">
         <div className="container remix-app__footer-content">
@@ -66,7 +74,7 @@ const Layout = ({ children }: PropsWithChildren) => {
 }
 
 export default function App() {
-  const { toastMessage } = useLoaderData<LoaderData>()
+  const { toastMessage, user } = useLoaderData<LoaderData>()
 
   useEffect(() => {
     if (!toastMessage) {
@@ -142,7 +150,7 @@ export default function App() {
           <Links />
         </head>
         <body>
-          <Layout>
+          <Layout user={user}>
             <Toaster />
             <Outlet />
           </Layout>

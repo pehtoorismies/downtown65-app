@@ -28,7 +28,6 @@ import { StepTitle } from '~/components/event-creation/step-title'
 import { StepType } from '~/components/event-creation/step-type'
 import type { User } from '~/domain/user'
 import { validateSessionUser } from '~/session.server'
-import { exhaustCheck } from '~/util/exhaust-check'
 import { getEventForm } from '~/util/validation.server'
 
 const iconSize = 20
@@ -78,31 +77,18 @@ interface LoaderData {
 export const loader: LoaderFunction = async ({ request }) => {
   const result = await validateSessionUser(request)
 
-  switch (result.kind) {
-    case 'no-session': {
-      return redirect('/auth/login')
-    }
-    case 'error': {
-      console.error(result.error)
-      return redirect('/auth/login')
-    }
-    case 'renewed': {
-      return json<LoaderData>(
-        {
-          user: result.user,
-        },
-        { headers: result.headers }
-      )
-    }
-    case 'valid': {
-      return json<LoaderData>({
-        user: result.user,
-      })
-    }
-    default: {
-      exhaustCheck(result)
-    }
+  if (!result.hasSession) {
+    return redirect('/auth/login')
   }
+
+  const headers = result.headers ?? {}
+
+  return json<LoaderData>(
+    {
+      user: result.user,
+    },
+    { headers }
+  )
 }
 
 export const action: ActionFunction = async ({ request }) => {
