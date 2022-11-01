@@ -1,8 +1,7 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { EventType } from '~/appsync.gen'
-import type { Event as Dt65Event, MutationCreateEventArgs } from '~/appsync.gen'
+import type { MutationCreateEventArgs, IdPayload } from '~/appsync.gen'
 import * as Event from '~/core/event'
-import { mapDynamoToEvent } from '~/core/map-dynamo-to-event'
 
 const getEventValues = () => Object.values(EventType)
 
@@ -12,9 +11,9 @@ const isEventType = (eventType: string): eventType is EventType => {
 
 export const createEvent: AppSyncResolverHandler<
   MutationCreateEventArgs,
-  Dt65Event
+  IdPayload
 > = async (event) => {
-  const { event: creatableEvent } = event.arguments
+  const { input: creatableEvent } = event.arguments
 
   if (!isEventType(creatableEvent.type)) {
     throw new Error(
@@ -22,11 +21,12 @@ export const createEvent: AppSyncResolverHandler<
     )
   }
 
-  return mapDynamoToEvent(
-    Event.create({
-      ...creatableEvent,
-      race: creatableEvent.race ?? false,
-      type: creatableEvent.type,
-    })
-  )
+  const { id } = await Event.create({
+    ...creatableEvent,
+    type: creatableEvent.type,
+  })
+
+  return {
+    id,
+  }
 }

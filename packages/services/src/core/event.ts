@@ -2,7 +2,11 @@ import { format } from 'date-fns'
 import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
 import { ulid } from 'ulid'
-import type { MutationCreateEventArgs, Event, MeInput } from '../appsync.gen'
+import type {
+  MutationCreateEventArgs,
+  MeInput,
+  IdPayload,
+} from '../appsync.gen'
 import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
@@ -45,15 +49,16 @@ const isEventType = (event: string): event is EventType => {
 }
 
 export const create = async (
-  creatableEvent: MutationCreateEventArgs['event']
-): Promise<Event> => {
+  creatableEvent: MutationCreateEventArgs['input']
+): Promise<IdPayload> => {
   const { title, dateStart, type, location, race, createdBy, participants } =
     creatableEvent
   const eventId = ulid()
   if (!isEventType(type)) {
     throw new Error('Wrong event type provided')
   }
-  const startDate = formatISO(new Date(dateStart))
+  // TODO: validate date input
+  const gsi1sk = formatISO(new Date(dateStart))
   const now = formatISO(new Date())
 
   const parts = participants ?? []
@@ -74,10 +79,10 @@ export const create = async (
     // add keys
     ...getPrimaryKey(eventId),
     GSI1PK: `EVENT#FUTURE`,
-    GSI1SK: `DATE#${startDate}#${eventId.slice(0, 8)}`,
+    GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     // add props
     createdBy,
-    dateStart: startDate,
+    dateStart: dateStart,
     id: eventId,
     participants: participantHashMap,
     title,
@@ -88,12 +93,7 @@ export const create = async (
 
   await Table.Dt65Event.put(persistableEvent, { returnValues: 'none' })
   return {
-    ...persistableEvent,
-    participants:
-      participants?.map((p) => ({
-        ...p,
-        joinedAt: now,
-      })) ?? [],
+    id: eventId,
   }
 }
 

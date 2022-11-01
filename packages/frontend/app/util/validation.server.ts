@@ -86,9 +86,10 @@ export const getDateStart = (
   time?: { hours: number; minutes: number }
 ): string => {
   if (!time) {
-    return format(new Date(date.year, date.month, date.date), 'yyyy.MM.dd')
+    // AWSDate
+    return format(new Date(date.year, date.month, date.date), 'yyyy-MM-dd')
   }
-
+  // AWSDateTime
   return formatISO(
     new Date(date.year, date.month, date.date, time.hours, time.minutes)
   )

@@ -42,7 +42,7 @@ export const StepType = ({ selectedEventType, onSelect }: Properties) => {
               : {
                   from: 'indigo',
                   to: 'cyan',
-                  deg: Math.floor(Math.random() * 360),
+                  deg: 45,
                 }
           }
         >

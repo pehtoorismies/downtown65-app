@@ -23,7 +23,7 @@ export type AuthPayload = {
 
 export type CreateEventInput = {
   createdBy: MeInput;
-  dateStart: Scalars['AWSDateTime'];
+  dateStart: Scalars['String'];
   description?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
@@ -54,7 +54,7 @@ export type Error = {
 export type Event = {
   __typename?: 'Event';
   createdBy: Creator;
-  dateStart: Scalars['AWSDateTime'];
+  dateStart: Scalars['String'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   location: Scalars['String'];
@@ -132,7 +132,7 @@ export type MeUser = DetailedUser & User & {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createEvent: Event;
+  createEvent: IdPayload;
   deleteEvent?: Maybe<IdPayload>;
   forgotPassword: Scalars['Boolean'];
   joinEvent?: Maybe<Scalars['Boolean']>;
@@ -145,7 +145,7 @@ export type Mutation = {
 
 
 export type MutationCreateEventArgs = {
-  event: CreateEventInput;
+  input: CreateEventInput;
 };
 
 
@@ -246,7 +246,7 @@ export type SignupPayload = {
 };
 
 export type UpdateEventInput = {
-  dateStart?: InputMaybe<Scalars['AWSDateTime']>;
+  dateStart?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
   race?: InputMaybe<Scalars['Boolean']>;
   subtitle?: InputMaybe<Scalars['String']>;

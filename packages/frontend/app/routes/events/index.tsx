@@ -15,7 +15,6 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const result = await validateSessionUser(request)
-  console.log('Events: result', result)
 
   if (!result.hasSession) {
     return redirect('/auth/login')

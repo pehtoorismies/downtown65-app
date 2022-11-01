@@ -44,9 +44,11 @@ type Creator implements User {
     picture: String!
 }
 
+
+
 type Event @aws_api_key @aws_oidc {
     createdBy: Creator!
-    dateStart: AWSDateTime!
+    dateStart: String! # Should be a AWSDateTime or AWSDate
     description: String
     id: ID!
     location: String!
@@ -83,7 +85,7 @@ input MeInput {
 
 input CreateEventInput {
     createdBy: MeInput!
-    dateStart: AWSDateTime!
+    dateStart: String!
     description: String
     location: String!
     participants: [MeInput!]
@@ -109,7 +111,7 @@ type IDPayload {
 }
 
 input UpdateEventInput {
-    dateStart: AWSDateTime
+    dateStart: String
     id: ID!
     race: Boolean
     subtitle: String
@@ -183,7 +185,7 @@ type Query {
 }
 
 type Mutation {
-    createEvent(event: CreateEventInput!): Event!
+    createEvent(input: CreateEventInput!): IDPayload!
     updateEvent(input: UpdateEventInput!): Event!
     deleteEvent(eventId: ID!): IDPayload
     leaveEvent(eventId: ID!): Boolean
