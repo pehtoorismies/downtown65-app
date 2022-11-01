@@ -77,7 +77,7 @@ export interface EventCardRootProps extends ParticipantProps {
   title: string
   type: EventType
   location: string
-  creator: User
+  createdBy: User
   shadow?: MantineShadow
   onParticipate: OnParticipateEvent
   onLeave: OnParticipateEvent
@@ -86,7 +86,7 @@ export interface EventCardRootProps extends ParticipantProps {
 export const EventCardRoot = ({
   id,
   children,
-  creator,
+  createdBy,
   isRace,
   location,
   me,
@@ -148,12 +148,12 @@ export const EventCardRoot = ({
                 <Avatar
                   alt="Creator image"
                   size={18}
-                  src={creator.picture}
+                  src={createdBy.picture}
                   radius="sm"
                 />
               }
             >
-              created by: {creator.nickname}
+              created by: {createdBy.nickname}
             </Badge>
 
             {isRace && (

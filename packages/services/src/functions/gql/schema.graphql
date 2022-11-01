@@ -31,14 +31,14 @@ interface DetailedUser  {
     name: String!
 }
 
-type EventParticipant implements User {
+type EventParticipant implements User @aws_api_key @aws_oidc {
     id: ID!
     nickname: String!
     joinedAt: AWSDateTime!
     picture: String!
 }
 
-type Creator implements User {
+type Creator implements User @aws_api_key @aws_oidc {
     id: ID!
     nickname: String!
     picture: String!
@@ -59,7 +59,7 @@ type Event @aws_api_key @aws_oidc {
 }
 
 
-type MeUser implements User & DetailedUser   @aws_api_key @aws_oidc {
+type MeUser implements User & DetailedUser @aws_api_key @aws_oidc {
     email: String!
     id: ID!
     name: String!

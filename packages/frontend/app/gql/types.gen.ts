@@ -271,19 +271,19 @@ export type UserError = {
   path: Scalars['String'];
 };
 
-export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
+export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
 
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID'];
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } | null };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } | null };
 
 export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> }> };
+export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> }> };
 
 export type CreateEventMutationVariables = Exact<{
   input: CreateEventInput;
@@ -334,6 +334,11 @@ export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename
 export const BaseFieldsFragmentDoc = gql`
     fragment baseFields on Event {
   id
+  createdBy {
+    id
+    nickname
+    picture
+  }
   dateStart
   description
   location
