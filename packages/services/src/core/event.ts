@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
 import { ulid } from 'ulid'
-import type { MutationCreateEventArgs, UserInput, Event } from '../appsync.gen'
+import type { MutationCreateEventArgs, Event, MeInput } from '../appsync.gen'
 import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
@@ -16,12 +16,12 @@ interface PersistableEvent {
   SK: string
   GSI1PK: 'EVENT#FUTURE'
   GSI1SK: string
-  createdBy: UserInput
+  createdBy: MeInput
   dateStart: string
   id: string
   participants: Record<
     string,
-    | UserInput
+    | MeInput
     | {
         joinedAt: string
       }

@@ -27,8 +27,9 @@ import { StepTime } from '~/components/event-creation/step-time'
 import { StepTitle } from '~/components/event-creation/step-title'
 import { StepType } from '~/components/event-creation/step-type'
 import type { User } from '~/domain/user'
+import { getGqlSdk } from '~/gql/get-gql-client'
 import { validateSessionUser } from '~/session.server'
-import { getEventForm } from '~/util/validation.server'
+import { getDateStart, getEventForm } from '~/util/validation.server'
 
 const iconSize = 20
 
@@ -92,27 +93,43 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const result = await validateSessionUser(request)
+  if (!result.hasSession) {
+    return redirect('/auth/login')
+  }
+
   const body = await request.formData()
 
-  const eventForm = getEventForm(body)
+  const {
+    description,
+    location,
+    isRace,
+    title,
+    type,
+    time,
+    date,
+    participants,
+  } = getEventForm(body)
 
-  // const { login } = await getGqlSdk().CreateEvent(
-  //   {
-  //     input: {
-  //       createdBy: UserInput!
-  //       dateStart: AWSDateTime!
-  //       description: description.trim() === '' ? undefined : description
-  //       location,
-  //       participants: [UserInput!]
-  //       race: isRace === 'true'
-  //       title,
-  //       type,
-  //     },
-  //   },
-  //   getPublicAuthHeaders()
-  // )
+  const { createEvent } = await getGqlSdk().CreateEvent(
+    {
+      input: {
+        createdBy: result.user,
+        description: description.trim() === '' ? undefined : description,
+        location,
+        race: isRace,
+        title,
+        type,
+        dateStart: getDateStart(date, time),
+        participants,
+      },
+    },
+    {
+      Authorization: `Bearer ${result.accessToken}`,
+    }
+  )
 
-  return json({ message: `Hello` })
+  return redirect(`/events/${createEvent.id}`)
 }
 
 const getDateComponents = (

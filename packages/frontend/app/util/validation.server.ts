@@ -1,3 +1,5 @@
+import format from 'date-fns/format'
+import formatISO from 'date-fns/formatISO'
 import { z } from 'zod'
 import { EventType } from '~/gql/types.gen'
 
@@ -16,16 +18,20 @@ const preprocessNumber = (a: unknown) => {
   return typeof a === 'string' ? Number.parseInt(a, 10) : undefined
 }
 
+const DateObject = z.object({
+  year: z.preprocess(preprocessNumber, z.number().positive().gte(2000)),
+  month: z.preprocess(preprocessNumber, z.number().nonnegative().lte(11)),
+  date: z.preprocess(preprocessNumber, z.number().positive().lte(31)),
+})
+
+type DateObject = z.infer<typeof DateObject>
+
 const EventForm = z.object({
   title: z.string().min(2),
   type: z.custom(isEventType, { message: 'Not a valid phone number' }),
   location: z.string(),
-  isRace: z.enum(['true', 'false']),
-  date: z.object({
-    year: z.preprocess(preprocessNumber, z.number().positive().gte(2000)),
-    month: z.preprocess(preprocessNumber, z.number().nonnegative().lte(11)),
-    date: z.preprocess(preprocessNumber, z.number().positive().lte(31)),
-  }),
+  isRace: z.enum(['true', 'false']).transform((v) => v === 'true'),
+  date: DateObject,
   time: z
     .object({
       minutes: z.preprocess(
@@ -73,4 +79,17 @@ export const getEventForm = (body: FormData): EventForm => {
     description: body.get('description'),
     participants: JSON.parse(String(body.get('participants'))),
   })
+}
+
+export const getDateStart = (
+  date: DateObject,
+  time?: { hours: number; minutes: number }
+): string => {
+  if (!time) {
+    return format(new Date(date.year, date.month, date.date), 'yyyy.MM.dd')
+  }
+
+  return formatISO(
+    new Date(date.year, date.month, date.date, time.hours, time.minutes)
+  )
 }
