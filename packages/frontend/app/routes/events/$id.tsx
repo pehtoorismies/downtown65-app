@@ -18,8 +18,9 @@ import { GraphQLClient } from 'graphql-request'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import invariant from 'tiny-invariant'
-import type { EventCardExtendedProps } from '~/components/event-card/event-card-extended'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
+import type { User } from '~/domain/user'
+import type { EventType } from '~/gql/types.gen'
 import { getSdk } from '~/gql/types.gen'
 import { getUser } from '~/session.server'
 
@@ -39,7 +40,17 @@ export const meta: MetaFunction = () => {
 }
 
 type LoaderData = {
-  eventItem: Awaited<EventCardExtendedProps>
+  eventItem: Awaited<{
+    creator: User
+    description: string
+    id: string
+    isRace: boolean
+    location: string
+    me?: User
+    participants: User[]
+    title: string
+    type: EventType
+  }>
 }
 
 const getEnvironmentVariable = (name: string): string => {
@@ -160,7 +171,11 @@ const Dt65Event = () => {
       </Modal>
       <Container pt={12}>
         <Breadcrumbs mb="xs">{items}</Breadcrumbs>
-        <EventCardExtended {...eventItem} />
+        <EventCardExtended
+          {...eventItem}
+          onLeave={() => {}}
+          onParticipate={() => {}}
+        />
         <Text align="center" mt="xl" weight={600} color="dimmed">
           Modification zone
         </Text>

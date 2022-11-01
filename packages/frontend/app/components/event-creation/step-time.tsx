@@ -1,20 +1,11 @@
 import 'dayjs/locale/fi'
-import {
-  Center,
-  Title,
-  Button,
-  Text,
-  Grid,
-  Stack,
-  Container,
-  Group,
-} from '@mantine/core'
+import { Center, Button, Text, Grid, Stack, Container } from '@mantine/core'
 import { prefixZero, suffixZero } from '~/components/event-creation/pad-zeros'
 
 const HOURS = [
   [6, 9, 12, 15, 18, 21, 0, 3],
   [7, 10, 13, 16, 19, 22, 1, 4],
-  [8, 11, 14, 17, 20, 23, 2, 4],
+  [8, 11, 14, 17, 20, 23, 2],
 ]
 
 const MINUTES = [
