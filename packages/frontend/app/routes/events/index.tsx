@@ -40,6 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 const Events = () => {
   const { eventItems } = useLoaderData<LoaderData>()
+
   if (eventItems.length === 0) {
     return (
       <Container pt={12} mt="lg">
@@ -77,14 +78,7 @@ const Events = () => {
         ]}
       >
         {eventItems.map((m) => {
-          return (
-            <EventCard
-              key={m.id}
-              {...m}
-              onParticipate={() => {}}
-              onLeave={() => {}}
-            />
-          )
+          return <EventCard key={m.id} {...m} />
         })}
       </SimpleGrid>
     </Container>
