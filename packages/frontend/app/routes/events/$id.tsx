@@ -22,7 +22,7 @@ import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
 import { getSdk } from '~/gql/types.gen'
-import { getUser } from '~/session.server'
+import { validateSessionUser } from '~/session.server'
 
 // const users = [
 //   { nick: 'gardan', id: '1' },
@@ -79,7 +79,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response('Not Found', { status: 404 })
   }
 
-  const user = await getUser(request)
+  const result = await validateSessionUser(request)
 
   return json<LoaderData>({
     eventItem: {
@@ -91,7 +91,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
         picture: 'asdasd',
       },
       isRace: event.race,
-      me: user,
+      me: result.hasSession ? result.user : undefined,
       participants: [],
     },
   })

@@ -15,12 +15,9 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const result = await validateSessionUser(request)
+  console.log('Events: result', result)
 
-  if (result.kind === 'error') {
-    console.error(result.error)
-    return redirect('/auth/login')
-  }
-  if (result.kind === 'no-session') {
+  if (!result.hasSession) {
     return redirect('/auth/login')
   }
 
@@ -40,11 +37,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
   })
 
-  if (result.kind === 'renewed') {
-    return json({ eventItems: mapped }, { headers: result.headers })
-  }
-
-  return json({ eventItems: mapped })
+  const headers = result.headers ?? {}
+  return json({ eventItems: mapped }, { headers })
 }
 
 const Events = () => {
@@ -61,7 +55,6 @@ const Events = () => {
             to="/events/new"
             size="lg"
             mt="xs"
-            color="dtPink"
             rightIcon={<IconSquarePlus size={30} />}
             styles={() => ({
               leftIcon: {
@@ -69,7 +62,7 @@ const Events = () => {
               },
             })}
           >
-            Luo uusi tapahtumax
+            Luo uusi tapahtuma
           </Button>
         </Center>
       </Container>

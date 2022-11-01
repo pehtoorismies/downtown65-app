@@ -26,7 +26,7 @@ import {
   IconCoin,
   IconChevronDown,
 } from '@tabler/icons'
-import { useUser } from '~/hooks/use-user'
+import type { User } from '~/domain/user'
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -130,9 +130,11 @@ const mockdata = [
   },
 ]
 
-export function HeaderMegaMenu() {
-  const user = useUser()
+interface Props {
+  user?: User
+}
 
+export const HeaderMenu = ({ user }: Props) => {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false)
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false)

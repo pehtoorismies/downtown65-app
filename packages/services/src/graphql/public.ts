@@ -9,7 +9,6 @@ import type {
   MutationSignupArgs,
   QueryEventArgs as QueryEventArguments,
   SignupPayload,
-  User,
 } from '../appsync.gen'
 import { forgotPassword } from './auth/forgot-password'
 import { login } from './auth/login'
@@ -29,7 +28,6 @@ export type Outputs =
   | SignupPayload
   | Dt65Event
   | IdPayload
-  | User
   | boolean
   | undefined
 

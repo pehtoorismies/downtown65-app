@@ -1,16 +1,16 @@
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import type {
-  BaseUser,
   Event as Dt65Event,
   IdPayload,
+  MeUser,
   MutationCreateEventArgs,
   MutationDeleteEventArgs,
   MutationJoinEventArgs,
   MutationLeaveEventArgs,
   MutationUpdateEventArgs,
   MutationUpdateMeArgs,
+  OtherUser,
   QueryEventArgs as QueryEventArguments,
-  User,
 } from '../appsync.gen'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
@@ -34,24 +34,24 @@ export type Inputs =
   | MutationUpdateMeArgs
 
 export type Outputs =
-  | BaseUser[]
   | Dt65Event
   | Dt65Event[]
   | IdPayload
-  | User
-  | undefined
+  | MeUser
+  | OtherUser[]
   | boolean
+  | undefined
 
 const PRIVATE_FIELDS = [
-  'events',
   'createEvent',
-  'updateEvent',
   'deleteEvent',
+  'events',
   'joinEvent',
   'leaveEvent',
   'me',
-  'users',
+  'updateEvent',
   'updateMe',
+  'users',
 ] as const
 type PrivateField = typeof PRIVATE_FIELDS[number]
 

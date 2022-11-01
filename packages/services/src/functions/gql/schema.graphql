@@ -20,49 +20,60 @@ enum EventType {
     ULTRAS
 }
 
-type Participant {
-    joinedAt: AWSDateTime!
+interface User {
     id: ID!
-    picture: String!
     nickname: String!
 }
 
+interface DetailedUser  {
+    picture: String!
+    email: String!
+    name: String!
+}
+
+type EventParticipant implements User {
+    id: ID!
+    nickname: String!
+    joinedAt: AWSDateTime!
+    picture: String!
+}
+
+type Creator implements User {
+    id: ID!
+    nickname: String!
+    picture: String!
+}
+
 type Event @aws_api_key @aws_oidc {
-    createdBy: Participant!
+    createdBy: Creator!
     dateStart: AWSDateTime!
     description: String
     id: ID!
     location: String!
-    participants: [Participant!]!
+    participants: [EventParticipant!]!
     race: Boolean!
     title: String!
     type: EventType!
 }
 
-interface Auth0User {
-    id: ID!
-    email: String!
-    name: String!
-    nickname: String!
-}
 
-type User implements Auth0User @aws_api_key @aws_oidc {
-    createdAt: AWSDateTime!
-    email: String!
-    id: ID!
-    name: String!
-    nickname: String!
-    preferences: Preferences!
-    updatedAt: AWSDateTime
-}
-
-type BaseUser implements Auth0User{
+type MeUser implements User & DetailedUser   @aws_api_key @aws_oidc {
     email: String!
     id: ID!
     name: String!
     nickname: String!
     picture: String!
+    preferences: Preferences!
 }
+
+type OtherUser implements User & DetailedUser {
+    email: String!
+    id: ID!
+    picture: String!
+    name: String!
+    nickname: String!
+}
+
 
 input UserInput {
     id: ID!
@@ -167,8 +178,8 @@ type Query {
     event(eventId: ID!): Event @aws_api_key
     # Future events
     events: [Event!]!
-    me: User!
-    users: [BaseUser!]!
+    me: MeUser!
+    users: [OtherUser!]!
 }
 
 type Mutation {
@@ -178,7 +189,7 @@ type Mutation {
     leaveEvent(eventId: ID!): Boolean
     joinEvent(eventId: ID!): Boolean
 
-    updateMe(input: UpdateMeInput!): User!
+    updateMe(input: UpdateMeInput!): MeUser!
 
     login(
         email: String!
