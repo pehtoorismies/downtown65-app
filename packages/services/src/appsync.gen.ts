@@ -56,6 +56,7 @@ export type Error = {
 
 export type Event = {
   __typename?: 'Event';
+  createdBy: Participant;
   dateStart: Scalars['AWSDateTime'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];

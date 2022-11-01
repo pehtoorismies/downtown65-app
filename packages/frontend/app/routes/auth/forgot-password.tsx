@@ -22,7 +22,7 @@ import {
 import { IconArrowLeft } from '@tabler/icons'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
 import { commitSession, getSession, setSuccessMessage } from '~/message.server'
-import { validateEmail } from '~/util/validation'
+import { validateEmail } from '~/util/validation.server'
 
 interface ActionData {
   error?: string

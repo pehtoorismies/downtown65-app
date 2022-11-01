@@ -89,6 +89,11 @@ export const create = async (
   await Table.Dt65Event.put(persistableEvent, { returnValues: 'none' })
   return {
     ...persistableEvent,
+    createdBy: {
+      ...createdBy,
+      joinedAt: now,
+    },
+    // participants: [],
     participants:
       participants?.map((p) => ({
         ...p,

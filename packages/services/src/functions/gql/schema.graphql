@@ -28,6 +28,7 @@ type Participant {
 }
 
 type Event @aws_api_key @aws_oidc {
+    createdBy: Participant!
     dateStart: AWSDateTime!
     description: String
     id: ID!
@@ -75,7 +76,7 @@ input CreateEventInput {
     description: String
     location: String!
     participants: [UserInput!]
-    race: Boolean
+    race: Boolean!
     title: String!
     type: String!
 }

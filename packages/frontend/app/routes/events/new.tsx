@@ -27,7 +27,9 @@ import { StepTime } from '~/components/event-creation/step-time'
 import { StepTitle } from '~/components/event-creation/step-title'
 import { StepType } from '~/components/event-creation/step-type'
 import type { User } from '~/domain/user'
-import { getUser } from '~/session.server'
+import { validateSessionUser } from '~/session.server'
+import { exhaustCheck } from '~/util/exhaust-check'
+import { getEventForm } from '~/util/validation.server'
 
 const iconSize = 20
 
@@ -74,23 +76,83 @@ interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await getUser(request)
-  if (!user) {
-    return redirect('/auth/login')
+  const result = await validateSessionUser(request)
+
+  switch (result.kind) {
+    case 'no-session': {
+      return redirect('/auth/login')
+    }
+    case 'error': {
+      console.error(result.error)
+      return redirect('/auth/login')
+    }
+    case 'renewed': {
+      return json<LoaderData>(
+        {
+          user: result.user,
+        },
+        { headers: result.headers }
+      )
+    }
+    case 'valid': {
+      return json<LoaderData>({
+        user: result.user,
+      })
+    }
+    default: {
+      exhaustCheck(result)
+    }
   }
-  return json<LoaderData>({
-    user: {
-      id: '123',
-      nickname: 'koira',
-      picture: 'asd',
-    },
-  })
 }
 
 export const action: ActionFunction = async ({ request }) => {
   const body = await request.formData()
-  const name = body.get('visitorsName')
-  return json({ message: `Hello, ${name}` })
+
+  const eventForm = getEventForm(body)
+
+  // const { login } = await getGqlSdk().CreateEvent(
+  //   {
+  //     input: {
+  //       createdBy: UserInput!
+  //       dateStart: AWSDateTime!
+  //       description: description.trim() === '' ? undefined : description
+  //       location,
+  //       participants: [UserInput!]
+  //       race: isRace === 'true'
+  //       title,
+  //       type,
+  //     },
+  //   },
+  //   getPublicAuthHeaders()
+  // )
+
+  return json({ message: `Hello` })
+}
+
+const getDateComponents = (
+  d?: Date
+): { month: string; year: string; date: string } | undefined => {
+  if (!d) {
+    return
+  }
+
+  return {
+    date: `${d.getDate()}`,
+    month: `${d.getMonth()}`,
+    year: `${d.getFullYear()}`,
+  }
+}
+
+const getTimeComponents = (
+  time: State['time']
+): { minutes: string; hours: string } | undefined => {
+  if (time.minutes === undefined || time.hours === undefined) {
+    return
+  }
+  return {
+    hours: `${time.hours}`,
+    minutes: `${time.minutes}`,
+  }
 }
 
 const NewEvent = () => {
@@ -100,7 +162,19 @@ const NewEvent = () => {
 
   useEffect(() => {
     if (state.submitEvent) {
-      // fetcher.submit(state)
+      fetcher.submit(
+        {
+          title: state.title,
+          eventType: state.eventType ?? '',
+          location: state.location,
+          isRace: state.isRace ? 'true' : 'false',
+          ...getDateComponents(state.date),
+          ...getTimeComponents(state.time),
+          description: state.description,
+          participants: JSON.stringify(state.participants),
+        },
+        { method: 'post', action: '/events/new' }
+      )
     }
   }, [state.submitEvent])
 

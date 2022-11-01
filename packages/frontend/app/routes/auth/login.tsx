@@ -24,8 +24,13 @@ import {
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
-import { createUserSession, getUser, Tokens } from '~/session.server'
-import { validateEmail } from '~/util/validation'
+import {
+  createUserSession,
+  Tokens,
+  validateSessionUser,
+} from '~/session.server'
+import { exhaustCheck } from '~/util/exhaust-check'
+import { validateEmail } from '~/util/validation.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -41,11 +46,28 @@ type ErrorData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await getUser(request)
-  if (user) {
-    return redirect('/events')
+  const result = await validateSessionUser(request)
+
+  switch (result.kind) {
+    case 'error': {
+      console.error(result.error)
+      return redirect('/events')
+    }
+    case 'no-session': {
+      return json({})
+    }
+    case 'valid': {
+      return redirect('/events')
+    }
+    case 'renewed': {
+      return redirect('/events', {
+        headers: result.headers,
+      })
+    }
+    default: {
+      exhaustCheck(result)
+    }
   }
-  return json({})
 }
 
 export const action: ActionFunction = async ({ request }) => {

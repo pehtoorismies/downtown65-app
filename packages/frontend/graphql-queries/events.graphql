@@ -26,3 +26,9 @@ query GetEvents {
         ...baseFields
     }
 }
+
+mutation CreateEvent($input: CreateEventInput!) {
+    createEvent(event: $input) {
+        ...baseFields
+    }
+}

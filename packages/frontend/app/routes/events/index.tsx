@@ -6,8 +6,7 @@ import { IconSquarePlus } from '@tabler/icons'
 import { EventCard } from '~/components/event-card/event-card'
 import type { EventCardRootProps } from '~/components/event-card/event-card-root'
 import { getGqlSdk } from '~/gql/get-gql-client'
-import { getSession, setErrorMessage } from '~/message.server'
-import { getAccessToken, getUser } from '~/session.server'
+import { validateSessionUser } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
 type LoaderData = {
@@ -15,25 +14,20 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const accessToken = await getAccessToken(request)
+  const result = await validateSessionUser(request)
 
-  if (!accessToken) {
-    const session = await getSession(request.headers.get('cookie'))
-    setErrorMessage(session, 'No access token')
-    redirect('/auth/login')
+  if (result.kind === 'error') {
+    console.error(result.error)
+    return redirect('/auth/login')
   }
-
-  const user = await getUser(request)
-  if (!user) {
-    const session = await getSession(request.headers.get('cookie'))
-    setErrorMessage(session, 'No id token')
+  if (result.kind === 'no-session') {
     return redirect('/auth/login')
   }
 
   const { events } = await getGqlSdk().GetEvents(
     {},
     {
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${result.accessToken}`,
     }
   )
 
@@ -41,10 +35,14 @@ export const loader: LoaderFunction = async ({ request }) => {
     return {
       ...event,
       type: mapToData(event.type),
-      me: user.nickname,
+      me: result.user,
       participants: [],
     }
   })
+
+  if (result.kind === 'renewed') {
+    return json({ eventItems: mapped }, { headers: result.headers })
+  }
 
   return json({ eventItems: mapped })
 }
@@ -89,7 +87,14 @@ const Events = () => {
         ]}
       >
         {eventItems.map((m) => {
-          return <EventCard key={m.id} {...m} />
+          return (
+            <EventCard
+              key={m.id}
+              {...m}
+              onParticipate={() => {}}
+              onLeave={() => {}}
+            />
+          )
         })}
       </SimpleGrid>
     </Container>
