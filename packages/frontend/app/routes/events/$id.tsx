@@ -14,14 +14,13 @@ import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
 import { IconCircleOff, IconCircleX, IconPencil } from '@tabler/icons'
-import { GraphQLClient } from 'graphql-request'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import invariant from 'tiny-invariant'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import type { User } from '~/domain/user'
+import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
 import type { EventType } from '~/gql/types.gen'
-import { getSdk } from '~/gql/types.gen'
 import { validateSessionUser } from '~/session.server'
 
 // const users = [
@@ -41,7 +40,7 @@ export const meta: MetaFunction = () => {
 
 type LoaderData = {
   eventItem: Awaited<{
-    creator: User
+    createdBy: User
     description: string
     id: string
     isRace: boolean
@@ -53,26 +52,14 @@ type LoaderData = {
   }>
 }
 
-const getEnvironmentVariable = (name: string): string => {
-  const value = process.env[name]
-  if (!value) {
-    throw new Error(`Environment value 'process.env.${name}' is not set`)
-  }
-  return value
-}
-
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
   invariant(params.id, 'Expected params.id')
 
-  const sdk = getSdk(client)
-  const { event } = await sdk.GetEvent(
+  const { event } = await getGqlSdk().GetEvent(
     {
       eventId: params.id,
     },
-    {
-      'x-api-key': getEnvironmentVariable('API_KEY'),
-    }
+    getPublicAuthHeaders()
   )
 
   if (!event) {
@@ -85,14 +72,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     eventItem: {
       ...event,
       description: event.description ?? '',
-      creator: {
-        nickname: 'koira',
-        id: '123',
-        picture: 'asdasd',
-      },
       isRace: event.race,
       me: result.hasSession ? result.user : undefined,
-      participants: [],
     },
   })
 }

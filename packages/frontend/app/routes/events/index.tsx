@@ -7,7 +7,6 @@ import { EventCard } from '~/components/event-card/event-card'
 import type { EventCardRootProps } from '~/components/event-card/event-card-root'
 import { getGqlSdk } from '~/gql/get-gql-client'
 import { validateSessionUser } from '~/session.server'
-import { mapToData } from '~/util/event-type'
 
 type LoaderData = {
   eventItems: Awaited<EventCardRootProps[]>
@@ -30,7 +29,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const mapped = events.map((event) => {
     return {
       ...event,
-      type: mapToData(event.type),
       me: result.user,
       participants: [],
     }
