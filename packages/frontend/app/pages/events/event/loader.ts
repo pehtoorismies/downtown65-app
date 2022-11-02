@@ -1,8 +1,8 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import invariant from 'tiny-invariant'
-import type { EventLoaderData } from '~/domain/event-loader-data'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
+import type { EventLoaderData } from '~/pages/events/event-loader-data'
 import { validateSessionUser } from '~/session.server'
 
 export type LoaderData = {

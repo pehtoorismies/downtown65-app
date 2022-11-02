@@ -1,6 +1,10 @@
 import type { MantineNumberSize } from '@mantine/core'
 import { createStyles, Group, Text } from '@mantine/core'
-import type { Participant } from '~/domain/participant'
+
+type Participant = {
+  id: string
+  nickname: string
+}
 
 interface ParticipantProperties {
   participants: Participant[]
