@@ -1,23 +1,12 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import invariant from 'tiny-invariant'
-import type { User } from '~/domain/user'
+import type { EventLoaderData } from '~/domain/event-loader-data'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
-import type { EventType } from '~/gql/types.gen'
 import { validateSessionUser } from '~/session.server'
 
 export type LoaderData = {
-  eventItem: Awaited<{
-    createdBy: User
-    description: string
-    id: string
-    isRace: boolean
-    location: string
-    me?: User
-    participants: User[]
-    title: string
-    type: EventType
-  }>
+  eventItem: EventLoaderData
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {

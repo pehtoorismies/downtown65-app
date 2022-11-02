@@ -116,7 +116,18 @@ export const NewEvent = () => {
         { method: 'post', action: '/events/new' }
       )
     }
-  }, [state.submitEvent])
+  }, [
+    state.submitEvent,
+    fetcher,
+    state.date,
+    state.description,
+    state.eventType,
+    state.isRace,
+    state.location,
+    state.participants,
+    state.time,
+    state.title,
+  ])
 
   return (
     <Container pt={12}>

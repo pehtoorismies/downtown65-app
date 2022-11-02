@@ -1,11 +1,11 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import type { EventCardRootProps } from '~/components/event-card/event-card-root'
+import type { EventLoaderData } from '~/domain/event-loader-data'
 import { getGqlSdk } from '~/gql/get-gql-client'
 import { validateSessionUser } from '~/session.server'
 
 export interface LoaderData {
-  eventItems: Awaited<EventCardRootProps[]>
+  eventItems: EventLoaderData[]
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -26,7 +26,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     return {
       ...event,
       me: result.user,
-      participants: [],
+      isRace: event.race,
+      description: event.description ?? '',
     }
   })
 
