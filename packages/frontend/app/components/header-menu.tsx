@@ -14,7 +14,7 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Link } from '@remix-run/react'
-import { IconChevronDown, IconHeart, IconStar } from '@tabler/icons'
+import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons'
 import { useState } from 'react'
 import type { User } from '~/domain/user'
 
@@ -56,35 +56,6 @@ const useStyles = createStyles((theme) => ({
     },
   },
 
-  subLink: {
-    width: '100%',
-    padding: `${theme.spacing.xs}px ${theme.spacing.md}px`,
-    borderRadius: theme.radius.md,
-
-    ...theme.fn.hover({
-      backgroundColor:
-        theme.colorScheme === 'dark'
-          ? theme.colors.dark[7]
-          : theme.colors.gray[0],
-    }),
-
-    '&:active': theme.activeStyles,
-  },
-
-  dropdownFooter: {
-    backgroundColor:
-      theme.colorScheme === 'dark'
-        ? theme.colors.dark[7]
-        : theme.colors.gray[0],
-    margin: -theme.spacing.md,
-    marginTop: theme.spacing.sm,
-    padding: `${theme.spacing.md}px ${theme.spacing.md * 2}px`,
-    paddingBottom: theme.spacing.xl,
-    borderTop: `1px solid ${
-      theme.colorScheme === 'dark' ? theme.colors.dark[5] : theme.colors.gray[1]
-    }`,
-  },
-
   hiddenMobile: {
     [theme.fn.smallerThan('sm')]: {
       display: 'none',
@@ -106,10 +77,6 @@ const useStyles = createStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.colors.blue[1],
     },
-
-    // [theme.fn.smallerThan('xs')]: {
-    //   display: 'none',
-    // },
   },
 
   userActive: {
@@ -185,14 +152,14 @@ export const HeaderMenu = ({ user }: Props) => {
                 <Menu.Item
                   component={Link}
                   to="/profile"
-                  icon={<IconHeart size={14} stroke={1.5} />}
+                  icon={<IconUser size={14} stroke={1.5} />}
                 >
                   Profiili
                 </Menu.Item>
                 <Menu.Item
                   component={Link}
                   to="/logout"
-                  icon={<IconStar size={14} stroke={1.5} />}
+                  icon={<IconLogout size={14} stroke={1.5} />}
                 >
                   Logout
                 </Menu.Item>
