@@ -87,11 +87,7 @@ type SessionReturnValue = ValidSession | NoSession
 
 const getUserFromJwt = (idTokenJWT: string): User => {
   const decoded = jwtDecode(idTokenJWT)
-  const { sub, ...rest } = User.parse(decoded)
-  return {
-    id: sub,
-    ...rest,
-  }
+  return User.parse(decoded)
 }
 
 export const validateSessionUser = async (
