@@ -98,7 +98,7 @@ const getDateStart = (
 export const action: ActionFunction = async ({ request }) => {
   const result = await validateSessionUser(request)
   if (!result.hasSession) {
-    return redirect('/auth/login')
+    return redirect('/login')
   }
 
   const body = await request.formData()

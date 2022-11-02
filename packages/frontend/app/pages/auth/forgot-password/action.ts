@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const session = await getSession(request.headers.get('cookie'))
   setSuccessMessage(session, `Ohjeet lähetetty osoitteeseen: ${email}`)
-  return redirect('/auth/login', {
+  return redirect('/login', {
     headers: { 'Set-Cookie': await commitSession(session) },
   })
 }

@@ -9,6 +9,6 @@ export const loader: LoaderFunction = async ({ request }) => {
     const headers = result.headers ?? {}
     return redirect('/events', { headers })
   } else {
-    return redirect('/auth/login')
+    return redirect('/login')
   }
 }
