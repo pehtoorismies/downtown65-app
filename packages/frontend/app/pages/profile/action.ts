@@ -1,7 +1,7 @@
 import type { ActionFunction } from '@remix-run/node'
-// import { json } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { getGqlSdk } from '~/gql/get-gql-client'
+import { commitSession, getSession, setSuccessMessage } from '~/message.server'
 import { validateSessionUser } from '~/session.server'
 
 export interface ActionData {}
@@ -25,8 +25,14 @@ export const action: ActionFunction = async ({ request }) => {
       Authorization: `Bearer ${result.accessToken}`,
     }
   )
+  const session = await getSession(request.headers.get('cookie'))
+  setSuccessMessage(session, 'Asetukset on päivitetty')
+  // const headers = result.headers ?? {} // TODO: how to combine these headers
 
-  const headers = result.headers ?? {}
-
-  return json<ActionData>({}, { headers })
+  return json<ActionData>(
+    {},
+    {
+      headers: { 'Set-Cookie': await commitSession(session) },
+    }
+  )
 }

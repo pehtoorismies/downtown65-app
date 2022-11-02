@@ -7,7 +7,7 @@
     "build": "remix build",
     "dev": "sst-env -- remix dev",
     "start": "remix-serve build",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx|app/gql/types.gen.ts|remix.env.d.ts'"
   },

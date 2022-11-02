@@ -9,7 +9,8 @@ export const action: ActionFunction = async ({ request, params }) => {
   if (!result.hasSession) {
     return redirect('/auth/login')
   }
-  const body = await request.formData()
-  const action = body.get('action')
+  // const body = await request.formData()
+  // const action = body.get('action')
+
   return json({})
 }
