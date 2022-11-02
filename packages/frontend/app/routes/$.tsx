@@ -66,11 +66,11 @@ const NotFound = () => {
           caption="Your support contact"
         />
         <div>
-          <Title className={classes.title}>404: sivua ei löytynyt</Title>
+          <Title className={classes.title}>PUMMI</Title>
           <Text color="dimmed" size="lg">
-            Sivua, ei ole olemassa. Tarkista oletko kirjoittanut osoitteen
-            oikein. Sivu voi myös olla siirretty. Tai sitten joku muu on vialla.
-            Contact support (kuvassa)!
+            Sivua ei löytynyt. Tarkista oletko kirjoittanut osoitteen oikein.
+            Sivu voi myös olla siirretty. Tai sitten joku muu on vialla. Contact
+            support (kuvassa)!
           </Text>
           <Button
             component={Link}
