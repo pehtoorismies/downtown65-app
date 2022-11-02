@@ -11,11 +11,10 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from '@remix-run/react'
-import type { PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
+import { Layout } from '~/components/layout'
 import type { User } from '~/domain/user'
-import { HeaderMenu } from '~/header'
 import type { ToastMessage } from '~/message.server'
 import { commitSession, getSession } from '~/message.server'
 import { validateSessionUser } from '~/session.server'
@@ -34,7 +33,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const toastMessage = session.get('toastMessage') as ToastMessage
 
   if (!toastMessage) {
-    return json<LoaderData>({ toastMessage: undefined })
+    return json<LoaderData>({ toastMessage: undefined, user })
   }
 
   if (!toastMessage.type) {
@@ -54,24 +53,6 @@ export const meta: MetaFunction = () => ({
 })
 
 createEmotionCache({ key: 'mantine' })
-
-interface LayoutProps {
-  user?: User
-}
-
-const Layout = ({ children, user }: PropsWithChildren<LayoutProps>) => {
-  return (
-    <div className="remix-app">
-      <HeaderMenu user={user} />
-      <div>{children}</div>
-      <footer className="remix-app__footer">
-        <div className="container remix-app__footer-content">
-          <p>&copy; You!</p>
-        </div>
-      </footer>
-    </div>
-  )
-}
 
 export default function App() {
   const { toastMessage, user } = useLoaderData<LoaderData>()
