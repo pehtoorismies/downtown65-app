@@ -1,14 +1,14 @@
-import { Container } from '@mantine/core'
-import type { MetaFunction } from '@remix-run/node'
+import type { LoaderFunction } from '@remix-run/node'
+import { redirect } from '@remix-run/node'
+import { validateSessionUser } from '~/session.server'
 
-export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - index',
+export const loader: LoaderFunction = async ({ request }) => {
+  const result = await validateSessionUser(request)
+
+  if (result.hasSession) {
+    const headers = result.headers ?? {}
+    return redirect('/events', { headers })
+  } else {
+    return redirect('/auth/login')
   }
 }
-
-const Index = () => {
-  return <Container pt={12}>HOME PAGE</Container>
-}
-
-export default Index
