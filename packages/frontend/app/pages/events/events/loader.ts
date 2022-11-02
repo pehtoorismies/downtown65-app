@@ -1,7 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import type { EventLoaderData } from '~/domain/event-loader-data'
 import { getGqlSdk } from '~/gql/get-gql-client'
+import type { EventLoaderData } from '~/pages/events/event-loader-data'
 import { validateSessionUser } from '~/session.server'
 
 export interface LoaderData {
