@@ -82,7 +82,7 @@ export const ForgotPassword = () => {
               color="dimmed"
               size="sm"
               className={classes.control}
-              onClick={() => navigation('/auth/login')}
+              onClick={() => navigation('/login')}
             >
               <Center inline>
                 <IconArrowLeft size={12} stroke={1.5} />

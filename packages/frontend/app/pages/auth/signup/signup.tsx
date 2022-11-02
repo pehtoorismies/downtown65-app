@@ -105,7 +105,7 @@ export const Signup = () => {
           )}
 
           <Group position="right" mt="md">
-            <Anchor onClick={() => navigation('/auth/login')} size="sm">
+            <Anchor onClick={() => navigation('/login')} size="sm">
               Kirjautumiseen
             </Anchor>
           </Group>

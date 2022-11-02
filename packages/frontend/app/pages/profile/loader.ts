@@ -16,7 +16,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const result = await validateSessionUser(request)
 
   if (!result.hasSession) {
-    return redirect('/auth/login')
+    return redirect('/login')
   }
 
   const { me } = await getGqlSdk().GetProfile(

@@ -49,7 +49,7 @@ export const action: ActionFunction = async ({ request }) => {
     session,
     `Vahvistus lähetetty osoitteeseen: ${signupForm.email}`
   )
-  return redirect('/auth/login', {
+  return redirect('/login', {
     headers: { 'Set-Cookie': await commitSession(session) },
   })
 }

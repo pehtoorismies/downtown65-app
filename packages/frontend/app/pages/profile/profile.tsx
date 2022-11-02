@@ -158,7 +158,7 @@ export const Profile = () => {
           <Text size="lg" weight={500} mt="md">
             Uloskirjautuminen:
           </Text>
-          <Form action="/auth/logout" method="post">
+          <Form action="/logout" method="post">
             <Button
               type="submit"
               leftIcon={<IconLogout size={18} />}

@@ -38,7 +38,7 @@ export const Login = () => {
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.{' '}
-        <Anchor<'a'> size="sm" onClick={() => navigation('/auth/signup')}>
+        <Anchor<'a'> size="sm" onClick={() => navigation('/signup')}>
           Rekisteröidy tästä.
         </Anchor>
       </Text>
@@ -78,10 +78,7 @@ export const Login = () => {
             aria-describedby="password-error"
           />
           <Group position="right" mt="md">
-            <Anchor
-              onClick={() => navigation('/auth/forgot-password')}
-              size="sm"
-            >
+            <Anchor onClick={() => navigation('/forgot-password')} size="sm">
               Unohditko salasanan?
             </Anchor>
           </Group>

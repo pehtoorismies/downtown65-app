@@ -160,7 +160,7 @@ export const createUserSession = async ({
 
 export const logout = async (request: Request) => {
   const session = await getSession(request)
-  return redirect('/auth/login', {
+  return redirect('/login', {
     headers: {
       'Set-Cookie': await sessionStorage.destroySession(session),
     },
