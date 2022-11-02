@@ -1,76 +1,27 @@
 import {
   Avatar,
-  Text,
   Button,
-  Paper,
-  Group,
-  Switch,
   Divider,
+  Group,
+  Paper,
   SimpleGrid,
+  Switch,
+  Text,
 } from '@mantine/core'
-import type { LoaderFunction, ActionFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
-import { useLoaderData, useTransition, Form } from '@remix-run/react'
+import { Form, useLoaderData, useTransition } from '@remix-run/react'
 import { IconLogout, IconX } from '@tabler/icons'
-import { GraphQLClient } from 'graphql-request'
 import { useState } from 'react'
-import { getGqlSdk } from '~/gql/get-gql-client'
-import type { GetProfileQuery } from '~/gql/types.gen'
-import { getSdk } from '~/gql/types.gen'
-import { getJwtFromSession } from '~/session.server'
+import type { LoaderData } from './loader'
 
-const getEnvironmentVariable = (name: string): string => {
-  const value = process.env[name]
-  if (!value) {
-    throw new Error(`Environment value 'process.env.${name}' is not set`)
-  }
-  return value
-}
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const accessTokenJwt = await getJwtFromSession(request)
-  if (!accessTokenJwt) {
-    return redirect('/auth/login')
-  }
-
-  const client = new GraphQLClient(getEnvironmentVariable('API_URL'))
-  const { me } = await getSdk(client).GetProfile(undefined, {
-    Authorization: `Bearer ${accessTokenJwt}`,
-  })
-  return json(me)
-}
-
-type Pref = {
+interface UserPreferences {
   weekly: boolean
   eventCreated: boolean
 }
 
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData()
-  const weekly = !!formData.get('weekly')
-  const eventCreated = !!formData.get('eventCreated')
-  const accessTokenJwt = await getJwtFromSession(request)
-
-  const { updateMe } = await getGqlSdk().UpdateMe(
-    {
-      subscribeEventCreationEmail: eventCreated,
-      subscribeWeeklyEmail: weekly,
-    },
-    {
-      Authorization: `Bearer ${accessTokenJwt}`,
-    }
-  )
-
-  return json<Pref>({
-    weekly: updateMe.preferences.subscribeWeeklyEmail,
-    eventCreated: updateMe.preferences.subscribeEventCreationEmail,
-  })
-}
-
-const Profile = () => {
+export const Profile = () => {
   const transition = useTransition()
-  const { name, nickname, preferences } = useLoaderData<GetProfileQuery['me']>()
-  const [emailSettings, setEmailSettings] = useState<Pref>({
+  const { name, nickname, preferences } = useLoaderData<LoaderData>()
+  const [emailSettings, setEmailSettings] = useState<UserPreferences>({
     weekly: preferences.subscribeWeeklyEmail,
     eventCreated: preferences.subscribeEventCreationEmail,
   })
@@ -137,7 +88,10 @@ const Profile = () => {
             <Group position="apart">
               <Button
                 type="submit"
-                loading={transition.state === 'submitting'}
+                loading={
+                  transition.state === 'submitting' ||
+                  transition.state === 'loading'
+                }
                 disabled={
                   preferences.subscribeWeeklyEmail === emailSettings.weekly &&
                   preferences.subscribeEventCreationEmail ===
@@ -237,5 +191,3 @@ const Profile = () => {
     </Paper>
   )
 }
-
-export default Profile

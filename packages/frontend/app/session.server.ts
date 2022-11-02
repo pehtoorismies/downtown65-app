@@ -33,12 +33,6 @@ const getSession = (request: Request) => {
   return sessionStorage.getSession(cookie)
 }
 
-export const getJwtFromSession = async (request: Request) => {
-  const cookie = request.headers.get('Cookie')
-  const value = await sessionStorage.getSession(cookie)
-  return value.get(REFRESH_TOKEN_KEY)
-}
-
 interface CreateUserSession {
   request: Request
   tokens: Tokens
