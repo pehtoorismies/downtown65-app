@@ -17,7 +17,9 @@ import {
   useTransition,
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
+import { Simulate } from 'react-dom/test-utils'
 import type { ActionData } from './action'
+import transitionEnd = Simulate.transitionEnd
 
 export const Login = () => {
   const navigation = useNavigate()
@@ -86,7 +88,10 @@ export const Login = () => {
             fullWidth
             mt="xl"
             type="submit"
-            loading={transition.state === 'submitting'}
+            loading={
+              transition.state === 'submitting' ||
+              transition.state === 'loading'
+            }
           >
             Kirjaudu
           </Button>
