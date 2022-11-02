@@ -1,7 +1,7 @@
 import { Button } from '@mantine/core'
-import { Form } from '@remix-run/react'
 import { IconHandOff, IconHandStop } from '@tabler/icons'
 import { Gradient } from '~/components/colors'
+import { useParticipatingContext } from '~/contexts/participating-context'
 
 const commonProperties = {
   border: 0,
@@ -34,49 +34,48 @@ interface Properties {
 }
 
 export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
+  const actions = useParticipatingContext()
   if (isParticipating) {
     return (
-      <Form method="post" action={`/events/${eventId}`}>
-        <input name="action" type="hidden" value="leave" />
-        <Button
-          type="submit"
-          leftIcon={<IconHandOff size={18} />}
-          variant="gradient"
-          gradient={Gradient.dtPink}
-          styles={() => ({
-            root: {
-              ...commonProperties,
-            },
-
-            leftIcon: {
-              marginRight: 15,
-            },
-          })}
-        >
-          Poistu
-        </Button>
-      </Form>
-    )
-  }
-
-  return (
-    <Form method="post" action={`/events/${eventId}`}>
-      <input name="action" type="hidden" value="participate" />
       <Button
-        type="submit"
+        onClick={() => {
+          actions.onLeave(eventId ?? 'no-event-id')
+        }}
+        leftIcon={<IconHandOff size={18} />}
         variant="gradient"
-        leftIcon={<IconHandStop size={18} />}
+        gradient={Gradient.dtPink}
         styles={() => ({
           root: {
             ...commonProperties,
           },
+
           leftIcon: {
             marginRight: 15,
           },
         })}
       >
-        Osallistu
+        Poistu
       </Button>
-    </Form>
+    )
+  }
+
+  return (
+    <Button
+      onClick={() => {
+        actions.onParticipate(eventId ?? 'no-event-id')
+      }}
+      variant="gradient"
+      leftIcon={<IconHandStop size={18} />}
+      styles={() => ({
+        root: {
+          ...commonProperties,
+        },
+        leftIcon: {
+          marginRight: 15,
+        },
+      })}
+    >
+      Osallistu
+    </Button>
   )
 }

@@ -1,7 +1,7 @@
 import { Button, Grid, Group } from '@mantine/core'
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons'
-import type { State } from '~/components/event-creation/creation-reducers'
-import { ActiveStep } from '~/components/event-creation/creation-reducers'
+import type { State } from './reducer'
+import { ActiveStep } from './reducer'
 
 const isNextVisible = (state: State): boolean => {
   switch (state.activeStep) {

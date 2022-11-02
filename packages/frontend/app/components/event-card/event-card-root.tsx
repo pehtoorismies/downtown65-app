@@ -80,16 +80,16 @@ export interface EventCardRootProps extends ParticipantProps {
 }
 
 export const EventCardRoot = ({
-  id,
   children,
   createdBy,
+  id,
   isRace,
   location,
   me,
   participants,
+  shadow,
   title,
   type,
-  shadow,
 }: PropsWithChildren<EventCardRootProps>) => {
   const { classes, cx } = useStyles()
   const meAttending =

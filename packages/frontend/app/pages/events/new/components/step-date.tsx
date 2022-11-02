@@ -1,5 +1,4 @@
 import 'dayjs/locale/fi'
-import { Title } from '@mantine/core'
 import { Calendar } from '@mantine/dates'
 
 interface Properties {
