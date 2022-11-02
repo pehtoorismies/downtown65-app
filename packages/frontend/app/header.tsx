@@ -167,16 +167,19 @@ export const HeaderMenu = ({ user }: Props) => {
             spacing={0}
             className={classes.hiddenMobile}
           >
-            <Link to="/" className={classes.link}>
-              Desktop home
-            </Link>
+            <Text>Downtown65.events</Text>
 
-            <a href="#" className={classes.link}>
-              Learn
-            </a>
-            <a href="#" className={classes.link}>
-              Academy
-            </a>
+            {user && (
+              <Link to="/events" className={classes.link}>
+                Tapahtumat
+              </Link>
+            )}
+
+            {user && (
+              <Link to="/users" className={classes.link}>
+                Users
+              </Link>
+            )}
           </Group>
           {user && (
             <NavLink to="/user/profile">
@@ -196,8 +199,12 @@ export const HeaderMenu = ({ user }: Props) => {
 
           {!user && (
             <Group className={classes.hiddenMobile}>
-              <Button variant="default">Log in</Button>
-              <Button variant="default">Sign up</Button>
+              <Button component={Link} to="/login" variant="default">
+                Kirjaudu
+              </Button>
+              <Button component={Link} to="/signup" variant="default">
+                Rekisteröidy
+              </Button>
             </Group>
           )}
 
