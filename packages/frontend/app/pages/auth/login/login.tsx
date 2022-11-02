@@ -17,7 +17,7 @@ import {
   useTransition,
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
-import type { ActionData } from './actions'
+import type { ActionData } from './action'
 
 export const Login = () => {
   const navigation = useNavigate()
