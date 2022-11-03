@@ -2,41 +2,23 @@ import {
   Alert,
   Anchor,
   Button,
-  Container,
   Group,
   Paper,
   PasswordInput,
   Text,
   TextInput,
-  Title,
 } from '@mantine/core'
-import {
-  Form,
-  Link,
-  useActionData,
-  useNavigate,
-  useTransition,
-} from '@remix-run/react'
+import { Form, Link, useActionData, useTransition } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
 import type { ActionData } from './action'
+import { AuthTemplate } from '~/pages/auth/auth-template'
 
 export const Login = () => {
-  const navigation = useNavigate()
   const transition = useTransition()
-
   const actionData = useActionData<ActionData>()
 
   return (
-    <Container size={420} py="xl">
-      <Title
-        align="center"
-        sx={(theme) => ({
-          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-          fontWeight: 900,
-        })}
-      >
-        Kirjaudu
-      </Title>
+    <AuthTemplate title="Kirjaudu">
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.
         <Anchor component={Link} to="/signup">
@@ -96,6 +78,6 @@ export const Login = () => {
           </Button>
         </Form>
       </Paper>
-    </Container>
+    </AuthTemplate>
   )
 }

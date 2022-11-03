@@ -3,62 +3,22 @@ import {
   Box,
   Button,
   Center,
-  Container,
-  createStyles,
   Group,
   Paper,
   Text,
   TextInput,
-  Title,
 } from '@mantine/core'
-import {
-  Form,
-  Link,
-  useActionData,
-  useNavigate,
-  useTransition,
-} from '@remix-run/react'
+import { Form, Link, useActionData, useTransition } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons'
 import type { ActionData } from './action'
-
-const styles = createStyles((theme) => ({
-  title: {
-    fontSize: 26,
-    fontWeight: 900,
-  },
-
-  controls: {
-    [theme.fn.smallerThan('xs')]: {
-      flexDirection: 'column-reverse',
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan('xs')]: {
-      width: '100%',
-      textAlign: 'center',
-    },
-  },
-}))
+import { AuthTemplate } from '~/pages/auth/auth-template'
 
 export const ForgotPassword = () => {
   const actionData = useActionData<ActionData>()
   const transition = useTransition()
-  const navigation = useNavigate()
-
-  const { classes } = styles()
 
   return (
-    <Container size={460} my={30}>
-      <Title
-        align="center"
-        sx={(theme) => ({
-          fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-          fontWeight: 900,
-        })}
-      >
-        Salasana unohtunut
-      </Title>
+    <AuthTemplate title="Salasana unohtunut">
       <Text color="dimmed" size="sm" align="center">
         Syötä sähköpostiosoitteesi saadaksesi sähköpostiisi ohjeet salasanan
         resetoimiseksi.
@@ -78,29 +38,20 @@ export const ForgotPassword = () => {
               {actionData.error}
             </Text>
           )}
-          <Group position="apart" mt="lg" className={classes.controls}>
-            <Anchor
-              component={Link}
-              to="/login"
-              size="sm"
-              className={classes.control}
-            >
+          <Group position="apart" mt="lg">
+            <Anchor component={Link} to="/login" size="sm">
               <Center inline>
                 <IconArrowLeft size={12} stroke={1.5} />
                 <Box ml={5}>Takaisin kirjautumiseen</Box>
               </Center>
             </Anchor>
 
-            <Button
-              type="submit"
-              className={classes.control}
-              loading={transition.state === 'submitting'}
-            >
+            <Button type="submit" loading={transition.state === 'submitting'}>
               Lähetä ohjeet
             </Button>
           </Group>
         </Form>
       </Paper>
-    </Container>
+    </AuthTemplate>
   )
 }
