@@ -138,9 +138,9 @@ export type Mutation = {
   createEvent: IdPayload;
   deleteEvent?: Maybe<IdPayload>;
   forgotPassword: Scalars['Boolean'];
-  joinEvent?: Maybe<Scalars['Boolean']>;
   leaveEvent?: Maybe<Scalars['Boolean']>;
   login: LoginPayload;
+  participateEvent?: Maybe<Scalars['Boolean']>;
   signup: SignupPayload;
   updateEvent: Event;
   updateMe: MeUser;
@@ -162,11 +162,6 @@ export type MutationForgotPasswordArgs = {
 };
 
 
-export type MutationJoinEventArgs = {
-  eventId: Scalars['ID'];
-};
-
-
 export type MutationLeaveEventArgs = {
   eventId: Scalars['ID'];
 };
@@ -175,6 +170,11 @@ export type MutationLeaveEventArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationParticipateEventArgs = {
+  eventId: Scalars['ID'];
 };
 
 

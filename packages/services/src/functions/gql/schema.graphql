@@ -189,7 +189,7 @@ type Mutation {
     updateEvent(input: UpdateEventInput!): Event!
     deleteEvent(eventId: ID!): IDPayload
     leaveEvent(eventId: ID!): Boolean
-    joinEvent(eventId: ID!): Boolean
+    participateEvent(eventId: ID!): Boolean
 
     updateMe(input: UpdateMeInput!): MeUser!
 
