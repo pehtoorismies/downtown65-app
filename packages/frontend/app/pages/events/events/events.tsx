@@ -39,7 +39,7 @@ export const Events = () => {
   }
 
   return (
-    <Container pt={12}>
+    <Container py={12}>
       <ParticipatingContext.Provider value={participationActions}>
         <SimpleGrid
           cols={2}
@@ -50,7 +50,7 @@ export const Events = () => {
           ]}
         >
           {eventItems.map((m) => {
-            return <EventCard key={m.id} {...m} />
+            return <EventCard key={m.id} {...m} shadow="sm" />
           })}
         </SimpleGrid>
       </ParticipatingContext.Provider>
