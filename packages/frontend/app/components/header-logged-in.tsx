@@ -13,16 +13,13 @@ import {
   Menu,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { Form, Link, NavLink } from '@remix-run/react'
+import { Form, Link, NavLink, useFetcher } from '@remix-run/react'
 import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons'
 import { useState } from 'react'
 import type { User } from '~/domain/user'
 
 const useStyles = createStyles((theme) => ({
   link: {
-    // display: 'flex',
-    // alignItems: 'center',
-    // height: '100%',
     paddingTop: 3,
     paddingBottom: 3,
     paddingLeft: theme.spacing.sm,
@@ -91,6 +88,7 @@ interface Props {
 }
 
 export const HeaderLoggedIn = ({ user }: Props) => {
+  const fetcher = useFetcher()
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false)
   const [userMenuOpened, setUserMenuOpened] = useState(false)
@@ -180,8 +178,9 @@ export const HeaderLoggedIn = ({ user }: Props) => {
                 Profiili
               </Menu.Item>
               <Menu.Item
-                component={Link}
-                to="/logout"
+                onClick={() => {
+                  fetcher.submit({}, { action: '/logout', method: 'post' })
+                }}
                 icon={<IconLogout size={14} stroke={1.5} />}
               >
                 Logout
