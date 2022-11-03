@@ -4,7 +4,7 @@ import { getGqlSdk } from '~/gql/get-gql-client'
 import { commitSession, getSession, setSuccessMessage } from '~/message.server'
 import { validateSessionUser } from '~/session.server'
 
-export interface ActionData {}
+interface ActionData {}
 
 export const action: ActionFunction = async ({ request }) => {
   const result = await validateSessionUser(request)

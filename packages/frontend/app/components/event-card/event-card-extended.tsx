@@ -9,7 +9,7 @@ import { Gradient } from '~/components/colors'
 import type { EventCardRootProps } from '~/components/event-card/event-card-root'
 import { EventCardRoot } from '~/components/event-card/event-card-root'
 
-export interface EventCardExtendedProps extends EventCardRootProps {
+interface EventCardExtendedProps extends EventCardRootProps {
   description: string
 }
 
