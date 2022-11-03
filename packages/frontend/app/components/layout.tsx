@@ -1,6 +1,7 @@
 import { Box } from '@mantine/core'
 import type { PropsWithChildren } from 'react'
-import { HeaderMenu } from '~/components/header-menu'
+import { HeaderLoggedIn } from '~/components/header-logged-in'
+import { HeaderLoggedOut } from '~/components/header-logged-out'
 import type { User } from '~/domain/user'
 
 interface LayoutProps {
@@ -10,7 +11,8 @@ interface LayoutProps {
 export const Layout = ({ children, user }: PropsWithChildren<LayoutProps>) => {
   return (
     <>
-      <HeaderMenu user={user} />
+      {!user && <HeaderLoggedOut />}
+      {user && <HeaderLoggedIn user={user} />}
       <Box mt={60}>{children}</Box>
     </>
   )
