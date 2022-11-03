@@ -6,6 +6,7 @@ import { validateSessionUser } from '~/session.server'
 export interface LoaderData {
   name: string
   nickname: string
+  picture: string
   preferences: {
     subscribeWeeklyEmail: boolean
     subscribeEventCreationEmail: boolean

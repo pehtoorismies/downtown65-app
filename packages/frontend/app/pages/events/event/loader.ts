@@ -4,6 +4,7 @@ import invariant from 'tiny-invariant'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
 import type { EventLoaderData } from '~/pages/events/event-loader-data'
 import { validateSessionUser } from '~/session.server'
+import { formatDynamoDate } from '~/util/format-date'
 
 export type LoaderData = {
   eventItem: EventLoaderData
@@ -31,6 +32,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       description: event.description ?? '',
       isRace: event.race,
       me: result.hasSession ? result.user : undefined,
+      ...formatDynamoDate(event.dateStart),
     },
   })
 }

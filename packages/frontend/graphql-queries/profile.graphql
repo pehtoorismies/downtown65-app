@@ -4,6 +4,7 @@ query GetProfile {
         email
         name
         nickname
+        picture
         preferences {
             subscribeEventCreationEmail
             subscribeWeeklyEmail

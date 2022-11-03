@@ -12,8 +12,6 @@ import {
   Grid,
 } from '@mantine/core'
 import { IconMedal, IconUsers } from '@tabler/icons'
-import format from 'date-fns/format'
-import { fi } from 'date-fns/locale'
 import type { PropsWithChildren } from 'react'
 import { Gradient } from '~/components/colors'
 import {
@@ -23,23 +21,6 @@ import {
 import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
 import { mapToData } from '~/util/event-type'
-
-const onlyDateRegexp = /^\d{4}-\d{2}-\d{2}$/
-
-const formatTime = (date: string): string | undefined => {
-  if (onlyDateRegexp.test(date)) {
-    return
-  }
-  return format(new Date(date), `'klo.' HH:mm`, {
-    locale: fi,
-  })
-}
-
-const formatDate = (date: string) => {
-  return format(new Date(date), 'dd.MM.yyyy (EEEEEE)', {
-    locale: fi,
-  })
-}
 
 const useStyles = createStyles((theme) => ({
   card: {
@@ -82,26 +63,28 @@ interface ParticipantProps {
 }
 
 export interface EventCardRootProps extends ParticipantProps {
-  isRace: boolean
+  createdBy: User
+  date: string
   id?: string
-  dateStart: string
+  isRace: boolean
+  location: string
+  shadow?: MantineShadow
+  time?: string
   title: string
   type: EventType
-  location: string
-  createdBy: User
-  shadow?: MantineShadow
 }
 
 export const EventCardRoot = ({
   children,
   createdBy,
-  dateStart,
+  date,
   id,
   isRace,
   location,
   me,
   participants,
   shadow,
+  time,
   title,
   type,
 }: PropsWithChildren<EventCardRootProps>) => {
@@ -110,8 +93,6 @@ export const EventCardRoot = ({
     me !== undefined && participants.map(({ id }) => id).includes(me.id)
   const gradient = meAttending ? Gradient.dtPink : Gradient.blue
   const { text, imageUrl } = mapToData(type)
-  const formattedDate = formatDate(dateStart)
-  const formattedTime = formatTime(dateStart)
 
   return (
     <Card withBorder radius="md" className={cx(classes.card)} shadow={shadow}>
@@ -189,14 +170,14 @@ export const EventCardRoot = ({
               {location}
             </Text>
             <Text size="sm" weight={500}>
-              {formattedDate}
+              {date}
             </Text>
-            {formattedTime && (
+            {time && (
               <Text size="sm" weight={500}>
-                {formattedTime}
+                klo: {time}
               </Text>
             )}
-            {!formattedTime && (
+            {!time && (
               <Text size="sm" weight={500} color="dimmed">
                 ei tarkempaa aikaa
               </Text>

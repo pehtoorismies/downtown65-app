@@ -29,7 +29,7 @@ interface UserPreferences {
 
 export const Profile = () => {
   const transition = useTransition()
-  const { name, nickname, preferences } = useLoaderData<LoaderData>()
+  const { name, nickname, preferences, picture } = useLoaderData<LoaderData>()
   const [emailSettings, setEmailSettings] = useState<UserPreferences>({
     weekly: preferences.subscribeWeeklyEmail,
     eventCreated: preferences.subscribeEventCreationEmail,
@@ -44,12 +44,7 @@ export const Profile = () => {
 
   return (
     <Paper radius="md" withBorder p="lg" m="lg">
-      <Avatar
-        src="https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png"
-        size={120}
-        radius={120}
-        mx="auto"
-      />
+      <Avatar src={picture} size={120} radius={120} mx="auto" />
       <Text align="center" size="lg" weight={500} mt="md">
         {nickname}
       </Text>
