@@ -1,6 +1,6 @@
 import 'dayjs/locale/fi'
 import { Center, Button, Text, Grid, Stack, Container } from '@mantine/core'
-import { prefixZero, suffixZero } from './pad-zeros'
+import { prefixZero, suffixZero } from '../../../../util/pad-zeros'
 
 const HOURS = [
   [6, 9, 12, 15, 18, 21, 0, 3],

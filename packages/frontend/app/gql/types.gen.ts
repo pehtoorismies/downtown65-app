@@ -310,7 +310,7 @@ export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Lo
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'MeUser', id: string, email: string, name: string, nickname: string, preferences: { __typename?: 'Preferences', subscribeEventCreationEmail: boolean, subscribeWeeklyEmail: boolean } } };
+export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'MeUser', id: string, email: string, name: string, nickname: string, picture: string, preferences: { __typename?: 'Preferences', subscribeEventCreationEmail: boolean, subscribeWeeklyEmail: boolean } } };
 
 export type SignupMutationVariables = Exact<{
   name: Scalars['String'];
@@ -402,6 +402,7 @@ export const GetProfileDocument = gql`
     email
     name
     nickname
+    picture
     preferences {
       subscribeEventCreationEmail
       subscribeWeeklyEmail
