@@ -11,6 +11,7 @@ import {
 } from '@mantine/core'
 import {
   Form,
+  Link,
   useActionData,
   useNavigate,
   useTransition,
@@ -105,8 +106,8 @@ export const Signup = () => {
           )}
 
           <Group position="right" mt="md">
-            <Anchor onClick={() => navigation('/login')} size="sm">
-              Kirjautumiseen
+            <Anchor component={Link} to="/login" size="sm">
+              Unohditko salasanan?
             </Anchor>
           </Group>
           <Button

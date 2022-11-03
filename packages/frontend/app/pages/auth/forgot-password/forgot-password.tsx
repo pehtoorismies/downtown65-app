@@ -13,6 +13,7 @@ import {
 } from '@mantine/core'
 import {
   Form,
+  Link,
   useActionData,
   useNavigate,
   useTransition,
@@ -79,16 +80,17 @@ export const ForgotPassword = () => {
           )}
           <Group position="apart" mt="lg" className={classes.controls}>
             <Anchor
-              color="dimmed"
+              component={Link}
+              to="/login"
               size="sm"
               className={classes.control}
-              onClick={() => navigation('/login')}
             >
               <Center inline>
                 <IconArrowLeft size={12} stroke={1.5} />
                 <Box ml={5}>Takaisin kirjautumiseen</Box>
               </Center>
             </Anchor>
+
             <Button
               type="submit"
               className={classes.control}

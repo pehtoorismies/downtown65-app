@@ -12,14 +12,13 @@ import {
 } from '@mantine/core'
 import {
   Form,
+  Link,
   useActionData,
   useNavigate,
   useTransition,
 } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons'
-import { Simulate } from 'react-dom/test-utils'
 import type { ActionData } from './action'
-import transitionEnd = Simulate.transitionEnd
 
 export const Login = () => {
   const navigation = useNavigate()
@@ -28,7 +27,7 @@ export const Login = () => {
   const actionData = useActionData<ActionData>()
 
   return (
-    <Container size={420} my={40}>
+    <Container size={420} py="xl">
       <Title
         align="center"
         sx={(theme) => ({
@@ -39,8 +38,8 @@ export const Login = () => {
         Kirjaudu
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
-        Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.{' '}
-        <Anchor<'a'> size="sm" onClick={() => navigation('/signup')}>
+        Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.
+        <Anchor component={Link} to="/signup">
           Rekisteröidy tästä.
         </Anchor>
       </Text>
@@ -80,7 +79,7 @@ export const Login = () => {
             aria-describedby="password-error"
           />
           <Group position="right" mt="md">
-            <Anchor onClick={() => navigation('/forgot-password')} size="sm">
+            <Anchor component={Link} to="/forgot-password" size="sm">
               Unohditko salasanan?
             </Anchor>
           </Group>
