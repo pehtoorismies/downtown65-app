@@ -115,7 +115,13 @@ export const Profile = () => {
             </Button>
             <Button
               leftIcon={<IconX size={18} />}
+              variant="light"
               onClick={resetEmailPreferences}
+              disabled={
+                preferences.subscribeWeeklyEmail === emailSettings.weekly &&
+                preferences.subscribeEventCreationEmail ===
+                  emailSettings.eventCreated
+              }
             >
               Palauta muutokset
             </Button>

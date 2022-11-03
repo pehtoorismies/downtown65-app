@@ -97,6 +97,7 @@ export const validateSessionUser = async (
   //  - if session is expired these getters return undefined and __session is removed
   // - session token is tampered these getters get undefined
   const tokens = getTokens(session)
+
   if (tokens === undefined) {
     return {
       hasSession: false,
@@ -106,6 +107,7 @@ export const validateSessionUser = async (
     const decoded = jwtDecode(tokens.accessToken)
     const { exp } = Jwt.parse(decoded)
     const isExpired = Date.now() >= exp * 1000
+
     if (!isExpired) {
       return {
         hasSession: true,
