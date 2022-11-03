@@ -62,19 +62,6 @@ export const GraphqlStack = ({ stack }: StackContext) => {
     dataSources: {
       gql: gqlFunction,
     },
-    resolvers: {
-      'Query    event': 'gql',
-      'Query    events': 'gql',
-      'Query    me': 'gql',
-      'Query    users': 'gql',
-      'Mutation createEvent': 'gql',
-      'Mutation deleteEvent': 'gql',
-      'Mutation updateEvent': 'gql',
-      'Mutation login': 'gql',
-      'Mutation signup': 'gql',
-      'Mutation forgotPassword': 'gql',
-      'Mutation updateMe': 'gql',
-    },
   })
 
   gqlApi.attachPermissions([dynamoStack.table])
