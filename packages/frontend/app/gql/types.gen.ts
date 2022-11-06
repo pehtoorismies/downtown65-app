@@ -306,6 +306,21 @@ export type CreateEventMutationVariables = Exact<{
 
 export type CreateEventMutation = { __typename?: 'Mutation', createEvent: { __typename?: 'IDPayload', id: string } };
 
+export type ParticipateEventMutationVariables = Exact<{
+  eventId: Scalars['ID'];
+  me: MeInput;
+}>;
+
+
+export type ParticipateEventMutation = { __typename?: 'Mutation', participateEvent?: boolean |  undefined };
+
+export type LeaveEventMutationVariables = Exact<{
+  eventId: Scalars['ID'];
+}>;
+
+
+export type LeaveEventMutation = { __typename?: 'Mutation', leaveEvent?: boolean |  undefined };
+
 export type ForgotPasswordMutationVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -387,6 +402,16 @@ export const CreateEventDocument = gql`
   createEvent(input: $input) {
     id
   }
+}
+    `;
+export const ParticipateEventDocument = gql`
+    mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {
+  participateEvent(eventId: $eventId, me: $me)
+}
+    `;
+export const LeaveEventDocument = gql`
+    mutation LeaveEvent($eventId: ID!) {
+  leaveEvent(eventId: $eventId)
 }
     `;
 export const ForgotPasswordDocument = gql`
@@ -471,6 +496,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     CreateEvent(variables: CreateEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateEventMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<CreateEventMutation>(CreateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'CreateEvent', 'mutation');
+    },
+    ParticipateEvent(variables: ParticipateEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ParticipateEventMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ParticipateEventMutation>(ParticipateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ParticipateEvent', 'mutation');
+    },
+    LeaveEvent(variables: LeaveEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LeaveEventMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LeaveEventMutation>(LeaveEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LeaveEvent', 'mutation');
     },
     ForgotPassword(variables: ForgotPasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ForgotPasswordMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<ForgotPasswordMutation>(ForgotPasswordDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ForgotPassword', 'mutation');

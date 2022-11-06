@@ -38,3 +38,13 @@ mutation CreateEvent($input: CreateEventInput!) {
         id
     }
 }
+
+
+mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {
+    participateEvent(eventId: $eventId, me: $me)
+}
+
+
+mutation LeaveEvent($eventId: ID!) {
+    leaveEvent(eventId: $eventId)
+}

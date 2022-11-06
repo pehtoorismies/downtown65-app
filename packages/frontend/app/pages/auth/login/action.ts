@@ -1,6 +1,6 @@
 import type { ActionFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
+import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import { createUserSession, Tokens } from '~/session.server'
 import { validateEmail } from '~/util/validation.server'
 

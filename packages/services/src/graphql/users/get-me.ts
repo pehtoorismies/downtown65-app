@@ -1,9 +1,9 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import type { MeUser } from '~/appsync.gen'
+import { getAuth0Management } from '~/graphql/support/auth0'
 import { Auth0UserResponse, toUser } from '~/graphql/support/auth0-user'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
-import { getAuth0Management } from '~/support/auth0'
 
 export const getMe: AppSyncResolverHandler<EmptyArgs, MeUser> = async (
   event

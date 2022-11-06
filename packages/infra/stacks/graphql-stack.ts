@@ -20,7 +20,7 @@ export const GraphqlStack = ({ stack }: StackContext) => {
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
     srcPath: 'packages/services',
     handler: 'src/functions/gql/gql.main',
-    config: [
+    bind: [
       AUTH_CLIENT_ID,
       AUTH_CLIENT_SECRET,
       AUTH_DOMAIN,
@@ -100,7 +100,6 @@ export const GraphqlStack = ({ stack }: StackContext) => {
   })
 
   return {
-    ApiId,
     ApiKey,
     ApiUrl,
   }

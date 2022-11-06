@@ -8,7 +8,7 @@ import type {
   SignupPayload,
 } from '~/appsync.gen'
 import { ErrorResponse } from '~/graphql/auth/support/error'
-import { getAuth0Management } from '~/support/auth0'
+import { getAuth0Management } from '~/graphql/support/auth0'
 
 const hasWhiteSpace = (s: string) => {
   return /\s/.test(s)

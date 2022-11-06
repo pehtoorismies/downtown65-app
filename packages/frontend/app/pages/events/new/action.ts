@@ -3,7 +3,7 @@ import { redirect } from '@remix-run/node'
 import format from 'date-fns/format'
 import formatISO from 'date-fns/formatISO'
 import { z } from 'zod'
-import { getGqlSdk } from '~/gql/get-gql-client'
+import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { EventType } from '~/gql/types.gen'
 import { validateSessionUser } from '~/session.server'
 

@@ -1,6 +1,6 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { getGqlSdk } from '~/gql/get-gql-client'
+import { getGqlSdk } from '~/gql/get-gql-client.server'
 import type { EventLoaderData } from '~/pages/events/event-loader-data'
 import { validateSessionUser } from '~/session.server'
 

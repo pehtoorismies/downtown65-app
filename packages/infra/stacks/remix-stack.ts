@@ -2,15 +2,15 @@ import type { StackContext } from '@serverless-stack/resources'
 import { RemixSite, use } from '@serverless-stack/resources'
 import { GraphqlStack } from './graphql-stack'
 
-export const FrontendStack = ({ stack }: StackContext) => {
-  const api = use(GraphqlStack)
+export const RemixStack = ({ stack }: StackContext) => {
+  const { ApiUrl, ApiKey } = use(GraphqlStack)
 
   // Create the Remix site
-  const site = new RemixSite(stack, 'Downtown65Site', {
+  const site = new RemixSite(stack, 'Downtown65-remix', {
     path: 'packages/frontend',
     environment: {
-      API_URL: api.ApiUrl,
-      API_KEY: api.ApiKey,
+      API_URL: ApiUrl,
+      API_KEY: ApiKey,
     },
   })
 

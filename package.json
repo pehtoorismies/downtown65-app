@@ -13,7 +13,7 @@
     "development:deploy": "sst deploy --stage development",
     "production:deploy": "sst deploy --stage production",
     "typecheck": "lerna run typecheck --no-sort",
-    "test": "sst load-config -- vitest --dir packages/services run",
+    "test": "sst bind -- vitest --dir packages/services run",
     "lint": "lerna run lint --no-sort",
     "find-deadcode": "yarn workspaces run find-deadcode",
     "generate": "graphql-codegen"
@@ -23,7 +23,7 @@
     "@graphql-codegen/typescript": "2.8.0",
     "@graphql-codegen/typescript-graphql-request": "4.5.7",
     "@graphql-codegen/typescript-operations": "2.5.5",
-    "@serverless-stack/cli": "1.15.8",
+    "@serverless-stack/cli": "1.17.1",
     "@tsconfig/node16": "1.0.3",
     "@typescript-eslint/eslint-plugin": "5.42.0",
     "@typescript-eslint/parser": "5.42.0",
