@@ -1,6 +1,6 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { MutationForgotPasswordArgs } from '~/appsync.gen'
-import { getClient } from '~/support/auth0'
+import { getClient } from '~/graphql/support/auth0'
 
 const auth0 = getClient()
 

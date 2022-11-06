@@ -1,7 +1,7 @@
 import type { ActionFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { z } from 'zod'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client'
+import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import type { SignupField, SignupPayload } from '~/gql/types.gen'
 import { commitSession, getSession, setSuccessMessage } from '~/message.server'
 

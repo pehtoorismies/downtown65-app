@@ -1,6 +1,6 @@
 import type { ActionFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { getGqlSdk } from '~/gql/get-gql-client'
+import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { commitSession, getSession, setSuccessMessage } from '~/message.server'
 import { validateSessionUser } from '~/session.server'
 

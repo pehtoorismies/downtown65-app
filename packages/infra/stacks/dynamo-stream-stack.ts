@@ -15,7 +15,7 @@ export const DynamoStreamStack = ({ stack }: StackContext) => {
   const eventCreatedFunction = new Function(stack, 'EventCreated', {
     srcPath: 'packages/services',
     handler: 'src/functions/streams/event-created.main',
-    config: [
+    bind: [
       AUTH_CLIENT_ID,
       AUTH_CLIENT_SECRET,
       AUTH_DOMAIN,

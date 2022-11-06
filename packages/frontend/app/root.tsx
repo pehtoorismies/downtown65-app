@@ -24,6 +24,8 @@ type LoaderData = {
   user?: User
 }
 
+const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
+
 export const loader: LoaderFunction = async ({ request }) => {
   const result = await validateSessionUser(request)
   const user = result.hasSession ? result.user : undefined
@@ -42,7 +44,13 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   return json<LoaderData>(
     { toastMessage, user },
-    { headers: { 'Set-Cookie': await commitSession(session) } }
+    {
+      headers: {
+        'Set-Cookie': await commitSession(session, {
+          expires: new Date(Date.now() + ONE_YEAR),
+        }),
+      },
+    }
   )
 }
 

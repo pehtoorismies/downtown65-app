@@ -3,7 +3,7 @@ import { createCookieSessionStorage } from '@remix-run/node'
 
 export type ToastMessage = { message: string; type: 'success' | 'error' }
 
-const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
+// const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 
 export const { commitSession, getSession } = createCookieSessionStorage({
   cookie: {
@@ -11,7 +11,7 @@ export const { commitSession, getSession } = createCookieSessionStorage({
     path: '/',
     httpOnly: true,
     sameSite: 'lax',
-    expires: new Date(Date.now() + ONE_YEAR),
+    // expires: new Date(Date.now() + ONE_YEAR),
     secrets: ['SUPER_SECRET'],
     secure: true,
   },

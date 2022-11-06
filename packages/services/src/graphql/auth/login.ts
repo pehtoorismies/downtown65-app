@@ -3,7 +3,7 @@ import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
 import type { LoginPayload, MutationLoginArgs } from '~/appsync.gen'
 import { ErrorMessage, ErrorResponse } from '~/graphql/auth/support/error'
-import { getClient } from '~/support/auth0'
+import { getClient } from '~/graphql/support/auth0'
 
 const Auth0Response = z.object({
   access_token: z.string(),

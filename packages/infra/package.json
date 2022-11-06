@@ -9,10 +9,9 @@
     "lint": "eslint . --ext .ts",
     "find-deadcode": "ts-prune --ignore stacks/index.ts"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@serverless-stack/resources": "1.15.8",
-    "aws-cdk-lib": "2.39.1"
+    "@serverless-stack/resources": "1.17.1",
+    "aws-cdk-lib": "2.50.0"
   }
 }
