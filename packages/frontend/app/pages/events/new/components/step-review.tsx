@@ -30,8 +30,8 @@ export const StepReview = ({ state, me }: Properties) => {
   return (
     <EventCardExtended
       createdBy={me}
-      date={getDate(state.date)}
-      time={getTime(state.time)}
+      dateStart={getDate(state.date)}
+      timeStart={getTime(state.time)}
       description={state.description}
       isRace={state.isRace}
       location={state.location}

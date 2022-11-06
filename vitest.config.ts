@@ -1,5 +1,6 @@
 /// <reference types="vitest" />
 
+import tsconfigPaths from 'vite-tsconfig-paths'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
@@ -11,9 +12,10 @@ export default defineConfig({
   esbuild: {
     sourcemap: 'both',
   },
-  resolve: {
-    alias: {
-      '@downtown65-app/core': './services/core',
-    },
-  },
+  // resolve: {
+  //   alias: {
+  //     '@downtown65-app/core': './services/core',
+  //   },
+  // },
+  plugins: [tsconfigPaths()],
 })

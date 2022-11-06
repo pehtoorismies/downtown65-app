@@ -14,7 +14,6 @@ export const getTable = () => {
     DocumentClient,
     indexes: {
       GSI1: { partitionKey: 'GSI1PK', sortKey: 'GSI1SK' },
-      GSI2: { partitionKey: 'GSI2PK', sortKey: 'GSI2SK' },
     },
     attributes: {
       PK: 'string',
@@ -24,25 +23,24 @@ export const getTable = () => {
       GSI2PK: 'string',
       GSI2SK: 'string',
       // Dt65Event properties
-      eventId: 'string',
       createdBy: 'map',
       dateStart: 'string',
       description: 'string',
-      title: 'string',
+      eventId: 'string',
       location: 'string',
       participants: 'map',
       race: 'boolean',
+      timeStart: 'string',
+      title: 'string',
       type: 'string',
-      // Participant properties
-      nickname: 'string',
     },
   })
 
   const Dt65EventEntity = new Entity({
     name: 'Dt65Event',
     attributes: {
-      PK: { partitionKey: true, hidden: true }, // flag as partitionKey
-      SK: { hidden: true, sortKey: true }, // flag as sortKey and mark hidden
+      PK: { partitionKey: true, hidden: true },
+      SK: { hidden: true, sortKey: true },
       GSI1PK: { hidden: true },
       GSI1SK: { hidden: true },
       createdBy: { type: 'map', required: true },
@@ -52,23 +50,13 @@ export const getTable = () => {
       participants: { type: 'map', required: true },
       race: { type: 'boolean', default: false },
       location: { type: 'string', required: true },
+      timeStart: { type: 'string', required: false },
       title: { type: 'string', required: true },
       type: { type: 'string', required: true },
     },
   } as const)
 
-  const ParticipantEntity = new Entity({
-    name: 'Participant',
-    attributes: {
-      PK: { partitionKey: true, hidden: true }, // flag as partitionKey
-      SK: { hidden: true, sortKey: true }, // flag as sortKey and mark hidden
-      GSI2PK: { hidden: true },
-      GSI2SK: { hidden: true },
-      nickname: { type: 'string', required: true },
-    },
-  } as const)
-
-  table.entities = [Dt65EventEntity, ParticipantEntity]
+  table.entities = [Dt65EventEntity]
 
   return table
 }

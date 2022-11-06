@@ -1,7 +1,6 @@
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
-  plugins: ["import", "unicorn", "unused-imports", "prettier"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -10,6 +9,7 @@ module.exports = {
     "plugin:unicorn/recommended",
     "prettier"
   ],
+  plugins: ["import", "unicorn", "unused-imports", "prettier"],
   ignorePatterns: ["**/*/*.gen.ts"],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",

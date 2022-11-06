@@ -1,6 +1,6 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import type { MutationLeaveEventArgs } from '~/appsync.gen'
+import type { MutationParticipateEventArgs } from '~/appsync.gen'
 import * as Event from '~/core/event'
 
 type Claims = {
@@ -15,15 +15,27 @@ type Claims = {
   gty: string
 }
 
-export const leaveEvent: AppSyncResolverHandler<
-  MutationLeaveEventArgs,
+export const participateEvent: AppSyncResolverHandler<
+  MutationParticipateEventArgs,
   boolean | undefined
 > = async (event) => {
-  const eventId = event.arguments.eventId
+  const { eventId, me } = event.arguments
+
   const identity = event.identity as AppSyncIdentityOIDC
   const claims = identity.claims as Claims
 
-  await Event.leave(eventId, claims.sub)
+  if (claims.sub !== me.id) {
+    throw new Error(
+      'Trying to insert somebody else. You can only participate yourself.'
+    )
+  }
 
+  const nickname = claims['https://graphql.downtown65.com/nickname']
+
+  await Event.participate(eventId, {
+    nickname,
+    picture: 'temp',
+    id: 'temp',
+  })
   return true
 }

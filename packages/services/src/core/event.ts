@@ -3,6 +3,7 @@ import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
 import { ulid } from 'ulid'
 import type {
+  Event,
   MutationCreateEventArgs,
   MeInput,
   IdPayload,
@@ -10,6 +11,7 @@ import type {
 import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
+import { getIsoDatetime, getTime, getDate } from './get-iso-datetime'
 import { mapDynamoToEvent } from './map-dynamo-to-event'
 
 const Table = getTable()
@@ -22,7 +24,9 @@ interface PersistableEvent {
   GSI1SK: string
   createdBy: MeInput
   dateStart: string
+  description?: string
   id: string
+  location: string
   participants: Record<
     string,
     | MeInput
@@ -30,9 +34,9 @@ interface PersistableEvent {
         joinedAt: string
       }
   >
-  title: string
-  location: string
   race: boolean
+  timeStart?: string
+  title: string
   type: EventType
 }
 
@@ -51,14 +55,24 @@ const isEventType = (event: string): event is EventType => {
 export const create = async (
   creatableEvent: MutationCreateEventArgs['input']
 ): Promise<IdPayload> => {
-  const { title, dateStart, type, location, race, createdBy, participants } =
-    creatableEvent
+  const {
+    createdBy,
+    dateStart,
+    description,
+    location,
+    participants,
+    race,
+    timeStart,
+    title,
+    type,
+  } = creatableEvent
+
   const eventId = ulid()
   if (!isEventType(type)) {
     throw new Error('Wrong event type provided')
   }
-  // TODO: validate date input
-  const gsi1sk = formatISO(new Date(dateStart))
+
+  const gsi1sk = getIsoDatetime(dateStart, timeStart)
   const now = formatISO(new Date())
 
   const parts = participants ?? []
@@ -82,16 +96,19 @@ export const create = async (
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     // add props
     createdBy,
-    dateStart: dateStart,
+    dateStart: getDate(dateStart),
+    description,
     id: eventId,
-    participants: participantHashMap,
-    title,
     location,
+    participants: participantHashMap,
     race: race ?? false,
+    timeStart: getTime(timeStart),
+    title,
     type,
   }
 
   await Table.Dt65Event.put(persistableEvent, { returnValues: 'none' })
+
   return {
     id: eventId,
   }
@@ -108,7 +125,7 @@ export const remove = async (id: string): Promise<boolean> => {
   return true
 }
 
-export const getById = async (id: string) => {
+export const getById = async (id: string): Promise<Event | undefined> => {
   const result = await Table.Dt65Event.get(getPrimaryKey(id))
   if (!result.Item) {
     return
@@ -127,4 +144,45 @@ export const getFutureEvents = async () => {
   return results.Items.map((dynamoEvent: unknown) =>
     mapDynamoToEvent(dynamoEvent)
   )
+}
+
+export const participate = async (
+  eventId: string,
+  user: { nickname: string; id: string; picture: string }
+) => {
+  Table.Dt65Event.update(
+    {
+      ...getPrimaryKey(eventId),
+      participants: {
+        $set: {
+          [user.id]: {
+            ...user,
+            joinedAt: formatISO(new Date()),
+          },
+        },
+      },
+    },
+    { conditions: { attr: 'title', exists: true } }
+  )
+}
+
+export const leave = async (eventId: string, userId: string) => {
+  const documentClient = Table.DocumentClient
+  if (!documentClient) {
+    throw new Error('No Dynamo Document client')
+  }
+
+  await documentClient
+    .update({
+      TableName: Table.name,
+      Key: getPrimaryKey(eventId),
+      UpdateExpression: 'REMOVE #participants.#userId',
+      ExpressionAttributeNames: {
+        '#participants': 'participants',
+        '#userId': userId,
+      },
+    })
+    .promise()
+
+  return true
 }

@@ -64,12 +64,12 @@ interface ParticipantProps {
 
 export interface EventCardRootProps extends ParticipantProps {
   createdBy: User
-  date: string
+  dateStart: string
   id?: string
   isRace: boolean
   location: string
   shadow?: MantineShadow
-  time?: string
+  timeStart?: string
   title: string
   type: EventType
 }
@@ -77,14 +77,14 @@ export interface EventCardRootProps extends ParticipantProps {
 export const EventCardRoot = ({
   children,
   createdBy,
-  date,
+  dateStart,
   id,
   isRace,
   location,
   me,
   participants,
   shadow,
-  time,
+  timeStart,
   title,
   type,
 }: PropsWithChildren<EventCardRootProps>) => {
@@ -170,14 +170,14 @@ export const EventCardRoot = ({
               {location}
             </Text>
             <Text size="sm" weight={500}>
-              {date}
+              {dateStart}
             </Text>
-            {time && (
+            {timeStart && (
               <Text size="sm" weight={500}>
-                klo: {time}
+                klo: {timeStart}
               </Text>
             )}
-            {!time && (
+            {!timeStart && (
               <Text size="sm" weight={500} color="dimmed">
                 ei tarkempaa aikaa
               </Text>

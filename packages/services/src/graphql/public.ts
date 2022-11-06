@@ -11,10 +11,10 @@ import type {
   SignupPayload,
 } from '../appsync.gen'
 import { forgotPassword } from './auth/forgot-password'
-import { login } from './auth/login'
 import { signup } from './auth/signup'
 import { getEventById } from './events/get-event-by-id'
 import { assertUnreachable } from './support/assert-unreachable'
+import { login } from '~/graphql/auth/login'
 
 export type Inputs =
   | MutationForgotPasswordArgs
