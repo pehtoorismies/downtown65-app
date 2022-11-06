@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "sst start",
-    "build": "sst build",
+    "build": "lerna run build && sst build",
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
@@ -21,26 +21,30 @@
   "devDependencies": {
     "@graphql-codegen/cli": "2.13.7",
     "@graphql-codegen/typescript": "2.8.0",
-    "@graphql-codegen/typescript-graphql-request": "^4.5.7",
-    "@graphql-codegen/typescript-operations": "^2.5.5",
+    "@graphql-codegen/typescript-graphql-request": "4.5.7",
+    "@graphql-codegen/typescript-operations": "2.5.5",
     "@serverless-stack/cli": "1.15.8",
     "@tsconfig/node16": "1.0.3",
-    "@typescript-eslint/eslint-plugin": "5.39.0",
-    "@typescript-eslint/parser": "5.39.0",
-    "eslint": "8.24.0",
+    "@typescript-eslint/eslint-plugin": "5.42.0",
+    "@typescript-eslint/parser": "5.42.0",
+    "eslint": "8.27.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-unicorn": "44.0.1",
     "eslint-plugin-unused-imports": "2.0.0",
-    "lerna": "5.6.2",
+    "lerna": "^5.6.2",
     "prettier": "2.7.1",
     "prettier-eslint": "15.0.1",
     "ts-prune": "0.10.3",
     "typescript": "4.8.4",
+    "vite-tsconfig-paths": "3.5.2",
     "vitest": "0.23.4"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "date-fns": "2.29.3"
+  }
 }

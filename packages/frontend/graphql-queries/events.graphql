@@ -16,6 +16,7 @@ fragment baseFields on Event {
     }
     race
     title
+    timeStart
     type
 
 }

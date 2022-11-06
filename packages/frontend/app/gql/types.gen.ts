@@ -1,8 +1,8 @@
 import { GraphQLClient } from 'graphql-request';
 import * as Dom from 'graphql-request/dist/types.dom';
 import gql from 'graphql-tag';
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type Maybe<T> = T |  undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -31,6 +31,7 @@ export type CreateEventInput = {
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
   race: Scalars['Boolean'];
+  timeStart?: InputMaybe<TimeInput>;
   title: Scalars['String'];
   type: Scalars['String'];
 };
@@ -63,6 +64,7 @@ export type Event = {
   location: Scalars['String'];
   participants: Array<EventParticipant>;
   race: Scalars['Boolean'];
+  timeStart?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: EventType;
 };
@@ -175,6 +177,7 @@ export type MutationLoginArgs = {
 
 export type MutationParticipateEventArgs = {
   eventId: Scalars['ID'];
+  me: MeInput;
 };
 
 
@@ -216,6 +219,7 @@ export type Query = {
   __typename?: 'Query';
   event?: Maybe<Event>;
   events: Array<Event>;
+  eventsByUser: Array<Event>;
   me: MeUser;
   users: Array<OtherUser>;
 };
@@ -223,6 +227,11 @@ export type Query = {
 
 export type QueryEventArgs = {
   eventId: Scalars['ID'];
+};
+
+
+export type QueryEventsByUserArgs = {
+  userId: Scalars['String'];
 };
 
 export const SignupField = {
@@ -248,6 +257,11 @@ export type SignupPayload = {
   user?: Maybe<User>;
 };
 
+export type TimeInput = {
+  hours: Scalars['Int'];
+  minutes: Scalars['Int'];
+};
+
 export type UpdateEventInput = {
   dateStart?: InputMaybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -271,19 +285,19 @@ export type UserError = {
   path: Scalars['String'];
 };
 
-export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
+export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: string, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
 
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID'];
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } | null };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: string, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } |  undefined };
 
 export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: string, description?: string | null, location: string, race: boolean, title: string, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> }> };
+export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: string, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> }> };
 
 export type CreateEventMutationVariables = Exact<{
   input: CreateEventInput;
@@ -305,7 +319,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', tokens?: { __typename?: 'AuthPayload', accessToken: string, idToken: string, refreshToken: string } | null, loginError?: { __typename?: 'LoginError', message: string, path: string, code: string } | null } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', tokens?: { __typename?: 'AuthPayload', accessToken: string, idToken: string, refreshToken: string } |  undefined, loginError?: { __typename?: 'LoginError', message: string, path: string, code: string } |  undefined } };
 
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -321,7 +335,7 @@ export type SignupMutationVariables = Exact<{
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'Creator', id: string } | { __typename?: 'EventParticipant', id: string } | { __typename?: 'MeUser', id: string } | { __typename?: 'OtherUser', id: string } | null, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> | null } };
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'Creator', id: string } | { __typename?: 'EventParticipant', id: string } | { __typename?: 'MeUser', id: string } | { __typename?: 'OtherUser', id: string } |  undefined, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> |  undefined } };
 
 export type UpdateMeMutationVariables = Exact<{
   subscribeWeeklyEmail: Scalars['Boolean'];
@@ -350,6 +364,7 @@ export const BaseFieldsFragmentDoc = gql`
   }
   race
   title
+  timeStart
   type
 }
     `;

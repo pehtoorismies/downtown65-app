@@ -54,6 +54,7 @@ type Event @aws_api_key @aws_oidc {
     location: String!
     participants: [EventParticipant!]!
     race: Boolean!
+    timeStart: String
     title: String!
     type: EventType!
 }
@@ -83,6 +84,11 @@ input MeInput {
     nickname: String!
 }
 
+input TimeInput {
+    hours: Int!
+    minutes: Int!
+}
+
 input CreateEventInput {
     createdBy: MeInput!
     dateStart: String!
@@ -91,6 +97,7 @@ input CreateEventInput {
     participants: [MeInput!]
     race: Boolean!
     title: String!
+    timeStart: TimeInput
     type: String!
 }
 
@@ -180,6 +187,7 @@ type Query {
     event(eventId: ID!): Event @aws_api_key
     # Future events
     events: [Event!]!
+    eventsByUser(userId: String!): [Event!]!
     me: MeUser!
     users: [OtherUser!]!
 }
@@ -189,7 +197,7 @@ type Mutation {
     updateEvent(input: UpdateEventInput!): Event!
     deleteEvent(eventId: ID!): IDPayload
     leaveEvent(eventId: ID!): Boolean
-    participateEvent(eventId: ID!): Boolean
+    participateEvent(eventId: ID!, me: MeInput!): Boolean
 
     updateMe(input: UpdateMeInput!): MeUser!
 

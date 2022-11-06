@@ -3,7 +3,6 @@ import { json, redirect } from '@remix-run/node'
 import { getGqlSdk } from '~/gql/get-gql-client'
 import type { EventLoaderData } from '~/pages/events/event-loader-data'
 import { validateSessionUser } from '~/session.server'
-import { formatDynamoDate } from '~/util/format-date'
 
 export interface LoaderData {
   eventItems: EventLoaderData[]
@@ -29,7 +28,6 @@ export const loader: LoaderFunction = async ({ request }) => {
       me: result.user,
       isRace: event.race,
       description: event.description ?? '',
-      ...formatDynamoDate(event.dateStart),
     }
   })
 

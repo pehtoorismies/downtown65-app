@@ -1,5 +1,5 @@
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type Maybe<T> = T |  undefined;
+export type InputMaybe<T> = T | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -28,6 +28,7 @@ export type CreateEventInput = {
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
   race: Scalars['Boolean'];
+  timeStart?: InputMaybe<TimeInput>;
   title: Scalars['String'];
   type: Scalars['String'];
 };
@@ -60,6 +61,7 @@ export type Event = {
   location: Scalars['String'];
   participants: Array<EventParticipant>;
   race: Scalars['Boolean'];
+  timeStart?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: EventType;
 };
@@ -172,6 +174,7 @@ export type MutationLoginArgs = {
 
 export type MutationParticipateEventArgs = {
   eventId: Scalars['ID'];
+  me: MeInput;
 };
 
 
@@ -213,6 +216,7 @@ export type Query = {
   __typename?: 'Query';
   event?: Maybe<Event>;
   events: Array<Event>;
+  eventsByUser: Array<Event>;
   me: MeUser;
   users: Array<OtherUser>;
 };
@@ -220,6 +224,11 @@ export type Query = {
 
 export type QueryEventArgs = {
   eventId: Scalars['ID'];
+};
+
+
+export type QueryEventsByUserArgs = {
+  userId: Scalars['String'];
 };
 
 export const SignupField = {
@@ -243,6 +252,11 @@ export type SignupPayload = {
   __typename?: 'SignupPayload';
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
+};
+
+export type TimeInput = {
+  hours: Scalars['Int'];
+  minutes: Scalars['Int'];
 };
 
 export type UpdateEventInput = {

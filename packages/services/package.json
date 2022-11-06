@@ -13,7 +13,6 @@
     "auth0": "2.42.0",
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1228.0",
-    "date-fns": "2.29.3",
     "dynamodb-toolbox": "0.4.3",
     "email-validator": "2.0.4",
     "mjml": "4.13.0",

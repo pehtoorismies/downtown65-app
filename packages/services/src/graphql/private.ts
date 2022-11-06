@@ -5,7 +5,7 @@ import type {
   MeUser,
   MutationCreateEventArgs,
   MutationDeleteEventArgs,
-  MutationJoinEventArgs,
+  MutationParticipateEventArgs,
   MutationLeaveEventArgs,
   MutationUpdateEventArgs,
   MutationUpdateMeArgs,
@@ -15,13 +15,13 @@ import type {
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
 import { getEvents } from './events/get-events'
-import { joinEvent } from './events/join-event'
 import { leaveEvent } from './events/leave-event'
 import { updateEvent } from './events/update-event'
 import { assertUnreachable } from './support/assert-unreachable'
 import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
 import { getUsers } from './users/get-users'
+import { participateEvent } from '~/graphql/events/participate-event'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
 import { updateMe } from '~/graphql/users/update-me'
 
@@ -46,7 +46,7 @@ const PRIVATE_FIELDS = [
   'createEvent',
   'deleteEvent',
   'events',
-  'joinEvent',
+  'participateEvent',
   'leaveEvent',
   'me',
   'updateEvent',
@@ -106,10 +106,10 @@ export const privateResolver = (
           callback
         )
       }
-      case 'joinEvent': {
+      case 'participateEvent': {
         allowScopes(['write:events'])
-        return joinEvent(
-          event as AppSyncResolverEvent<MutationJoinEventArgs>,
+        return participateEvent(
+          event as AppSyncResolverEvent<MutationParticipateEventArgs>,
           context,
           callback
         )

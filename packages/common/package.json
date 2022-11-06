@@ -1,0 +1,17 @@
+{
+  "name": "@downtown65-app/common",
+  "version": "1.0.0",
+  "private": true,
+  "sideEffects": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
