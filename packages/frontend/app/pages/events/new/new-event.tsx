@@ -19,6 +19,7 @@ import { StepTime } from './components/step-time'
 import { StepTitle } from './components/step-title'
 import { StepType } from './components/step-type'
 import type { LoaderData } from './loader'
+import type { Context } from '~/contexts/participating-context'
 import { ParticipatingContext } from '~/contexts/participating-context'
 
 const iconSize = 20
@@ -91,13 +92,14 @@ export const NewEvent = () => {
   const fetcher = useFetcher()
   const { me } = useLoaderData<LoaderData>()
   const [state, dispatch] = useReducer(reducer, INIT_STATE)
-  const participatingActions = {
+  const participatingActions: Context = {
     onLeave: () => {
       dispatch({ kind: 'leaveEvent' })
     },
     onParticipate: () => {
       dispatch({ kind: 'participateEvent', me })
     },
+    state: 'idle',
   }
 
   useEffect(() => {

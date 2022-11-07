@@ -4491,10 +4491,10 @@
     "@pothos/core" "^3.11.0"
     graphql "^16.5.0"
 
-"@serverless-stack/node@1.15.8":
-  version "1.15.8"
-  resolved "https://registry.npmjs.org/@serverless-stack/node/-/node-1.15.8.tgz"
-  integrity sha512-U0wYD5owmJFApkaSTFhOGLxudeL4Swdy/IGxtyy1qZY8vIk/rLpBo50JZeJzquxZKtjBGubd7NDgljVaHa9lRA==
+"@serverless-stack/node@1.17.1":
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/@serverless-stack/node/-/node-1.17.1.tgz#93fb23d29d0cbb2421ceeabbee9439077adf44ba"
+  integrity sha512-hfByLWtjhMrvOZ5dkkjX1Z5oht/U9iUWeVc7doXrwqtQTbRBnWgKx/v19sNGwt+TW+zrfY1dLeP5RTwt/me4bA==
   dependencies:
     "@aws-sdk/client-lambda" "3.43.0"
     "@aws-sdk/client-ssm" "3.43.0"

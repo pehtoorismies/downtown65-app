@@ -20,7 +20,6 @@ export const participateEvent: AppSyncResolverHandler<
   boolean | undefined
 > = async (event) => {
   const { eventId, me } = event.arguments
-
   const identity = event.identity as AppSyncIdentityOIDC
   const claims = identity.claims as Claims
 
@@ -30,12 +29,6 @@ export const participateEvent: AppSyncResolverHandler<
     )
   }
 
-  const nickname = claims['https://graphql.downtown65.com/nickname']
-
-  await Event.participate(eventId, {
-    nickname,
-    picture: 'temp',
-    id: 'temp',
-  })
+  await Event.participate(eventId, me)
   return true
 }

@@ -27,16 +27,15 @@ export const action: ActionFunction = async ({ request, params }) => {
       return json({})
     }
     case 'leave': {
-      {
-        await getGqlSdk().LeaveEvent(
-          {
-            eventId: params.id,
-          },
-          {
-            Authorization: `Bearer ${result.accessToken}`,
-          }
-        )
-      }
+      await getGqlSdk().LeaveEvent(
+        {
+          eventId: params.id,
+        },
+        {
+          Authorization: `Bearer ${result.accessToken}`,
+        }
+      )
+
       return json({})
     }
   }

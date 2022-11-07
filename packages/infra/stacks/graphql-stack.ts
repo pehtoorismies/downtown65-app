@@ -1,6 +1,6 @@
 import * as appsync from '@aws-cdk/aws-appsync-alpha'
 import type { StackContext } from '@serverless-stack/resources'
-import { AppSyncApi, Config, Function, use } from '@serverless-stack/resources'
+import { AppSyncApi, Function, use } from '@serverless-stack/resources'
 import * as cdk from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
@@ -8,7 +8,7 @@ import { DynamoStack } from './dynamo-stack'
 import { getEnvironmentVariable } from './get-environment'
 
 export const GraphqlStack = ({ stack }: StackContext) => {
-  const dynamoStack = use(DynamoStack)
+  const { TABLE_NAME, table } = use(DynamoStack)
   const {
     AUTH_CLIENT_ID,
     AUTH_CLIENT_SECRET,
@@ -26,7 +26,7 @@ export const GraphqlStack = ({ stack }: StackContext) => {
       AUTH_DOMAIN,
       JWT_AUDIENCE,
       REGISTER_SECRET,
-      dynamoStack.TABLE_NAME,
+      TABLE_NAME,
     ],
   })
 
@@ -79,14 +79,14 @@ export const GraphqlStack = ({ stack }: StackContext) => {
     },
   })
 
-  gqlApi.attachPermissions([dynamoStack.table])
+  gqlApi.attachPermissions([table])
 
-  new Config.Parameter(stack, 'API_URL', {
-    value: gqlApi.url,
-  })
-  new Config.Parameter(stack, 'API_ACCESS_KEY', {
-    value: gqlApi.cdk.graphqlApi.apiKey || 'No api key received',
-  })
+  // new Config.Parameter(stack, 'API_URL', {
+  //   value: gqlApi.url,
+  // })
+  // new Config.Parameter(stack, 'API_ACCESS_KEY', {
+  //   value: gqlApi.cdk.graphqlApi.apiKey || 'No api key received',
+  // })
 
   const ApiId = gqlApi.apiId
   const ApiKey = gqlApi.cdk.graphqlApi.apiKey || 'No api key received'

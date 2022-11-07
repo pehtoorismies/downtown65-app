@@ -41,6 +41,15 @@ describe('Events', () => {
     const updatedEvent = await Event.getById(id)
     expect(updatedEvent?.participants.length).toBe(0)
 
+    await Event.participate(id, {
+      id: '123',
+      picture: 'picture',
+      nickname: 'nickname',
+    })
+
+    const updatedEvent2 = await Event.getById(id)
+    expect(updatedEvent2?.participants.length).toBe(1)
+
     await Event.remove(id)
   })
 

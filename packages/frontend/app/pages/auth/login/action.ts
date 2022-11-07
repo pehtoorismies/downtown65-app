@@ -40,10 +40,6 @@ export const action: ActionFunction = async ({ request }) => {
         { generalError: 'Email or password is invalid' },
         { status: 400 }
       )
-      return json<ActionData>(
-        { generalError: login.loginError?.message },
-        { status: 400 }
-      )
     }
 
     const tokens = Tokens.parse(login.tokens)
