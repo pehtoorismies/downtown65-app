@@ -1,9 +1,10 @@
 import { useFetcher } from '@remix-run/react'
 import { createContext, useContext } from 'react'
 
-interface Context {
+export interface Context {
   onLeave: (eventId: string) => void
   onParticipate: (eventId: string) => void
+  state: 'idle' | 'submitting' | 'loading'
 }
 
 export const ParticipatingContext = createContext<Context | undefined>(
@@ -20,6 +21,7 @@ export const useParticipatingContext = (): Context => {
 
 export const useParticipationActions = () => {
   const fetcher = useFetcher()
+
   return {
     onParticipate: (eventId: string) => {
       fetcher.submit(
@@ -43,5 +45,6 @@ export const useParticipationActions = () => {
         }
       )
     },
+    state: fetcher.state,
   }
 }

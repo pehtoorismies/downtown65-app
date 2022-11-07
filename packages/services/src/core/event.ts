@@ -150,20 +150,29 @@ export const participate = async (
   eventId: string,
   user: { nickname: string; id: string; picture: string }
 ) => {
-  Table.Dt65Event.update(
-    {
-      ...getPrimaryKey(eventId),
-      participants: {
-        $set: {
-          [user.id]: {
-            ...user,
-            joinedAt: formatISO(new Date()),
-          },
+  const documentClient = Table.DocumentClient
+  if (!documentClient) {
+    throw new Error('No Dynamo Document client')
+  }
+
+  await documentClient
+    .update({
+      TableName: Table.name,
+      Key: getPrimaryKey(eventId),
+      UpdateExpression: 'SET #participants.#userId = :user',
+      ConditionExpression: 'attribute_not_exists(#participants.#userId)',
+      ExpressionAttributeNames: {
+        '#participants': 'participants',
+        '#userId': user.id,
+      },
+      ExpressionAttributeValues: {
+        ':user': {
+          joinedAt: formatISO(new Date()),
+          ...user,
         },
       },
-    },
-    { conditions: { attr: 'title', exists: true } }
-  )
+    })
+    .promise()
 }
 
 export const leave = async (eventId: string, userId: string) => {
@@ -177,6 +186,7 @@ export const leave = async (eventId: string, userId: string) => {
       TableName: Table.name,
       Key: getPrimaryKey(eventId),
       UpdateExpression: 'REMOVE #participants.#userId',
+      ConditionExpression: 'attribute_exists(#participants.#userId)',
       ExpressionAttributeNames: {
         '#participants': 'participants',
         '#userId': userId,
