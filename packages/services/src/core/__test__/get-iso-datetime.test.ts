@@ -33,7 +33,6 @@ test('Correct input getIsoDatetime', () => {
 test('Get date', () => {
   expect(getDate('2022-12-12')).toBe('2022-12-12')
   expect(() => getDate('202-13-12')).toThrowError(/Date is incorrect/)
-  expect(getTime({ hours: 9, minutes: 30 })).toBe('09:30')
 })
 
 test('Get time', () => {
