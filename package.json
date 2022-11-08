@@ -8,7 +8,7 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
-    "development:build": "sst build --stage development",
+    "development:build": "lerna run build && sst build --stage development",
     "development:test": "sst bind --stage development -- vitest run",
     "development:deploy": "sst deploy --stage development",
     "production:deploy": "sst deploy --stage production",

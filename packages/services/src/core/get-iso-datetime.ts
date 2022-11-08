@@ -48,8 +48,9 @@ export const getTime = (time?: Time): string | undefined => {
   validateTime(time)
 
   const timeOnly = new Date(2000, 1, 1, time.hours, time.minutes)
-  // drop timezone and seconds: ie. :25+02:00
-  return formatISO(timeOnly, { representation: 'time' }).slice(0, -9)
+  // 12:30:00.000Z or 12:30:00.000+2:00
+  // get only time ie. 12:30
+  return formatISO(timeOnly, { representation: 'time' }).slice(0, 5)
 }
 
 export const getDate = (date: string): string => {
@@ -64,8 +65,9 @@ export const getIsoDatetime = (date: string, time?: Time): ISODateTime => {
   const dateObject = parseISO(date)
 
   if (!time) {
-    return formatISO(dateObject).slice(0, -6) // drop timezone: ie. +02:00
+    return formatISO(dateObject).slice(0, 19) // drop timezone
   }
+
   return formatISO(
     new Date(
       dateObject.getFullYear(),
@@ -74,5 +76,5 @@ export const getIsoDatetime = (date: string, time?: Time): ISODateTime => {
       time.hours,
       time.minutes
     )
-  ).slice(0, -6) // drop timezone: ie. +02:00
+  ).slice(0, 19) // drop timezone
 }

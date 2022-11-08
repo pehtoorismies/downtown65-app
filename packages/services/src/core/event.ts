@@ -66,7 +66,6 @@ export const create = async (
     title,
     type,
   } = creatableEvent
-
   const eventId = ulid()
   if (!isEventType(type)) {
     throw new Error('Wrong event type provided')
