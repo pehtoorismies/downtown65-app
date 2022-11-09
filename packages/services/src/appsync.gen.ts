@@ -23,7 +23,7 @@ export type AuthPayload = {
 
 export type CreateEventInput = {
   createdBy: MeInput;
-  dateStart: Scalars['String'];
+  dateStart: DateInput;
   description?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
@@ -38,6 +38,12 @@ export type Creator = User & {
   id: Scalars['ID'];
   nickname: Scalars['String'];
   picture: Scalars['String'];
+};
+
+export type DateInput = {
+  day: Scalars['Int'];
+  month: Scalars['Int'];
+  year: Scalars['Int'];
 };
 
 export type DetailedUser = {

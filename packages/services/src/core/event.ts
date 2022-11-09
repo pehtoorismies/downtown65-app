@@ -11,8 +11,8 @@ import type {
 import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
-import { getIsoDatetime, getTime, getDate } from './get-iso-datetime'
 import { mapDynamoToEvent } from './map-dynamo-to-event'
+import { DynamoDatetime } from '~/core/dynamo-datetime'
 
 const Table = getTable()
 
@@ -71,7 +71,12 @@ export const create = async (
     throw new Error('Wrong event type provided')
   }
 
-  const gsi1sk = getIsoDatetime(dateStart, timeStart)
+  const ddt = new DynamoDatetime({
+    dates: dateStart,
+    times: timeStart,
+  })
+
+  const gsi1sk = ddt.getIsoDatetime()
   const now = formatISO(new Date())
 
   const parts = participants ?? []
@@ -95,13 +100,13 @@ export const create = async (
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     // add props
     createdBy,
-    dateStart: getDate(dateStart),
+    dateStart: ddt.getDate(),
     description,
     id: eventId,
     location,
     participants: participantHashMap,
     race: race ?? false,
-    timeStart: getTime(timeStart),
+    timeStart: ddt.getTime(),
     title,
     type,
   }

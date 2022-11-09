@@ -60,20 +60,24 @@ type ParticipateEventAction = {
 type LeaveEventAction = {
   kind: 'leaveEvent'
 }
+type FormSubmittedAction = {
+  kind: 'formSubmitted'
+}
 
 type Action =
+  | DateAction
+  | DescriptionAction
+  | FormSubmittedAction
+  | LeaveEventAction
+  | LocationAction
+  | NextStepAction
+  | ParticipateEventAction
+  | PreviousStepAction
+  | RaceAction
+  | StepAction
+  | TimeAction
   | TitleAction
   | TypeAction
-  | StepAction
-  | NextStepAction
-  | PreviousStepAction
-  | LocationAction
-  | RaceAction
-  | DateAction
-  | TimeAction
-  | DescriptionAction
-  | ParticipateEventAction
-  | LeaveEventAction
 
 export interface State {
   eventType?: EventType
@@ -164,6 +168,12 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         participants: [],
+      }
+    }
+    case 'formSubmitted': {
+      return {
+        ...state,
+        submitEvent: false,
       }
     }
   }
