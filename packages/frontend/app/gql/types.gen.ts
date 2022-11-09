@@ -26,7 +26,7 @@ export type AuthPayload = {
 
 export type CreateEventInput = {
   createdBy: MeInput;
-  dateStart: Scalars['String'];
+  dateStart: DateInput;
   description?: InputMaybe<Scalars['String']>;
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
@@ -41,6 +41,12 @@ export type Creator = User & {
   id: Scalars['ID'];
   nickname: Scalars['String'];
   picture: Scalars['String'];
+};
+
+export type DateInput = {
+  day: Scalars['Int'];
+  month: Scalars['Int'];
+  year: Scalars['Int'];
 };
 
 export type DetailedUser = {
@@ -285,6 +291,32 @@ export type UserError = {
   path: Scalars['String'];
 };
 
+export type ForgotPasswordMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
+
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', tokens?: { __typename?: 'AuthPayload', accessToken: string, idToken: string, refreshToken: string } |  undefined, loginError?: { __typename?: 'LoginError', message: string, path: string, code: string } |  undefined } };
+
+export type SignupMutationVariables = Exact<{
+  name: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+  nickname: Scalars['String'];
+  registerSecret: Scalars['String'];
+}>;
+
+
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'Creator', id: string } | { __typename?: 'EventParticipant', id: string } | { __typename?: 'MeUser', id: string } | { __typename?: 'OtherUser', id: string } |  undefined, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> |  undefined } };
+
 export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: string, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
 
 export type GetEventQueryVariables = Exact<{
@@ -321,36 +353,10 @@ export type LeaveEventMutationVariables = Exact<{
 
 export type LeaveEventMutation = { __typename?: 'Mutation', leaveEvent?: boolean |  undefined };
 
-export type ForgotPasswordMutationVariables = Exact<{
-  email: Scalars['String'];
-}>;
-
-
-export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
-
-export type LoginMutationVariables = Exact<{
-  email: Scalars['String'];
-  password: Scalars['String'];
-}>;
-
-
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginPayload', tokens?: { __typename?: 'AuthPayload', accessToken: string, idToken: string, refreshToken: string } |  undefined, loginError?: { __typename?: 'LoginError', message: string, path: string, code: string } |  undefined } };
-
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetProfileQuery = { __typename?: 'Query', me: { __typename?: 'MeUser', id: string, email: string, name: string, nickname: string, picture: string, preferences: { __typename?: 'Preferences', subscribeEventCreationEmail: boolean, subscribeWeeklyEmail: boolean } } };
-
-export type SignupMutationVariables = Exact<{
-  name: Scalars['String'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-  nickname: Scalars['String'];
-  registerSecret: Scalars['String'];
-}>;
-
-
-export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'Creator', id: string } | { __typename?: 'EventParticipant', id: string } | { __typename?: 'MeUser', id: string } | { __typename?: 'OtherUser', id: string } |  undefined, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> |  undefined } };
 
 export type UpdateMeMutationVariables = Exact<{
   subscribeWeeklyEmail: Scalars['Boolean'];
@@ -381,6 +387,42 @@ export const BaseFieldsFragmentDoc = gql`
   title
   timeStart
   type
+}
+    `;
+export const ForgotPasswordDocument = gql`
+    mutation ForgotPassword($email: String!) {
+  forgotPassword(email: $email)
+}
+    `;
+export const LoginDocument = gql`
+    mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    tokens {
+      accessToken
+      idToken
+      refreshToken
+    }
+    loginError {
+      message
+      path
+      code
+    }
+  }
+}
+    `;
+export const SignupDocument = gql`
+    mutation Signup($name: String!, $email: String!, $password: String!, $nickname: String!, $registerSecret: String!) {
+  signup(
+    input: {name: $name, email: $email, password: $password, nickname: $nickname, registerSecret: $registerSecret}
+  ) {
+    user {
+      id
+    }
+    errors {
+      path
+      message
+    }
+  }
 }
     `;
 export const GetEventDocument = gql`
@@ -414,27 +456,6 @@ export const LeaveEventDocument = gql`
   leaveEvent(eventId: $eventId)
 }
     `;
-export const ForgotPasswordDocument = gql`
-    mutation ForgotPassword($email: String!) {
-  forgotPassword(email: $email)
-}
-    `;
-export const LoginDocument = gql`
-    mutation Login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    tokens {
-      accessToken
-      idToken
-      refreshToken
-    }
-    loginError {
-      message
-      path
-      code
-    }
-  }
-}
-    `;
 export const GetProfileDocument = gql`
     query GetProfile {
   me {
@@ -446,21 +467,6 @@ export const GetProfileDocument = gql`
     preferences {
       subscribeEventCreationEmail
       subscribeWeeklyEmail
-    }
-  }
-}
-    `;
-export const SignupDocument = gql`
-    mutation Signup($name: String!, $email: String!, $password: String!, $nickname: String!, $registerSecret: String!) {
-  signup(
-    input: {name: $name, email: $email, password: $password, nickname: $nickname, registerSecret: $registerSecret}
-  ) {
-    user {
-      id
-    }
-    errors {
-      path
-      message
     }
   }
 }
@@ -488,6 +494,15 @@ const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationTy
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    ForgotPassword(variables: ForgotPasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ForgotPasswordMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<ForgotPasswordMutation>(ForgotPasswordDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ForgotPassword', 'mutation');
+    },
+    Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Login', 'mutation');
+    },
+    Signup(variables: SignupMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SignupMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SignupMutation>(SignupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Signup', 'mutation');
+    },
     GetEvent(variables: GetEventQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetEventQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetEventQuery>(GetEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEvent', 'query');
     },
@@ -503,17 +518,8 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     LeaveEvent(variables: LeaveEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LeaveEventMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<LeaveEventMutation>(LeaveEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LeaveEvent', 'mutation');
     },
-    ForgotPassword(variables: ForgotPasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ForgotPasswordMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<ForgotPasswordMutation>(ForgotPasswordDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ForgotPassword', 'mutation');
-    },
-    Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Login', 'mutation');
-    },
     GetProfile(variables?: GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetProfileQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');
-    },
-    Signup(variables: SignupMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SignupMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<SignupMutation>(SignupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Signup', 'mutation');
     },
     UpdateMe(variables: UpdateMeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMeMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateMeMutation>(UpdateMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateMe', 'mutation');

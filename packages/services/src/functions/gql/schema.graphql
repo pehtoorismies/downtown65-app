@@ -89,9 +89,16 @@ input TimeInput {
     minutes: Int!
 }
 
+input DateInput {
+    year: Int!
+    month: Int!
+    day: Int!
+}
+
+
 input CreateEventInput {
     createdBy: MeInput!
-    dateStart: String!
+    dateStart: DateInput!
     description: String
     location: String!
     participants: [MeInput!]

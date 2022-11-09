@@ -1,7 +1,5 @@
 import type { ActionFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
-import format from 'date-fns/format'
-import formatISO from 'date-fns/formatISO'
 import { z } from 'zod'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { EventType } from '~/gql/types.gen'
@@ -21,10 +19,8 @@ const preprocessNumber = (a: unknown) => {
 const DateObject = z.object({
   year: z.preprocess(preprocessNumber, z.number().positive().gte(2000)),
   month: z.preprocess(preprocessNumber, z.number().nonnegative().lte(11)),
-  date: z.preprocess(preprocessNumber, z.number().positive().lte(31)),
+  day: z.preprocess(preprocessNumber, z.number().positive().lte(31)),
 })
-
-type DateObject = z.infer<typeof DateObject>
 
 const EventForm = z.object({
   title: z.string().min(2),
@@ -70,7 +66,7 @@ const getEventForm = (body: FormData): EventForm => {
     date: {
       year: body.get('year'),
       month: body.get('month'),
-      date: body.get('date'),
+      day: body.get('day'),
     },
     time: {
       minutes: body.get('minutes'),
@@ -79,20 +75,6 @@ const getEventForm = (body: FormData): EventForm => {
     description: body.get('description'),
     participants: JSON.parse(String(body.get('participants'))),
   })
-}
-
-const getDateStart = (
-  date: DateObject,
-  time?: { hours: number; minutes: number }
-): string => {
-  if (!time) {
-    // AWSDate
-    return format(new Date(date.year, date.month, date.date), 'yyyy-MM-dd')
-  }
-  // AWSDateTime
-  return formatISO(
-    new Date(date.year, date.month, date.date, time.hours, time.minutes)
-  )
 }
 
 export const action: ActionFunction = async ({ request }) => {
@@ -118,12 +100,13 @@ export const action: ActionFunction = async ({ request }) => {
     {
       input: {
         createdBy: result.user,
+        dateStart: date,
         description: description.trim() === '' ? undefined : description,
         location,
         race: isRace,
+        timeStart: time,
         title,
         type,
-        dateStart: getDateStart(date, time),
         participants,
       },
     },

@@ -2,7 +2,7 @@ overwrite: true
 schema:
   - 'packages/services/src/functions/gql/schema.graphql'
 documents:
-  - 'packages/frontend/graphql-queries/**/*'
+  - 'packages/frontend/app/**/*.graphql'
 
 generates:
   packages/services/src/appsync.gen.ts:

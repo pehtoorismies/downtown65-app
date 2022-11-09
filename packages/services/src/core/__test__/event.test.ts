@@ -8,7 +8,11 @@ const creatableEvent = {
       'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png',
     id: 'some_id',
   },
-  dateStart: '2018-12-13',
+  dateStart: {
+    year: 2018,
+    month: 12,
+    day: 13,
+  },
   location: 'Sipoo',
   participants: [
     {

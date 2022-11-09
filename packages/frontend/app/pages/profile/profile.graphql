@@ -1,3 +1,17 @@
+query GetProfile {
+    me {
+        id
+        email
+        name
+        nickname
+        picture
+        preferences {
+            subscribeEventCreationEmail
+            subscribeWeeklyEmail
+        }
+    }
+}
+
 mutation UpdateMe($subscribeWeeklyEmail: Boolean!, $subscribeEventCreationEmail: Boolean!) {
     updateMe(
         input: {

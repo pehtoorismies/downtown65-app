@@ -64,14 +64,14 @@ const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
 
 const getDateComponents = (
   d?: Date
-): { month: string; year: string; date: string } | undefined => {
+): { month: string; year: string; day: string } | undefined => {
   if (!d) {
     return
   }
 
   return {
-    date: `${d.getDate()}`,
-    month: `${d.getMonth()}`,
+    day: `${d.getDate()}`,
+    month: `${d.getMonth() + 1}`,
     year: `${d.getFullYear()}`,
   }
 }
@@ -117,6 +117,7 @@ export const NewEvent = () => {
         },
         { method: 'post', action: '/events/new' }
       )
+      dispatch({ kind: 'formSubmitted' })
     }
   }, [
     state.submitEvent,
