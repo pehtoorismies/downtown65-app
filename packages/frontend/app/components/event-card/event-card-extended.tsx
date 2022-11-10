@@ -1,13 +1,7 @@
-import {
-  Card,
-  Badge,
-  TypographyStylesProvider,
-  Group,
-  Text,
-} from '@mantine/core'
-import { Gradient } from '~/components/colors'
+import { Card, TypographyStylesProvider, Text } from '@mantine/core'
 import type { EventCardRootProps } from '~/components/event-card/event-card-root'
 import { EventCardRoot } from '~/components/event-card/event-card-root'
+import { Participants } from '~/components/event-card/participants'
 
 interface EventCardExtendedProps extends EventCardRootProps {
   description: string
@@ -28,27 +22,10 @@ export const EventCardExtended = (props: EventCardExtendedProps) => {
         </Text>
       )}
       <Card.Section p="xs" withBorder>
-        <Group position="center" spacing={2}>
-          {props.participants.map((p) => {
-            const gradient =
-              props.me?.id === p.id
-                ? Gradient.dtPink
-                : { from: 'indigo', to: 'blue', deg: 45 }
-
-            return (
-              <Badge
-                m={2}
-                radius="sm"
-                key={p.id}
-                styles={{ inner: { textTransform: 'none' } }}
-                variant="gradient"
-                gradient={gradient}
-              >
-                {p.nickname}
-              </Badge>
-            )
-          })}
-        </Group>
+        <Text size="sm" weight={400}>
+          Osallistujat:
+        </Text>
+        <Participants participants={props.participants} me={props.me} />
       </Card.Section>
     </EventCardRoot>
   )
