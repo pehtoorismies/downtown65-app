@@ -22,11 +22,13 @@ interface Input {
   date?: string
 }
 
-const throwDateError = (): never => {
-  throw new Error('Date is incorrect. Use YYYY-MM-DD')
+const throwDateError = (date: string): never => {
+  throw new Error(`Date is incorrect. Use YYYY-MM-DD. Received ${date}`)
 }
-const throwTimeError = (): never => {
-  throw new Error('Time is incorrect. Use hours 0 - 23 and minutes 0 - 59')
+const throwTimeError = (time: string): never => {
+  throw new Error(
+    `Time is incorrect. Use hours 0 - 23 and minutes 0 - 59. Received ${time}`
+  )
 }
 
 const dateRegexp = /^\d{4}-\d{2}-\d{2}$/
@@ -34,13 +36,13 @@ const timeRegexp = /^(\d{2}):(\d{2})$/
 
 const parseDate = (d: string): Dates => {
   if (!dateRegexp.test(d)) {
-    return throwDateError()
+    return throwDateError(d)
   }
 
   const date = parse(d, 'yyyy-MM-dd', new Date())
 
   if (!isValid(date)) {
-    return throwDateError()
+    return throwDateError(d)
   }
   return {
     year: date.getFullYear(),
@@ -54,10 +56,10 @@ const parseTimes = (times?: Times): Times | undefined => {
     return
   }
   if (times.hours < 0 || times.hours > 23) {
-    throwTimeError()
+    throwTimeError(`${times.hours}:${times.minutes}`)
   }
   if (times.minutes < 0 || times.minutes > 59) {
-    throwTimeError()
+    throwTimeError(`${times.hours}:${times.minutes}`)
   }
   return times
 }
@@ -68,7 +70,7 @@ const parseTime = (t: string | undefined): Times | undefined => {
   }
   const matches = t.match(timeRegexp)
   if (!matches || !matches[1] || !matches[2]) {
-    return throwTimeError()
+    return throwTimeError(t)
   }
 
   return parseTimes({
@@ -81,10 +83,10 @@ const parseDates = (dates: Dates): Dates => {
   const { year, month, day } = dates
   const parsed = parse(`${year}-${month}-${day}`, 'yyyy-MM-dd', new Date())
   if (!isValid(parsed)) {
-    return throwDateError()
+    return throwDateError(`${year}-${month}-${day}`)
   }
   if (!isAfter(parsed, new Date(2000, 1, 1))) {
-    return throwDateError()
+    return throwDateError(`${year}-${month}-${day}`)
   }
 
   return dates
