@@ -20,7 +20,8 @@ export const createEvent: AppSyncResolverHandler<
       `Schema mismatch. 'type' is not within ${getEventValues().join(',')} `
     )
   }
-
+  console.log('Creatable Event')
+  console.log(creatableEvent)
   const { id } = await Event.create({
     ...creatableEvent,
     type: creatableEvent.type,

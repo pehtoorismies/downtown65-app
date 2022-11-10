@@ -3,6 +3,7 @@ import { json } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import type { EventLoaderData } from '~/pages/events/event-loader-data'
+import { formatDate } from '~/pages/events/format-date'
 import { validateSessionUser } from '~/session.server'
 
 export type LoaderData = {
@@ -28,6 +29,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json<LoaderData>({
     eventItem: {
       ...event,
+      dateStart: formatDate(event.dateStart),
       description: event.description ?? '',
       isRace: event.race,
       me: result.hasSession ? result.user : undefined,
