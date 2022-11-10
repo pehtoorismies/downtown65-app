@@ -6,7 +6,6 @@ import {
   BackgroundImage,
   Center,
   Badge,
-  Avatar,
   ThemeIcon,
   Box,
   Grid,
@@ -28,32 +27,39 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colors.white,
   },
 
-  typeTitle: {
+  grid: {
+    display: 'grid',
+    gridTemplateColumns: '100px auto 100px',
+    gridTemplateRows: '50px auto 50px',
+    gap: '15px 15px',
+    gridTemplateAreas: `
+"topLeft . topRight"
+"main main main"
+"bottomLeft footer bottomRight"
+`,
+  },
+  gridTitle: {
+    gridArea: 'main',
     textShadow: 'black 2px 2px 10px',
     fontWeight: 700,
     letterSpacing: '4px',
     textTransform: 'uppercase',
   },
-
-  count: {
-    position: 'absolute',
-    top: theme.spacing.xs,
-    right: theme.spacing.xs + 2,
+  gridCount: {
+    gridArea: 'topRight',
     pointerEvents: 'none',
+    backgroundColor: 'orange',
+    justifySelf: 'end',
   },
-
-  creator: {
-    position: 'absolute',
-    right: 3,
-    top: theme.spacing.xs + 120,
-    visibility: 'hidden',
-  },
-
-  race: {
-    position: 'absolute',
-    left: theme.spacing.xs,
-    top: theme.spacing.xs,
+  gridRace: {
+    gridArea: 'topLeft',
     boxShadow: '3px 3px 16px #888888',
+  },
+  gridCreator: {
+    gridArea: 'bottomRight',
+    opacity: 0.8,
+    justifySelf: 'end',
+    alignSelf: 'end',
   },
 }))
 
@@ -73,6 +79,8 @@ export interface EventCardRootProps extends ParticipantProps {
   title: string
   type: EventType
 }
+
+const BADGE_MARGIN = 'xs'
 
 export const EventCardRoot = ({
   children,
@@ -97,20 +105,34 @@ export const EventCardRoot = ({
   return (
     <Card withBorder radius="md" className={cx(classes.card)} shadow={shadow}>
       <Card.Section>
-        <Box>
-          <BackgroundImage src={imageUrl}>
-            <Center p="md">
-              <Text
-                color="#fff"
-                size={30}
-                px="xs"
-                my={36}
-                className={classes.typeTitle}
-              >
-                {text}
-              </Text>
-            </Center>
+        <BackgroundImage src={imageUrl}>
+          <Box className={classes.grid}>
+            <Text
+              align="center"
+              color="#fff"
+              size={30}
+              className={classes.gridTitle}
+            >
+              {text}
+            </Text>
             <Badge
+              m={BADGE_MARGIN}
+              py="xs"
+              px={4}
+              className={classes.gridCreator}
+              styles={{ inner: { textTransform: 'none' } }}
+              size="lg"
+              radius="xs"
+              variant="gradient"
+              gradient={meAttending ? Gradient.dtPink : Gradient.blue}
+              // leftSection={
+              //   <Avatar alt="Creator image" size={18} src={createdBy.picture} />
+              // }
+            >
+              #created {createdBy.nickname}
+            </Badge>
+            <Badge
+              m={BADGE_MARGIN}
               size="lg"
               leftSection={
                 <Center>
@@ -118,38 +140,16 @@ export const EventCardRoot = ({
                 </Center>
               }
               radius="sm"
-              className={classes.count}
+              className={classes.gridCount}
               variant="gradient"
               gradient={gradient}
             >
               {participants.length}
             </Badge>
-            <Badge
-              className={classes.creator}
-              styles={{ inner: { textTransform: 'none' } }}
-              sx={(theme) => ({
-                paddingLeft: 0,
-                paddingRight: theme.spacing.xs,
-                opacity: 0.8,
-              })}
-              size="sm"
-              radius="sm"
-              variant="gradient"
-              leftSection={
-                <Avatar
-                  alt="Creator image"
-                  size={18}
-                  src={createdBy.picture}
-                  radius="sm"
-                />
-              }
-            >
-              created by: {createdBy.nickname}
-            </Badge>
-
             {isRace && (
               <ThemeIcon
-                className={classes.race}
+                m={BADGE_MARGIN}
+                className={classes.gridRace}
                 size="lg"
                 gradient={gradient}
                 variant="gradient"
@@ -157,8 +157,8 @@ export const EventCardRoot = ({
                 <IconMedal />
               </ThemeIcon>
             )}
-          </BackgroundImage>
-        </Box>
+          </Box>
+        </BackgroundImage>
       </Card.Section>
       <Card.Section withBorder px="xs" pb="xs">
         <Text weight={700} mt={2}>
