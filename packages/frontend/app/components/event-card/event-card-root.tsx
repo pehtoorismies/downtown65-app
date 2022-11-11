@@ -125,11 +125,8 @@ export const EventCardRoot = ({
               radius="xs"
               variant="gradient"
               gradient={meAttending ? Gradient.dtPink : Gradient.blue}
-              // leftSection={
-              //   <Avatar alt="Creator image" size={18} src={createdBy.picture} />
-              // }
             >
-              #created {createdBy.nickname}
+              #created-by {createdBy.nickname}
             </Badge>
             <Badge
               m={BADGE_MARGIN}

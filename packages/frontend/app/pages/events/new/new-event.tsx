@@ -100,6 +100,7 @@ export const NewEvent = () => {
       dispatch({ kind: 'participateEvent', me })
     },
     state: 'idle',
+    loadingEventId: 'not-defined',
   }
 
   useEffect(() => {
