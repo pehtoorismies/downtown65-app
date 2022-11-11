@@ -366,6 +366,11 @@ export type UpdateMeMutationVariables = Exact<{
 
 export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename?: 'MeUser', id: string, nickname: string, name: string, preferences: { __typename?: 'Preferences', subscribeWeeklyEmail: boolean, subscribeEventCreationEmail: boolean } } };
 
+export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'OtherUser', id: string, name: string, nickname: string }> };
+
 export const BaseFieldsFragmentDoc = gql`
     fragment baseFields on Event {
   id
@@ -486,6 +491,15 @@ export const UpdateMeDocument = gql`
   }
 }
     `;
+export const GetUsersDocument = gql`
+    query GetUsers {
+  users {
+    id
+    name
+    nickname
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -523,6 +537,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     UpdateMe(variables: UpdateMeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMeMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateMeMutation>(UpdateMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateMe', 'mutation');
+    },
+    GetUsers(variables?: GetUsersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUsersQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetUsersQuery>(GetUsersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetUsers', 'query');
     }
   };
 }

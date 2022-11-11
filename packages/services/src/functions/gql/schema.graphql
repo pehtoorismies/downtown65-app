@@ -44,8 +44,6 @@ type Creator implements User @aws_api_key @aws_oidc {
     picture: String!
 }
 
-
-
 type Event @aws_api_key @aws_oidc {
     createdBy: Creator!
     dateStart: String! # Should be a AWSDateTime or AWSDate
