@@ -35,7 +35,7 @@ interface Properties {
 
 export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
   const actions = useParticipatingContext()
-
+  const loading = actions.state !== 'idle' && actions.loadingEventId === eventId
   if (isParticipating) {
     return (
       <Button
@@ -43,7 +43,7 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
         onClick={() => {
           actions.onLeave(eventId ?? 'no-event-id')
         }}
-        loading={actions.state !== 'idle'}
+        loading={loading}
         leftIcon={<IconHandOff size={18} />}
         variant="gradient"
         gradient={Gradient.dtPink}
@@ -68,7 +68,7 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
       onClick={() => {
         actions.onParticipate(eventId ?? 'no-event-id')
       }}
-      loading={actions.state !== 'idle'}
+      loading={loading}
       variant="gradient"
       leftIcon={<IconHandStop size={18} />}
       styles={() => ({
