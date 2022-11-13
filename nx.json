@@ -5,7 +5,8 @@
       "options": {
         "cacheableOperations": [
           "lint",
-          "typecheck"
+          "typecheck",
+          "test"
         ]
       }
     }
