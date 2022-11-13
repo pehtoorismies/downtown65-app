@@ -1,9 +1,9 @@
+import { DynamoDatetime } from '@downtown65-app/common'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import type { EventLoaderData } from '~/pages/events/event-loader-data'
-import { formatDate } from '~/pages/events/format-date'
 import { validateSessionUser } from '~/session.server'
 
 export type LoaderData = {
@@ -26,10 +26,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const result = await validateSessionUser(request)
 
+  const ddt = new DynamoDatetime({
+    date: event.dateStart,
+    time: event.timeStart,
+  })
+
   return json<LoaderData>({
     eventItem: {
       ...event,
-      dateStart: formatDate(event.dateStart),
+      dateStart: ddt.getFormattedDate(),
       description: event.description ?? '',
       isRace: event.race,
       me: result.hasSession ? result.user : undefined,
