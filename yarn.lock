@@ -7266,6 +7266,11 @@ dedent@^0.7.0:
   resolved "https://registry.npmjs.org/dedent/-/dedent-0.7.0.tgz"
   integrity sha512-Q6fKUPqnAHAyhiUgFU7BUzLiv0kd8saH9al7tnu5Q/okj6dnupxyTgFIBjVzJATdfIAm9NAsvXNzjaKa+bxVyA==
 
+deep-copy@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/deep-copy/-/deep-copy-1.4.2.tgz#0622719257e4bd60240e401ea96718211c5c4697"
+  integrity sha512-VxZwQ/1+WGQPl5nE67uLhh7OqdrmqI1OazrraO9Bbw/M8Bt6Mol/RxzDA6N6ZgRXpsG/W9PgUj8E1LHHBEq2GQ==
+
 deep-eql@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/deep-eql/-/deep-eql-3.0.1.tgz"
@@ -7612,12 +7617,13 @@ duplexify@^3.5.0, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-dynamodb-toolbox@0.4.3:
-  version "0.4.3"
-  resolved "https://registry.npmjs.org/dynamodb-toolbox/-/dynamodb-toolbox-0.4.3.tgz"
-  integrity sha512-z5WuDj+g5ZBKiDrNRbxg5hEpTDwR/9MsnE2A3+t0FuRyPbEegmUmauHWcnK/JxwTE2JcUMQvDzMgCAJW5BAj/g==
+dynamodb-toolbox@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/dynamodb-toolbox/-/dynamodb-toolbox-0.5.2.tgz#7e8129e16ce784c00e27a24851396a6f9e27e1a3"
+  integrity sha512-AJ1SjDz1Bdu77iZKjG9vZ1BplcEduGLBQRJPC8F9LXxqkxcUB+/1Koak6awny4Q2ECQjEcLffrArFwpl+Ka6AA==
   dependencies:
-    ts-toolbelt "^6.15.5"
+    deep-copy "^1.4.2"
+    ts-toolbelt "^9.6.0"
 
 ecdsa-sig-formatter@1.0.11, ecdsa-sig-formatter@^1.0.11:
   version "1.0.11"
@@ -15518,10 +15524,10 @@ ts-prune@0.10.3:
     "true-myth" "^4.1.0"
     ts-morph "^13.0.1"
 
-ts-toolbelt@^6.15.5:
-  version "6.15.5"
-  resolved "https://registry.npmjs.org/ts-toolbelt/-/ts-toolbelt-6.15.5.tgz"
-  integrity sha512-FZIXf1ksVyLcfr7M317jbB67XFJhOO1YqdTcuGaq9q5jLUoTikukZ+98TPjKiP2jC5CgmYdWWYs0s2nLSU0/1A==
+ts-toolbelt@^9.6.0:
+  version "9.6.0"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-9.6.0.tgz#50a25426cfed500d4a09bd1b3afb6f28879edfd5"
+  integrity sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==
 
 tsconfig-paths@^3.14.1, tsconfig-paths@^3.9.0:
   version "3.14.1"
