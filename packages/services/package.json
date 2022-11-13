@@ -6,7 +6,8 @@
   "scripts": {
     "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "test": "yarn --cwd ../../ sst bind vitest --dir packages/services run"
   },
   "dependencies": {
     "@serverless-stack/node": "1.17.1",
