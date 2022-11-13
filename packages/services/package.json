@@ -10,6 +10,7 @@
     "test": "yarn --cwd ../../ sst bind vitest --dir packages/services run"
   },
   "dependencies": {
+    "@downtown65-app/common": "*",
     "@serverless-stack/node": "1.17.1",
     "auth0": "2.44.0",
     "aws-lambda": "1.0.7",

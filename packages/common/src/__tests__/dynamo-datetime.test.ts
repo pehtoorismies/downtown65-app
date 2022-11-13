@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { DynamoDatetime } from '~/core/dynamo-datetime'
+import { DynamoDatetime } from '../dynamo-datetime'
 
 test.each([
   { date: '202-12-12', time: undefined, expected: /Date is incorrect/ },
@@ -94,4 +94,42 @@ test('DynamoDatetime: date and time', () => {
   expect(ddt.getDate()).toBe('2022-12-12')
   expect(ddt.getTimes()).toEqual({ hours: 20, minutes: 15 })
   expect(ddt.getDates()).toEqual({ year: 2022, month: 12, day: 12 })
+})
+
+test('DynamoDatetie format date fi', () => {
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2022, month: 12, day: 12 },
+    }).getFormattedDate()
+  ).toEqual('12.12.2022 (ma)')
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2022, month: 12, day: 13 },
+    }).getFormattedDate()
+  ).toEqual('13.12.2022 (ti)')
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2022, month: 12, day: 14 },
+    }).getFormattedDate()
+  ).toEqual('14.12.2022 (ke)')
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2022, month: 12, day: 15 },
+    }).getFormattedDate()
+  ).toEqual('15.12.2022 (to)')
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2022, month: 12, day: 16 },
+    }).getFormattedDate()
+  ).toEqual('16.12.2022 (pe)')
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2022, month: 12, day: 17 },
+    }).getFormattedDate()
+  ).toEqual('17.12.2022 (la)')
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2022, month: 12, day: 18 },
+    }).getFormattedDate()
+  ).toEqual('18.12.2022 (su)')
 })

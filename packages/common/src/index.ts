@@ -1,1 +1,1 @@
-export const someCommonFunction = () => {}
+export { DynamoDatetime } from './dynamo-datetime'

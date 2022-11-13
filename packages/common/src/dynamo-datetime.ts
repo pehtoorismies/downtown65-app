@@ -2,6 +2,7 @@ import format from 'date-fns/format'
 import formatISO from 'date-fns/formatISO'
 import isAfter from 'date-fns/isAfter'
 import isValid from 'date-fns/isValid'
+import fi from 'date-fns/locale/fi'
 import parse from 'date-fns/parse'
 
 interface Times {
@@ -141,5 +142,13 @@ export class DynamoDatetime {
       : new Date(year, month - 1, day)
 
     return formatISO(d).slice(0, 19)
+  }
+
+  getFormattedDate(): string {
+    return format(
+      new Date(this.dates.year, this.dates.month - 1, this.dates.day),
+      `dd.MM.yyyy (EEEEEE)`,
+      { locale: fi }
+    )
   }
 }

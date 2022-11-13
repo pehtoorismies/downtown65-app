@@ -1,3 +1,4 @@
+import { DynamoDatetime } from '@downtown65-app/common'
 import { format } from 'date-fns'
 import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
@@ -12,7 +13,6 @@ import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
 import { mapDynamoToEvent } from './map-dynamo-to-event'
-import { DynamoDatetime } from '~/core/dynamo-datetime'
 
 const Table = getTable()
 
