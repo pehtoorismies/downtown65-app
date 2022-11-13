@@ -3731,73 +3731,73 @@
     npmlog "^6.0.2"
     write-file-atomic "^4.0.1"
 
-"@mantine/core@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-5.6.4.tgz#c395ade4756262aa73512aa4a63fb0e7ee54690f"
-  integrity sha512-sztwr392mhZCPemmpk6rwUKvatIkxwDgOx1IHCmJNi0anb+8jeezCDu15lxu7gCZWHntZh7KbDeSauwK1lYUVA==
+"@mantine/core@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/core/-/core-5.7.2.tgz#0f78f29ecbb8daebffbbe4a956ad6276caa7f6d3"
+  integrity sha512-cDDvlYhDCzREfIZ33CRLQpXlv+UXRb4VBZWbfYxWXTRPV6gKNGXwlVmXcdDUJCcjRWLh9Wc4erWT8gdTAbvzsQ==
   dependencies:
     "@floating-ui/react-dom-interactions" "^0.10.1"
-    "@mantine/styles" "5.6.4"
-    "@mantine/utils" "5.6.4"
+    "@mantine/styles" "5.7.2"
+    "@mantine/utils" "5.7.2"
     "@radix-ui/react-scroll-area" "1.0.0"
     react-textarea-autosize "8.3.4"
 
-"@mantine/dates@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-5.6.4.tgz#3fbecc49082f0c9f51ce44739cc37570c8c8b123"
-  integrity sha512-vKh88IULuwF30XUEUZ0DVjucvKM1Ums+8D1DNHkUWg485Q3ASeZ3AqjDrj6Be1UDgaWJmAMKQ8DsWRKMZHZNtw==
+"@mantine/dates@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/dates/-/dates-5.7.2.tgz#f036ccb3801033bfd6cb38b4b8b3b7667e75c024"
+  integrity sha512-TFOebfiAcPoLJZWDRvh2PJiXPFeNmiAcISjnt2F3ihyr25j0MVs/Zkp2ozYkFCtc6BnVluwkv2H4h9FLuCaL6A==
   dependencies:
-    "@mantine/utils" "5.6.4"
+    "@mantine/utils" "5.7.2"
 
-"@mantine/ds@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/ds/-/ds-5.6.4.tgz#96758945aae60ba48f5e8809463fd9aa42324005"
-  integrity sha512-vw/m4nAvFmUi2uNui9u1jhnkxhmhEYRVg7zEKWgAL7xBGBBE5z99EVQqQL4mr20jxmDvNUfXDMgnV4iuvAsxDw==
+"@mantine/ds@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/ds/-/ds-5.7.2.tgz#dafd2f260d4fdae4e091d9fa6dc02b2941fcd485"
+  integrity sha512-VqXRf+/EoDEL4sdtWhX+G82dPs45uXOUk00HeSLGmhxvgxSsDbgEQKPZ/HUtJn5SXVQhTOrl1xqviSrNIRD5SQ==
   dependencies:
-    "@mantine/utils" "5.6.4"
+    "@mantine/utils" "5.7.2"
 
-"@mantine/hooks@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-5.6.4.tgz#252bddb0591a167ce0e132bb446c2e7a39a5f0da"
-  integrity sha512-oalipPx2B9WJzYRPs/3FQVx2/opYei/KvITfJyClPZDUAmgAIG5/PdU8kfQcH01cQxQ9GLXIGP8ceZuzo1x1+Q==
+"@mantine/hooks@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-5.7.2.tgz#29ffa4f68c61145dd091e07763854c4624e254f9"
+  integrity sha512-g+fxcnQwEeVM/5h+SAX/rDNL2s1652DGbP4xxfNg6yFqqhQzmtxQN7xsmkZ+ffx8wKhbsP5z13x6WZoxuJQh9Q==
 
-"@mantine/remix@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/remix/-/remix-5.6.4.tgz#b0a3121983ad66cc21adb455a277318ed947f879"
-  integrity sha512-pHN9nU2mjInF7kiDgd0gVD9OHSJIsaSl53+iLCGcZVXKqcnlWBtIofTSoLsW8llcDM5+xcBdUIuHehbNlf6FyQ==
+"@mantine/remix@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/remix/-/remix-5.7.2.tgz#3f562620bdedee52e6da2016595a803d22b811be"
+  integrity sha512-iWyQfa1fDabvrfJHtW8fT0r3JokezCaFfy2QuB70rdMSuDCWfLHT+7IlOZ7t2+noVJ/OD83PoYnl1jqvjKQqlQ==
   dependencies:
-    "@mantine/ssr" "5.6.4"
-    "@mantine/styles" "5.6.4"
+    "@mantine/ssr" "5.7.2"
+    "@mantine/styles" "5.7.2"
 
-"@mantine/rte@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/rte/-/rte-5.6.4.tgz#5c9458c3659c3ae752fca0a76de2bed0f955098c"
-  integrity sha512-yDXnDV9l9fwOOt15sYccM6DJ5qDL5WCnGPe8Oz1qNgS+BqR57ddsKgiig5AoNGOQaIAW0m3/rkelTyFHC4t21A==
+"@mantine/rte@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/rte/-/rte-5.7.2.tgz#c5f96959ac61748ab01f159b41f61e5356d3c802"
+  integrity sha512-8FkHlJBsiGwM7LTislqcUr0TC1Lfp6GQxGf/y2B4mW/LB1jmxGkYFgbHbiS/v38smaJC5FxqfeL/zgDQ9G57EA==
   dependencies:
     "@tabler/icons" "^1.68.0"
     quill-mention "^3.0.8"
     react-quill "2.0.0"
 
-"@mantine/ssr@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/ssr/-/ssr-5.6.4.tgz#120c3758d13069c46cf0baea788ed12949b61aa0"
-  integrity sha512-rTSMhtUk55Y77sXUwJ4a7D/C5UaqRKhkouyeeWkHr0+r6gh6VHpBtoH1+/wcgGQ2e1IGGBVZZJrXmcY9rhcTNQ==
+"@mantine/ssr@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/ssr/-/ssr-5.7.2.tgz#4b019dd5eb1b4ef8b8fde94711495ae393640064"
+  integrity sha512-2DB5Df6eR4C9/V7lpmwQE8jVkSHSJBTqkZxjsYa1HsKeX4cNFM0SbRsNYk1bQHSq377DXh6PkVMqTzSDqGcFgw==
   dependencies:
-    "@mantine/styles" "5.6.4"
+    "@mantine/styles" "5.7.2"
     html-react-parser "1.4.12"
 
-"@mantine/styles@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-5.6.4.tgz#ea6089bb460ff420d910579f06643c0863486127"
-  integrity sha512-vXKr0suhdjKpp3My1AWQlcAYbnCrIsGXESjlbDTc8Dw3qlZVpkqAUik04LIaLuIMliad+qUV5SkQDQcAUeRbaQ==
+"@mantine/styles@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/styles/-/styles-5.7.2.tgz#22b87c899997110fac682e0868c3d292f198359b"
+  integrity sha512-z5Mxf6Zp7lXzfIM77XkZ68Wp62lDSMJwEMoKm0Kz5tRGV4oMQwirbZf4ZJznZKK3HkaT7ct1ScxnCouEWzlKUg==
   dependencies:
     clsx "1.1.1"
     csstype "3.0.9"
 
-"@mantine/utils@5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.6.4.tgz#74a2ea5d149e870e043722ae9e42960226373f1c"
-  integrity sha512-62PZpY3VHG5XIguO/hmcPC7f6kjSxHQMAQN5KFARbclwAcBs1+xY8aac9Zi8pSrvA3KXFJ9o4WeIXuuFFka+2A==
+"@mantine/utils@5.7.2":
+  version "5.7.2"
+  resolved "https://registry.yarnpkg.com/@mantine/utils/-/utils-5.7.2.tgz#ae2eb5fd73615aa3d92d41d595a953d5325809e9"
+  integrity sha512-LE/ckEX+d1f5GOP1ARNEldUYybOp3Tualx5IYgeV06oyBOaeJaXs9Tco2NTM6j+opZwUbNuYEUmtp4bkArhpOg==
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
@@ -4581,10 +4581,10 @@
   dependencies:
     defer-to-connect "^2.0.0"
 
-"@tabler/icons@1.109.0":
-  version "1.109.0"
-  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.109.0.tgz#11626c3fc097f2f70c4c197e4b9909fb05380752"
-  integrity sha512-B0YetE4pB6HY2Wa57v/LJ3NgkJzKYPze4U0DurIqPoKSptatKv2ga76FZSkO6EUpkYfHMtGPM6QjpJljfuCmAQ==
+"@tabler/icons@1.111.0":
+  version "1.111.0"
+  resolved "https://registry.yarnpkg.com/@tabler/icons/-/icons-1.111.0.tgz#0538fdd8b5de7072ae60fc5d2f13a9a636d2d0e3"
+  integrity sha512-TZWYiMT5ccqfHxRE0Qtgvl+sGsMbNkrv7cJMt/tm8TN9l/CDXx/o7d8uAwUN+3PAlSFfF5e/rD1bi1WJs2xNIA==
 
 "@tabler/icons@^1.68.0":
   version "1.108.0"
