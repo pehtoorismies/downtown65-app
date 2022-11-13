@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@serverless-stack/node": "1.17.1",
-    "auth0": "2.42.0",
+    "auth0": "2.44.0",
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1228.0",
     "dynamodb-toolbox": "0.4.3",
@@ -22,8 +22,8 @@
     "zod": "3.19.1"
   },
   "devDependencies": {
-    "@types/auth0": "2.35.6",
-    "@types/aws-lambda": "8.10.106",
+    "@types/auth0": "2.35.7",
+    "@types/aws-lambda": "8.10.108",
     "@types/mjml": "4.7.0",
     "@types/mustache": "4.2.1",
     "@types/uuid": "8.3.4"
