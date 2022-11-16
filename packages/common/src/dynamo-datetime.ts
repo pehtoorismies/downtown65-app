@@ -66,9 +66,10 @@ const parseTimes = (times?: Times): Times | undefined => {
 }
 
 const parseTime = (t: string | undefined): Times | undefined => {
-  if (t === undefined) {
+  if (!t) {
     return
   }
+
   const matches = t.match(timeRegexp)
   if (!matches || !matches[1] || !matches[2]) {
     return throwTimeError(t)

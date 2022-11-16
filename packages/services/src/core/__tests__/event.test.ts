@@ -32,7 +32,7 @@ const creatableEvent = {
 }
 
 describe('Events', () => {
-  it('should create and delete event ', async () => {
+  it.skip('should create and delete event ', async () => {
     const { id } = await Event.create(creatableEvent)
     const event = await Event.getById(id)
     expect(event).toBeDefined()
