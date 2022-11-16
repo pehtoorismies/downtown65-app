@@ -17,7 +17,7 @@ export const EventCard = (props: EventCardRootProps) => {
           variant="outline"
           rightIcon={<IconArrowNarrowRight size={18} />}
         >
-          Näytä tapahtuma
+          Näytä
         </Button>
       </Center>
     </EventCardRoot>
