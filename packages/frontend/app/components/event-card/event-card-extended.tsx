@@ -12,20 +12,19 @@ export const EventCardExtended = (props: EventCardExtendedProps) => {
 
   return (
     <EventCardRoot {...props}>
-      {hasDescription ? (
-        <TypographyStylesProvider p={0} mt="sm">
-          <div dangerouslySetInnerHTML={{ __html: props.description }} />
-        </TypographyStylesProvider>
-      ) : (
-        <Text align="center" p="sm" color="dimmed" weight={400}>
-          ei tarkempaa tapahtuman kuvausta
-        </Text>
-      )}
-      <Card.Section p="xs" withBorder>
-        <Text size="sm" weight={400}>
-          Osallistujat:
-        </Text>
+      <Card.Section p="xs">
         <Participants participants={props.participants} me={props.me} />
+      </Card.Section>
+      <Card.Section p="xs" withBorder>
+        {hasDescription ? (
+          <TypographyStylesProvider p={0} mt="sm">
+            <div dangerouslySetInnerHTML={{ __html: props.description }} />
+          </TypographyStylesProvider>
+        ) : (
+          <Text align="center" p="sm" color="dimmed" weight={400}>
+            ei tarkempaa tapahtuman kuvausta
+          </Text>
+        )}
       </Card.Section>
     </EventCardRoot>
   )

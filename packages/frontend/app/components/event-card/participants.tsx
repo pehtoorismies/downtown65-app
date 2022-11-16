@@ -21,7 +21,7 @@ export const Participants = ({ me, participants }: Props) => {
   }
 
   return (
-    <Group position="center" spacing={2}>
+    <Group position="left" spacing={2}>
       {participants.map((p) => {
         const gradient =
           me?.id === p.id
