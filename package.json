@@ -36,6 +36,7 @@
     "lerna": "^6.0.3",
     "prettier": "2.7.1",
     "prettier-eslint": "15.0.1",
+    "ts-node": "^10.9.1",
     "ts-prune": "0.10.3",
     "typescript": "4.8.4",
     "vite-tsconfig-paths": "3.5.2",
