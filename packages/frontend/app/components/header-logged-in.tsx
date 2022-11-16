@@ -138,7 +138,7 @@ export const HeaderLoggedIn = ({ user }: Props) => {
                 })
               }}
             >
-              Käyttäjät
+              Jäsenet
             </NavLink>
           </Group>
 
@@ -234,7 +234,7 @@ export const HeaderLoggedIn = ({ user }: Props) => {
             [classes.linkActive]: false,
           })}
         >
-          Käyttäjät
+          Jäsenet
         </Link>
         <Group position="center" grow pb="xl" px="md">
           <Form action="/logout" method="post">
