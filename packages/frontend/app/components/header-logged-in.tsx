@@ -104,7 +104,7 @@ export const HeaderLoggedIn = ({ user }: Props) => {
               onClick={toggleDrawer}
               className={classes.hiddenDesktop}
             />
-            <Text>Downtown65</Text>
+            <Text sx={{ userSelect: 'none' }}>Dt65 Events</Text>
           </Group>
           <Group className={classes.hiddenMobile}>
             <NavLink

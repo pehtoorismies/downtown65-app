@@ -17,7 +17,7 @@ export const HeaderLoggedOut = () => {
       <Header height={60} px="md" fixed>
         <Group position="apart" sx={{ height: '100%' }}>
           <Group>
-            <Text>Downtown65</Text>
+            <Text sx={{ userSelect: 'none' }}>Dt65 Events</Text>
           </Group>
           <Group className={classes.hiddenMobile}>
             <Button component={Link} to="/login" variant="default">
