@@ -50,7 +50,7 @@ export const Events = () => {
           ]}
         >
           {eventItems.map((m) => {
-            return <EventCard key={m.id} {...m} shadow="sm" />
+            return <EventCard key={m.id} {...m} shadow="xs" />
           })}
         </SimpleGrid>
       </ParticipatingContext.Provider>
