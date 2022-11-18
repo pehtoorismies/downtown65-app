@@ -31,7 +31,6 @@ export const login: AppSyncResolverHandler<
         'read:events write:events read:me write:me read:users openid profile email offline_access',
       audience: Config.JWT_AUDIENCE,
     })
-
     const tokens = Auth0Response.parse(auth0Response)
 
     return {
@@ -43,7 +42,7 @@ export const login: AppSyncResolverHandler<
       },
     }
   } catch (error: unknown) {
-    console.error(error)
+    console.error(JSON.stringify(error))
     const errorResponse = ErrorResponse.parse(error)
 
     const message = JSON.parse(errorResponse.message)
