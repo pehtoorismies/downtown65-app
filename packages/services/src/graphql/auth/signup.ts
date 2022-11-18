@@ -120,7 +120,7 @@ export const signup: AppSyncResolverHandler<
 
     return { user: toUser(auth0User) }
   } catch (error: unknown) {
-    console.error(error)
+    console.error(JSON.stringify(error))
     const errorResponse = ErrorResponse.parse(error)
 
     return {
