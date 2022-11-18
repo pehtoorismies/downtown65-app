@@ -21,7 +21,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   )
 
   if (!event) {
-    throw new Response('Not Found', { status: 404 })
+    throw new Response('Not Found', {
+      status: 404,
+      statusText: 'Tapahtumaa ei löydy',
+    })
   }
 
   const result = await validateSessionUser(request)
