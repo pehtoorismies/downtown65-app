@@ -48,3 +48,9 @@ mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {
 mutation LeaveEvent($eventId: ID!) {
     leaveEvent(eventId: $eventId)
 }
+
+mutation DeleteEvent($eventId: ID!) {
+    deleteEvent(eventId: $eventId) {
+        id
+    }
+}

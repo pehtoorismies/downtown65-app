@@ -10,7 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  AWSDateTime: any;
+  AWSDate: any;
 };
 
 export type AuthPayload = {
@@ -61,7 +61,7 @@ export type Error = {
 export type Event = {
   __typename?: 'Event';
   createdBy: Creator;
-  dateStart: Scalars['String'];
+  dateStart: Scalars['AWSDate'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   location: Scalars['String'];
@@ -75,7 +75,7 @@ export type Event = {
 export type EventParticipant = User & {
   __typename?: 'EventParticipant';
   id: Scalars['ID'];
-  joinedAt: Scalars['AWSDateTime'];
+  joinedAt: Scalars['String'];
   nickname: Scalars['String'];
   picture: Scalars['String'];
 };

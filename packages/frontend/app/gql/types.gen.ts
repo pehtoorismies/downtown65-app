@@ -13,7 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  AWSDateTime: any;
+  AWSDate: any;
 };
 
 export type AuthPayload = {
@@ -64,7 +64,7 @@ export type Error = {
 export type Event = {
   __typename?: 'Event';
   createdBy: Creator;
-  dateStart: Scalars['String'];
+  dateStart: Scalars['AWSDate'];
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   location: Scalars['String'];
@@ -78,7 +78,7 @@ export type Event = {
 export type EventParticipant = User & {
   __typename?: 'EventParticipant';
   id: Scalars['ID'];
-  joinedAt: Scalars['AWSDateTime'];
+  joinedAt: Scalars['String'];
   nickname: Scalars['String'];
   picture: Scalars['String'];
 };
@@ -317,19 +317,19 @@ export type SignupMutationVariables = Exact<{
 
 export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'Creator', id: string } | { __typename?: 'EventParticipant', id: string } | { __typename?: 'MeUser', id: string } | { __typename?: 'OtherUser', id: string } |  undefined, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> |  undefined } };
 
-export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: string, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> };
+export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> };
 
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID'];
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: string, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> } |  undefined };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> } |  undefined };
 
 export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: string, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: any, nickname: string, picture: string }> }> };
+export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> }> };
 
 export type CreateEventMutationVariables = Exact<{
   input: CreateEventInput;
@@ -352,6 +352,13 @@ export type LeaveEventMutationVariables = Exact<{
 
 
 export type LeaveEventMutation = { __typename?: 'Mutation', leaveEvent?: boolean |  undefined };
+
+export type DeleteEventMutationVariables = Exact<{
+  eventId: Scalars['ID'];
+}>;
+
+
+export type DeleteEventMutation = { __typename?: 'Mutation', deleteEvent?: { __typename?: 'IDPayload', id: string } |  undefined };
 
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -461,6 +468,13 @@ export const LeaveEventDocument = gql`
   leaveEvent(eventId: $eventId)
 }
     `;
+export const DeleteEventDocument = gql`
+    mutation DeleteEvent($eventId: ID!) {
+  deleteEvent(eventId: $eventId) {
+    id
+  }
+}
+    `;
 export const GetProfileDocument = gql`
     query GetProfile {
   me {
@@ -531,6 +545,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     LeaveEvent(variables: LeaveEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LeaveEventMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<LeaveEventMutation>(LeaveEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'LeaveEvent', 'mutation');
+    },
+    DeleteEvent(variables: DeleteEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteEventMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<DeleteEventMutation>(DeleteEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteEvent', 'mutation');
     },
     GetProfile(variables?: GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetProfileQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');

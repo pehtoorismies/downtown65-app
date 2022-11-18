@@ -10,7 +10,7 @@ import {
   TextInput,
   TypographyStylesProvider,
 } from '@mantine/core'
-import { Link, useLoaderData, useNavigate } from '@remix-run/react'
+import { Form, Link, useLoaderData, useTransition } from '@remix-run/react'
 import { IconCircleOff, IconCircleX, IconPencil } from '@tabler/icons'
 import { useState } from 'react'
 import type { ChangeEvent } from 'react'
@@ -21,15 +21,13 @@ import {
   useParticipationActions,
 } from '~/contexts/participating-context'
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
 export const Event = () => {
   const { eventItem } = useLoaderData<LoaderData>()
+  const transition = useTransition()
+
   const participationActions = useParticipationActions()
-  const navigate = useNavigate()
   const [opened, setOpened] = useState(false)
   const [formValue, setFormValue] = useState('')
-  const [isDeleting, setIsDeleting] = useState(false)
 
   const items = [
     { title: 'Tapahtumat', href: '/events' },
@@ -49,17 +47,13 @@ export const Event = () => {
     setOpened(false)
   }
 
-  const onDeleteEvent = async () => {
-    setIsDeleting(true)
-    await sleep(3000)
-    setIsDeleting(false)
-    navigate('/')
-  }
-
   return (
     <>
       <Modal opened={opened} onClose={onCloseModal} title="Tapahtuman poisto">
-        <LoadingOverlay visible={isDeleting} transitionDuration={200} />
+        <LoadingOverlay
+          visible={transition.submission?.method === 'DELETE'}
+          transitionDuration={200}
+        />
         <TypographyStylesProvider my="sm">
           <h3>Olet poistamassa tapahtumaa</h3>
           <p>
@@ -69,30 +63,30 @@ export const Event = () => {
             Poista.
           </p>
         </TypographyStylesProvider>
-
-        <TextInput
-          placeholder="poista"
-          label="Kirjoita 'poista'"
-          value={formValue}
-          onChange={handleChange}
-        />
-
-        <Text mt="sm">
-          Voit peruuttaa poiston sulkemalla dialogin tai klikkaamalla Peruuta.
-        </Text>
-        <Group position="apart" mt="lg">
-          <Button onClick={onCloseModal} leftIcon={<IconCircleX size={18} />}>
-            Peruuta
-          </Button>
-          <Button
-            color="red"
-            disabled={formValue !== 'poista'}
-            onClick={onDeleteEvent}
-            rightIcon={<IconCircleOff size={18} />}
-          >
-            Poista
-          </Button>
-        </Group>
+        <Form action={`/events/${eventItem.id}`} method="delete">
+          <TextInput
+            placeholder="poista"
+            label="Kirjoita 'poista'"
+            value={formValue}
+            onChange={handleChange}
+          />
+          <Text mt="sm">
+            Voit peruuttaa poiston sulkemalla dialogin tai klikkaamalla Peruuta.
+          </Text>
+          <Group position="apart" mt="lg">
+            <Button onClick={onCloseModal} leftIcon={<IconCircleX size={18} />}>
+              Peruuta
+            </Button>
+            <Button
+              type="submit"
+              color="red"
+              disabled={formValue !== 'poista'}
+              rightIcon={<IconCircleOff size={18} />}
+            >
+              Poista
+            </Button>
+          </Group>
+        </Form>
       </Modal>
       <Container pt={12}>
         <Breadcrumbs mb="xs">{items}</Breadcrumbs>
