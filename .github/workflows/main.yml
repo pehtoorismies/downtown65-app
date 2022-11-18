@@ -33,4 +33,5 @@ jobs:
         run: npx lerna bootstrap
       - name: Deploy infra
         run: |
+          yarn production:build
           yarn production:deploy
