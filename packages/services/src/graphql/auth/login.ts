@@ -43,6 +43,7 @@ export const login: AppSyncResolverHandler<
       },
     }
   } catch (error: unknown) {
+    console.error(error)
     const errorResponse = ErrorResponse.parse(error)
 
     const message = JSON.parse(errorResponse.message)
