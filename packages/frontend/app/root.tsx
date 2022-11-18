@@ -1,4 +1,4 @@
-import { MantineProvider, createEmotionCache } from '@mantine/core'
+import { MantineProvider, createEmotionCache, Title } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -10,6 +10,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useCatch,
 } from '@remix-run/react'
 import { useEffect } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
@@ -149,5 +150,15 @@ export default function App() {
         </body>
       </html>
     </MantineProvider>
+  )
+}
+
+export function CatchBoundary() {
+  const caught = useCatch()
+
+  return (
+    <Title>
+      {caught.status} {caught.statusText}
+    </Title>
   )
 }

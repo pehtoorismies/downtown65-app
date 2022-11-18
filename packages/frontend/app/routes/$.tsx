@@ -8,6 +8,7 @@ import {
   SimpleGrid,
 } from '@mantine/core'
 import { Link } from '@remix-run/react'
+import { IconArrowNarrowLeft } from '@tabler/icons'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -79,6 +80,7 @@ const NotFound = () => {
             size="md"
             mt="xl"
             className={classes.control}
+            leftIcon={<IconArrowNarrowLeft size={18} />}
           >
             Etusivulle
           </Button>
