@@ -69,7 +69,6 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
         actions.onParticipate(eventId ?? 'no-event-id')
       }}
       loading={loading}
-      variant="gradient"
       leftIcon={<IconHandStop size={18} />}
       styles={() => ({
         root: {

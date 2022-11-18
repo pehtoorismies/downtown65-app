@@ -10,7 +10,7 @@ import {
   Box,
   Grid,
 } from '@mantine/core'
-import { IconHandStop, IconMedal, IconUsers } from '@tabler/icons'
+import { IconMedal, IconUsers } from '@tabler/icons'
 import type { PropsWithChildren } from 'react'
 import {
   DisabledInButton,
@@ -146,7 +146,7 @@ export const EventCardRoot = ({
   title,
   type,
 }: PropsWithChildren<EventCardRootProps>) => {
-  const { classes, cx, theme } = useStyles()
+  const { classes, cx } = useStyles()
   const meAttending =
     me !== undefined && participants.map(({ id }) => id).includes(me.id)
 
@@ -181,17 +181,6 @@ export const EventCardRoot = ({
             >
               #{createdBy.nickname}
             </Badge>
-            {meAttending && (
-              <ThemeIcon
-                m={BADGE_MARGIN}
-                className={classes.gridMeIn}
-                size="lg"
-                color="blue.1"
-                variant="outline"
-              >
-                <IconHandStop size={20} color={theme.colors.blue[0]} />
-              </ThemeIcon>
-            )}
             <Badge
               m={BADGE_MARGIN}
               size="lg"
