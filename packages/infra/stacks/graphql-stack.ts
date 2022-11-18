@@ -5,7 +5,6 @@ import * as cdk from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
 import { DynamoStack } from './dynamo-stack'
-import { getEnvironmentVariable } from './get-environment'
 
 export const GraphqlStack = ({ stack }: StackContext) => {
   const { TABLE_NAME, table } = use(DynamoStack)
@@ -45,7 +44,7 @@ export const GraphqlStack = ({ stack }: StackContext) => {
           defaultAuthorization: {
             authorizationType: appsync.AuthorizationType.OIDC,
             openIdConnectConfig: {
-              oidcProvider: `https://${getEnvironmentVariable('AUTH_DOMAIN')}`,
+              oidcProvider: `https://${AUTH_DOMAIN.value}`,
             },
           },
           additionalAuthorizationModes: [
