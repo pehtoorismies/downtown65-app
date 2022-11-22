@@ -9,6 +9,7 @@ import {
   ThemeIcon,
   Box,
   Grid,
+  Group,
 } from '@mantine/core'
 import { IconMedal, IconUsers } from '@tabler/icons'
 import type { PropsWithChildren } from 'react'
@@ -191,12 +192,12 @@ export const EventCardRoot = ({
           </Text>
         </Grid.Col>
         <Grid.Col span={5}>
-          <Center>
+          <Group position="right">
             {!me && <DisabledInButton />}
             {me && (
               <ToggleJoinButton isParticipating={meAttending} eventId={id} />
             )}
-          </Center>
+          </Group>
         </Grid.Col>
       </Grid>
       {children}
