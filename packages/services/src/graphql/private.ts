@@ -21,6 +21,7 @@ import { assertUnreachable } from './support/assert-unreachable'
 import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
 import { getUsers } from './users/get-users'
+import { importEvents } from '~/graphql/events/import-events'
 import { participateEvent } from '~/graphql/events/participate-event'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
 import { updateMe } from '~/graphql/users/update-me'
@@ -41,14 +42,16 @@ export type Outputs =
   | OtherUser[]
   | boolean
   | undefined
+  | string
 
 const PRIVATE_FIELDS = [
   'createEvent',
   'deleteEvent',
   'events',
-  'participateEvent',
+  'importEvents',
   'leaveEvent',
   'me',
+  'participateEvent',
   'updateEvent',
   'updateMe',
   'users',
@@ -134,6 +137,14 @@ export const privateResolver = (
         allowScopes(['write:me'])
         return updateMe(
           event as AppSyncResolverEvent<MutationUpdateMeArgs>,
+          context,
+          callback
+        )
+      }
+      case 'importEvents': {
+        allowScopes(['write:events'])
+        return importEvents(
+          event as AppSyncResolverEvent<EmptyArgs>,
           context,
           callback
         )

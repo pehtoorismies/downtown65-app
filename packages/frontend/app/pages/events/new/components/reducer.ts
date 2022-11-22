@@ -16,10 +16,15 @@ type TitleAction = {
   kind: 'title'
   title: string
 }
+type SubtitleAction = {
+  kind: 'subtitle'
+  subtitle: string
+}
 type TypeAction = {
   kind: 'type'
   type: EventType
 }
+
 type LocationAction = {
   kind: 'location'
   location: string
@@ -75,6 +80,7 @@ type Action =
   | PreviousStepAction
   | RaceAction
   | StepAction
+  | SubtitleAction
   | TimeAction
   | TitleAction
   | TypeAction
@@ -82,6 +88,7 @@ type Action =
 export interface State {
   eventType?: EventType
   title: string
+  subtitle: string
   location: string
   isRace: boolean
   date?: Date
@@ -109,6 +116,9 @@ export const reducer = (state: State, action: Action): State => {
     }
     case 'title': {
       return { ...state, title: action.title }
+    }
+    case 'subtitle': {
+      return { ...state, subtitle: action.subtitle }
     }
     case 'location': {
       return { ...state, location: action.location }

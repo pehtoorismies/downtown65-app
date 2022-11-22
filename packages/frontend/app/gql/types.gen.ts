@@ -31,6 +31,7 @@ export type CreateEventInput = {
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
   race: Scalars['Boolean'];
+  subtitle: Scalars['String'];
   timeStart?: InputMaybe<TimeInput>;
   title: Scalars['String'];
   type: Scalars['String'];
@@ -70,6 +71,7 @@ export type Event = {
   location: Scalars['String'];
   participants: Array<EventParticipant>;
   race: Scalars['Boolean'];
+  subtitle: Scalars['String'];
   timeStart?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: EventType;
@@ -317,19 +319,19 @@ export type SignupMutationVariables = Exact<{
 
 export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'Creator', id: string } | { __typename?: 'EventParticipant', id: string } | { __typename?: 'MeUser', id: string } | { __typename?: 'OtherUser', id: string } |  undefined, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> |  undefined } };
 
-export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> };
+export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, subtitle: string, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> };
 
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID'];
 }>;
 
 
-export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> } |  undefined };
+export type GetEventQuery = { __typename?: 'Query', event?: { __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, subtitle: string, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> } |  undefined };
 
 export type GetEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> }> };
+export type GetEventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, subtitle: string, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> }> };
 
 export type CreateEventMutationVariables = Exact<{
   input: CreateEventInput;
@@ -396,6 +398,7 @@ export const BaseFieldsFragmentDoc = gql`
     picture
   }
   race
+  subtitle
   title
   timeStart
   type

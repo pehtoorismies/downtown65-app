@@ -27,6 +27,7 @@ const iconSize = 20
 const INIT_STATE: State = {
   activeStep: ActiveStep.STEP_EVENT_TYPE,
   title: '',
+  subtitle: '',
   location: '',
   isRace: false,
   time: {},
@@ -107,21 +108,21 @@ export const NewEvent = () => {
     if (state.submitEvent) {
       fetcher.submit(
         {
-          title: state.title,
-          eventType: state.eventType ?? '',
-          location: state.location,
-          isRace: state.isRace ? 'true' : 'false',
           ...getDateComponents(state.date),
           ...getTimeComponents(state.time),
           description: state.description,
+          eventType: state.eventType ?? '',
+          isRace: state.isRace ? 'true' : 'false',
+          location: state.location,
           participants: JSON.stringify(state.participants),
+          subtitle: state.subtitle,
+          title: state.title,
         },
         { method: 'post', action: '/events/new' }
       )
       dispatch({ kind: 'formSubmitted' })
     }
   }, [
-    state.submitEvent,
     fetcher,
     state.date,
     state.description,
@@ -129,6 +130,8 @@ export const NewEvent = () => {
     state.isRace,
     state.location,
     state.participants,
+    state.submitEvent,
+    state.subtitle,
     state.time,
     state.title,
   ])
@@ -181,10 +184,14 @@ export const NewEvent = () => {
       {state.activeStep === ActiveStep.STEP_TITLE && (
         <StepTitle
           title={state.title}
+          subtitle={state.subtitle}
           location={state.location}
           eventType={state.eventType}
           onSetTitle={(title) => {
             dispatch({ kind: 'title', title })
+          }}
+          onSetSubtitle={(subtitle) => {
+            dispatch({ kind: 'subtitle', subtitle })
           }}
           onSetLocation={(location) => {
             dispatch({ kind: 'location', location })

@@ -23,11 +23,18 @@ const DateObject = z.object({
 })
 
 const EventForm = z.object({
-  title: z.string().min(2),
-  type: z.custom(isEventType, { message: 'Not a valid phone number' }),
-  location: z.string(),
-  isRace: z.enum(['true', 'false']).transform((v) => v === 'true'),
   date: DateObject,
+  description: z.string(),
+  isRace: z.enum(['true', 'false']).transform((v) => v === 'true'),
+  location: z.string(),
+  participants: z.array(
+    z.object({
+      id: z.string(),
+      nickname: z.string(),
+      picture: z.string(),
+    })
+  ),
+  subtitle: z.string(),
   time: z
     .object({
       minutes: z.preprocess(
@@ -45,35 +52,30 @@ const EventForm = z.object({
       }
     })
     .optional(),
-  description: z.string(),
-  participants: z.array(
-    z.object({
-      id: z.string(),
-      nickname: z.string(),
-      picture: z.string(),
-    })
-  ),
+  title: z.string().min(2),
+  type: z.custom(isEventType, { message: 'Not a valid phone number' }),
 })
 
 type EventForm = z.infer<typeof EventForm>
 
 const getEventForm = (body: FormData): EventForm => {
   return EventForm.parse({
-    title: body.get('title'),
-    type: body.get('eventType'),
-    location: body.get('location'),
-    isRace: body.get('isRace'),
     date: {
       year: body.get('year'),
       month: body.get('month'),
       day: body.get('day'),
     },
+    description: body.get('description'),
+    isRace: body.get('isRace'),
+    location: body.get('location'),
+    participants: JSON.parse(String(body.get('participants'))),
+    subtitle: body.get('subtitle'),
+    title: body.get('title'),
     time: {
       minutes: body.get('minutes'),
       hours: body.get('hours'),
     },
-    description: body.get('description'),
-    participants: JSON.parse(String(body.get('participants'))),
+    type: body.get('eventType'),
   })
 }
 
@@ -89,6 +91,7 @@ export const action: ActionFunction = async ({ request }) => {
     description,
     location,
     isRace,
+    subtitle,
     title,
     type,
     time,
@@ -104,6 +107,7 @@ export const action: ActionFunction = async ({ request }) => {
         description: description.trim() === '' ? undefined : description,
         location,
         race: isRace,
+        subtitle,
         timeStart: time,
         title,
         type,

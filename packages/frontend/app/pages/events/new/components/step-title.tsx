@@ -6,6 +6,8 @@ interface Properties {
   eventType?: EventType
   onSetTitle: (title: string) => void
   title?: string
+  onSetSubtitle: (subtitle: string) => void
+  subtitle?: string
   onSetLocation: (location: string) => void
   location?: string
   isRace: boolean
@@ -15,6 +17,8 @@ interface Properties {
 export const StepTitle = ({
   onSetTitle,
   onSetLocation,
+  onSetSubtitle,
+  subtitle,
   location,
   title,
   isRace,
@@ -22,6 +26,9 @@ export const StepTitle = ({
 }: Properties) => {
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     onSetTitle(event.target.value)
+  }
+  const handleSubtitleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    onSetSubtitle(event.target.value)
   }
   const handleLocationChange = (event: ChangeEvent<HTMLInputElement>) => {
     onSetLocation(event.target.value)
@@ -36,6 +43,14 @@ export const StepTitle = ({
         withAsterisk
         onChange={handleTitleChange}
         value={title}
+      />
+      <TextInput
+        placeholder="6-7 joukkuetta"
+        label="Tarkenne"
+        size="lg"
+        withAsterisk
+        onChange={handleSubtitleChange}
+        value={subtitle}
       />
       <TextInput
         placeholder="Sijainti"

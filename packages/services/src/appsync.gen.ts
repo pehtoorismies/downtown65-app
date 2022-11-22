@@ -28,6 +28,7 @@ export type CreateEventInput = {
   location: Scalars['String'];
   participants?: InputMaybe<Array<MeInput>>;
   race: Scalars['Boolean'];
+  subtitle: Scalars['String'];
   timeStart?: InputMaybe<TimeInput>;
   title: Scalars['String'];
   type: Scalars['String'];
@@ -67,6 +68,7 @@ export type Event = {
   location: Scalars['String'];
   participants: Array<EventParticipant>;
   race: Scalars['Boolean'];
+  subtitle: Scalars['String'];
   timeStart?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   type: EventType;

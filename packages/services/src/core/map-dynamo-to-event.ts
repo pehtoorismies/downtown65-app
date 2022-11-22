@@ -23,6 +23,7 @@ const PersistedDynamoEvent = z.object({
     })
   ),
   race: z.boolean(),
+  subtitle: z.string(),
   timeStart: z.string().optional(),
   title: z.string(),
   type: z.string(), // should be enum

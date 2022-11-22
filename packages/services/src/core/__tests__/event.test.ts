@@ -23,6 +23,7 @@ const creatableEvent = {
     },
   ],
   race: false,
+  subtitle: 'Some subtitle',
   timeStart: {
     hours: 9,
     minutes: 30,

@@ -10,6 +10,7 @@ export interface EventLoaderData {
   location: string
   me?: User
   participants: User[]
+  subtitle: string
   timeStart?: string
   title: string
   type: EventType

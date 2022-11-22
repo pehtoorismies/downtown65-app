@@ -19,6 +19,7 @@
     "email-validator": "2.0.4",
     "mjml": "4.13.0",
     "mustache": "4.2.0",
+    "node-fetch": "^3.3.0",
     "superagent-proxy": "3.0.0",
     "ulid": "2.3.0",
     "zod": "3.19.1"
