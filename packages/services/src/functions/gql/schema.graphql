@@ -53,6 +53,7 @@ type Event @aws_api_key @aws_oidc {
     participants: [EventParticipant!]!
     race: Boolean!
     timeStart: String
+    subtitle: String!
     title: String!
     type: EventType!
 }
@@ -101,6 +102,7 @@ input CreateEventInput {
     location: String!
     participants: [MeInput!]
     race: Boolean!
+    subtitle: String!
     title: String!
     timeStart: TimeInput
     type: String!
@@ -216,6 +218,8 @@ type Mutation {
     forgotPassword(
         email: String!
     ): Boolean! @aws_api_key
+
+    importEvents: String!
 }
 
 

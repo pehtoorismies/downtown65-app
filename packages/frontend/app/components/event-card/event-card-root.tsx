@@ -125,6 +125,7 @@ export interface EventCardRootProps extends ParticipantProps {
   isRace: boolean
   location: string
   shadow?: MantineShadow
+  subtitle: string
   timeStart?: string
   title: string
   type: EventType
@@ -142,6 +143,7 @@ export const EventCardRoot = ({
   me,
   participants,
   shadow,
+  subtitle,
   timeStart,
   title,
   type,
@@ -152,6 +154,8 @@ export const EventCardRoot = ({
 
   const { imageUrl } = mapToData(type)
   const count = participants.length
+
+  const time = timeStart ? `klo ${timeStart}` : ''
 
   return (
     <Card withBorder radius="md" className={cx(classes.card)} shadow={shadow}>
@@ -212,26 +216,16 @@ export const EventCardRoot = ({
       </Card.Section>
       <Card.Section withBorder px="xs" pb="xs">
         <Text weight={700} mt={2}>
-          {title}
+          {subtitle}
         </Text>
         <Grid align="center">
           <Grid.Col span={7}>
+            <Text size="sm" weight={500}>
+              {dateStart} {time}
+            </Text>
             <Text size="sm" color="dimmed" weight={400}>
               {location}
             </Text>
-            <Text size="sm" weight={500}>
-              {dateStart}
-            </Text>
-            {timeStart && (
-              <Text size="sm" weight={500}>
-                klo: {timeStart}
-              </Text>
-            )}
-            {!timeStart && (
-              <Text size="sm" weight={500} color="dimmed">
-                ei tarkempaa aikaa
-              </Text>
-            )}
           </Grid.Col>
           <Grid.Col span={5}>
             <Center>

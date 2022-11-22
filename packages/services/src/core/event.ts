@@ -13,7 +13,7 @@ import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
 import { mapDynamoToEvent } from './map-dynamo-to-event'
-import { getImportedEvents } from '~/import-old/get-imported-events'
+import type { FormattedEvent } from '~/import-old/get-imported-events'
 
 const Table = getTable()
 
@@ -36,6 +36,7 @@ interface PersistableEvent {
       }
   >
   race: boolean
+  subtitle: string
   timeStart?: string
   title: string
   type: EventType
@@ -53,8 +54,9 @@ const isEventType = (event: string): event is EventType => {
   return Object.values(EventType).includes(event as EventType)
 }
 
-export const importEvents = async (): Promise<{ id: string }> => {
-  const events = getImportedEvents()
+export const importEvents = async (
+  events: FormattedEvent[]
+): Promise<{ id: string }> => {
   // return { id: '123' }
   for await (const event of events) {
     const {
@@ -65,12 +67,11 @@ export const importEvents = async (): Promise<{ id: string }> => {
       location,
       participants,
       race,
+      subtitle,
       timeStart,
       title,
       type,
     } = event
-
-    // return { id }
 
     const eventId = id
 
@@ -113,6 +114,7 @@ export const importEvents = async (): Promise<{ id: string }> => {
       location,
       participants: participantHashMap,
       race: race ?? false,
+      subtitle,
       timeStart: ddt.getTime(),
       title,
       type,
@@ -135,6 +137,7 @@ export const create = async (
     location,
     participants,
     race,
+    subtitle,
     timeStart,
     title,
     type,
@@ -179,6 +182,7 @@ export const create = async (
     location,
     participants: participantHashMap,
     race: race ?? false,
+    subtitle,
     timeStart: ddt.getTime(),
     title,
     type,

@@ -31,12 +31,13 @@ export const StepReview = ({ state, me }: Properties) => {
     <EventCardExtended
       createdBy={me}
       dateStart={getDate(state.date)}
-      timeStart={getTime(state.time)}
       description={state.description}
       isRace={state.isRace}
       location={state.location}
       me={me}
       participants={state.participants}
+      subtitle={state.subtitle}
+      timeStart={getTime(state.time)}
       title={state.title}
       type={state.eventType}
     />

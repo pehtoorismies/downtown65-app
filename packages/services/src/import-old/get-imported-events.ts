@@ -1,6 +1,5 @@
 import { ulid } from 'ulid'
 import type { CreateEventInput } from '~/appsync.gen'
-import { oldEvensSemiJSON } from '~/import-old/old-events'
 
 const parseMongoString = (s: string | undefined) => {
   if (s) {
@@ -8,7 +7,7 @@ const parseMongoString = (s: string | undefined) => {
   }
 }
 
-type FormattedEvent = CreateEventInput & { id: string }
+export type FormattedEvent = CreateEventInput & { id: string }
 
 const formatType = (type: string): string => {
   const t = type.toUpperCase()
@@ -62,11 +61,14 @@ const formatMongoEvent = (mongoEvent: any): FormattedEvent => {
         }
       }
     ),
-    location: parseMongoString(mongoEvent.subtitle) ?? '<missing>',
+    subtitle: parseMongoString(mongoEvent.subtitle) ?? 'ei tarkennetta',
+    location: parseMongoString(mongoEvent.subtitle) ?? 'ei sijaintia',
   }
 }
 
-export const getImportedEvents = (): FormattedEvent[] => {
+export const getImportedEvents = (
+  oldEvensSemiJSON: string
+): FormattedEvent[] => {
   const parts = oldEvensSemiJSON.split(/\r?\n/).slice(1, -1)
   const objects = []
 
