@@ -3,6 +3,7 @@ import { redirect } from '@remix-run/node'
 import { z } from 'zod'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { EventType } from '~/gql/types.gen'
+import { commitSession, getSession, setSuccessMessage } from '~/message.server'
 import { validateSessionUser } from '~/session.server'
 
 const isEventType = (eventType: unknown): eventType is EventType => {
@@ -119,5 +120,9 @@ export const action: ActionFunction = async ({ request }) => {
     }
   )
 
-  return redirect(`/events/${createEvent.id}`)
+  const session = await getSession(request.headers.get('cookie'))
+  setSuccessMessage(session, 'Tapahtuman luonti onnistui')
+  return redirect(`/events/${createEvent.id}`, {
+    headers: { 'Set-Cookie': await commitSession(session) },
+  })
 }
