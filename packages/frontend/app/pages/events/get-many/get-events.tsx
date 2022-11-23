@@ -8,7 +8,7 @@ import {
   useParticipationActions,
 } from '~/contexts/participating-context'
 
-export const Events = () => {
+export const GetEvents = () => {
   const { eventItems } = useLoaderData<LoaderData>()
   const participationActions = useParticipationActions()
 

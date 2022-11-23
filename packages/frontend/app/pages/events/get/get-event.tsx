@@ -21,7 +21,7 @@ import {
   useParticipationActions,
 } from '~/contexts/participating-context'
 
-export const Event = () => {
+export const GetEvent = () => {
   const { eventItem } = useLoaderData<LoaderData>()
   const transition = useTransition()
 
