@@ -66,6 +66,7 @@ type ParticipateEventAction = {
 }
 type LeaveEventAction = {
   kind: 'leaveEvent'
+  me: User
 }
 type FormSubmittedAction = {
   kind: 'formSubmitted'
@@ -161,13 +162,13 @@ export const reducer = (state: EventState, action: EventAction): EventState => {
     case 'participateEvent': {
       return {
         ...state,
-        participants: [action.me],
+        participants: [...state.participants, action.me],
       }
     }
     case 'leaveEvent': {
       return {
         ...state,
-        participants: [],
+        participants: state.participants.filter((x) => x.id !== action.me.id),
       }
     }
     case 'formSubmitted': {

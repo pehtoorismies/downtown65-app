@@ -51,7 +51,7 @@ export const EditEvent = () => {
   })
   const participatingActions: Context = {
     onLeave: () => {
-      dispatch({ kind: 'leaveEvent' })
+      dispatch({ kind: 'leaveEvent', me })
     },
     onParticipate: () => {
       dispatch({ kind: 'participateEvent', me })

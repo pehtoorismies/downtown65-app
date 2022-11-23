@@ -34,11 +34,6 @@ const getHighlightColor = (
   return mainColor
 }
 
-interface Properties {
-  time: Time
-  onSetTime: (time: Time) => void
-}
-
 export const StepTime = ({ state, dispatch }: ReducerProps) => {
   const getHoursCol = (hours: number[]) =>
     hours.map((hour) => (
