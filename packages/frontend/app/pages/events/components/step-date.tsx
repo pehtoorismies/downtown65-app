@@ -1,16 +1,14 @@
 import 'dayjs/locale/fi'
 import { Calendar } from '@mantine/dates'
+import type { ReducerProps } from '~/pages/events/components/reducer'
 
-interface Properties {
-  date?: Date
-  onSetDate: (date: Date) => void
-}
-
-export const StepDate = ({ date, onSetDate }: Properties) => {
+export const StepDate = ({ state, dispatch }: ReducerProps) => {
   return (
     <Calendar
-      value={date}
-      onChange={onSetDate}
+      value={state.date}
+      onChange={(date: Date) => {
+        dispatch({ kind: 'date', date })
+      }}
       fullWidth
       size="md"
       allowLevelChange={false}

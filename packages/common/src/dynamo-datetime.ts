@@ -152,4 +152,12 @@ export class DynamoDatetime {
       { locale: fi }
     )
   }
+
+  getDateObject(): Date {
+    const { day, year, month } = this.dates
+
+    return this.times
+      ? new Date(year, month - 1, day, this.times.hours, this.times.minutes)
+      : new Date(year, month - 1, day)
+  }
 }

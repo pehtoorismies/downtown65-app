@@ -1,17 +1,27 @@
-import { DynamoDatetime } from '@downtown65-app/common'
 import type { LoaderFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
 import invariant from 'tiny-invariant'
+import type { User } from '~/domain/user'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import type { EventLoaderData } from '~/pages/events/event-loader-data'
+import type { EventState } from '~/pages/events/components/event-state'
+import { ActiveStep } from '~/pages/events/components/reducer'
 import { validateSessionUser } from '~/session.server'
 
 export type LoaderData = {
-  eventItem: EventLoaderData
+  me: User
+  state: Omit<EventState, 'date' | 'time'>
+  dateStart: string
+  timeStart?: string
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
+
+  const result = await validateSessionUser(request)
+
+  if (!result.hasSession) {
+    return redirect('/login')
+  }
 
   const { event } = await getGqlSdk().GetEvent(
     {
@@ -27,20 +37,20 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     })
   }
 
-  const result = await validateSessionUser(request)
-
-  const ddt = new DynamoDatetime({
-    date: event.dateStart,
-    time: event.timeStart,
-  })
+  const { timeStart, dateStart, race, description, type, ...rest } = event
 
   return json<LoaderData>({
-    eventItem: {
-      ...event,
-      dateStart: ddt.getFormattedDate(),
-      description: event.description ?? '',
-      isRace: event.race,
-      me: result.hasSession ? result.user : undefined,
+    me: result.user,
+    state: {
+      ...rest,
+      activeStep: ActiveStep.STEP_EVENT_TYPE,
+      eventType: type,
+      description: description ?? '',
+      isRace: race,
+      submitEvent: false,
     },
+
+    dateStart,
+    timeStart,
   })
 }
