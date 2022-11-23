@@ -1,5 +1,6 @@
 import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
+import type { EventState } from '~/pages/events/components/event-state'
 
 export const ActiveStep = {
   STEP_EVENT_TYPE: 0,
@@ -69,7 +70,7 @@ type FormSubmittedAction = {
   kind: 'formSubmitted'
 }
 
-type Action =
+export type EventAction =
   | DateAction
   | DescriptionAction
   | FormSubmittedAction
@@ -85,24 +86,7 @@ type Action =
   | TitleAction
   | TypeAction
 
-export interface State {
-  eventType?: EventType
-  title: string
-  subtitle: string
-  location: string
-  isRace: boolean
-  date?: Date
-  activeStep: StepNumber
-  time: {
-    hours?: number
-    minutes?: number
-  }
-  description: string
-  participants: User[]
-  submitEvent: boolean
-}
-
-export const reducer = (state: State, action: Action): State => {
+export const reducer = (state: EventState, action: EventAction): EventState => {
   switch (action.kind) {
     case 'type': {
       if (!state.eventType) {
