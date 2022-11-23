@@ -102,57 +102,19 @@ export const EditOrCreate = ({
         </Grid.Col>
       </Grid>
       {state.activeStep === ActiveStep.STEP_EVENT_TYPE && (
-        <StepType
-          selectedEventType={state.eventType}
-          onSelect={(type) => {
-            dispatch({ kind: 'type', type })
-          }}
-        />
+        <StepType state={state} dispatch={dispatch} />
       )}
       {state.activeStep === ActiveStep.STEP_TITLE && (
-        <StepTitle
-          title={state.title}
-          subtitle={state.subtitle}
-          location={state.location}
-          eventType={state.eventType}
-          onSetTitle={(title) => {
-            dispatch({ kind: 'title', title })
-          }}
-          onSetSubtitle={(subtitle) => {
-            dispatch({ kind: 'subtitle', subtitle })
-          }}
-          onSetLocation={(location) => {
-            dispatch({ kind: 'location', location })
-          }}
-          isRace={state.isRace}
-          onSetRace={(isRace) => {
-            dispatch({ kind: 'race', isRace })
-          }}
-        />
+        <StepTitle state={state} dispatch={dispatch} />
       )}
       {state.activeStep === ActiveStep.STEP_DATE && (
-        <StepDate
-          date={state.date}
-          onSetDate={(date) => {
-            dispatch({ kind: 'date', date })
-          }}
-        />
+        <StepDate state={state} dispatch={dispatch} />
       )}
       {state.activeStep === ActiveStep.STEP_TIME && (
-        <StepTime
-          time={state.time}
-          onSetTime={(time) => {
-            dispatch({ kind: 'time', time })
-          }}
-        />
+        <StepTime state={state} dispatch={dispatch} />
       )}
       {state.activeStep === ActiveStep.STEP_DESCRIPTION && (
-        <StepDescriptionClient
-          description={state.description}
-          onSetDescription={(description) => {
-            dispatch({ kind: 'description', description })
-          }}
-        />
+        <StepDescriptionClient state={state} dispatch={dispatch} />
       )}
       {state.activeStep === ActiveStep.STEP_REVIEW && (
         <ParticipatingContext.Provider value={participatingActions}>

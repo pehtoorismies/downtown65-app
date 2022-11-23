@@ -1,21 +1,19 @@
 import { RichTextEditor } from '@mantine/rte'
-
-interface Properties {
-  description: string
-  onSetDescription: (value: string) => void
-}
+import type { ReducerProps } from '~/pages/events/components/reducer'
 
 /**
  * This component is available only client side
  */
-export const StepDescriptionClient = ({
-  description,
-  onSetDescription,
-}: Properties) => {
+export const StepDescriptionClient = ({ state, dispatch }: ReducerProps) => {
   return (
     <RichTextEditor
-      value={description}
-      onChange={onSetDescription}
+      value={state.description}
+      onChange={(description) => {
+        dispatch({
+          kind: 'description',
+          description,
+        })
+      }}
       id="rte"
       controls={[
         ['bold', 'italic', 'underline', 'link'],

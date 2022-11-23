@@ -1,3 +1,4 @@
+import type { Dispatch } from 'react'
 import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
 import type { EventState } from '~/pages/events/components/event-state'
@@ -85,6 +86,11 @@ export type EventAction =
   | TimeAction
   | TitleAction
   | TypeAction
+
+export interface ReducerProps {
+  state: EventState
+  dispatch: Dispatch<EventAction>
+}
 
 export const reducer = (state: EventState, action: EventAction): EventState => {
   switch (action.kind) {

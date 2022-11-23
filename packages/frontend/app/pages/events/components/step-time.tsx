@@ -1,6 +1,7 @@
 import 'dayjs/locale/fi'
 import { Center, Button, Text, Grid, Stack, Container } from '@mantine/core'
-import { prefixZero, suffixZero } from '../../../util/pad-zeros'
+import type { ReducerProps } from '~/pages/events/components/reducer'
+import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 const HOURS = [
   [6, 9, 12, 15, 18, 21, 0, 3],
@@ -38,19 +39,22 @@ interface Properties {
   onSetTime: (time: Time) => void
 }
 
-export const StepTime = ({ time, onSetTime }: Properties) => {
+export const StepTime = ({ state, dispatch }: ReducerProps) => {
   const getHoursCol = (hours: number[]) =>
     hours.map((hour) => (
       <Button
-        color={getHighlightColor('blue', 'dtPink', hour, time.hours)}
+        color={getHighlightColor('blue', 'dtPink', hour, state.time.hours)}
         key={hour}
         radius="xs"
         size="xs"
         compact
         onClick={() => {
-          onSetTime({
-            ...time,
-            hours: hour,
+          dispatch({
+            kind: 'time',
+            time: {
+              ...state.time,
+              hours: hour,
+            },
           })
         }}
       >
@@ -60,16 +64,19 @@ export const StepTime = ({ time, onSetTime }: Properties) => {
   const getMinutesCol = (minutes: number[]) =>
     minutes.map((minute) => (
       <Button
-        color={getHighlightColor('teal', 'dtPink', minute, time.minutes)}
-        disabled={time.hours === undefined}
+        color={getHighlightColor('teal', 'dtPink', minute, state.time.minutes)}
+        disabled={state.time.hours === undefined}
         key={minute}
         radius="xs"
         size="xs"
         compact
         onClick={() => {
-          onSetTime({
-            ...time,
-            minutes: minute,
+          dispatch({
+            kind: 'time',
+            time: {
+              ...state.time,
+              minutes: minute,
+            },
           })
         }}
       >
@@ -106,7 +113,20 @@ export const StepTime = ({ time, onSetTime }: Properties) => {
         </Grid.Col>
       </Grid>
       <Center>
-        <Button mt="md" variant="outline" compact onClick={() => onSetTime({})}>
+        <Button
+          mt="md"
+          variant="outline"
+          compact
+          onClick={() =>
+            dispatch({
+              kind: 'time',
+              time: {
+                hours: undefined,
+                minutes: undefined,
+              },
+            })
+          }
+        >
           Tyhjennä aika
         </Button>
       </Center>

@@ -1,14 +1,10 @@
 import { Button, SimpleGrid } from '@mantine/core'
 import { Gradient } from '~/components/colors'
 import { EventType } from '~/gql/types.gen'
+import type { ReducerProps } from '~/pages/events/components/reducer'
 import { mapToData } from '~/util/event-type'
 
-interface Properties {
-  selectedEventType: EventType | undefined
-  onSelect: (eventType: EventType) => void
-}
-
-export const StepType = ({ selectedEventType, onSelect }: Properties) => {
+export const StepType = ({ state, dispatch }: ReducerProps) => {
   const buttons = Object.values(EventType)
     .map((v) => {
       return {
@@ -30,14 +26,14 @@ export const StepType = ({ selectedEventType, onSelect }: Properties) => {
     .map(({ text, type }) => {
       return (
         <Button
-          color={selectedEventType === type ? 'dtPink' : 'blue'}
+          color={state.eventType === type ? 'dtPink' : 'blue'}
           key={type}
           onClick={() => {
-            onSelect(type)
+            dispatch({ kind: 'type', type })
           }}
           variant="gradient"
           gradient={
-            selectedEventType === type
+            state.eventType === type
               ? Gradient.dtPink
               : {
                   from: 'indigo',

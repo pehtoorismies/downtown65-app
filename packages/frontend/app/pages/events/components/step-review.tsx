@@ -1,14 +1,14 @@
-import type { State } from './reducer'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import type { User } from '~/domain/user'
+import type { EventState } from '~/pages/events/components/event-state'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 interface Properties {
-  state: State
+  state: EventState
   me: User
 }
 
-const getDate = (date: State['date']) => {
+const getDate = (date: EventState['date']) => {
   if (!date) {
     return 'Missing date'
   }
@@ -17,7 +17,7 @@ const getDate = (date: State['date']) => {
   )}.${date.getFullYear()}`
 }
 
-const getTime = ({ hours, minutes }: State['time']) => {
+const getTime = ({ hours, minutes }: EventState['time']) => {
   if (hours !== undefined && minutes !== undefined) {
     return `${prefixZero(hours)}:${suffixZero(minutes)}`
   }
