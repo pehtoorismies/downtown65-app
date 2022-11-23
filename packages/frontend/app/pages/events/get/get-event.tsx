@@ -97,7 +97,13 @@ export const GetEvent = () => {
           Modification zone
         </Text>
         <Group position="center" my="xl" spacing="xl">
-          <Button rightIcon={<IconPencil size={18} />}>Muokkaa</Button>
+          <Button
+            component={Link}
+            to={`/events/edit/${eventItem.id}`}
+            rightIcon={<IconPencil size={18} />}
+          >
+            Muokkaa
+          </Button>
           <Button
             color="grape"
             onClick={() => setOpened(true)}
