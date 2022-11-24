@@ -1,10 +1,13 @@
 import { Center, TextInput, Switch } from '@mantine/core'
 import type { ReducerProps } from '~/pages/events/components/reducer'
 
+const spacing = 'md'
+
 export const StepTitle = ({ state, dispatch }: ReducerProps) => {
   return (
     <>
       <TextInput
+        my={spacing}
         placeholder="Jukola Konala"
         label="Tapahtuman nimi"
         size="lg"
@@ -15,6 +18,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         value={state.title}
       />
       <TextInput
+        my={spacing}
         placeholder="6-7 joukkuetta"
         label="Tarkenne"
         size="lg"
@@ -25,6 +29,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         value={state.subtitle}
       />
       <TextInput
+        my={spacing}
         placeholder="Sijainti"
         label="Missä tapahtuma järjestetään?"
         size="lg"
