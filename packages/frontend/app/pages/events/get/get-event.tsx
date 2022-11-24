@@ -63,7 +63,7 @@ export const GetEvent = () => {
             Poista.
           </p>
         </TypographyStylesProvider>
-        <Form action={`/events/${eventItem.id}`} method="delete">
+        <Form action={`/events/${eventItem.id}`} method="post">
           <TextInput
             placeholder="poista"
             label="Kirjoita 'poista'"
@@ -78,6 +78,8 @@ export const GetEvent = () => {
               Peruuta
             </Button>
             <Button
+              name="action"
+              value="delete"
               type="submit"
               color="red"
               disabled={formValue !== 'poista'}

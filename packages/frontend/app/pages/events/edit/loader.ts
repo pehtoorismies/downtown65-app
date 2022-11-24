@@ -9,9 +9,10 @@ import { validateSessionUser } from '~/session.server'
 
 export type LoaderData = {
   me: User
-  state: Omit<EventState, 'date' | 'time'>
-  dateStart: string
-  timeStart?: string
+  initState: Omit<EventState, 'date' | 'time'>
+  initDateStart: string
+  initTimeStart?: string
+  eventId: string
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -40,8 +41,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const { timeStart, dateStart, race, description, type, ...rest } = event
 
   return json<LoaderData>({
+    eventId: event.id,
     me: result.user,
-    state: {
+    initState: {
       ...rest,
       activeStep: ActiveStep.STEP_EVENT_TYPE,
       eventType: type,
@@ -49,8 +51,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       isRace: race,
       submitEvent: false,
     },
-
-    dateStart,
-    timeStart,
+    initDateStart: dateStart,
+    initTimeStart: timeStart,
   })
 }

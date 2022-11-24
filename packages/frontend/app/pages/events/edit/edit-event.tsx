@@ -1,48 +1,23 @@
 import { DynamoDatetime } from '@downtown65-app/common'
-import { useLoaderData } from '@remix-run/react'
-import { useReducer } from 'react'
-import type { EventState } from '../components/event-state'
+import { useFetcher, useLoaderData } from '@remix-run/react'
+import { useEffect, useReducer } from 'react'
 import { reducer } from '../components/reducer'
 import type { LoaderData } from './loader'
 import type { Context } from '~/contexts/participating-context'
 import { EditOrCreate } from '~/pages/events/components/edit-or-create'
-
-const getDateComponents = (
-  d?: Date
-): { month: string; year: string; day: string } | undefined => {
-  if (!d) {
-    return
-  }
-
-  return {
-    day: `${d.getDate()}`,
-    month: `${d.getMonth() + 1}`,
-    year: `${d.getFullYear()}`,
-  }
-}
-
-const getTimeComponents = (
-  time: EventState['time']
-): { minutes: string; hours: string } | undefined => {
-  if (time.minutes === undefined || time.hours === undefined) {
-    return
-  }
-  return {
-    hours: `${time.hours}`,
-    minutes: `${time.minutes}`,
-  }
-}
+import { eventStateToSubmittable } from '~/pages/events/components/event-state-to-submittable'
 
 export const EditEvent = () => {
-  // const fetcher = useFetcher()
-  const { me, state, timeStart, dateStart } = useLoaderData<LoaderData>()
+  const fetcher = useFetcher()
+  const { me, initState, initTimeStart, initDateStart, eventId } =
+    useLoaderData<LoaderData>()
   const ddt = new DynamoDatetime({
-    time: timeStart,
-    date: dateStart,
+    time: initTimeStart,
+    date: initDateStart,
   })
 
   const [eventState, dispatch] = useReducer(reducer, {
-    ...state,
+    ...initState,
     date: ddt.getDateObject(),
     time: ddt.getTimes() ?? {
       hours: undefined,
@@ -60,37 +35,15 @@ export const EditEvent = () => {
     loadingEventId: 'not-defined',
   }
 
-  // useEffect(() => {
-  //   if (state.submitEvent) {
-  //     fetcher.submit(
-  //       {
-  //         ...getDateComponents(state.date),
-  //         ...getTimeComponents(state.time),
-  //         description: state.description,
-  //         eventType: state.eventType ?? '',
-  //         isRace: state.isRace ? 'true' : 'false',
-  //         location: state.location,
-  //         participants: JSON.stringify(state.participants),
-  //         subtitle: state.subtitle,
-  //         title: state.title,
-  //       },
-  //       { method: 'post', action: '/events/new' }
-  //     )
-  //     dispatch({ kind: 'formSubmitted' })
-  //   }
-  // }, [
-  //   fetcher,
-  //   state.date,
-  //   state.description,
-  //   state.eventType,
-  //   state.isRace,
-  //   state.location,
-  //   state.participants,
-  //   state.submitEvent,
-  //   state.subtitle,
-  //   state.time,
-  //   state.title,
-  // ])
+  useEffect(() => {
+    if (eventState.submitEvent) {
+      fetcher.submit(eventStateToSubmittable(eventState), {
+        method: 'put',
+        action: `/events/${eventId}`,
+      })
+      dispatch({ kind: 'formSubmitted' })
+    }
+  }, [fetcher, eventState])
 
   return EditOrCreate({ state: eventState, me, dispatch, participatingActions })
 }
