@@ -17,4 +17,5 @@ export interface EventState {
   description: string
   participants: User[]
   submitEvent: boolean
+  kind: 'edit' | 'create'
 }

@@ -50,9 +50,10 @@ export const GetEvent = () => {
   return (
     <>
       <Modal opened={opened} onClose={onCloseModal} title="Tapahtuman poisto">
-        {/* TODO: fix loader method */}
         <LoadingOverlay
-          visible={transition.submission?.method === 'DELETE'}
+          visible={
+            transition.state === 'submitting' || transition.state === 'loading'
+          }
           transitionDuration={200}
         />
         <TypographyStylesProvider my="sm">
