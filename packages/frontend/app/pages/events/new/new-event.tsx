@@ -1,3 +1,4 @@
+import { Divider, Text } from '@mantine/core'
 import { useFetcher, useLoaderData } from '@remix-run/react'
 import { useEffect, useReducer } from 'react'
 import type { EventState } from '../components/event-state'
@@ -46,11 +47,17 @@ export const NewEvent = () => {
   }, [fetcher, eventState])
 
   return (
-    <EditOrCreate
-      state={eventState}
-      me={me}
-      dispatch={dispatch}
-      participatingActions={participatingActions}
-    />
+    <>
+      <EditOrCreate
+        state={eventState}
+        me={me}
+        dispatch={dispatch}
+        participatingActions={participatingActions}
+      />
+      <Divider mt="md" m="sm" />
+      <Text ta="center" fz="md" fw={400} mt="xs" c="blue">
+        Olet luomassa uutta tapahtumaa
+      </Text>
+    </>
   )
 }

@@ -67,6 +67,7 @@ export const EditOrCreate = ({
   return (
     <Container pt={12}>
       <Stepper
+        color={state.kind === 'edit' ? 'dtPink.4' : 'blue'}
         size="xs"
         active={state.activeStep}
         onStepClick={(stepIndex: StepNumber) => {
