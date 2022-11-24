@@ -30,7 +30,7 @@ const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
     isSkippable: false,
   },
   [ActiveStep.STEP_TITLE]: {
-    title: 'Kuvaus',
+    title: 'Perustiedot',
     isSkippable: false,
   },
   [ActiveStep.STEP_DATE]: {
@@ -42,7 +42,7 @@ const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
     isSkippable: true,
   },
   [ActiveStep.STEP_DESCRIPTION]: {
-    title: 'Kuvaus',
+    title: 'Vapaa kuvaus',
     isSkippable: true,
   },
   [ActiveStep.STEP_REVIEW]: {
@@ -56,6 +56,15 @@ interface Props {
   dispatch: Dispatch<EventAction>
   me: User
   participatingActions: Context
+}
+
+const hasMandatory = (state: EventState): boolean => {
+  return (
+    state.eventType !== undefined &&
+    !!state.title &&
+    !!state.location &&
+    !!state.subtitle
+  )
 }
 
 export const EditOrCreate = ({
@@ -75,11 +84,31 @@ export const EditOrCreate = ({
         }}
       >
         <Stepper.Step icon={<IconRun size={iconSize} />} />
-        <Stepper.Step icon={<IconEdit size={iconSize} />} />
-        <Stepper.Step icon={<IconCalendar size={iconSize} />} />
-        <Stepper.Step icon={<IconClockHour5 size={iconSize} />} />
-        <Stepper.Step icon={<IconAlignLeft size={iconSize} />} />
-        <Stepper.Step icon={<IconRocket size={iconSize} />} />
+        <Stepper.Step
+          allowStepSelect={state.eventType !== undefined}
+          icon={<IconEdit size={iconSize} />}
+        />
+        <Stepper.Step
+          allowStepSelect={
+            state.eventType !== undefined &&
+            !!state.title &&
+            !!state.location &&
+            !!state.subtitle
+          }
+          icon={<IconCalendar size={iconSize} />}
+        />
+        <Stepper.Step
+          allowStepSelect={hasMandatory(state)}
+          icon={<IconClockHour5 size={iconSize} />}
+        />
+        <Stepper.Step
+          allowStepSelect={hasMandatory(state)}
+          icon={<IconAlignLeft size={iconSize} />}
+        />
+        <Stepper.Step
+          allowStepSelect={hasMandatory(state)}
+          icon={<IconRocket size={iconSize} />}
+        />
       </Stepper>
       <Grid gutter="xs" my="sm" align="center">
         <Grid.Col span={6} offset={3}>

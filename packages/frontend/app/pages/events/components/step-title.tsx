@@ -1,15 +1,9 @@
-import { Center, TextInput, Text, Switch } from '@mantine/core'
+import { Center, TextInput, Switch } from '@mantine/core'
 import type { ReducerProps } from '~/pages/events/components/reducer'
-import { mapToData } from '~/util/event-type'
 
 export const StepTitle = ({ state, dispatch }: ReducerProps) => {
   return (
     <>
-      {state.eventType && (
-        <Text my="xs">
-          Tarkenteet tapahtumalle: {mapToData(state.eventType).text}{' '}
-        </Text>
-      )}
       <TextInput
         placeholder="Jukola Konala"
         label="Tapahtuman nimi"
