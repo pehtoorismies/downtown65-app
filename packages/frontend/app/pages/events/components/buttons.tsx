@@ -29,13 +29,13 @@ const isNextVisible = (state: EventState): boolean => {
 const isPreviousVisible = (state: EventState): boolean =>
   state.activeStep !== ActiveStep.STEP_EVENT_TYPE
 
-interface Properties {
+interface Props {
   state: EventState
   onNextStep: () => void
   onPreviousStep: () => void
 }
 
-export const Buttons = ({ state, onPreviousStep, onNextStep }: Properties) => {
+export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
   const isReviewStep = state.activeStep === ActiveStep.STEP_REVIEW
   return (
     <>
