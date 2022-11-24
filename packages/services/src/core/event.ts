@@ -8,6 +8,7 @@ import type {
   MeInput,
   IdPayload,
   CreateEventInput,
+  UpdateEventInput,
 } from '../appsync.gen'
 import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
@@ -54,6 +55,7 @@ const isEventType = (event: string): event is EventType => {
   return Object.values(EventType).includes(event as EventType)
 }
 
+// TODO: remove after release
 export const importEvents = async (
   events: FormattedEvent[]
 ): Promise<{ id: string }> => {
@@ -193,6 +195,23 @@ export const create = async (
   return {
     id: eventId,
   }
+}
+
+export const update = async (
+  eventId: string,
+  updateEventInput: UpdateEventInput
+): Promise<Event> => {
+  const result = await Table.Dt65Event.update(
+    {
+      ...getPrimaryKey(eventId),
+      ...updateEventInput,
+    },
+    {
+      returnValues: 'all_new',
+    }
+  )
+
+  return mapDynamoToEvent(result.Attributes)
 }
 
 export const remove = async (id: string): Promise<boolean> => {

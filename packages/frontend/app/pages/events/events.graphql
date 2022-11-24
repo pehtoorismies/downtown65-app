@@ -55,3 +55,9 @@ mutation DeleteEvent($eventId: ID!) {
         id
     }
 }
+
+mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {
+    updateEvent(eventId: $eventId, input: $input) {
+        id
+    }
+}

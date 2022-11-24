@@ -125,12 +125,14 @@ type IDPayload {
 }
 
 input UpdateEventInput {
-    dateStart: String
-    id: ID!
-    race: Boolean
-    subtitle: String
-    title: String
-    type: String
+    description: String
+    dateStart: DateInput!
+    race: Boolean!
+    location: String!
+    subtitle: String!
+    timeStart: TimeInput
+    title: String!
+    type: String!
 }
 
 interface Error {
@@ -201,7 +203,7 @@ type Query {
 
 type Mutation {
     createEvent(input: CreateEventInput!): IDPayload!
-    updateEvent(input: UpdateEventInput!): Event!
+    updateEvent(eventId: ID!, input: UpdateEventInput!): Event!
     deleteEvent(eventId: ID!): IDPayload
     leaveEvent(eventId: ID!): Boolean
     participateEvent(eventId: ID!, me: MeInput!): Boolean

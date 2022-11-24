@@ -1,46 +1,13 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import formatISO from 'date-fns/formatISO'
-import { getPrimaryKey } from '../../core/event-primary-key'
 import type { Event as Dt65Event, MutationUpdateEventArgs } from '~/appsync.gen'
-import { getTable } from '~/dynamo/table'
-
-// : EventInput & { GSI1SK?: string }
-
-const getUpdateObject = (input: MutationUpdateEventArgs['input']) => {
-  if (input.dateStart) {
-    const dateStart = formatISO(new Date(input.dateStart))
-    return {
-      ...input,
-      dateStart,
-      GSI1SK: `DATE#${dateStart}#${input.id.slice(0, 8)}`,
-    }
-  }
-  return input
-}
+import * as Event from '~/core/event'
 
 export const updateEvent: AppSyncResolverHandler<
   MutationUpdateEventArgs,
   Dt65Event
 > = async (event) => {
-  const { input } = event.arguments
-  if (Object.keys(input).length === 1) {
-    // only eventId
-    throw new Error('No fields to be updated')
-  }
+  const { input, eventId } = event.arguments
+  const result = await Event.update(eventId, input)
 
-  const updated = getUpdateObject(input)
-
-  const Table = getTable()
-
-  const result = await Table.Dt65Event.update(
-    {
-      ...getPrimaryKey(input.id),
-      ...updated,
-    },
-    {
-      returnValues: 'all_new',
-    }
-  )
-
-  return result.Item
+  return result
 }
