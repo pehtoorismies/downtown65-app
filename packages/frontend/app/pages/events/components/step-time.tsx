@@ -1,5 +1,6 @@
 import 'dayjs/locale/fi'
 import { Center, Button, Text, Grid, Stack, Container } from '@mantine/core'
+import type { EventState } from '~/pages/events/components/event-state'
 import type { ReducerProps } from '~/pages/events/components/reducer'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
@@ -14,11 +15,6 @@ const MINUTES = [
   [5, 15, 25, 35, 45, 55],
 ]
 
-interface Time {
-  hours?: number
-  minutes?: number
-}
-
 const getHighlightColor = (
   mainColor: string,
   highliteColor: string,
@@ -28,17 +24,25 @@ const getHighlightColor = (
   if (value === currentValue) {
     return highliteColor
   }
-  // if (value !== undefined) {
-  //   return 'blue.5'
-  // }
+
   return mainColor
+}
+
+const getTime = ({ time }: EventState): string => {
+  if (time.hours !== undefined && time.minutes !== undefined) {
+    return `${prefixZero(time.hours)}:${suffixZero(time.minutes)}`
+  }
+  if (time.hours !== undefined) {
+    return `${prefixZero(time.hours)}:xx`
+  }
+  return 'ei aikaa'
 }
 
 export const StepTime = ({ state, dispatch }: ReducerProps) => {
   const getHoursCol = (hours: number[]) =>
     hours.map((hour) => (
       <Button
-        color={getHighlightColor('blue', 'dtPink', hour, state.time.hours)}
+        color={getHighlightColor('blue', 'dtPink.4', hour, state.time.hours)}
         key={hour}
         radius="xs"
         size="xs"
@@ -59,7 +63,12 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
   const getMinutesCol = (minutes: number[]) =>
     minutes.map((minute) => (
       <Button
-        color={getHighlightColor('teal', 'dtPink', minute, state.time.minutes)}
+        color={getHighlightColor(
+          'blue',
+          'dtPink.4',
+          minute,
+          state.time.minutes
+        )}
         disabled={state.time.hours === undefined}
         key={minute}
         radius="xs"
@@ -125,6 +134,9 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
           Tyhjennä aika
         </Button>
       </Center>
+      <Text align="center" fz="xl" fw={700} mt="md">
+        {getTime(state)}
+      </Text>
     </Container>
   )
 }
