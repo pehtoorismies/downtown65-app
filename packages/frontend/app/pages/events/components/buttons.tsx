@@ -35,8 +35,24 @@ interface Props {
   onPreviousStep: () => void
 }
 
+const getNextButtonText = (state: EventState): string => {
+  const isReviewStep = state.activeStep === ActiveStep.STEP_REVIEW
+  if (!isReviewStep) {
+    return 'Seuraava'
+  }
+  switch (state.kind) {
+    case 'create': {
+      return 'Luo tapahtuma'
+    }
+    case 'edit': {
+      return 'Tallenna'
+    }
+  }
+}
+
 export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
   const isReviewStep = state.activeStep === ActiveStep.STEP_REVIEW
+
   return (
     <>
       <Grid justify="center" mt="xl">
@@ -70,7 +86,7 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
                 color={isReviewStep ? 'dtPink.3' : 'blue'}
                 onClick={onNextStep}
               >
-                {isReviewStep ? 'Luo tapahtuma' : 'Seuraava'}
+                {getNextButtonText(state)}
               </Button>
             </Group>
           )}

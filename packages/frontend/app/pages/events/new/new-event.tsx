@@ -18,6 +18,7 @@ const INIT_STATE: EventState = {
   subtitle: '',
   time: {},
   title: '',
+  kind: 'create',
 }
 
 export const NewEvent = () => {

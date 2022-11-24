@@ -44,6 +44,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     eventId: event.id,
     me: result.user,
     initState: {
+      kind: 'edit',
       ...rest,
       activeStep: ActiveStep.STEP_EVENT_TYPE,
       eventType: type,
