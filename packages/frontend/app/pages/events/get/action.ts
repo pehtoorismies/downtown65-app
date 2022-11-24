@@ -13,27 +13,26 @@ export const action: ActionFunction = async ({ request, params }) => {
     return redirect('/login')
   }
 
-  if (request.method === 'DELETE') {
-    // TODO: add error handling
-    await getGqlSdk().DeleteEvent(
-      {
-        eventId: params.id,
-      },
-      {
-        Authorization: `Bearer ${result.accessToken}`,
-      }
-    )
-    const session = await getSession(request.headers.get('cookie'))
-    setSuccessMessage(session, 'Tapahtuma on poistettu')
-    return redirect('/events', {
-      headers: { 'Set-Cookie': await commitSession(session) },
-    })
-  }
-
   const body = await request.formData()
   const action = body.get('action')
 
   switch (action) {
+    case 'delete': {
+      // TODO: add error handling
+      await getGqlSdk().DeleteEvent(
+        {
+          eventId: params.id,
+        },
+        {
+          Authorization: `Bearer ${result.accessToken}`,
+        }
+      )
+      const session = await getSession(request.headers.get('cookie'))
+      setSuccessMessage(session, 'Tapahtuma on poistettu')
+      return redirect('/events', {
+        headers: { 'Set-Cookie': await commitSession(session) },
+      })
+    }
     case 'participate': {
       await getGqlSdk().ParticipateEvent(
         {
