@@ -9,14 +9,15 @@ import { eventStateToSubmittable } from '~/pages/events/support/event-state-to-s
 
 const INIT_STATE: EventState = {
   activeStep: ActiveStep.STEP_EVENT_TYPE,
-  title: '',
-  subtitle: '',
-  location: '',
-  isRace: false,
-  time: {},
+  date: new Date(),
   description: 'asdadsjdasladskj adlkjadsladksj adlskj',
+  isRace: false,
+  location: '',
   participants: [],
   submitEvent: false,
+  subtitle: '',
+  time: {},
+  title: '',
 }
 
 export const NewEvent = () => {
@@ -43,5 +44,12 @@ export const NewEvent = () => {
     }
   }, [fetcher, eventState])
 
-  return EditOrCreate({ state: eventState, me, dispatch, participatingActions })
+  return (
+    <EditOrCreate
+      state={eventState}
+      me={me}
+      dispatch={dispatch}
+      participatingActions={participatingActions}
+    />
+  )
 }
