@@ -145,6 +145,7 @@ export type Mutation = {
   createEvent: IdPayload;
   deleteEvent?: Maybe<IdPayload>;
   forgotPassword: Scalars['Boolean'];
+  importEvents: Scalars['String'];
   leaveEvent?: Maybe<Scalars['Boolean']>;
   login: LoginPayload;
   participateEvent?: Maybe<Scalars['Boolean']>;
@@ -192,6 +193,7 @@ export type MutationSignupArgs = {
 
 
 export type MutationUpdateEventArgs = {
+  eventId: Scalars['ID'];
   input: UpdateEventInput;
 };
 
@@ -268,12 +270,14 @@ export type TimeInput = {
 };
 
 export type UpdateEventInput = {
-  dateStart?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  race?: InputMaybe<Scalars['Boolean']>;
-  subtitle?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
+  dateStart: DateInput;
+  description?: InputMaybe<Scalars['String']>;
+  location: Scalars['String'];
+  race: Scalars['Boolean'];
+  subtitle: Scalars['String'];
+  timeStart?: InputMaybe<TimeInput>;
+  title: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UpdateMeInput = {

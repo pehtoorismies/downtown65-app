@@ -55,6 +55,30 @@ describe('Events', () => {
     const updatedEvent2 = await Event.getById(id)
     expect(updatedEvent2?.participants.length).toBe(1)
 
+    await Event.update(id, {
+      dateStart: {
+        year: 2018,
+        month: 12,
+        day: 13,
+      },
+      location: 'Vantaa',
+      race: true,
+      subtitle: 'Some other subtitle',
+      timeStart: {
+        hours: 9,
+        minutes: 30,
+      },
+      title: 'Updated title',
+      type: 'OTHER',
+    })
+
+    const titleUpdateEvent = await Event.getById(id)
+    expect(titleUpdateEvent?.title).toBe('Updated title')
+    expect(titleUpdateEvent?.type).toBe('OTHER')
+    expect(titleUpdateEvent?.race).toBe(true)
+    expect(titleUpdateEvent?.location).toBe('Vantaa')
+    expect(titleUpdateEvent?.subtitle).toBe('Some other subtitle')
+
     await Event.remove(id)
   })
 

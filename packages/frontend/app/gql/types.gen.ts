@@ -148,6 +148,7 @@ export type Mutation = {
   createEvent: IdPayload;
   deleteEvent?: Maybe<IdPayload>;
   forgotPassword: Scalars['Boolean'];
+  importEvents: Scalars['String'];
   leaveEvent?: Maybe<Scalars['Boolean']>;
   login: LoginPayload;
   participateEvent?: Maybe<Scalars['Boolean']>;
@@ -195,6 +196,7 @@ export type MutationSignupArgs = {
 
 
 export type MutationUpdateEventArgs = {
+  eventId: Scalars['ID'];
   input: UpdateEventInput;
 };
 
@@ -271,12 +273,14 @@ export type TimeInput = {
 };
 
 export type UpdateEventInput = {
-  dateStart?: InputMaybe<Scalars['String']>;
-  id: Scalars['ID'];
-  race?: InputMaybe<Scalars['Boolean']>;
-  subtitle?: InputMaybe<Scalars['String']>;
-  title?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
+  dateStart: DateInput;
+  description?: InputMaybe<Scalars['String']>;
+  location: Scalars['String'];
+  race: Scalars['Boolean'];
+  subtitle: Scalars['String'];
+  timeStart?: InputMaybe<TimeInput>;
+  title: Scalars['String'];
+  type: Scalars['String'];
 };
 
 export type UpdateMeInput = {
@@ -361,6 +365,14 @@ export type DeleteEventMutationVariables = Exact<{
 
 
 export type DeleteEventMutation = { __typename?: 'Mutation', deleteEvent?: { __typename?: 'IDPayload', id: string } |  undefined };
+
+export type UpdateEventMutationVariables = Exact<{
+  eventId: Scalars['ID'];
+  input: UpdateEventInput;
+}>;
+
+
+export type UpdateEventMutation = { __typename?: 'Mutation', updateEvent: { __typename?: 'Event', id: string } };
 
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -478,6 +490,13 @@ export const DeleteEventDocument = gql`
   }
 }
     `;
+export const UpdateEventDocument = gql`
+    mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {
+  updateEvent(eventId: $eventId, input: $input) {
+    id
+  }
+}
+    `;
 export const GetProfileDocument = gql`
     query GetProfile {
   me {
@@ -551,6 +570,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     DeleteEvent(variables: DeleteEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteEventMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<DeleteEventMutation>(DeleteEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'DeleteEvent', 'mutation');
+    },
+    UpdateEvent(variables: UpdateEventMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateEventMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateEventMutation>(UpdateEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateEvent', 'mutation');
     },
     GetProfile(variables?: GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetProfileQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');
