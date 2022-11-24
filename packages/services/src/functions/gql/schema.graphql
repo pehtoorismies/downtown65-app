@@ -125,13 +125,13 @@ type IDPayload {
 }
 
 input UpdateEventInput {
-    description: String
     dateStart: DateInput!
-    race: Boolean!
+    description: String
     location: String!
+    race: Boolean!
     subtitle: String!
-    timeStart: TimeInput
     title: String!
+    timeStart: TimeInput
     type: String!
 }
 

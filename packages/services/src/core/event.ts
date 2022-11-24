@@ -43,6 +43,17 @@ interface PersistableEvent {
   type: EventType
 }
 
+interface UpdateableEvent {
+  dateStart: string
+  description?: string
+  location: string
+  race: boolean
+  subtitle: string
+  timeStart?: string
+  title: string
+  type: EventType
+}
+
 const getExpression = (d: Date) => {
   const lt = format(
     new Date(d.getFullYear(), d.getMonth(), d.getDate()),
@@ -201,10 +212,28 @@ export const update = async (
   eventId: string,
   updateEventInput: UpdateEventInput
 ): Promise<Event> => {
+  const { dateStart, timeStart, type, ...rest } = updateEventInput
+
+  if (!isEventType(type)) {
+    throw new Error(`Wrong event type provided '${type}'`)
+  }
+
+  const ddt = new DynamoDatetime({
+    dates: dateStart,
+    times: timeStart,
+  })
+
+  const update: UpdateableEvent = {
+    ...rest,
+    dateStart: ddt.getDate(),
+    timeStart: ddt.getTime(),
+    type,
+  }
+
   const result = await Table.Dt65Event.update(
     {
       ...getPrimaryKey(eventId),
-      ...updateEventInput,
+      ...update,
     },
     {
       returnValues: 'all_new',

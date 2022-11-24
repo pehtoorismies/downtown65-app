@@ -78,8 +78,6 @@ describe('Events', () => {
     expect(titleUpdateEvent?.race).toBe(true)
     expect(titleUpdateEvent?.location).toBe('Vantaa')
     expect(titleUpdateEvent?.subtitle).toBe('Some other subtitle')
-
-    await Event.remove(id)
   })
 
   it('remove should throw error if event is not found', async () => {

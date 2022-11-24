@@ -1,5 +1,5 @@
-// export { meta } from '~/pages/events/event/edit/meta'
+export { meta } from '~/pages/events/edit/meta'
 export { loader } from '~/pages/events/edit/loader'
-// export { action } from '~/pages/events/event/action'
+export { action } from '~/pages/events/edit/action'
 export { EditEvent as default } from '~/pages/events/edit/edit-event'
 // export { CatchBoundary } from '~/pages/events/event/catch-boundary'
