@@ -8,7 +8,7 @@ export interface EventState {
   subtitle: string
   location: string
   isRace: boolean
-  date?: Date
+  date: Date
   activeStep: StepNumber
   time: {
     hours?: number
