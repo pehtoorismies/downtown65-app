@@ -1,9 +1,9 @@
 import { Button, Grid, Group } from '@mantine/core'
 import { IconArrowLeft, IconArrowRight } from '@tabler/icons'
-import type { State } from './reducer'
+import type { EventState } from './event-state'
 import { ActiveStep } from './reducer'
 
-const isNextVisible = (state: State): boolean => {
+const isNextVisible = (state: EventState): boolean => {
   switch (state.activeStep) {
     case ActiveStep.STEP_EVENT_TYPE: {
       return !!state.eventType
@@ -26,11 +26,11 @@ const isNextVisible = (state: State): boolean => {
   }
 }
 
-const isPreviousVisible = (state: State): boolean =>
+const isPreviousVisible = (state: EventState): boolean =>
   state.activeStep !== ActiveStep.STEP_EVENT_TYPE
 
 interface Properties {
-  state: State
+  state: EventState
   onNextStep: () => void
   onPreviousStep: () => void
 }

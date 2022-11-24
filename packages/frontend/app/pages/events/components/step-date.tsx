@@ -6,6 +6,7 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
   return (
     <Calendar
       value={state.date}
+      initialMonth={state.date}
       onChange={(date: Date) => {
         dispatch({ kind: 'date', date })
       }}

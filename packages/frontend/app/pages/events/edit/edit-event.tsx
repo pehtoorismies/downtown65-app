@@ -5,7 +5,7 @@ import { reducer } from '../components/reducer'
 import type { LoaderData } from './loader'
 import type { Context } from '~/contexts/participating-context'
 import { EditOrCreate } from '~/pages/events/components/edit-or-create'
-import { eventStateToSubmittable } from '~/pages/events/components/event-state-to-submittable'
+import { eventStateToSubmittable } from '~/pages/events/support/event-state-to-submittable'
 
 export const EditEvent = () => {
   const fetcher = useFetcher()
@@ -38,8 +38,8 @@ export const EditEvent = () => {
   useEffect(() => {
     if (eventState.submitEvent) {
       fetcher.submit(eventStateToSubmittable(eventState), {
-        method: 'put',
-        action: `/events/${eventId}`,
+        method: 'post',
+        action: `/events/edit/${eventId}`,
       })
       dispatch({ kind: 'formSubmitted' })
     }

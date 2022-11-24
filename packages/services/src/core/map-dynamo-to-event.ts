@@ -31,8 +31,16 @@ const PersistedDynamoEvent = z.object({
 })
 
 export const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
-  const parsed = PersistedDynamoEvent.parse(persistedDynamoItem)
+  const result = PersistedDynamoEvent.safeParse(persistedDynamoItem)
 
+  if (!result.success) {
+    throw new Error(
+      `Error in dynamo item: ${JSON.stringify(persistedDynamoItem)}. Error: ${
+        result.error
+      }`
+    )
+  }
+  const parsed = result.data
   return {
     ...parsed,
     type: parsed.type as EventType, // should check for enum

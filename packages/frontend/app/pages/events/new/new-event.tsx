@@ -5,7 +5,7 @@ import { ActiveStep, reducer } from '../components/reducer'
 import type { LoaderData } from './loader'
 import type { Context } from '~/contexts/participating-context'
 import { EditOrCreate } from '~/pages/events/components/edit-or-create'
-import { eventStateToSubmittable } from '~/pages/events/components/event-state-to-submittable'
+import { eventStateToSubmittable } from '~/pages/events/support/event-state-to-submittable'
 
 const INIT_STATE: EventState = {
   activeStep: ActiveStep.STEP_EVENT_TYPE,
