@@ -8,9 +8,20 @@ import { validateSessionUser } from '~/session.server'
 
 export type LoaderData = {
   eventItem: EventLoaderData
+  origin: string
+}
+
+const getOrigin = (host: string): string => {
+  if (process.env.NODE_ENV === 'development') {
+    return `http://${host}`
+  }
+  return `https://${host}`
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
+  const host = request.headers.get('host')
+  invariant(host, 'No host provided in request headers')
+
   invariant(params.id, 'Expected params.id')
 
   const { event } = await getGqlSdk().GetEvent(
@@ -42,5 +53,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       isRace: event.race,
       me: result.hasSession ? result.user : undefined,
     },
+    origin: getOrigin(host),
   })
 }
