@@ -2,7 +2,6 @@ import type { StackContext } from '@serverless-stack/resources'
 import { RemixSite, use } from '@serverless-stack/resources'
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
 import * as route53 from 'aws-cdk-lib/aws-route53'
-import * as route53Targets from 'aws-cdk-lib/aws-route53-targets'
 import { GraphqlStack } from './graphql-stack'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
@@ -55,16 +54,16 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     },
   })
 
-  const recordProps = {
-    recordName: 'beta.downtown65.events',
-    zone: hostedZone,
-    target: route53.RecordTarget.fromAlias(
-      new route53Targets.CloudFrontTarget(site.cdk.distribution)
-    ),
-  }
-
-  new route53.ARecord(stack, 'AlternateARecord', recordProps)
-  new route53.AaaaRecord(stack, 'AlternateAAAARecord', recordProps)
+  // const recordProps = {
+  //   recordName: 'beta.downtown65.events',
+  //   zone: hostedZone,
+  //   target: route53.RecordTarget.fromAlias(
+  //     new route53Targets.CloudFrontTarget(site.cdk.distribution)
+  //   ),
+  // }
+  //
+  // new route53.ARecord(stack, 'AlternateARecord', recordProps)
+  // new route53.AaaaRecord(stack, 'AlternateAAAARecord', recordProps)
 
   // Add the site's URL to stack output
   stack.addOutputs({
