@@ -15,3 +15,6 @@ dist
 
 yarn-error.log
 cdk.context.json
+.swn
+.swo
+.swp

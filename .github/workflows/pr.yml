@@ -23,24 +23,39 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: eu-north-1
       AWS_REGION: eu-north-1
+      PR_NAME: pr-${{ github.event.pull_request.id }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Install
         run: yarn install --immutable --immutable-cache --check-cache
+      - name: Set common sst secrets
+        run: |
+          npx sst secrets --stage $PR_NAME set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
+          npx sst secrets --stage $PR_NAME set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+      - name: Print stage
+        run: |
+          echo Stage is $PR_NAME
+          echo to remove: sst remove --stage $PR_NAME
       - name: Bootstrap
         run: npx lerna bootstrap
       - name: Build
-        run: yarn run development:build
+        run: |
+          npx lerna run build
+          npx sst build --stage $PR_NAME
       - name: Lint and typecheck
         run: |
           yarn lint
           yarn typecheck
       - name: Deploy infra
         run: |
-          yarn development:deploy
+          npx sst deploy --stage $PR_NAME
       - name: Test
         run: |
-          yarn development:test
+          npx sst bind --stage $PR_NAME -- vitest run
+      #      - name: Tear down
+      #        run: |
+      #          sst secrets remove AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
+      #          sst secrets remove REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
       
