@@ -80,12 +80,8 @@ export const RemixStack = ({ stack, app }: StackContext) => {
         new route53Targets.CloudFrontTarget(site.cdk.distribution)
       ),
     }
-    new route53.ARecord(stack, `AlternateARecord_${app.stage}`, recordProps)
-    new route53.AaaaRecord(
-      stack,
-      `AlternateAAAARecord_${app.stage}`,
-      recordProps
-    )
+    new route53.ARecord(stack, 'AlternateARecord', recordProps)
+    new route53.AaaaRecord(stack, 'AlternateAAAARecord', recordProps)
   }
 
   // Add the site's URL to stack output
