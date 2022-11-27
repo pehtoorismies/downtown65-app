@@ -69,10 +69,7 @@ export const Login = () => {
             fullWidth
             mt="xl"
             type="submit"
-            loading={
-              transition.state === 'submitting' ||
-              transition.state === 'loading'
-            }
+            loading={transition.state === 'submitting'}
           >
             Kirjaudu
           </Button>
