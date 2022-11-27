@@ -89,7 +89,7 @@ export const Signup = () => {
 
           <Group position="right" mt="md">
             <Anchor component={Link} to="/login" size="sm">
-              Unohditko salasanan?
+              Kirjautumiseen
             </Anchor>
           </Group>
           <Button
