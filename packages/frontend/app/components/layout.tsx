@@ -6,11 +6,31 @@ import type { User } from '~/domain/user'
 
 interface LayoutProps {
   user?: User
+  stage: string
 }
 
-export const Layout = ({ children, user }: PropsWithChildren<LayoutProps>) => {
+export const Layout = ({
+  children,
+  user,
+  stage,
+}: PropsWithChildren<LayoutProps>) => {
   return (
     <>
+      {stage !== 'production' && (
+        <Box
+          sx={{
+            position: 'fixed',
+            fontSize: 8,
+            padding: 2,
+            top: 0,
+            right: 0,
+            zIndex: 1_000_001,
+            userSelect: 'none',
+          }}
+        >
+          stage: {stage}
+        </Box>
+      )}
       {!user && <HeaderLoggedOut />}
       {user && <HeaderLoggedIn user={user} />}
       <Box mt={60}>{children}</Box>

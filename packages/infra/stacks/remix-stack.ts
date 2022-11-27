@@ -18,6 +18,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     environment: {
       API_URL: ApiUrl,
       API_KEY: ApiKey,
+      SST_STAGE: stage,
       // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
     },
   }
@@ -34,12 +35,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     domainName: `downtown65.events`,
     hostedZone,
     region: 'us-east-1',
-    subjectAlternativeNames: [
-      '*.downtown65.events',
-      // 'beta.downtown65.events',
-      // 'development.downtown65.events',
-      // 'staging.downtown65.events',
-    ],
+    subjectAlternativeNames: ['*.downtown65.events'],
   })
 
   // Create the Remix site
@@ -53,17 +49,6 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       },
     },
   })
-
-  // const recordProps = {
-  //   recordName: 'beta.downtown65.events',
-  //   zone: hostedZone,
-  //   target: route53.RecordTarget.fromAlias(
-  //     new route53Targets.CloudFrontTarget(site.cdk.distribution)
-  //   ),
-  // }
-  //
-  // new route53.ARecord(stack, 'AlternateARecord', recordProps)
-  // new route53.AaaaRecord(stack, 'AlternateAAAARecord', recordProps)
 
   // Add the site's URL to stack output
   stack.addOutputs({

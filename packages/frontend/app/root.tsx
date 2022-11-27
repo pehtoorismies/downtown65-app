@@ -23,11 +23,24 @@ import { validateSessionUser } from '~/session.server'
 type LoaderData = {
   toastMessage?: ToastMessage
   user?: User
+  stage: string
 }
 
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 
+export const getStage = (): string => {
+  if (process.env.NODE_ENV === 'development') {
+    return 'local-development'
+  }
+  const value = process.env['SST_STAGE']
+  if (!value) {
+    throw new Error(`Environment value 'process.env.SST_STAGE' is not set`)
+  }
+  return value
+}
+
 export const loader: LoaderFunction = async ({ request }) => {
+  const stage = getStage()
   const result = await validateSessionUser(request)
   const user = result.hasSession ? result.user : undefined
 
@@ -36,7 +49,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const toastMessage = session.get('toastMessage') as ToastMessage
 
   if (!toastMessage) {
-    return json<LoaderData>({ toastMessage: undefined, user })
+    return json<LoaderData>({ toastMessage: undefined, user, stage })
   }
 
   if (!toastMessage.type) {
@@ -44,7 +57,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   return json<LoaderData>(
-    { toastMessage, user },
+    { toastMessage, user, stage },
     {
       headers: {
         'Set-Cookie': await commitSession(session, {
@@ -64,7 +77,7 @@ export const meta: MetaFunction = () => ({
 createEmotionCache({ key: 'mantine' })
 
 export default function App() {
-  const { toastMessage, user } = useLoaderData<LoaderData>()
+  const { toastMessage, user, stage } = useLoaderData<LoaderData>()
 
   useEffect(() => {
     if (!toastMessage) {
@@ -140,7 +153,7 @@ export default function App() {
           <Links />
         </head>
         <body>
-          <Layout user={user}>
+          <Layout user={user} stage={stage}>
             <Toaster />
             <Outlet />
           </Layout>
