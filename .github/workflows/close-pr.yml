@@ -4,7 +4,7 @@ on:
       - closed
 
 jobs:
-  if_merged:
+  merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
@@ -19,14 +19,15 @@ jobs:
       AWS_DEFAULT_REGION: eu-north-1
       AWS_REGION: eu-north-1
       PR_NAME: pr-${{ github.event.pull_request.id }}
+      SST: npx @serverless-stack/cli@1.17.1 --yes
     steps:
-      - uses: actions/checkout@v3
-      - name: Install
-        run: yarn install --immutable --immutable-cache --check-cache
+      #      - uses: actions/checkout@v3
+      #      - name: Install
+      #        run: yarn install --immutable --immutable-cache --check-cache
       - name: Remove common sst secrets
         run: |
-          sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
-          sst secrets --stage $PR_NAME remove REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+          $SST secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
+          $SST secrets --stage $PR_NAME remove REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
       - name: Remove infra
         run: |
-          sst remove --stage $PR_NAME
+          $SST remove --stage $PR_NAME
