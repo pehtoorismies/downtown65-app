@@ -19,15 +19,14 @@ jobs:
       AWS_DEFAULT_REGION: eu-north-1
       AWS_REGION: eu-north-1
       PR_NAME: pr-${{ github.event.pull_request.id }}
-      SST: npx @serverless-stack/cli@1.17.1 --yes
     steps:
-      #      - uses: actions/checkout@v3
-      #      - name: Install
-      #        run: yarn install --immutable --immutable-cache --check-cache
+      - uses: actions/checkout@v3
+      - name: Install
+        run: yarn install --immutable --immutable-cache --check-cache
       - name: Remove common sst secrets
         run: |
-          $SST secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
-          $SST secrets --stage $PR_NAME remove REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+          npx sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
+          npx sst secrets --stage $PR_NAME remove REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
       - name: Remove infra
         run: |
-          $SST remove --stage $PR_NAME
+          npx sst remove --stage $PR_NAME
