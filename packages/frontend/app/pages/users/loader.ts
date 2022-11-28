@@ -9,6 +9,10 @@ export interface LoaderData {
     name: string
     nickname: string
   }[]
+  length: number
+  limit: number
+  start: number
+  total: number
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -19,12 +23,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   const response = await getGqlSdk().GetUsers(
-    {},
+    {
+      page: 0,
+      perPage: 100,
+    },
     {
       Authorization: `Bearer ${result.accessToken}`,
     }
   )
 
   const headers = result.headers ?? {}
-  return json<LoaderData>({ users: response.users }, { headers })
+  return json<LoaderData>(response.users, { headers })
 }
