@@ -11,11 +11,15 @@ export type LoaderData = {
   origin: string
 }
 
-const getOrigin = (host: string): string => {
+export const getOrigin = (): string => {
   if (process.env.NODE_ENV === 'development') {
-    return `http://${host}`
+    return 'http://localhost:3000'
   }
-  return `https://${host}`
+  const domainName = process.env['DOMAIN_NAME']
+  if (!domainName) {
+    throw new Error(`Environment value 'process.env.DOMAIN_NAME' is not set`)
+  }
+  return `https://${domainName}`
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -53,6 +57,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       isRace: event.race,
       me: result.hasSession ? result.user : undefined,
     },
-    origin: getOrigin(host),
+    origin: getOrigin(),
   })
 }
