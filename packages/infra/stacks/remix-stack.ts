@@ -46,5 +46,6 @@ export const RemixStack = ({ stack, app }: StackContext) => {
   // Add the site's URL to stack output
   stack.addOutputs({
     URL: site.url,
+    CUSTOM_DOMAIN_URL: site.customDomainUrl ?? 'no_custom_domain',
   })
 }
