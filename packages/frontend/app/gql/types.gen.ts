@@ -231,7 +231,7 @@ export type Query = {
   events: Array<Event>;
   eventsByUser: Array<Event>;
   me: MeUser;
-  users: Array<OtherUser>;
+  users: UsersResponse;
 };
 
 
@@ -242,6 +242,12 @@ export type QueryEventArgs = {
 
 export type QueryEventsByUserArgs = {
   userId: Scalars['String'];
+};
+
+
+export type QueryUsersArgs = {
+  page: Scalars['Int'];
+  perPage: Scalars['Int'];
 };
 
 export const SignupField = {
@@ -295,6 +301,15 @@ export type User = {
 export type UserError = {
   message: Scalars['String'];
   path: Scalars['String'];
+};
+
+export type UsersResponse = {
+  __typename?: 'UsersResponse';
+  length: Scalars['Int'];
+  limit: Scalars['Int'];
+  start: Scalars['Int'];
+  total: Scalars['Int'];
+  users: Array<OtherUser>;
 };
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -387,10 +402,13 @@ export type UpdateMeMutationVariables = Exact<{
 
 export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename?: 'MeUser', id: string, nickname: string, name: string, preferences: { __typename?: 'Preferences', subscribeWeeklyEmail: boolean, subscribeEventCreationEmail: boolean } } };
 
-export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUsersQueryVariables = Exact<{
+  perPage: Scalars['Int'];
+  page: Scalars['Int'];
+}>;
 
 
-export type GetUsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'OtherUser', id: string, name: string, nickname: string }> };
+export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'UsersResponse', length: number, limit: number, start: number, total: number, users: Array<{ __typename?: 'OtherUser', id: string, name: string, nickname: string }> } };
 
 export const BaseFieldsFragmentDoc = gql`
     fragment baseFields on Event {
@@ -528,11 +546,17 @@ export const UpdateMeDocument = gql`
 }
     `;
 export const GetUsersDocument = gql`
-    query GetUsers {
-  users {
-    id
-    name
-    nickname
+    query GetUsers($perPage: Int!, $page: Int!) {
+  users(page: $page, perPage: $perPage) {
+    users {
+      id
+      name
+      nickname
+    }
+    length
+    limit
+    start
+    total
   }
 }
     `;
@@ -580,7 +604,7 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     UpdateMe(variables: UpdateMeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMeMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateMeMutation>(UpdateMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateMe', 'mutation');
     },
-    GetUsers(variables?: GetUsersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUsersQuery> {
+    GetUsers(variables: GetUsersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUsersQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetUsersQuery>(GetUsersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetUsers', 'query');
     }
   };

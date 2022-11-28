@@ -228,7 +228,7 @@ export type Query = {
   events: Array<Event>;
   eventsByUser: Array<Event>;
   me: MeUser;
-  users: Array<OtherUser>;
+  users: UsersResponse;
 };
 
 
@@ -239,6 +239,12 @@ export type QueryEventArgs = {
 
 export type QueryEventsByUserArgs = {
   userId: Scalars['String'];
+};
+
+
+export type QueryUsersArgs = {
+  page: Scalars['Int'];
+  perPage: Scalars['Int'];
 };
 
 export const SignupField = {
@@ -292,4 +298,13 @@ export type User = {
 export type UserError = {
   message: Scalars['String'];
   path: Scalars['String'];
+};
+
+export type UsersResponse = {
+  __typename?: 'UsersResponse';
+  length: Scalars['Int'];
+  limit: Scalars['Int'];
+  start: Scalars['Int'];
+  total: Scalars['Int'];
+  users: Array<OtherUser>;
 };
