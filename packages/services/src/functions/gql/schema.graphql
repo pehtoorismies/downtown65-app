@@ -192,13 +192,21 @@ input UpdateMeInput {
     preferences: PreferencesInput!
 }
 
+type UsersResponse {
+    length: Int!
+    limit: Int!
+    start: Int!
+    total: Int!
+    users: [OtherUser!]!
+}
+
 type Query {
     event(eventId: ID!): Event @aws_api_key
     # Future events
     events: [Event!]!
     eventsByUser(userId: String!): [Event!]!
     me: MeUser!
-    users: [OtherUser!]!
+    users(page: Int!, perPage: Int!): UsersResponse!
 }
 
 type Mutation {

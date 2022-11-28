@@ -1,7 +1,13 @@
-query GetUsers {
-    users {
-        id
-        name
-        nickname
+query GetUsers($perPage: Int!, $page: Int!) {
+    users(page: $page, perPage: $perPage) {
+        users {
+            id
+            name
+            nickname
+        }
+        length
+        limit
+        start
+        total
     }
 }

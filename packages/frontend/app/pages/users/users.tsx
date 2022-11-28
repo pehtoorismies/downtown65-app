@@ -3,7 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 import type { LoaderData } from './loader'
 
 export const Users = () => {
-  const { users } = useLoaderData<LoaderData>()
+  const { users, total } = useLoaderData<LoaderData>()
 
   const rows = users.map((u) => (
     <tr key={u.id}>
@@ -16,7 +16,7 @@ export const Users = () => {
     <Container py="sm">
       <Title>Downtown65 Endurance ry jäsenet</Title>
       <Text c="dimmed" fw={500}>
-        Jäseniä yhteensä: {users.length}kpl
+        Jäseniä yhteensä: {total}kpl
       </Text>
       <Table striped withColumnBorders>
         <thead>

@@ -11,6 +11,8 @@ import type {
   MutationUpdateMeArgs,
   OtherUser,
   QueryEventArgs as QueryEventArguments,
+  UsersResponse,
+  QueryUsersArgs,
 } from '../appsync.gen'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
@@ -31,8 +33,9 @@ export type Inputs =
   | MutationCreateEventArgs
   | MutationDeleteEventArgs
   | MutationUpdateEventArgs
-  | QueryEventArguments
   | MutationUpdateMeArgs
+  | QueryEventArguments
+  | QueryUsersArgs
 
 export type Outputs =
   | Dt65Event
@@ -40,9 +43,10 @@ export type Outputs =
   | IdPayload
   | MeUser
   | OtherUser[]
+  | UsersResponse
   | boolean
-  | undefined
   | string
+  | undefined
 
 const PRIVATE_FIELDS = [
   'createEvent',
@@ -128,7 +132,7 @@ export const privateResolver = (
       case 'users': {
         allowScopes(['read:users'])
         return getUsers(
-          event as AppSyncResolverEvent<EmptyArgs>,
+          event as AppSyncResolverEvent<QueryUsersArgs>,
           context,
           callback
         )
