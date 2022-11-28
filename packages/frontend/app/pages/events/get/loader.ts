@@ -2,6 +2,7 @@ import { DynamoDatetime } from '@downtown65-app/common'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import invariant from 'tiny-invariant'
+import type { User } from '~/domain/user'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import type { EventLoaderData } from '~/pages/events/event-loader-data'
 import { validateSessionUser } from '~/session.server'
@@ -9,6 +10,7 @@ import { validateSessionUser } from '~/session.server'
 export type LoaderData = {
   eventItem: EventLoaderData
   origin: string
+  user?: User
 }
 
 export const getOrigin = (): string => {
@@ -23,9 +25,6 @@ export const getOrigin = (): string => {
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const host = request.headers.get('host')
-  invariant(host, 'No host provided in request headers')
-
   invariant(params.id, 'Expected params.id')
 
   const { event } = await getGqlSdk().GetEvent(
@@ -43,6 +42,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   const result = await validateSessionUser(request)
+  const user = result.hasSession ? result.user : undefined
 
   const ddt = new DynamoDatetime({
     date: event.dateStart,
@@ -50,6 +50,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   })
 
   return json<LoaderData>({
+    user,
     eventItem: {
       ...event,
       dateStart: ddt.getFormattedDate(),
