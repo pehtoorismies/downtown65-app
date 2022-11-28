@@ -22,7 +22,7 @@ import {
 } from '~/contexts/participating-context'
 
 export const GetEvent = () => {
-  const { eventItem } = useLoaderData<LoaderData>()
+  const { eventItem, user } = useLoaderData<LoaderData>()
   const transition = useTransition()
 
   const participationActions = useParticipationActions()
@@ -31,12 +31,16 @@ export const GetEvent = () => {
 
   const items = [
     { title: 'Tapahtumat', href: '/events' },
-    { title: eventItem.title, href: `/events/${eventItem.id}` },
-  ].map((item, index) => (
-    <Anchor component={Link} to={item.href} key={index}>
-      {item.title}
-    </Anchor>
-  ))
+    { title: eventItem.title },
+  ].map((item, index) => {
+    return item.href ? (
+      <Anchor component={Link} to={item.href} key={index}>
+        {item.title}
+      </Anchor>
+    ) : (
+      <Text key={index}>{item.title}</Text>
+    )
+  })
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setFormValue(event.target.value)
@@ -97,25 +101,29 @@ export const GetEvent = () => {
         <ParticipatingContext.Provider value={participationActions}>
           <EventCardExtended {...eventItem} />
         </ParticipatingContext.Provider>
-        <Text align="center" mt="xl" weight={600} color="dimmed">
-          Modification zone
-        </Text>
-        <Group position="center" my="xl" spacing="xl">
-          <Button
-            component={Link}
-            to={`/events/edit/${eventItem.id}`}
-            rightIcon={<IconPencil size={18} />}
-          >
-            Muokkaa
-          </Button>
-          <Button
-            color="grape"
-            onClick={() => setOpened(true)}
-            rightIcon={<IconCircleOff size={18} />}
-          >
-            Poista tapahtuma
-          </Button>
-        </Group>
+        {user && (
+          <>
+            <Text align="center" mt="xl" weight={600} color="dimmed">
+              Modification zone
+            </Text>
+            <Group position="center" my="xl" spacing="xl">
+              <Button
+                component={Link}
+                to={`/events/edit/${eventItem.id}`}
+                rightIcon={<IconPencil size={18} />}
+              >
+                Muokkaa
+              </Button>
+              <Button
+                color="grape"
+                onClick={() => setOpened(true)}
+                rightIcon={<IconCircleOff size={18} />}
+              >
+                Poista tapahtuma
+              </Button>
+            </Group>
+          </>
+        )}
       </Container>
     </>
   )
