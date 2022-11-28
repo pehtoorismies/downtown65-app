@@ -1,4 +1,4 @@
-import { Container, Table, Title } from '@mantine/core'
+import { Container, Text, Table, Title } from '@mantine/core'
 import { useLoaderData } from '@remix-run/react'
 import type { LoaderData } from './loader'
 
@@ -14,7 +14,10 @@ export const Users = () => {
 
   return (
     <Container py="sm">
-      <Title>Downtown65 jäsenet</Title>
+      <Title>Downtown65 Endurance ry jäsenet</Title>
+      <Text c="dimmed" fw={500}>
+        Jäseniä yhteensä: {users.length}kpl
+      </Text>
       <Table striped withColumnBorders>
         <thead>
           <tr>
