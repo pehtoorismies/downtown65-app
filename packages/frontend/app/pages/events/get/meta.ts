@@ -11,7 +11,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
     'og:url': `${origin}${location.pathname}`,
     'og:title': `Event: ${eventItem.title}`,
     'og:description': `${eventItem.dateStart} - ${eventItem.subtitle}`,
-    'og:image': `${origin}/${mapToData(eventItem.type).imageUrl}`,
+    'og:image': `${origin}${mapToData(eventItem.type).imageUrl}`,
     'og:image:type': 'image/jpg',
   }
 }
