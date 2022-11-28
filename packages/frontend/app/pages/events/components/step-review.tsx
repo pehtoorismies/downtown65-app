@@ -12,7 +12,8 @@ const getDate = (date: EventState['date']) => {
   if (!date) {
     return 'Missing date'
   }
-  return `${suffixZero(date.getDate())}.${prefixZero(
+
+  return `${prefixZero(date.getDate())}.${suffixZero(
     date.getMonth() + 1
   )}.${date.getFullYear()}`
 }
