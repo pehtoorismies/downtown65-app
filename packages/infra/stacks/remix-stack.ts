@@ -12,24 +12,10 @@ export const RemixStack = ({ stack, app }: StackContext) => {
   })
 
   const stage = app.stage
-
-  const remixSiteProps = {
-    path: 'packages/frontend',
-    environment: {
-      API_URL: ApiUrl,
-      API_KEY: ApiKey,
-      SST_STAGE: stage,
-      // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
-    },
-  }
-
-  if (stage !== 'production') {
-    const prSite = new RemixSite(stack, 'Downtown65-remix', remixSiteProps)
-    stack.addOutputs({
-      URL: prSite.url,
-    })
-    return
-  }
+  const domainName =
+    stage === 'production'
+      ? 'beta.downtown65.events'
+      : `${stage}.downtown65.events`
 
   const certificate = new acm.DnsValidatedCertificate(stack, 'Certificate', {
     domainName: `downtown65.events`,
@@ -40,9 +26,16 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   // Create the Remix site
   const site = new RemixSite(stack, 'Downtown65-remix', {
-    ...remixSiteProps,
+    path: 'packages/frontend',
+    environment: {
+      API_URL: ApiUrl,
+      API_KEY: ApiKey,
+      SST_STAGE: stage,
+      DOMAIN_NAME: domainName,
+      // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
+    },
     customDomain: {
-      domainName: 'beta.downtown65.events',
+      domainName,
       cdk: {
         hostedZone,
         certificate,
