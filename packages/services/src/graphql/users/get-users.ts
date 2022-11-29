@@ -24,6 +24,7 @@ export const getUsers: AppSyncResolverHandler<
     per_page: perPage,
     include_totals: true,
     fields: 'nickname,name,user_id,picture,email',
+    sort: 'created_at:1',
   })
   const auth0Users = Auth0Users.parse(response.users)
   const users = auth0Users.map((auth0User) => {
