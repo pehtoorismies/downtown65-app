@@ -52,6 +52,7 @@ interface UpdateableEvent {
   timeStart?: string
   title: string
   type: EventType
+  GSI1SK: string
 }
 
 const getExpression = (d: Date) => {
@@ -223,10 +224,13 @@ export const update = async (
     times: timeStart,
   })
 
+  const gsi1sk = ddt.getIsoDatetime()
+
   const update: UpdateableEvent = {
     ...rest,
     dateStart: ddt.getDate(),
     timeStart: ddt.getTime(),
+    GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     type,
   }
 
