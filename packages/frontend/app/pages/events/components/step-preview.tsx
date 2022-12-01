@@ -13,7 +13,7 @@ const getDate = (date: EventState['date']) => {
     return 'Missing date'
   }
 
-  return `${prefixZero(date.getDate())}.${suffixZero(
+  return `${prefixZero(date.getDate())}.${prefixZero(
     date.getMonth() + 1
   )}.${date.getFullYear()}`
 }
@@ -24,7 +24,7 @@ const getTime = ({ hours, minutes }: EventState['time']) => {
   }
 }
 
-export const StepReview = ({ state, me }: Properties) => {
+export const StepPreview = ({ state, me }: Properties) => {
   if (!state.eventType) {
     throw new Error('Illegal state, not eventType defined')
   }
