@@ -17,7 +17,7 @@ import type { EventAction, StepNumber } from '~/pages/events/components/reducer'
 import { ActiveStep } from '~/pages/events/components/reducer'
 import { StepDate } from '~/pages/events/components/step-date'
 import { StepDescriptionClient } from '~/pages/events/components/step-description.client'
-import { StepReview } from '~/pages/events/components/step-review'
+import { StepPreview } from '~/pages/events/components/step-preview'
 import { StepTime } from '~/pages/events/components/step-time'
 import { StepTitle } from '~/pages/events/components/step-title'
 import { StepType } from '~/pages/events/components/step-type'
@@ -148,7 +148,7 @@ export const EditOrCreate = ({
       )}
       {state.activeStep === ActiveStep.STEP_REVIEW && (
         <ParticipatingContext.Provider value={participatingActions}>
-          <StepReview state={state} me={me} />
+          <StepPreview state={state} me={me} />
         </ParticipatingContext.Provider>
       )}
       <Buttons
