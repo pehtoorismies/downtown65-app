@@ -1,7 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { validateSessionUser } from '~/session.server'
+import { logout, validateSessionUser } from '~/session.server'
 
 export interface LoaderData {
   users: {
@@ -28,10 +28,10 @@ const defaultTo = (defaultValue: number, value: string | null): number => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const result = await validateSessionUser(request)
+  const userSession = await validateSessionUser(request)
 
-  if (!result.hasSession) {
-    return redirect('/login')
+  if (!userSession.valid) {
+    return logout(request)
   }
 
   const url = new URL(request.url)
@@ -44,7 +44,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       perPage,
     },
     {
-      Authorization: `Bearer ${result.accessToken}`,
+      Authorization: `Bearer ${userSession.accessToken}`,
     }
   )
 
@@ -56,8 +56,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const numberPages = Math.floor(total / limit) + extra
   const currentPage = Math.floor(start / limit) + 1
 
-  const headers = result.headers ?? {}
-  return json<LoaderData>(
+  json<LoaderData>(
     {
       users,
       userCount: total,
@@ -67,6 +66,6 @@ export const loader: LoaderFunction = async ({ request }) => {
       usersOnPage: length,
       start,
     },
-    headers
+    { headers: userSession.headers }
   )
 }

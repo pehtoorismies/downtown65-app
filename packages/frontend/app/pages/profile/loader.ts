@@ -1,7 +1,7 @@
 import type { LoaderFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { validateSessionUser } from '~/session.server'
+import { logout, validateSessionUser } from '~/session.server'
 
 export interface LoaderData {
   name: string
@@ -14,19 +14,18 @@ export interface LoaderData {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const result = await validateSessionUser(request)
+  const userSession = await validateSessionUser(request)
 
-  if (!result.hasSession) {
-    return redirect('/login')
+  if (!userSession.valid) {
+    return logout(request)
   }
 
   const { me } = await getGqlSdk().GetProfile(
     {},
     {
-      Authorization: `Bearer ${result.accessToken}`,
+      Authorization: `Bearer ${userSession.accessToken}`,
     }
   )
 
-  const headers = result.headers ?? {}
-  return json<LoaderData>(me, { headers })
+  return json<LoaderData>(me, { headers: userSession.headers })
 }

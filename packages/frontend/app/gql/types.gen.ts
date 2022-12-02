@@ -152,6 +152,7 @@ export type Mutation = {
   leaveEvent?: Maybe<Scalars['Boolean']>;
   login: LoginPayload;
   participateEvent?: Maybe<Scalars['Boolean']>;
+  refreshToken: RefreshPayload;
   signup: SignupPayload;
   updateEvent: Event;
   updateMe: MeUser;
@@ -187,6 +188,11 @@ export type MutationLoginArgs = {
 export type MutationParticipateEventArgs = {
   eventId: Scalars['ID'];
   me: MeInput;
+};
+
+
+export type MutationRefreshTokenArgs = {
+  refreshToken: Scalars['String'];
 };
 
 
@@ -248,6 +254,19 @@ export type QueryEventsByUserArgs = {
 export type QueryUsersArgs = {
   page: Scalars['Int'];
   perPage: Scalars['Int'];
+};
+
+export type RefreshPayload = {
+  __typename?: 'RefreshPayload';
+  refreshError?: Maybe<Scalars['String']>;
+  tokens?: Maybe<RefreshTokensPayload>;
+};
+
+export type RefreshTokensPayload = {
+  __typename?: 'RefreshTokensPayload';
+  accessToken: Scalars['String'];
+  expiresIn: Scalars['Int'];
+  idToken: Scalars['String'];
 };
 
 export const SignupField = {
@@ -337,6 +356,13 @@ export type SignupMutationVariables = Exact<{
 
 
 export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'SignupPayload', user?: { __typename?: 'Creator', id: string } | { __typename?: 'EventParticipant', id: string } | { __typename?: 'MeUser', id: string } | { __typename?: 'OtherUser', id: string } |  undefined, errors?: Array<{ __typename?: 'FieldError', path: SignupField, message: string }> |  undefined } };
+
+export type RefreshTokenMutationVariables = Exact<{
+  refreshToken: Scalars['String'];
+}>;
+
+
+export type RefreshTokenMutation = { __typename?: 'Mutation', refreshToken: { __typename?: 'RefreshPayload', refreshError?: string |  undefined, tokens?: { __typename?: 'RefreshTokensPayload', idToken: string, accessToken: string } |  undefined } };
 
 export type BaseFieldsFragment = { __typename?: 'Event', id: string, dateStart: any, description?: string |  undefined, location: string, race: boolean, subtitle: string, title: string, timeStart?: string |  undefined, type: EventType, createdBy: { __typename?: 'Creator', id: string, nickname: string, picture: string }, participants: Array<{ __typename?: 'EventParticipant', id: string, joinedAt: string, nickname: string, picture: string }> };
 
@@ -470,6 +496,17 @@ export const SignupDocument = gql`
   }
 }
     `;
+export const RefreshTokenDocument = gql`
+    mutation RefreshToken($refreshToken: String!) {
+  refreshToken(refreshToken: $refreshToken) {
+    tokens {
+      idToken
+      accessToken
+    }
+    refreshError
+  }
+}
+    `;
 export const GetEventDocument = gql`
     query GetEvent($eventId: ID!) {
   event(eventId: $eventId) {
@@ -576,6 +613,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     Signup(variables: SignupMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SignupMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<SignupMutation>(SignupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Signup', 'mutation');
+    },
+    RefreshToken(variables: RefreshTokenMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RefreshTokenMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<RefreshTokenMutation>(RefreshTokenDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'RefreshToken', 'mutation');
     },
     GetEvent(variables: GetEventQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetEventQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetEventQuery>(GetEventDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetEvent', 'query');

@@ -40,3 +40,14 @@ mutation Signup(
         }
     }
 }
+
+mutation RefreshToken($refreshToken: String!) {
+    refreshToken(refreshToken: $refreshToken) {
+        tokens {
+            idToken
+            accessToken
+        }
+        refreshError
+    }
+
+}

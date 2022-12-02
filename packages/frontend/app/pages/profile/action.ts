@@ -7,8 +7,8 @@ import { validateSessionUser } from '~/session.server'
 interface ActionData {}
 
 export const action: ActionFunction = async ({ request }) => {
-  const result = await validateSessionUser(request)
-  if (!result.hasSession) {
+  const userSession = await validateSessionUser(request)
+  if (!userSession.valid) {
     return redirect('/login')
   }
 
@@ -22,17 +22,19 @@ export const action: ActionFunction = async ({ request }) => {
       subscribeWeeklyEmail: weekly,
     },
     {
-      Authorization: `Bearer ${result.accessToken}`,
+      Authorization: `Bearer ${userSession.accessToken}`,
     }
   )
-  const session = await getSession(request.headers.get('cookie'))
-  setSuccessMessage(session, 'Asetukset on päivitetty')
-  // const headers = result.headers ?? {} // TODO: how to combine these headers
+  const messageSession = await getSession(request.headers.get('cookie'))
+  setSuccessMessage(messageSession, 'Asetukset on päivitetty')
+
+  const headers = userSession.headers
+  headers.append('Set-Cookie', await commitSession(messageSession))
 
   return json<ActionData>(
     {},
     {
-      headers: { 'Set-Cookie': await commitSession(session) },
+      headers,
     }
   )
 }

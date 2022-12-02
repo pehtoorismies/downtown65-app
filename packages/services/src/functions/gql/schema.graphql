@@ -152,6 +152,17 @@ type LoginPayload @aws_api_key {
     loginError: LoginError
 }
 
+type RefreshTokensPayload @aws_api_key {
+    accessToken: String!
+    expiresIn: Int!
+    idToken: String!
+}
+
+type RefreshPayload @aws_api_key {
+    tokens: RefreshTokensPayload
+    refreshError: String
+}
+
 input PreferencesInput {
     subscribeEventCreationEmail: Boolean!
     subscribeWeeklyEmail: Boolean!
@@ -228,6 +239,11 @@ type Mutation {
     forgotPassword(
         email: String!
     ): Boolean! @aws_api_key
+
+
+    refreshToken(
+        refreshToken: String!
+    ): RefreshPayload! @aws_api_key
 
     importEvents: String!
 }

@@ -41,23 +41,34 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     })
   }
 
-  const result = await validateSessionUser(request)
-  const user = result.hasSession ? result.user : undefined
-
   const ddt = new DynamoDatetime({
     date: event.dateStart,
     time: event.timeStart,
   })
 
-  return json<LoaderData>({
-    user,
+  const userSession = await validateSessionUser(request)
+
+  const data = {
     eventItem: {
       ...event,
       dateStart: ddt.getFormattedDate(),
       description: event.description ?? '',
       isRace: event.race,
-      me: result.hasSession ? result.user : undefined,
     },
     origin: getOrigin(),
-  })
+  }
+
+  return userSession.valid
+    ? json<LoaderData>(
+        {
+          ...data,
+          user: userSession.user,
+          eventItem: {
+            ...data.eventItem,
+            me: userSession.user,
+          },
+        },
+        { headers: userSession.headers }
+      )
+    : json<LoaderData>(data)
 }

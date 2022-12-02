@@ -3,14 +3,15 @@ import { json, redirect } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { commitSession, getSession, setSuccessMessage } from '~/message.server'
-import { validateSessionUser } from '~/session.server'
+import { logout, validateSessionUser } from '~/session.server'
+// TODO: add error handling
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const result = await validateSessionUser(request)
+  const userSession = await validateSessionUser(request)
 
-  if (!result.hasSession) {
-    return redirect('/login')
+  if (!userSession.valid) {
+    return logout(request)
   }
 
   const body = await request.formData()
@@ -24,26 +25,30 @@ export const action: ActionFunction = async ({ request, params }) => {
           eventId: params.id,
         },
         {
-          Authorization: `Bearer ${result.accessToken}`,
+          Authorization: `Bearer ${userSession.accessToken}`,
         }
       )
       const session = await getSession(request.headers.get('cookie'))
       setSuccessMessage(session, 'Tapahtuma on poistettu')
+
+      const headers = userSession.headers
+      headers.append('Set-Cookie', await commitSession(session))
+
       return redirect('/events', {
-        headers: { 'Set-Cookie': await commitSession(session) },
+        headers,
       })
     }
     case 'participate': {
       await getGqlSdk().ParticipateEvent(
         {
           eventId: params.id,
-          me: result.user,
+          me: userSession.user,
         },
         {
-          Authorization: `Bearer ${result.accessToken}`,
+          Authorization: `Bearer ${userSession.accessToken}`,
         }
       )
-      return json({})
+      return json({}, { headers: userSession.headers })
     }
     case 'leave': {
       await getGqlSdk().LeaveEvent(
@@ -51,11 +56,10 @@ export const action: ActionFunction = async ({ request, params }) => {
           eventId: params.id,
         },
         {
-          Authorization: `Bearer ${result.accessToken}`,
+          Authorization: `Bearer ${userSession.accessToken}`,
         }
       )
-
-      return json({})
+      return json({}, { headers: userSession.headers })
     }
   }
 

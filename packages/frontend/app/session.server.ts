@@ -3,22 +3,12 @@ import { createCookieSessionStorage, redirect } from '@remix-run/node'
 import jwtDecode from 'jwt-decode'
 import { z } from 'zod'
 import { User } from '~/domain/user'
+import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import { commitSession } from '~/message.server'
 
 const REFRESH_TOKEN_KEY = 'refreshToken'
 const ID_TOKEN_KEY = 'idToken'
 const ACCESS_TOKEN_KEY = 'accessToken'
-
-const sessionStorage = createCookieSessionStorage({
-  cookie: {
-    name: '__session',
-    httpOnly: true,
-    path: '/',
-    sameSite: 'lax',
-    secrets: ['super-secret'],
-    secure: process.env.NODE_ENV === 'production',
-  },
-})
 
 export const Tokens = z.object({
   refreshToken: z.string(),
@@ -27,6 +17,37 @@ export const Tokens = z.object({
 })
 
 type Tokens = z.infer<typeof Tokens>
+
+const Jwt = z.object({
+  exp: z.number(),
+})
+
+type ValidSession = {
+  valid: true
+  user: User
+  accessToken: string
+  headers: Headers
+}
+
+type NoSession = {
+  valid: false
+}
+
+type SessionValue = ValidSession | NoSession
+
+const SEVEN_DAYS: number = 60 * 60 * 24 * 7
+
+const sessionStorage = createCookieSessionStorage({
+  cookie: {
+    name: '__session',
+    httpOnly: true,
+    path: '/',
+    sameSite: 'lax',
+    // TODO: add proper secret
+    secrets: ['super-secret'],
+    secure: process.env.NODE_ENV === 'production',
+  },
+})
 
 const getSession = (request: Request) => {
   const cookie = request.headers.get('Cookie')
@@ -39,14 +60,27 @@ interface CreateUserSession {
   redirectTo: string
 }
 
-const renewTokens = async (refreshToken: string): Promise<Tokens> => {
-  // fetch tokens from auth0
+const fetchRenewTokens = async (
+  refreshToken: string
+): Promise<{
+  accessToken: string
+  idToken: string
+}> => {
+  const { refreshToken: rt } = await getGqlSdk().RefreshToken(
+    {
+      refreshToken,
+    },
+    getPublicAuthHeaders()
+  )
 
-  return {
-    refreshToken,
-    accessToken: '123',
-    idToken: '123',
+  if (rt.tokens) {
+    return {
+      accessToken: rt.tokens.accessToken,
+      idToken: rt.tokens.idToken,
+    }
   }
+
+  throw new Error(rt.refreshError)
 }
 
 const getTokens = (session: Session): Tokens | undefined => {
@@ -69,22 +103,6 @@ const getTokens = (session: Session): Tokens | undefined => {
   }
 }
 
-const Jwt = z.object({
-  exp: z.number(),
-})
-
-type ValidSession = {
-  hasSession: true
-  user: User
-  accessToken: string
-  headers?: { 'Set-Cookie': string }
-}
-type NoSession = {
-  hasSession: false
-}
-
-type SessionReturnValue = ValidSession | NoSession
-
 const getUserFromJwt = (idTokenJWT: string): User => {
   const decoded = jwtDecode(idTokenJWT)
   return User.parse(decoded)
@@ -92,7 +110,7 @@ const getUserFromJwt = (idTokenJWT: string): User => {
 
 export const validateSessionUser = async (
   request: Request
-): Promise<SessionReturnValue> => {
+): Promise<SessionValue> => {
   const session = await getSession(request)
   //  - if session is expired these getters return undefined and __session is removed
   // - session token is tampered these getters get undefined
@@ -100,9 +118,10 @@ export const validateSessionUser = async (
 
   if (tokens === undefined) {
     return {
-      hasSession: false,
+      valid: false,
     }
   }
+
   try {
     const decoded = jwtDecode(tokens.accessToken)
     const { exp } = Jwt.parse(decoded)
@@ -110,32 +129,36 @@ export const validateSessionUser = async (
 
     if (!isExpired) {
       return {
-        hasSession: true,
+        valid: true,
         user: getUserFromJwt(tokens.idToken),
         accessToken: tokens.accessToken,
+        headers: new Headers(),
       }
     }
-    const renewed = await renewTokens(tokens.refreshToken)
-    session.set(REFRESH_TOKEN_KEY, renewed.refreshToken)
-    session.set(ID_TOKEN_KEY, renewed.idToken)
-    session.set(ACCESS_TOKEN_KEY, renewed.accessToken)
+
+    const renewResponse = await fetchRenewTokens(tokens.refreshToken)
+    session.set(REFRESH_TOKEN_KEY, tokens.refreshToken)
+    session.set(ID_TOKEN_KEY, renewResponse.idToken)
+    session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
+
+    const headers = new Headers()
+    headers.append(
+      'Set-Cookie',
+      await commitSession(session, {
+        maxAge: SEVEN_DAYS,
+      })
+    )
 
     return {
-      hasSession: true,
-      user: getUserFromJwt(renewed.idToken),
-      accessToken: renewed.accessToken,
-      headers: {
-        // TODO: Do something!
-        'Set-Cookie': await commitSession(session, {
-          maxAge: 60 * 60 * 24 * 7, // 7 days
-          // maxAge: 20, // 20 seconds
-        }),
-      },
+      valid: true,
+      user: getUserFromJwt(renewResponse.idToken),
+      accessToken: renewResponse.accessToken,
+      headers,
     }
   } catch (error) {
     console.error(error)
     return {
-      hasSession: false,
+      valid: false,
     }
   }
 }
@@ -153,8 +176,7 @@ export const createUserSession = async ({
   return redirect(redirectTo, {
     headers: {
       'Set-Cookie': await sessionStorage.commitSession(session, {
-        maxAge: 60 * 60 * 24 * 7, // 7 days
-        // maxAge: 20, // 20 seconds
+        maxAge: SEVEN_DAYS,
       }),
     },
   })
