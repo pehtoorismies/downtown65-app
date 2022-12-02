@@ -149,6 +149,7 @@ export type Mutation = {
   leaveEvent?: Maybe<Scalars['Boolean']>;
   login: LoginPayload;
   participateEvent?: Maybe<Scalars['Boolean']>;
+  refreshToken: RefreshPayload;
   signup: SignupPayload;
   updateEvent: Event;
   updateMe: MeUser;
@@ -184,6 +185,11 @@ export type MutationLoginArgs = {
 export type MutationParticipateEventArgs = {
   eventId: Scalars['ID'];
   me: MeInput;
+};
+
+
+export type MutationRefreshTokenArgs = {
+  refreshToken: Scalars['String'];
 };
 
 
@@ -245,6 +251,19 @@ export type QueryEventsByUserArgs = {
 export type QueryUsersArgs = {
   page: Scalars['Int'];
   perPage: Scalars['Int'];
+};
+
+export type RefreshPayload = {
+  __typename?: 'RefreshPayload';
+  refreshError?: Maybe<Scalars['String']>;
+  tokens?: Maybe<RefreshTokensPayload>;
+};
+
+export type RefreshTokensPayload = {
+  __typename?: 'RefreshTokensPayload';
+  accessToken: Scalars['String'];
+  expiresIn: Scalars['Int'];
+  idToken: Scalars['String'];
 };
 
 export const SignupField = {

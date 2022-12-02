@@ -1,29 +1,28 @@
 import { DynamoDatetime } from '@downtown65-app/common'
 import type { LoaderFunction } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import type { EventLoaderData } from '~/pages/events/event-loader-data'
-import { validateSessionUser } from '~/session.server'
+import { logout, validateSessionUser } from '~/session.server'
 
 export interface LoaderData {
   eventItems: EventLoaderData[]
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const result = await validateSessionUser(request)
+  const userSession = await validateSessionUser(request)
 
-  if (!result.hasSession) {
-    return redirect('/login')
+  if (!userSession.valid) {
+    return logout(request)
   }
 
   const { events } = await getGqlSdk().GetEvents(
     {},
     {
-      Authorization: `Bearer ${result.accessToken}`,
+      Authorization: `Bearer ${userSession.accessToken}`,
     }
   )
-
-  const mapped = events.map((event) => {
+  const eventItems = events.map((event) => {
     const ddt = new DynamoDatetime({
       date: event.dateStart,
       time: event.timeStart,
@@ -34,10 +33,9 @@ export const loader: LoaderFunction = async ({ request }) => {
       dateStart: ddt.getFormattedDate(),
       description: event.description ?? '',
       isRace: event.race,
-      me: result.user,
+      me: userSession.user,
     }
   })
 
-  const headers = result.headers ?? {}
-  return json<LoaderData>({ eventItems: mapped }, { headers })
+  return json<LoaderData>({ eventItems }, { headers: userSession.headers })
 }

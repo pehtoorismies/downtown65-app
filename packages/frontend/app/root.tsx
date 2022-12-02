@@ -41,29 +41,36 @@ export const getStage = (): string => {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const stage = getStage()
-  const result = await validateSessionUser(request)
-  const user = result.hasSession ? result.user : undefined
+  const userSession = await validateSessionUser(request)
+  const user = userSession.valid ? userSession.user : undefined
+  const headers = userSession.valid ? userSession.headers : new Headers()
 
   const session = await getSession(request.headers.get('cookie'))
 
   const toastMessage = session.get('toastMessage') as ToastMessage
 
   if (!toastMessage) {
-    return json<LoaderData>({ toastMessage: undefined, user, stage })
+    return json<LoaderData>(
+      { toastMessage: undefined, user, stage },
+      { headers }
+    )
   }
 
   if (!toastMessage.type) {
     throw new Error('Message should have a type')
   }
 
+  headers.append(
+    'Set-Cookie',
+    await commitSession(session, {
+      expires: new Date(Date.now() + ONE_YEAR),
+    })
+  )
+
   return json<LoaderData>(
     { toastMessage, user, stage },
     {
-      headers: {
-        'Set-Cookie': await commitSession(session, {
-          expires: new Date(Date.now() + ONE_YEAR),
-        }),
-      },
+      headers,
     }
   )
 }

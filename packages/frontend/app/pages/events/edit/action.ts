@@ -4,13 +4,14 @@ import invariant from 'tiny-invariant'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { commitSession, getSession, setSuccessMessage } from '~/message.server'
 import { getEventForm } from '~/pages/events/support/get-event-form'
-import { validateSessionUser } from '~/session.server'
+import { logout, validateSessionUser } from '~/session.server'
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const result = await validateSessionUser(request)
-  if (!result.hasSession) {
-    return redirect('/login')
+  const userSession = await validateSessionUser(request)
+
+  if (!userSession.valid) {
+    return logout(request)
   }
 
   const { id: eventId } = params
@@ -35,13 +36,16 @@ export const action: ActionFunction = async ({ request, params }) => {
       },
     },
     {
-      Authorization: `Bearer ${result.accessToken}`,
+      Authorization: `Bearer ${userSession.accessToken}`,
     }
   )
 
-  const session = await getSession(request.headers.get('cookie'))
-  setSuccessMessage(session, 'Tapahtuman muokkaus onnistui')
+  const messageSession = await getSession(request.headers.get('cookie'))
+  setSuccessMessage(messageSession, 'Tapahtuman muokkaus onnistui')
+
+  const headers = userSession.headers
+  headers.append('Set-Cookie', await commitSession(messageSession))
   return redirect(`/events/${eventId}`, {
-    headers: { 'Set-Cookie': await commitSession(session) },
+    headers,
   })
 }
