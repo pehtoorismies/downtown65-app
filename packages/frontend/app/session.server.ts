@@ -1,5 +1,5 @@
 import type { Session } from '@remix-run/node'
-import { createCookieSessionStorage, redirect } from '@remix-run/node'
+import { createCookieSessionStorage, json, redirect } from '@remix-run/node'
 import jwtDecode from 'jwt-decode'
 import { z } from 'zod'
 import { User } from '~/domain/user'
@@ -141,13 +141,12 @@ export const validateSessionUser = async (
     session.set(ID_TOKEN_KEY, renewResponse.idToken)
     session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
 
+    const renewedSessionCookie = await commitSession(session, {
+      maxAge: SEVEN_DAYS,
+    })
+
     const headers = new Headers()
-    headers.append(
-      'Set-Cookie',
-      await commitSession(session, {
-        maxAge: SEVEN_DAYS,
-      })
-    )
+    headers.append('Set-Cookie', renewedSessionCookie)
 
     return {
       valid: true,
@@ -185,6 +184,15 @@ export const createUserSession = async ({
 export const logout = async (request: Request) => {
   const session = await getSession(request)
   return redirect('/login', {
+    headers: {
+      'Set-Cookie': await sessionStorage.destroySession(session),
+    },
+  })
+}
+
+export const publicLogout = async (request: Request, data: unknown) => {
+  const session = await getSession(request)
+  return json(data, {
     headers: {
       'Set-Cookie': await sessionStorage.destroySession(session),
     },
