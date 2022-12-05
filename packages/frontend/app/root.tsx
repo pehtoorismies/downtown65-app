@@ -2,6 +2,7 @@ import { MantineProvider, createEmotionCache, Title } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
+import type { RouteMatch } from '@remix-run/react'
 import {
   Links,
   LiveReload,
@@ -11,18 +12,18 @@ import {
   ScrollRestoration,
   useLoaderData,
   useCatch,
+  useMatches,
 } from '@remix-run/react'
 import { useEffect } from 'react'
 import { Toaster, toast } from 'react-hot-toast'
 import { Layout } from '~/components/layout'
 import type { User } from '~/domain/user'
 import type { ToastMessage } from '~/message.server'
-import { commitSession, getSession } from '~/message.server'
-import { validateSessionUser } from '~/session.server'
+import { theme } from '~/theme'
 
 type LoaderData = {
-  toastMessage?: ToastMessage
-  user?: User
+  // toastMessage?: ToastMessage
+  // user?: User
   stage: string
 }
 
@@ -39,40 +40,36 @@ export const getStage = (): string => {
   return value
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async () => {
   const stage = getStage()
-  const userSession = await validateSessionUser(request)
-  const user = userSession.valid ? userSession.user : undefined
-  const headers = userSession.valid ? userSession.headers : new Headers()
+  // const userSession = await validateSessionUser(request)
 
-  const session = await getSession(request.headers.get('cookie'))
+  // const user = userSession.valid ? userSession.user : undefined
 
-  const toastMessage = session.get('toastMessage') as ToastMessage
+  // const session = await getSession(request.headers.get('cookie'))
 
-  if (!toastMessage) {
-    return json<LoaderData>(
-      { toastMessage: undefined, user, stage },
-      { headers }
-    )
-  }
+  // const toastMessage = session.get('toastMessage') as ToastMessage
+  // console.log('end root loader')
+  return json<LoaderData>({ stage })
 
-  if (!toastMessage.type) {
-    throw new Error('Message should have a type')
-  }
+  // if (!toastMessage) {
+  //   return json<LoaderData>({ toastMessage: undefined, user, stage })
+  // }
 
-  headers.append(
-    'Set-Cookie',
-    await commitSession(session, {
-      expires: new Date(Date.now() + ONE_YEAR),
-    })
-  )
+  // if (!toastMessage.type) {
+  //   throw new Error('Message should have a type')
+  // }
 
-  return json<LoaderData>(
-    { toastMessage, user, stage },
-    {
-      headers,
-    }
-  )
+  // return json<LoaderData>(
+  //   { toastMessage, user, stage },
+  //   {
+  //     headers: {
+  //       'Set-Cookie': await commitSession(session, {
+  //         expires: new Date(Date.now() + ONE_YEAR),
+  //       }),
+  //     },
+  //   }
+  // )
 }
 
 export const meta: MetaFunction = () => ({
@@ -83,8 +80,24 @@ export const meta: MetaFunction = () => ({
 
 createEmotionCache({ key: 'mantine' })
 
+const findUser = (matches: RouteMatch[]): User | undefined => {
+  return
+  matches
+    .map((match) => match.data)
+    .filter(Boolean)
+    .map(({ user }) => user)
+    .find(Boolean)
+}
+
+const findToastMessage = (matches: RouteMatch[]): ToastMessage | undefined => {
+  return undefined
+}
+
 export default function App() {
-  const { toastMessage, user, stage } = useLoaderData<LoaderData>()
+  const { stage } = useLoaderData<LoaderData>()
+  const matches = useMatches()
+  const user = findUser(matches)
+  const toastMessage = findToastMessage(matches)
 
   useEffect(() => {
     if (!toastMessage) {
@@ -108,51 +121,7 @@ export default function App() {
   }, [toastMessage])
 
   return (
-    <MantineProvider
-      theme={{
-        colorScheme: 'light',
-        colors: {
-          dtPink: [
-            '#F7D9F2',
-            '#F6AFEA',
-            '#FF80EA', // original
-            '#EE6AD9',
-            '#DB5BC6',
-            '#C751B3',
-            '#B14AA0',
-            '#964C8A',
-            '#804B78',
-            '#804B78',
-          ],
-        },
-        defaultGradient: { from: 'indigo', to: 'cyan', deg: 45 },
-        shadows: {
-          md: '1px 1px 3px rgba(0, 0, 0, .25)',
-          xl: '5px 5px 3px rgba(0, 0, 0, .25)',
-        },
-        components: {
-          Container: {
-            defaultProps: {
-              sizes: {
-                xs: 540,
-                sm: 720,
-                md: 960,
-                lg: 1140,
-                xl: 1320,
-              },
-            },
-          },
-        },
-        headings: {
-          fontFamily: 'Roboto, sans-serif',
-          sizes: {
-            h1: { fontSize: 30 },
-          },
-        },
-      }}
-      withGlobalStyles
-      withNormalizeCSS
-    >
+    <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
       <html lang="en">
         <head>
           <StylesPlaceholder />

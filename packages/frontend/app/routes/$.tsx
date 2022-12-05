@@ -7,8 +7,12 @@ import {
   Button,
   SimpleGrid,
 } from '@mantine/core'
+import type { LoaderFunction } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons'
+import type { PublicRoute } from '~/domain/public-route'
+import { publicLogout, validateSessionUser } from '~/session.server'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -50,6 +54,18 @@ const useStyles = createStyles((theme) => ({
     },
   },
 }))
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const userSession = await validateSessionUser(request)
+
+  if (userSession.valid) {
+    return json<PublicRoute>(
+      { user: userSession.user },
+      { headers: userSession.headers }
+    )
+  }
+  return publicLogout(request)
+}
 
 const NotFound = () => {
   const { classes } = useStyles()
