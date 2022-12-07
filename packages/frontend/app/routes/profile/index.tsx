@@ -19,8 +19,12 @@ import { IconLogout, IconX } from '@tabler/icons'
 import { useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { commitSession, getSession, setSuccessMessage } from '~/message.server'
-import { logout, validateSessionUser } from '~/session.server'
+import {
+  commitMessageSession,
+  getMessageSession,
+  setSuccessMessage,
+} from '~/message.server'
+import { logout, getUserSession } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -31,7 +35,7 @@ export const meta: MetaFunction = () => {
 interface ActionData {}
 
 export const action: ActionFunction = async ({ request }) => {
-  const userSession = await validateSessionUser(request)
+  const userSession = await getUserSession(request)
   if (!userSession.valid) {
     return redirect('/login')
   }
@@ -49,11 +53,11 @@ export const action: ActionFunction = async ({ request }) => {
       Authorization: `Bearer ${userSession.accessToken}`,
     }
   )
-  const messageSession = await getSession(request.headers.get('cookie'))
+  const messageSession = await getMessageSession(request.headers.get('cookie'))
   setSuccessMessage(messageSession, 'Asetukset on päivitetty')
 
   const headers = userSession.headers
-  headers.append('Set-Cookie', await commitSession(messageSession))
+  headers.append('Set-Cookie', await commitMessageSession(messageSession))
 
   return json<ActionData>(
     {},
@@ -72,7 +76,7 @@ interface LoaderData extends PrivateRoute {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await validateSessionUser(request)
+  const userSession = await getUserSession(request)
 
   if (!userSession.valid) {
     return logout(request)

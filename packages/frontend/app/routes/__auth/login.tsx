@@ -63,6 +63,7 @@ export const action: ActionFunction = async ({ request }) => {
       )
     }
 
+    // TODO: use discrimination
     const tokens = Tokens.parse(login.tokens)
 
     return createUserSession({
