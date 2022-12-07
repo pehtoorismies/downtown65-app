@@ -22,7 +22,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { authenticateAction, authenticateLoader } from '~/session.server'
+import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -39,7 +39,7 @@ interface LoaderData extends PrivateRoute {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const { user } = await authenticateLoader(request)
+  const { user } = await loaderAuthenticate(request)
 
   const { event } = await getGqlSdk().GetEvent(
     {
@@ -76,7 +76,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
 
-  const userSession = await authenticateAction(request)
+  const userSession = await actionAuthenticate(request)
 
   const { id: eventId } = params
 

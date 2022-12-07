@@ -12,7 +12,7 @@ import {
 } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { authenticateLoader } from '~/session.server'
+import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -25,7 +25,7 @@ interface LoaderData extends PrivateRoute {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { accessToken, user } = await authenticateLoader(request)
+  const { accessToken, user } = await loaderAuthenticate(request)
 
   const { events } = await getGqlSdk().GetEvents(
     {},
