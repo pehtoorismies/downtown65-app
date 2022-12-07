@@ -26,19 +26,6 @@ const Jwt = z.object({
   exp: z.number(),
 })
 
-type ValidSession = {
-  valid: true
-  user: User
-  accessToken: string
-  headers: Headers
-}
-
-type NoSession = {
-  valid: false
-}
-
-type SessionValue = ValidSession | NoSession
-
 const SEVEN_DAYS: number = 60 * 60 * 24 * 7
 
 const sessionStorage = createCookieSessionStorage({
@@ -87,9 +74,9 @@ const fetchRenewTokens = async (
   throw new Error(rt.refreshError)
 }
 
-const getValues = (
-  session: Session
-): { user: User; accessToken: string; refreshToken: string } | undefined => {
+type Values = { user: User; accessToken: string; refreshToken: string }
+
+const getValues = (session: Session): Values | undefined => {
   const user = session.get(USER_KEY)
   const accessToken = session.get(ACCESS_TOKEN_KEY)
   const refreshToken = session.get(REFRESH_TOKEN_KEY)
@@ -114,57 +101,69 @@ const getUserFromJwt = (idTokenJWT: string): User => {
   return User.parse(decoded)
 }
 
-export const authenticate = async (request: Request): Promise<SessionValue> => {
+const getAuthentication = async (
+  request: Request
+): Promise<
+  { user: User; accessToken: string; headers: Headers } | undefined
+> => {
   const session = await getSession(request)
-  //  - if session is expired these getters return undefined and __session is removed
-  // - session token is tampered these getters get undefined
   const values = getValues(session)
+  if (!values) {
+    return
+  }
 
-  if (values === undefined) {
+  const decoded = jwtDecode(values.accessToken)
+  const { exp } = Jwt.parse(decoded)
+  const isExpired = Date.now() >= exp * 1000
+
+  if (!isExpired) {
     return {
-      valid: false,
+      user: values.user,
+      accessToken: values.accessToken,
+      headers: new Headers(),
     }
   }
 
-  try {
-    const decoded = jwtDecode(values.accessToken)
-    const { exp } = Jwt.parse(decoded)
-    const isExpired = Date.now() >= exp * 1000
+  const renewResponse = await fetchRenewTokens(values.refreshToken)
+  const user = getUserFromJwt(renewResponse.idToken)
+  session.set(REFRESH_TOKEN_KEY, values.refreshToken)
+  session.set(USER_KEY, JSON.stringify(user))
+  session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
+  const headers = new Headers()
+  headers.append('Set-Cookie', await sessionStorage.commitSession(session))
 
-    if (!isExpired) {
-      return {
-        valid: true,
-        user: values.user,
-        accessToken: values.accessToken,
-        headers: new Headers(),
-      }
-    }
-
-    const renewResponse = await fetchRenewTokens(values.refreshToken)
-    const user = getUserFromJwt(renewResponse.idToken)
-    session.set(REFRESH_TOKEN_KEY, values.refreshToken)
-    session.set(USER_KEY, JSON.stringify(user))
-    session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
-
-    const renewedSessionCookie = await sessionStorage.commitSession(session, {
-      maxAge: SEVEN_DAYS,
-    })
-
-    const headers = new Headers()
-    headers.append('Set-Cookie', renewedSessionCookie)
-
-    return {
-      valid: true,
-      user,
-      accessToken: renewResponse.accessToken,
-      headers,
-    }
-  } catch (error) {
-    console.error(error)
-    return {
-      valid: false,
-    }
+  if (request.method === 'GET') {
+    throw redirect(request.url, { headers })
   }
+
+  return { user, accessToken: renewResponse.accessToken, headers }
+}
+
+export const getAuthenticatedUser = async (
+  request: Request
+): Promise<User | undefined> => {
+  const result = await getAuthentication(request)
+  return result ? result.user : undefined
+}
+
+export const authenticateLoader = async (
+  request: Request
+): Promise<{ user: User; accessToken: string }> => {
+  const result = await getAuthentication(request)
+  if (!result) {
+    throw redirect('/login')
+  }
+  return result
+}
+
+export const authenticateAction = async (
+  request: Request
+): Promise<{ user: User; accessToken: string; headers: Headers }> => {
+  const result = await getAuthentication(request)
+  if (!result) {
+    throw redirect('/login')
+  }
+  return result
 }
 
 export const createUserSession = async ({

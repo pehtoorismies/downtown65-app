@@ -48,7 +48,11 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logout, publicLogout, authenticate } from '~/session.server'
+import {
+  publicLogout,
+  getAuthenticatedUser,
+  authenticateAction,
+} from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
 export const meta: MetaFunction = ({ data, location }) => {
@@ -64,11 +68,6 @@ export const meta: MetaFunction = ({ data, location }) => {
     'og:image:type': 'image/jpg',
   }
 }
-
-// export const headers: HeadersFunction = (data) => {
-//   console.log(data)
-//   return data.loaderHeaders
-// }
 
 interface LoaderData extends PublicRoute {
   eventItem: EventLoaderData
@@ -89,6 +88,8 @@ const getOriginForMeta = (): string => {
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
 
+  const user = await getAuthenticatedUser(request)
+
   const { event } = await getGqlSdk().GetEvent(
     {
       eventId: params.id,
@@ -108,8 +109,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     time: event.timeStart,
   })
 
-  const userSession = await authenticate(request)
-
   const data = {
     eventItem: {
       ...event,
@@ -120,22 +119,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     origin: getOriginForMeta(),
   }
 
-  // const getMessageData = addToastMessage(request)
-
-  if (userSession.valid) {
-    return json<LoaderData>(
-      {
-        ...data,
-        user: userSession.user,
-        eventItem: {
-          ...data.eventItem,
-          me: userSession.user,
-        },
+  if (user) {
+    return json<LoaderData>({
+      ...data,
+      user,
+      eventItem: {
+        ...data.eventItem,
+        me: user,
       },
-      {
-        headers: userSession.headers,
-      }
-    )
+    })
   }
 
   return publicLogout(request, {
@@ -148,12 +140,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await authenticate(request)
-
-  if (!userSession.valid) {
-    return logout(request)
-  }
-
+  const { headers, user, accessToken } = await authenticateAction(request)
   const body = await request.formData()
   const action = body.get('action')
 
@@ -165,13 +152,12 @@ export const action: ActionFunction = async ({ request, params }) => {
           eventId: params.id,
         },
         {
-          Authorization: `Bearer ${userSession.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         }
       )
       const session = await getMessageSession(request.headers.get('cookie'))
       setSuccessMessage(session, 'Tapahtuma on poistettu')
 
-      const headers = userSession.headers
       headers.append('Set-Cookie', await commitMessageSession(session))
 
       return redirect('/events', {
@@ -182,13 +168,13 @@ export const action: ActionFunction = async ({ request, params }) => {
       await getGqlSdk().ParticipateEvent(
         {
           eventId: params.id,
-          me: userSession.user,
+          me: user,
         },
         {
-          Authorization: `Bearer ${userSession.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         }
       )
-      return json({}, { headers: userSession.headers })
+      return json({}, { headers })
     }
     case 'leave': {
       await getGqlSdk().LeaveEvent(
@@ -196,10 +182,10 @@ export const action: ActionFunction = async ({ request, params }) => {
           eventId: params.id,
         },
         {
-          Authorization: `Bearer ${userSession.accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         }
       )
-      return json({}, { headers: userSession.headers })
+      return json({}, { headers })
     }
   }
 

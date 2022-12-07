@@ -12,7 +12,7 @@ import { json } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons'
 import type { PublicRoute } from '~/domain/public-route'
-import { publicLogout, authenticate } from '~/session.server'
+import { publicLogout, getAuthenticatedUser } from '~/session.server'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -56,15 +56,8 @@ const useStyles = createStyles((theme) => ({
 }))
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await authenticate(request)
-
-  if (userSession.valid) {
-    return json<PublicRoute>(
-      { user: userSession.user },
-      { headers: userSession.headers }
-    )
-  }
-  return publicLogout(request, {})
+  const user = await getAuthenticatedUser(request)
+  return user ? json<PublicRoute>({ user }) : publicLogout(request, {})
 }
 
 const NotFound = () => {

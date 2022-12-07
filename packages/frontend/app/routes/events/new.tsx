@@ -19,7 +19,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logout, authenticate } from '~/session.server'
+import { authenticateLoader, authenticateAction } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -28,26 +28,15 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await authenticate(request)
+  const { accessToken, user } = await authenticateLoader(request)
 
-  if (!userSession.valid) {
-    return logout(request)
-  }
-
-  return json<PrivateRoute>(
-    {
-      user: userSession.user,
-    },
-    { headers: userSession.headers }
-  )
+  return json<PrivateRoute>({
+    user,
+  })
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const userSession = await authenticate(request)
-
-  if (!userSession.valid) {
-    return logout(request)
-  }
+  const { headers, user, accessToken } = await authenticateAction(request)
 
   const body = await request.formData()
 
@@ -66,7 +55,7 @@ export const action: ActionFunction = async ({ request }) => {
   const { createEvent } = await getGqlSdk().CreateEvent(
     {
       input: {
-        createdBy: userSession.user,
+        createdBy: user,
         dateStart: date,
         description: description.trim() === '' ? undefined : description,
         location,
@@ -79,14 +68,13 @@ export const action: ActionFunction = async ({ request }) => {
       },
     },
     {
-      Authorization: `Bearer ${userSession.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     }
   )
 
   const messageSession = await getMessageSession(request.headers.get('cookie'))
-
   setSuccessMessage(messageSession, 'Tapahtuman luonti onnistui')
-  const headers = userSession.headers
+
   headers.append('Set-Cookie', await commitMessageSession(messageSession))
 
   return redirect(`/events/${createEvent.id}`, {
