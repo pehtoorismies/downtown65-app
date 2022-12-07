@@ -17,8 +17,12 @@ import { getEventForm } from '../modules/get-event-form'
 import type { Context } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import { commitSession, getSession, setSuccessMessage } from '~/message.server'
-import { logout, validateSessionUser } from '~/session.server'
+import {
+  commitMessageSession,
+  getMessageSession,
+  setSuccessMessage,
+} from '~/message.server'
+import { logout, getUserSession } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -35,7 +39,7 @@ interface LoaderData extends PrivateRoute {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await validateSessionUser(request)
+  const userSession = await getUserSession(request)
 
   if (!userSession.valid) {
     return logout(request)
@@ -78,7 +82,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await validateSessionUser(request)
+  const userSession = await getUserSession(request)
 
   if (!userSession.valid) {
     return logout(request)
@@ -110,11 +114,11 @@ export const action: ActionFunction = async ({ request, params }) => {
     }
   )
 
-  const messageSession = await getSession(request.headers.get('cookie'))
+  const messageSession = await getMessageSession(request.headers.get('cookie'))
   setSuccessMessage(messageSession, 'Tapahtuman muokkaus onnistui')
 
   const headers = userSession.headers
-  headers.append('Set-Cookie', await commitSession(messageSession))
+  headers.append('Set-Cookie', await commitMessageSession(messageSession))
   return redirect(`/events/${eventId}`, {
     headers,
   })

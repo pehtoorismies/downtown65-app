@@ -43,8 +43,12 @@ import {
 } from '~/contexts/participating-context'
 import type { PublicRoute } from '~/domain/public-route'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import { commitSession, getSession, setSuccessMessage } from '~/message.server'
-import { logout, publicLogout, validateSessionUser } from '~/session.server'
+import {
+  commitMessageSession,
+  getMessageSession,
+  setSuccessMessage,
+} from '~/message.server'
+import { logout, publicLogout, getUserSession } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
 export const meta: MetaFunction = ({ data, location }) => {
@@ -61,12 +65,17 @@ export const meta: MetaFunction = ({ data, location }) => {
   }
 }
 
+// export const headers: HeadersFunction = (data) => {
+//   console.log(data)
+//   return data.loaderHeaders
+// }
+
 interface LoaderData extends PublicRoute {
   eventItem: EventLoaderData
   origin: string // for meta
 }
 
-const getOrigin = (): string => {
+const getOriginForMeta = (): string => {
   if (process.env.NODE_ENV === 'development') {
     return 'http://localhost:3000'
   }
@@ -99,7 +108,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     time: event.timeStart,
   })
 
-  const userSession = await validateSessionUser(request)
+  const userSession = await getUserSession(request)
 
   const data = {
     eventItem: {
@@ -108,8 +117,10 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       description: event.description ?? '',
       isRace: event.race,
     },
-    origin: getOrigin(), // TODO: is this needed?
+    origin: getOriginForMeta(),
   }
+
+  // const getMessageData = addToastMessage(request)
 
   if (userSession.valid) {
     return json<LoaderData>(
@@ -121,7 +132,9 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           me: userSession.user,
         },
       },
-      { headers: userSession.headers }
+      {
+        headers: userSession.headers,
+      }
     )
   }
 
@@ -135,7 +148,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await validateSessionUser(request)
+  const userSession = await getUserSession(request)
 
   if (!userSession.valid) {
     return logout(request)
@@ -155,11 +168,11 @@ export const action: ActionFunction = async ({ request, params }) => {
           Authorization: `Bearer ${userSession.accessToken}`,
         }
       )
-      const session = await getSession(request.headers.get('cookie'))
+      const session = await getMessageSession(request.headers.get('cookie'))
       setSuccessMessage(session, 'Tapahtuma on poistettu')
 
       const headers = userSession.headers
-      headers.append('Set-Cookie', await commitSession(session))
+      headers.append('Set-Cookie', await commitMessageSession(session))
 
       return redirect('/events', {
         headers,

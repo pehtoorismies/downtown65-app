@@ -4,10 +4,14 @@ import jwtDecode from 'jwt-decode'
 import { z } from 'zod'
 import { User } from '~/domain/user'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import { commitSession } from '~/message.server'
+import {
+  setSuccessMessage,
+  getMessageSession,
+  commitMessageSession,
+} from '~/message.server'
 
 const REFRESH_TOKEN_KEY = 'refreshToken'
-const ID_TOKEN_KEY = 'idToken'
+const USER_KEY = 'user'
 const ACCESS_TOKEN_KEY = 'accessToken'
 
 export const Tokens = z.object({
@@ -83,13 +87,15 @@ const fetchRenewTokens = async (
   throw new Error(rt.refreshError)
 }
 
-const getTokens = (session: Session): Tokens | undefined => {
-  const idToken = session.get(ID_TOKEN_KEY)
+const getValues = (
+  session: Session
+): { user: User; accessToken: string; refreshToken: string } | undefined => {
+  const user = session.get(USER_KEY)
   const accessToken = session.get(ACCESS_TOKEN_KEY)
   const refreshToken = session.get(REFRESH_TOKEN_KEY)
 
   if (
-    idToken === undefined ||
+    user === undefined ||
     accessToken === undefined ||
     refreshToken === undefined
   ) {
@@ -97,7 +103,7 @@ const getTokens = (session: Session): Tokens | undefined => {
   }
 
   return {
-    idToken,
+    user: JSON.parse(user),
     accessToken,
     refreshToken,
   }
@@ -108,40 +114,41 @@ const getUserFromJwt = (idTokenJWT: string): User => {
   return User.parse(decoded)
 }
 
-export const validateSessionUser = async (
+export const getUserSession = async (
   request: Request
 ): Promise<SessionValue> => {
   const session = await getSession(request)
   //  - if session is expired these getters return undefined and __session is removed
   // - session token is tampered these getters get undefined
-  const tokens = getTokens(session)
+  const values = getValues(session)
 
-  if (tokens === undefined) {
+  if (values === undefined) {
     return {
       valid: false,
     }
   }
 
   try {
-    const decoded = jwtDecode(tokens.accessToken)
+    const decoded = jwtDecode(values.accessToken)
     const { exp } = Jwt.parse(decoded)
     const isExpired = Date.now() >= exp * 1000
 
     if (!isExpired) {
       return {
         valid: true,
-        user: getUserFromJwt(tokens.idToken),
-        accessToken: tokens.accessToken,
+        user: values.user,
+        accessToken: values.accessToken,
         headers: new Headers(),
       }
     }
 
-    const renewResponse = await fetchRenewTokens(tokens.refreshToken)
-    session.set(REFRESH_TOKEN_KEY, tokens.refreshToken)
-    session.set(ID_TOKEN_KEY, renewResponse.idToken)
+    const renewResponse = await fetchRenewTokens(values.refreshToken)
+    const user = getUserFromJwt(renewResponse.idToken)
+    session.set(REFRESH_TOKEN_KEY, values.refreshToken)
+    session.set(USER_KEY, JSON.stringify(user))
     session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
 
-    const renewedSessionCookie = await commitSession(session, {
+    const renewedSessionCookie = await sessionStorage.commitSession(session, {
       maxAge: SEVEN_DAYS,
     })
 
@@ -150,7 +157,7 @@ export const validateSessionUser = async (
 
     return {
       valid: true,
-      user: getUserFromJwt(renewResponse.idToken),
+      user,
       accessToken: renewResponse.accessToken,
       headers,
     }
@@ -168,33 +175,57 @@ export const createUserSession = async ({
   redirectTo,
 }: CreateUserSession) => {
   const session = await getSession(request)
+  const user = getUserFromJwt(tokens.idToken)
+
   session.set(REFRESH_TOKEN_KEY, tokens.refreshToken)
-  session.set(ID_TOKEN_KEY, tokens.idToken)
+  session.set(USER_KEY, JSON.stringify(user))
   session.set(ACCESS_TOKEN_KEY, tokens.accessToken)
 
+  const headers = new Headers()
+  headers.append(
+    'Set-Cookie',
+    await sessionStorage.commitSession(session, {
+      maxAge: SEVEN_DAYS,
+    })
+  )
+
+  const messageSession = await getMessageSession(request.headers.get('cookie'))
+  setSuccessMessage(messageSession, `Tervetuloa ${user.nickname}`)
+  headers.append('Set-Cookie', await commitMessageSession(messageSession))
+
   return redirect(redirectTo, {
-    headers: {
-      'Set-Cookie': await sessionStorage.commitSession(session, {
-        maxAge: SEVEN_DAYS,
-      }),
-    },
+    headers,
   })
 }
 
-export const logout = async (request: Request) => {
+export const logout = async (
+  request: Request,
+  toastSuccessMessage?: string
+) => {
+  const headers = new Headers()
+
+  if (toastSuccessMessage !== undefined) {
+    const messageSession = await getMessageSession(
+      request.headers.get('cookie')
+    )
+    setSuccessMessage(messageSession, toastSuccessMessage)
+    headers.append('Set-Cookie', await commitMessageSession(messageSession))
+  }
+
   const session = await getSession(request)
+  headers.append('Set-Cookie', await sessionStorage.destroySession(session))
+
   return redirect('/login', {
-    headers: {
-      'Set-Cookie': await sessionStorage.destroySession(session),
-    },
+    headers,
   })
 }
 
 export const publicLogout = async (request: Request, data: unknown) => {
   const session = await getSession(request)
-  return json(data, {
-    headers: {
-      'Set-Cookie': await sessionStorage.destroySession(session),
-    },
-  })
+  return json(data)
+  // return json(data, {
+  //   headers: {
+  //     'Set-Cookie': await sessionStorage.destroySession(session),
+  //   },
+  // })
 }

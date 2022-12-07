@@ -14,7 +14,11 @@ import { Form, Link, useActionData, useTransition } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import { commitSession, getSession, setSuccessMessage } from '~/message.server'
+import {
+  commitMessageSession,
+  getMessageSession,
+  setSuccessMessage,
+} from '~/message.server'
 import { validateEmail } from '~/util/validation.server'
 
 export { loader } from './modules/loader'
@@ -42,10 +46,10 @@ export const action: ActionFunction = async ({ request }) => {
 
   await getGqlSdk().ForgotPassword({ email }, getPublicAuthHeaders())
 
-  const session = await getSession(request.headers.get('cookie'))
+  const session = await getMessageSession(request.headers.get('cookie'))
   setSuccessMessage(session, `Ohjeet lähetetty osoitteeseen: ${email}`)
   return redirect('/login', {
-    headers: { 'Set-Cookie': await commitSession(session) },
+    headers: { 'Set-Cookie': await commitMessageSession(session) },
   })
 }
 

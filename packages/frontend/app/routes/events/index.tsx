@@ -12,7 +12,7 @@ import {
 } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { logout, validateSessionUser } from '~/session.server'
+import { logout, getUserSession } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -25,7 +25,7 @@ interface LoaderData extends PrivateRoute {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await validateSessionUser(request)
+  const userSession = await getUserSession(request)
 
   if (!userSession.valid) {
     return logout(request)
@@ -53,7 +53,10 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
 
   return json<LoaderData>(
-    { eventItems, user: userSession.user },
+    {
+      eventItems,
+      user: userSession.user,
+    },
     { headers: userSession.headers }
   )
 }

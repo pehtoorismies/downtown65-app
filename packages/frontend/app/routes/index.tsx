@@ -1,9 +1,9 @@
 import type { LoaderFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
-import { logout, validateSessionUser } from '~/session.server'
+import { logout, getUserSession } from '~/session.server'
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const session = await validateSessionUser(request)
+  const session = await getUserSession(request)
 
   return !session.valid
     ? logout(request)

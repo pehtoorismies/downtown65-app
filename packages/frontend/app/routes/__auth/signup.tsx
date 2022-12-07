@@ -14,7 +14,11 @@ import { z } from 'zod'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import type { SignupField, SignupPayload } from '~/gql/types.gen'
-import { commitSession, getSession, setSuccessMessage } from '~/message.server'
+import {
+  commitMessageSession,
+  getMessageSession,
+  setSuccessMessage,
+} from '~/message.server'
 
 export { loader } from './modules/loader'
 
@@ -63,13 +67,13 @@ export const action: ActionFunction = async ({ request }) => {
     return json<ActionData>(toActionData(signup.errors), { status: 400 })
   }
 
-  const session = await getSession(request.headers.get('cookie'))
+  const session = await getMessageSession(request.headers.get('cookie'))
   setSuccessMessage(
     session,
     `Vahvistus lähetetty osoitteeseen: ${signupForm.email}`
   )
   return redirect('/login', {
-    headers: { 'Set-Cookie': await commitSession(session) },
+    headers: { 'Set-Cookie': await commitMessageSession(session) },
   })
 }
 
