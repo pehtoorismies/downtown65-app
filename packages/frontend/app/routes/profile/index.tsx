@@ -24,7 +24,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { authenticateAction, authenticateLoader } from '~/session.server'
+import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -35,7 +35,7 @@ export const meta: MetaFunction = () => {
 interface ActionData {}
 
 export const action: ActionFunction = async ({ request }) => {
-  const { headers, accessToken, user } = await authenticateAction(request)
+  const { headers, accessToken, user } = await actionAuthenticate(request)
 
   const formData = await request.formData()
   const weekly = !!formData.get('weekly')
@@ -73,7 +73,7 @@ interface LoaderData extends PrivateRoute {
 
 export const loader: LoaderFunction = async ({ request }) => {
   // TODO: get user as well
-  const { accessToken } = await authenticateLoader(request)
+  const { accessToken } = await loaderAuthenticate(request)
 
   const { me } = await getGqlSdk().GetProfile(
     {},

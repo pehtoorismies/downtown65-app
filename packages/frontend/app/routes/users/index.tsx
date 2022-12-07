@@ -4,7 +4,7 @@ import { json } from '@remix-run/node'
 import { useLoaderData, useNavigate } from '@remix-run/react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { authenticateLoader } from '~/session.server'
+import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -37,7 +37,7 @@ const defaultTo = (defaultValue: number, value: string | null): number => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { user, accessToken } = await authenticateLoader(request)
+  const { user, accessToken } = await loaderAuthenticate(request)
 
   const url = new URL(request.url)
   const page = defaultTo(1, url.searchParams.get('page'))

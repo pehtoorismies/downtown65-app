@@ -51,7 +51,7 @@ import {
 import {
   publicLogout,
   getAuthenticatedUser,
-  authenticateAction,
+  actionAuthenticate,
 } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
@@ -140,7 +140,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const { headers, user, accessToken } = await authenticateAction(request)
+  const { headers, user, accessToken } = await actionAuthenticate(request)
   const body = await request.formData()
   const action = body.get('action')
 

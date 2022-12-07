@@ -146,7 +146,7 @@ export const getAuthenticatedUser = async (
   return result ? result.user : undefined
 }
 
-export const authenticateLoader = async (
+export const loaderAuthenticate = async (
   request: Request
 ): Promise<{ user: User; accessToken: string }> => {
   const result = await getAuthentication(request)
@@ -156,7 +156,7 @@ export const authenticateLoader = async (
   return result
 }
 
-export const authenticateAction = async (
+export const actionAuthenticate = async (
   request: Request
 ): Promise<{ user: User; accessToken: string; headers: Headers }> => {
   const result = await getAuthentication(request)

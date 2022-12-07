@@ -19,7 +19,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { authenticateLoader, authenticateAction } from '~/session.server'
+import { loaderAuthenticate, actionAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -28,7 +28,7 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { accessToken, user } = await authenticateLoader(request)
+  const { accessToken, user } = await loaderAuthenticate(request)
 
   return json<PrivateRoute>({
     user,
@@ -36,7 +36,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const { headers, user, accessToken } = await authenticateAction(request)
+  const { headers, user, accessToken } = await actionAuthenticate(request)
 
   const body = await request.formData()
 
