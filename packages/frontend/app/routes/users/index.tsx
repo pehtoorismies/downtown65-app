@@ -4,7 +4,7 @@ import { json } from '@remix-run/node'
 import { useLoaderData, useNavigate } from '@remix-run/react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { logout, authenticate } from '~/session.server'
+import { authenticateLoader } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -37,11 +37,7 @@ const defaultTo = (defaultValue: number, value: string | null): number => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await authenticate(request)
-
-  if (!userSession.valid) {
-    return logout(request)
-  }
+  const { user, accessToken } = await authenticateLoader(request)
 
   const url = new URL(request.url)
   const page = defaultTo(1, url.searchParams.get('page'))
@@ -53,7 +49,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       perPage,
     },
     {
-      Authorization: `Bearer ${userSession.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     }
   )
 
@@ -65,19 +61,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   const numberPages = Math.floor(total / limit) + extra
   const currentPage = Math.floor(start / limit) + 1
 
-  json<LoaderData>(
-    {
-      user: userSession.user,
-      users,
-      userCount: total,
-      numPages: numberPages,
-      currentPage,
-      perPage: limit,
-      usersOnPage: length,
-      start,
-    },
-    { headers: userSession.headers }
-  )
+  json<LoaderData>({
+    user,
+    users,
+    userCount: total,
+    numPages: numberPages,
+    currentPage,
+    perPage: limit,
+    usersOnPage: length,
+    start,
+  })
 }
 
 export default function Users() {

@@ -13,7 +13,7 @@ import type {
   LoaderFunction,
   ActionFunction,
 } from '@remix-run/node'
-import { json, redirect } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { Form, useLoaderData, useTransition } from '@remix-run/react'
 import { IconLogout, IconX } from '@tabler/icons'
 import { useState } from 'react'
@@ -24,7 +24,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logout, authenticate } from '~/session.server'
+import { authenticateAction, authenticateLoader } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -35,10 +35,7 @@ export const meta: MetaFunction = () => {
 interface ActionData {}
 
 export const action: ActionFunction = async ({ request }) => {
-  const userSession = await authenticate(request)
-  if (!userSession.valid) {
-    return redirect('/login')
-  }
+  const { headers, accessToken, user } = await authenticateAction(request)
 
   const formData = await request.formData()
   const weekly = !!formData.get('weekly')
@@ -50,13 +47,12 @@ export const action: ActionFunction = async ({ request }) => {
       subscribeWeeklyEmail: weekly,
     },
     {
-      Authorization: `Bearer ${userSession.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     }
   )
   const messageSession = await getMessageSession(request.headers.get('cookie'))
   setSuccessMessage(messageSession, 'Asetukset on päivitetty')
 
-  const headers = userSession.headers
   headers.append('Set-Cookie', await commitMessageSession(messageSession))
 
   return json<ActionData>(
@@ -76,34 +72,28 @@ interface LoaderData extends PrivateRoute {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await authenticate(request)
-
-  if (!userSession.valid) {
-    return logout(request)
-  }
+  // TODO: get user as well
+  const { accessToken } = await authenticateLoader(request)
 
   const { me } = await getGqlSdk().GetProfile(
     {},
     {
-      Authorization: `Bearer ${userSession.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     }
   )
-
-  return json<LoaderData>(
-    {
-      user: {
-        nickname: me.nickname,
-        id: me.id,
-        picture: me.picture,
-      },
-      name: me.name,
-      preferences: {
-        subscribeWeeklyEmail: me.preferences.subscribeWeeklyEmail,
-        subscribeEventCreationEmail: me.preferences.subscribeEventCreationEmail,
-      },
+  // TODO: can user / loaded data be not in sync: yes
+  return json<LoaderData>({
+    user: {
+      nickname: me.nickname,
+      id: me.id,
+      picture: me.picture,
     },
-    { headers: userSession.headers }
-  )
+    name: me.name,
+    preferences: {
+      subscribeWeeklyEmail: me.preferences.subscribeWeeklyEmail,
+      subscribeEventCreationEmail: me.preferences.subscribeEventCreationEmail,
+    },
+  })
 }
 
 const switchStyles = {

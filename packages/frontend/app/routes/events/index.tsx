@@ -12,7 +12,7 @@ import {
 } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { logout, authenticate } from '~/session.server'
+import { authenticateLoader } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -25,16 +25,12 @@ interface LoaderData extends PrivateRoute {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await authenticate(request)
-
-  if (!userSession.valid) {
-    return logout(request)
-  }
+  const { accessToken, user } = await authenticateLoader(request)
 
   const { events } = await getGqlSdk().GetEvents(
     {},
     {
-      Authorization: `Bearer ${userSession.accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
     }
   )
   const eventItems = events.map((event) => {
@@ -48,17 +44,14 @@ export const loader: LoaderFunction = async ({ request }) => {
       dateStart: ddt.getFormattedDate(),
       description: event.description ?? '',
       isRace: event.race,
-      me: userSession.user,
+      me: user,
     }
   })
 
-  return json<LoaderData>(
-    {
-      eventItems,
-      user: userSession.user,
-    },
-    { headers: userSession.headers }
-  )
+  return json<LoaderData>({
+    eventItems,
+    user,
+  })
 }
 
 export default function GetEvents() {

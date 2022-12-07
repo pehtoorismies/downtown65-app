@@ -22,7 +22,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logout, authenticate } from '~/session.server'
+import { authenticateAction, authenticateLoader } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -39,11 +39,7 @@ interface LoaderData extends PrivateRoute {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await authenticate(request)
-
-  if (!userSession.valid) {
-    return logout(request)
-  }
+  const { user } = await authenticateLoader(request)
 
   const { event } = await getGqlSdk().GetEvent(
     {
@@ -60,33 +56,27 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
   const { timeStart, dateStart, race, description, type, ...rest } = event
 
-  return json<LoaderData>(
-    {
-      eventId: event.id,
-      user: userSession.user,
-      initState: {
-        kind: 'edit',
-        ...rest,
-        activeStep: ActiveStep.STEP_EVENT_TYPE,
-        eventType: type,
-        description: description ?? '',
-        isRace: race,
-        submitEvent: false,
-      },
-      initDateStart: dateStart,
-      initTimeStart: timeStart,
+  return json<LoaderData>({
+    eventId: event.id,
+    user,
+    initState: {
+      kind: 'edit',
+      ...rest,
+      activeStep: ActiveStep.STEP_EVENT_TYPE,
+      eventType: type,
+      description: description ?? '',
+      isRace: race,
+      submitEvent: false,
     },
-    { headers: userSession.headers }
-  )
+    initDateStart: dateStart,
+    initTimeStart: timeStart,
+  })
 }
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await authenticate(request)
 
-  if (!userSession.valid) {
-    return logout(request)
-  }
+  const userSession = await authenticateAction(request)
 
   const { id: eventId } = params
 
