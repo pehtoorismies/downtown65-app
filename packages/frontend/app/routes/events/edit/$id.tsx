@@ -22,7 +22,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logout, getUserSession } from '~/session.server'
+import { logout, authenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -39,7 +39,7 @@ interface LoaderData extends PrivateRoute {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await getUserSession(request)
+  const userSession = await authenticate(request)
 
   if (!userSession.valid) {
     return logout(request)
@@ -82,7 +82,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await getUserSession(request)
+  const userSession = await authenticate(request)
 
   if (!userSession.valid) {
     return logout(request)

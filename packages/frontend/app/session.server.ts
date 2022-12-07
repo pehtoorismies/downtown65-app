@@ -114,9 +114,7 @@ const getUserFromJwt = (idTokenJWT: string): User => {
   return User.parse(decoded)
 }
 
-export const getUserSession = async (
-  request: Request
-): Promise<SessionValue> => {
+export const authenticate = async (request: Request): Promise<SessionValue> => {
   const session = await getSession(request)
   //  - if session is expired these getters return undefined and __session is removed
   // - session token is tampered these getters get undefined

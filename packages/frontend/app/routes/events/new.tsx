@@ -19,7 +19,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logout, getUserSession } from '~/session.server'
+import { logout, authenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -28,7 +28,7 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const userSession = await getUserSession(request)
+  const userSession = await authenticate(request)
 
   if (!userSession.valid) {
     return logout(request)
@@ -43,7 +43,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const userSession = await getUserSession(request)
+  const userSession = await authenticate(request)
 
   if (!userSession.valid) {
     return logout(request)

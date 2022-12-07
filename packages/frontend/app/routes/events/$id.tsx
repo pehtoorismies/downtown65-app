@@ -48,7 +48,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logout, publicLogout, getUserSession } from '~/session.server'
+import { logout, publicLogout, authenticate } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
 export const meta: MetaFunction = ({ data, location }) => {
@@ -108,7 +108,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     time: event.timeStart,
   })
 
-  const userSession = await getUserSession(request)
+  const userSession = await authenticate(request)
 
   const data = {
     eventItem: {
@@ -148,7 +148,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
 export const action: ActionFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  const userSession = await getUserSession(request)
+  const userSession = await authenticate(request)
 
   if (!userSession.valid) {
     return logout(request)
