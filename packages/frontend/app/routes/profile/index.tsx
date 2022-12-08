@@ -1,6 +1,9 @@
 import {
+  Alert,
+  Anchor,
   Avatar,
   Button,
+  Center,
   Divider,
   Group,
   Paper,
@@ -14,9 +17,9 @@ import type {
   ActionFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Form, useLoaderData, useTransition } from '@remix-run/react'
-import { IconLogout, IconX } from '@tabler/icons'
-import { useState } from 'react'
+import { Form, useLoaderData, useSubmit, useTransition } from '@remix-run/react'
+import { IconAlertCircle, IconLogout, IconX } from '@tabler/icons'
+import { useRef, useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import {
@@ -24,6 +27,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { userPrefsCookie } from '~/routes/profile/modules/user-prefs-cookie'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
@@ -65,13 +69,18 @@ export const action: ActionFunction = async ({ request }) => {
 
 interface LoaderData extends PrivateRoute {
   name: string
+  email: string
   preferences: {
     subscribeWeeklyEmail: boolean
     subscribeEventCreationEmail: boolean
   }
+  showGravatarTip: boolean
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const cookieHeader = request.headers.get('Cookie')
+  const userPrefs = (await userPrefsCookie.parse(cookieHeader)) ?? {}
+  const showGravatarTip = userPrefs.showGravatarTip ?? true
   // TODO: get user as well
   const { accessToken } = await loaderAuthenticate(request)
 
@@ -83,11 +92,13 @@ export const loader: LoaderFunction = async ({ request }) => {
   )
   // TODO: can user / loaded data be not in sync: yes
   return json<LoaderData>({
+    showGravatarTip,
     user: {
       nickname: me.nickname,
       id: me.id,
       picture: me.picture,
     },
+    email: me.email,
     name: me.name,
     preferences: {
       subscribeWeeklyEmail: me.preferences.subscribeWeeklyEmail,
@@ -111,8 +122,11 @@ interface UserPreferences {
 }
 
 export default function Profile() {
+  const submit = useSubmit()
+  const formReference = useRef(null)
   const transition = useTransition()
-  const { name, user, preferences } = useLoaderData<LoaderData>()
+  const { name, user, preferences, email, showGravatarTip } =
+    useLoaderData<LoaderData>()
   const [emailSettings, setEmailSettings] = useState<UserPreferences>({
     weekly: preferences.subscribeWeeklyEmail,
     eventCreated: preferences.subscribeEventCreationEmail,
@@ -131,13 +145,39 @@ export default function Profile() {
       <Text align="center" size="lg" weight={500} mt="md">
         {user.nickname}
       </Text>
-      <Text align="center" color="dimmed" size="sm">
+      <Text align="center" fw={500} size="sm">
         {name}
       </Text>
-      <Divider my="sm" />
-      <Text size="lg" weight={500} mt="md">
-        Sähköpostiasetukset
+      <Text align="center" fw={500} size="sm">
+        {email}
       </Text>
+      {showGravatarTip && (
+        <>
+          <Form method="post" action="/profile/user-prefs" ref={formReference}>
+            <input type="hidden" name="showGravatarTip" value="hidden" />
+          </Form>
+          <Center>
+            <Alert
+              onClose={() => {
+                submit(formReference.current)
+              }}
+              withCloseButton
+              closeButtonLabel="Close alert"
+              icon={<IconAlertCircle size={16} />}
+              title="Protip!"
+              color="gray"
+              my="sm"
+              sx={{ maxWidth: 300, width: '100%' }}
+            >
+              Voit luoda itsellesi profiililkuvan / avatarin osoitteessa:{' '}
+              <Anchor href="https://gravatar.com" target="_blank">
+                gravatar.com
+              </Anchor>
+            </Alert>
+          </Center>
+        </>
+      )}
+      <Divider my="sm" label="Sähköpostiasetukset" labelPosition="center" />
       <Group position="center">
         <Form method="post">
           <Switch
@@ -170,7 +210,6 @@ export default function Profile() {
             }}
             size="md"
           />
-
           <SimpleGrid
             mt="sm"
             cols={2}
@@ -206,10 +245,7 @@ export default function Profile() {
           </SimpleGrid>
         </Form>
       </Group>
-      <Divider my="sm" />
-      <Text size="lg" weight={500} mt="md">
-        Uloskirjautuminen
-      </Text>
+      <Divider my="sm" label="Kirjaudu ulos" labelPosition="center" />
       <Group position="center">
         <SimpleGrid cols={1} ml="lg">
           <Form action="/logout" method="post">
