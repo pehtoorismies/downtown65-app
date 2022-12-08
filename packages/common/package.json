@@ -9,10 +9,14 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
-    "test": "vitest -c ../../vitest.config.ts --run"
+    "test": "vitest -c ../../vitest.config.ts --run",
+    "find-deadcode": "ts-prune"
   },
   "dependencies": {
   },
   "devDependencies": {
+  },
+  "engines": {
+    "node": ">=16"
   }
 }
