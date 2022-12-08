@@ -166,17 +166,19 @@ export default function Profile() {
                 submit(formReference.current)
               }}
               withCloseButton
-              closeButtonLabel="Close alert"
+              closeButtonLabel="Sulje"
               icon={<IconAlertCircle size={16} />}
-              title="Protip!"
+              title="Info"
               color="gray"
               my="sm"
               sx={{ maxWidth: 300, width: '100%' }}
             >
-              Voit luoda itsellesi profiililkuvan / avatarin osoitteessa:{' '}
+              Jos näet profiilikuvasi, se on haettu palvelusta{' '}
               <Anchor href="https://gravatar.com" target="_blank">
-                gravatar.com
+                Gravatar
               </Anchor>
+              , kun tilisi luotiin. Tämä siis mikäli sinulla on gravatar-tili ja
+              sähköpostiosoitteesi on palvelussa sama.
             </Alert>
           </Center>
         </>
