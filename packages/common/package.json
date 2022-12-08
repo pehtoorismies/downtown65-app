@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
     "test": "vitest -c ../../vitest.config.ts --run",
-    "find-deadcode": "ts-prune"
+    "find-deadcode": "ts-prune --ignore src/index.ts"
   },
   "dependencies": {
   },

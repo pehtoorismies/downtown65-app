@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { MeUser, OtherUser } from '~/appsync.gen'
+import type { MeUser } from '~/appsync.gen'
 
 const ROLES = ['USER', 'ADMIN'] as const
 
@@ -31,15 +31,5 @@ export const toUser = (auth0User: Auth0UserResponse): MeUser => {
     // updatedAt: auth0User.updated_at,
     // createdAt: auth0User.created_at,
     preferences: auth0User.user_metadata,
-  }
-}
-
-export const toBaseUser = (auth0User: Auth0UserResponse): OtherUser => {
-  return {
-    id: auth0User.user_id,
-    email: auth0User.email,
-    name: auth0User.name,
-    nickname: auth0User.nickname,
-    picture: auth0User.picture,
   }
 }
