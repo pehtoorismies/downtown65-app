@@ -19,7 +19,7 @@ export default function (app: App) {
         '.mjml': 'text',
       },
     },
-    logRetention: 'one_month',
+    logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
   })
   app
     .stack(ConfigStack)

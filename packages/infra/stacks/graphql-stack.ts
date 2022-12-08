@@ -6,7 +6,7 @@ import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
 import { DynamoStack } from './dynamo-stack'
 
-export const GraphqlStack = ({ stack }: StackContext) => {
+export const GraphqlStack = ({ app, stack }: StackContext) => {
   const { TABLE_NAME, table } = use(DynamoStack)
   const {
     AUTH_CLIENT_ID,
@@ -36,8 +36,14 @@ export const GraphqlStack = ({ stack }: StackContext) => {
       graphqlApi: {
         logConfig: {
           excludeVerboseContent: false,
-          fieldLogLevel: appsync.FieldLogLevel.ALL,
-          retention: RetentionDays.ONE_WEEK,
+          fieldLogLevel:
+            app.stage === 'production'
+              ? appsync.FieldLogLevel.ERROR
+              : appsync.FieldLogLevel.ALL,
+          retention:
+            app.stage === 'production'
+              ? RetentionDays.TWO_MONTHS
+              : RetentionDays.THREE_DAYS,
         },
         xrayEnabled: false,
         authorizationConfig: {
