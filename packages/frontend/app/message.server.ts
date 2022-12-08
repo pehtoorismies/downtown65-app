@@ -19,9 +19,9 @@ export const setSuccessMessage = (session: Session, message: string) => {
   session.flash('toastMessage', { message, type: 'success' } as ToastMessage)
 }
 
-export const setErrorMessage = (session: Session, message: string) => {
-  session.flash('toastMessage', { message, type: 'error' } as ToastMessage)
-}
+// export const setErrorMessage = (session: Session, message: string) => {
+//   session.flash('toastMessage', { message, type: 'error' } as ToastMessage)
+// }
 
 export {
   commitSession as commitMessageSession,
