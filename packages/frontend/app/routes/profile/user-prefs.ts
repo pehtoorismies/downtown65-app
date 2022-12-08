@@ -1,4 +1,4 @@
-import type { ActionFunction } from '@remix-run/node'
+import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
 import { userPrefsCookie } from './modules/user-prefs-cookie'
 
@@ -16,4 +16,8 @@ export const action: ActionFunction = async ({ request }) => {
       'Set-Cookie': await userPrefsCookie.serialize(cookie),
     },
   })
+}
+
+export const loader: LoaderFunction = async () => {
+  return redirect('/profile')
 }

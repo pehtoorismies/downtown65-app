@@ -123,10 +123,13 @@ interface UserPreferences {
 
 export default function Profile() {
   const submit = useSubmit()
+
   const formReference = useRef(null)
   const transition = useTransition()
   const { name, user, preferences, email, showGravatarTip } =
     useLoaderData<LoaderData>()
+  const [hasGravatarTip, setGravatarTip] = useState(showGravatarTip)
+
   const [emailSettings, setEmailSettings] = useState<UserPreferences>({
     weekly: preferences.subscribeWeeklyEmail,
     eventCreated: preferences.subscribeEventCreationEmail,
@@ -151,7 +154,7 @@ export default function Profile() {
       <Text align="center" fw={500} size="sm">
         {email}
       </Text>
-      {showGravatarTip && (
+      {hasGravatarTip && (
         <>
           <Form method="post" action="/profile/user-prefs" ref={formReference}>
             <input type="hidden" name="showGravatarTip" value="hidden" />
@@ -159,6 +162,7 @@ export default function Profile() {
           <Center>
             <Alert
               onClose={() => {
+                setGravatarTip(false)
                 submit(formReference.current)
               }}
               withCloseButton
