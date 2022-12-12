@@ -55,7 +55,7 @@ const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
     isSkippable: false,
   },
   [ActiveStep.STEP_TIME]: {
-    title: 'Kellon aika',
+    title: 'Kellonaika',
     isSkippable: true,
   },
   [ActiveStep.STEP_DESCRIPTION]: {
