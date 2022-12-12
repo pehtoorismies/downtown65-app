@@ -71,6 +71,9 @@ type LeaveEventAction = {
 type FormSubmittedAction = {
   kind: 'formSubmitted'
 }
+export type ToPreviewAction = {
+  kind: 'toPreview'
+}
 
 export type EventAction =
   | DateAction
@@ -86,6 +89,7 @@ export type EventAction =
   | SubtitleAction
   | TimeAction
   | TitleAction
+  | ToPreviewAction
   | TypeAction
 
 export interface ReducerProps {
@@ -175,6 +179,12 @@ export const reducer = (state: EventState, action: EventAction): EventState => {
       return {
         ...state,
         submitEvent: false,
+      }
+    }
+    case 'toPreview': {
+      return {
+        ...state,
+        activeStep: ActiveStep.STEP_REVIEW,
       }
     }
   }

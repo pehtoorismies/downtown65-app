@@ -1,5 +1,13 @@
 import { DynamoDatetime } from '@downtown65-app/common'
-import { Anchor, Breadcrumbs, Container, Divider, Text } from '@mantine/core'
+import {
+  Anchor,
+  Breadcrumbs,
+  Button,
+  Center,
+  Container,
+  Divider,
+  Text,
+} from '@mantine/core'
 import type {
   MetaFunction,
   LoaderFunction,
@@ -7,10 +15,12 @@ import type {
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useFetcher, useLoaderData } from '@remix-run/react'
+import { IconRocket } from '@tabler/icons'
 import { useEffect, useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import { EditOrCreate } from '../modules/components/edit-or-create'
 import type { EventState } from '../modules/components/event-state'
+import { isValidStateToSave } from '../modules/components/event-state'
 import { ActiveStep, reducer } from '../modules/components/reducer'
 import { eventStateToSubmittable } from '../modules/event-state-to-submittable'
 import { getEventForm } from '../modules/get-event-form'
@@ -183,6 +193,23 @@ export default function EditEvent() {
         dispatch={dispatch}
         participatingActions={participatingActions}
       />
+      {eventState.activeStep !== ActiveStep.STEP_REVIEW && (
+        <Center>
+          <Button
+            onClick={() => dispatch({ kind: 'toPreview' })}
+            disabled={!isValidStateToSave(eventState)}
+            mt="xs"
+            rightIcon={<IconRocket size={18} />}
+            styles={() => ({
+              leftIcon: {
+                marginRight: 15,
+              },
+            })}
+          >
+            Näytä esikatselu
+          </Button>
+        </Center>
+      )}
       <Divider mt="md" m="sm" />
       <Text ta="center" fz="md" fw={400} c="dtPink.4" mt="xs">
         Muokkaat tapahtumaa:

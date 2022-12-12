@@ -19,3 +19,18 @@ export interface EventState {
   submitEvent: boolean
   kind: 'edit' | 'create'
 }
+
+const isEmptyOrUndefined = (value: string | undefined): boolean => {
+  return !value
+}
+
+export const isValidStateToSave = ({
+  eventType,
+  title,
+  subtitle,
+  location,
+}: EventState): boolean => {
+  return ![eventType, title, subtitle, location].some((element) =>
+    isEmptyOrUndefined(element)
+  )
+}
