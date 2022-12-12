@@ -1,12 +1,12 @@
 import { DynamoDatetime } from '@downtown65-app/common'
-import { Divider, Text } from '@mantine/core'
+import { Anchor, Breadcrumbs, Container, Divider, Text } from '@mantine/core'
 import type {
   MetaFunction,
   LoaderFunction,
   ActionFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useFetcher, useLoaderData } from '@remix-run/react'
+import { Link, useFetcher, useLoaderData } from '@remix-run/react'
 import { useEffect, useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import { EditOrCreate } from '../modules/components/edit-or-create'
@@ -147,6 +147,20 @@ export default function EditEvent() {
     loadingEventId: 'not-defined',
   }
 
+  const items = [
+    { title: 'Tapahtumat', href: '/events' },
+    { title: eventState.title, href: `/events/${eventId}` },
+    { title: 'edit' },
+  ].map((item, index) => {
+    return item.href ? (
+      <Anchor component={Link} to={item.href} key={index}>
+        {item.title}
+      </Anchor>
+    ) : (
+      <Text key={index}>{item.title}</Text>
+    )
+  })
+
   useEffect(() => {
     if (eventState.submitEvent) {
       fetcher.submit(eventStateToSubmittable(eventState), {
@@ -159,6 +173,9 @@ export default function EditEvent() {
 
   return (
     <>
+      <Container>
+        <Breadcrumbs py="xs">{items}</Breadcrumbs>
+      </Container>
       <EditOrCreate
         cancelRedirectPath={`/events/${eventId}`}
         state={eventState}

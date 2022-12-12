@@ -3,9 +3,11 @@ import {
   Anchor,
   Breadcrumbs,
   Button,
+  Center,
   Container,
   Group,
   Image,
+  Loader,
   LoadingOverlay,
   Modal,
   Text,
@@ -224,6 +226,14 @@ export default function GetEvent() {
     setOpened(false)
   }
 
+  if (transition.state === 'loading') {
+    return (
+      <Center py={100}>
+        <Loader />
+      </Center>
+    )
+  }
+
   return (
     <>
       <Modal
@@ -233,9 +243,7 @@ export default function GetEvent() {
         title="Tapahtuman poisto"
       >
         <LoadingOverlay
-          visible={
-            transition.state === 'submitting' || transition.state === 'loading'
-          }
+          visible={transition.state === 'submitting'}
           transitionDuration={200}
         />
         <TypographyStylesProvider my="sm">
