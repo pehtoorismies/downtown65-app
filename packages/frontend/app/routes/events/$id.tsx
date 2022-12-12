@@ -247,12 +247,9 @@ export default function GetEvent() {
           transitionDuration={200}
         />
         <TypographyStylesProvider my="sm">
-          <h3>Olet poistamassa tapahtumaa</h3>
           <p>
-            Sinun pitää varmistaa tapahtuman{' '}
-            <strong>"{eventItem.title}"</strong> poistaminen.
-            <br /> Kirjoita allaolevaan kenttään <i>poista</i> ja klikkaa
-            Poista.
+            Varmista tapahtuman <strong>{eventItem.title}</strong> poisto.
+            Kirjoita allaolevaan kenttään <i>poista</i> ja klikkaa Poista.
           </p>
         </TypographyStylesProvider>
         <Form action={`/events/${eventItem.id}`} method="post">
