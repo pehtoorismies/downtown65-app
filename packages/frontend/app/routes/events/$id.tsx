@@ -226,7 +226,12 @@ export default function GetEvent() {
 
   return (
     <>
-      <Modal opened={opened} onClose={onCloseModal} title="Tapahtuman poisto">
+      <Modal
+        zIndex={2000}
+        opened={opened}
+        onClose={onCloseModal}
+        title="Tapahtuman poisto"
+      >
         <LoadingOverlay
           visible={
             transition.state === 'submitting' || transition.state === 'loading'

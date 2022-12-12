@@ -122,6 +122,7 @@ export default function NewEvent() {
   return (
     <>
       <EditOrCreate
+        cancelRedirectPath="/events"
         state={eventState}
         me={me}
         dispatch={dispatch}

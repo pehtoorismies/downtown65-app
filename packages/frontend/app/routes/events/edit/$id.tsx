@@ -160,6 +160,7 @@ export default function EditEvent() {
   return (
     <>
       <EditOrCreate
+        cancelRedirectPath={`/events/${eventId}`}
         state={eventState}
         me={me}
         dispatch={dispatch}
