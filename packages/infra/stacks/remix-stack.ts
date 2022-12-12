@@ -2,6 +2,7 @@ import type { StackContext } from '@serverless-stack/resources'
 import { RemixSite, use } from '@serverless-stack/resources'
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
 import * as route53 from 'aws-cdk-lib/aws-route53'
+import { getEnvironmentVariable } from './get-environment'
 import { GraphqlStack } from './graphql-stack'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
@@ -32,6 +33,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       API_KEY: ApiKey,
       SST_STAGE: stage,
       DOMAIN_NAME: domainName,
+      COOKIE_SECRET: getEnvironmentVariable('COOKIE_SECRET'),
       // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
     },
     customDomain: {

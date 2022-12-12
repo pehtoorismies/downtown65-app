@@ -24,6 +24,7 @@ jobs:
       AWS_DEFAULT_REGION: eu-north-1
       AWS_REGION: eu-north-1
       PR_NAME: pr-${{ github.event.pull_request.id }}
+      COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it

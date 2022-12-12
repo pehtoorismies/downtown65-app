@@ -71,11 +71,6 @@ export const meta: MetaFunction = ({ data, location }) => {
   }
 }
 
-interface LoaderData extends PublicRoute {
-  eventItem: EventLoaderData
-  origin: string // for meta
-}
-
 const getOriginForMeta = (): string => {
   if (process.env.NODE_ENV === 'development') {
     return 'http://localhost:3000'
@@ -87,9 +82,14 @@ const getOriginForMeta = (): string => {
   return `https://${domainName}`
 }
 
+interface LoaderData extends PublicRoute {
+  eventItem: EventLoaderData
+  origin: string // for meta
+}
+
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-
+  // console.log('secret secrererrer', process.env['COOKIE_SECRET'])
   const user = await getAuthenticatedUser(request)
 
   const { event } = await getGqlSdk().GetEvent(
