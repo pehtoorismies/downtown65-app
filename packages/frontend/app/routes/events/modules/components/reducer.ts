@@ -9,7 +9,7 @@ export const ActiveStep = {
   STEP_DATE: 2,
   STEP_TIME: 3,
   STEP_DESCRIPTION: 4,
-  STEP_REVIEW: 5,
+  STEP_PREVIEW: 5,
 } as const
 
 export type StepNumber = typeof ActiveStep[keyof typeof ActiveStep]
@@ -122,7 +122,7 @@ export const reducer = (state: EventState, action: EventAction): EventState => {
       return { ...state, activeStep: action.step }
     }
     case 'nextStep': {
-      if (state.activeStep === ActiveStep.STEP_REVIEW) {
+      if (state.activeStep === ActiveStep.STEP_PREVIEW) {
         return {
           ...state,
           submitEvent: true,
@@ -184,7 +184,7 @@ export const reducer = (state: EventState, action: EventAction): EventState => {
     case 'toPreview': {
       return {
         ...state,
-        activeStep: ActiveStep.STEP_REVIEW,
+        activeStep: ActiveStep.STEP_PREVIEW,
       }
     }
   }

@@ -63,7 +63,7 @@ const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
     title: 'Vapaa kuvaus',
     isSkippable: true,
   },
-  [ActiveStep.STEP_REVIEW]: {
+  [ActiveStep.STEP_PREVIEW]: {
     title: 'Esikatselu',
     isSkippable: false,
   },
@@ -218,7 +218,7 @@ export const EditOrCreate: FC<Props> = ({
         {state.activeStep === ActiveStep.STEP_DESCRIPTION && (
           <StepDescriptionClient state={state} dispatch={dispatch} />
         )}
-        {state.activeStep === ActiveStep.STEP_REVIEW && (
+        {state.activeStep === ActiveStep.STEP_PREVIEW && (
           <ParticipatingContext.Provider value={participatingActions}>
             <StepPreview state={state} me={me} />
           </ParticipatingContext.Provider>

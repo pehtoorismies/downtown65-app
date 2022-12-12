@@ -89,7 +89,7 @@ const getButtonAttributes = (state: EventState): ButtonAttributes => {
         isPreviousVisible: true,
       }
     }
-    case ActiveStep.STEP_REVIEW: {
+    case ActiveStep.STEP_PREVIEW: {
       return {
         prevTitle: 'Vapaa kuvaus',
         isNextVisible: true,
@@ -101,7 +101,7 @@ const getButtonAttributes = (state: EventState): ButtonAttributes => {
 }
 
 export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
-  const isReviewStep = state.activeStep === ActiveStep.STEP_REVIEW
+  const isReviewStep = state.activeStep === ActiveStep.STEP_PREVIEW
 
   const { nextTitle, prevTitle, NextIcon, isNextVisible, isPreviousVisible } =
     getButtonAttributes(state)

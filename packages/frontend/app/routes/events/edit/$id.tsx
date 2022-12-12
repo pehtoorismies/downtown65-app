@@ -193,7 +193,7 @@ export default function EditEvent() {
         dispatch={dispatch}
         participatingActions={participatingActions}
       />
-      {eventState.activeStep !== ActiveStep.STEP_REVIEW && (
+      {eventState.activeStep !== ActiveStep.STEP_PREVIEW && (
         <Center>
           <Button
             onClick={() => dispatch({ kind: 'toPreview' })}
