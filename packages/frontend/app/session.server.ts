@@ -2,6 +2,7 @@ import type { Session } from '@remix-run/node'
 import { createCookieSessionStorage, json, redirect } from '@remix-run/node'
 import jwtDecode from 'jwt-decode'
 import { z } from 'zod'
+import { getCookieSecret } from '~/cookie-secret.server'
 import { User } from '~/domain/user'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import {
@@ -35,7 +36,7 @@ const sessionStorage = createCookieSessionStorage({
     path: '/',
     sameSite: 'lax',
     // TODO: add proper secret
-    secrets: ['super-secret'],
+    secrets: [getCookieSecret()],
     secure: process.env.NODE_ENV === 'production',
   },
 })
