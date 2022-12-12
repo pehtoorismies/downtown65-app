@@ -61,7 +61,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const numberPages = Math.floor(total / limit) + extra
   const currentPage = Math.floor(start / limit) + 1
 
-  json<LoaderData>({
+  return json<LoaderData>({
     user,
     users,
     userCount: total,
