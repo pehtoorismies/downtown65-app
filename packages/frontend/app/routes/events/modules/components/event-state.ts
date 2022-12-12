@@ -1,6 +1,6 @@
+import type { StepNumber } from './reducer'
 import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
-import type { StepNumber } from '~/routes/events/modules/components/reducer'
 
 export interface EventState {
   eventType?: EventType
