@@ -173,12 +173,12 @@ export default function Profile() {
               my="sm"
               sx={{ maxWidth: 300, width: '100%' }}
             >
-              Jos näet profiilikuvasi, se on haettu palvelusta{' '}
+              Profiilikuvasi on haettu palvelusta{' '}
               <Anchor href="https://gravatar.com" target="_blank">
                 Gravatar
               </Anchor>
-              , kun tilisi luotiin. Tämä siis mikäli sinulla on gravatar-tili ja
-              sähköpostiosoitteesi on palvelussa sama.
+              , kun tilisi luotiin. Jos näet vain nimikirjaimet sinulla ei ole
+              Gravatar-tiliä osoitteella {email}.
             </Alert>
           </Center>
         </>
