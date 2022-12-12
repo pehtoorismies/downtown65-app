@@ -27,6 +27,7 @@ import { ParticipatingContext } from '~/contexts/participating-context'
 import type { User } from '~/domain/user'
 import { Buttons } from '~/routes/events/modules/components/buttons'
 import type { EventState } from '~/routes/events/modules/components/event-state'
+import { isValidStateToSave } from '~/routes/events/modules/components/event-state'
 import type {
   EventAction,
   StepNumber,
@@ -66,15 +67,6 @@ const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
     title: 'Esikatselu',
     isSkippable: false,
   },
-}
-
-const hasMandatory = (state: EventState): boolean => {
-  return (
-    state.eventType !== undefined &&
-    !!state.title &&
-    !!state.location &&
-    !!state.subtitle
-  )
 }
 
 const getModalTitle = (kind: EventState['kind']): string => {
@@ -166,15 +158,15 @@ export const EditOrCreate: FC<Props> = ({
             icon={<IconCalendar size={iconSize} />}
           />
           <Stepper.Step
-            allowStepSelect={hasMandatory(state)}
+            allowStepSelect={isValidStateToSave(state)}
             icon={<IconClockHour5 size={iconSize} />}
           />
           <Stepper.Step
-            allowStepSelect={hasMandatory(state)}
+            allowStepSelect={isValidStateToSave(state)}
             icon={<IconAlignLeft size={iconSize} />}
           />
           <Stepper.Step
-            allowStepSelect={hasMandatory(state)}
+            allowStepSelect={isValidStateToSave(state)}
             icon={<IconRocket size={iconSize} />}
           />
         </Stepper>
