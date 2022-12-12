@@ -1,33 +1,13 @@
 import { Button, Grid, Group } from '@mantine/core'
-import { IconArrowLeft, IconArrowRight } from '@tabler/icons'
+import type { TablerIcon } from '@tabler/icons'
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconArrowUp,
+  IconDeviceFloppy,
+} from '@tabler/icons'
 import type { EventState } from './event-state'
 import { ActiveStep } from './reducer'
-
-const isNextVisible = (state: EventState): boolean => {
-  switch (state.activeStep) {
-    case ActiveStep.STEP_EVENT_TYPE: {
-      return !!state.eventType
-    }
-    case ActiveStep.STEP_TITLE: {
-      return !!state.title && !!state.location
-    }
-    case ActiveStep.STEP_DATE: {
-      return !!state.date
-    }
-    case ActiveStep.STEP_TIME: {
-      return true
-    }
-    case ActiveStep.STEP_DESCRIPTION: {
-      return true
-    }
-    case ActiveStep.STEP_REVIEW: {
-      return true
-    }
-  }
-}
-
-const isPreviousVisible = (state: EventState): boolean =>
-  state.activeStep !== ActiveStep.STEP_EVENT_TYPE
 
 interface Props {
   state: EventState
@@ -35,17 +15,87 @@ interface Props {
   onPreviousStep: () => void
 }
 
-const getNextButtonText = (state: EventState): string => {
-  const isReviewStep = state.activeStep === ActiveStep.STEP_REVIEW
-  if (!isReviewStep) {
-    return 'Seuraava'
-  }
-  switch (state.kind) {
+type ButtonAttributes = {
+  nextTitle: string
+  prevTitle: string
+  NextIcon: TablerIcon
+  isNextVisible: boolean
+  isPreviousVisible: boolean
+}
+
+const getNextStuff = (
+  kind: EventState['kind']
+): { nextTitle: string; NextIcon: TablerIcon } => {
+  switch (kind) {
     case 'create': {
-      return 'Luo tapahtuma'
+      return {
+        nextTitle: 'Luo tapahtuma',
+        NextIcon: IconArrowUp,
+      }
     }
     case 'edit': {
-      return 'Tallenna'
+      return {
+        nextTitle: 'Tallenna',
+        NextIcon: IconDeviceFloppy,
+      }
+    }
+  }
+}
+
+const getButtonAttributes = (state: EventState): ButtonAttributes => {
+  switch (state.activeStep) {
+    case ActiveStep.STEP_EVENT_TYPE: {
+      return {
+        nextTitle: 'Perustiedot',
+        prevTitle: '',
+        NextIcon: IconArrowRight,
+        isNextVisible: !!state.eventType,
+        isPreviousVisible: false,
+      }
+    }
+    case ActiveStep.STEP_TITLE: {
+      return {
+        nextTitle: 'Päivämäärä',
+        prevTitle: 'Tyyppi',
+        NextIcon: IconArrowRight,
+        isNextVisible: !!state.title && !!state.location && !!state.subtitle,
+        isPreviousVisible: true,
+      }
+    }
+    case ActiveStep.STEP_DATE: {
+      return {
+        nextTitle: 'Kellonaika',
+        prevTitle: 'Perustiedot',
+        NextIcon: IconArrowRight,
+        isNextVisible: true,
+        isPreviousVisible: true,
+      }
+    }
+    case ActiveStep.STEP_TIME: {
+      return {
+        nextTitle: 'Vapaa kuvaus',
+        prevTitle: 'Päivämäärä',
+        NextIcon: IconArrowRight,
+        isNextVisible: true,
+        isPreviousVisible: true,
+      }
+    }
+    case ActiveStep.STEP_DESCRIPTION: {
+      return {
+        nextTitle: 'Esikatselu',
+        prevTitle: 'Kellonaika',
+        NextIcon: IconArrowRight,
+        isNextVisible: true,
+        isPreviousVisible: true,
+      }
+    }
+    case ActiveStep.STEP_REVIEW: {
+      return {
+        prevTitle: 'Vapaa kuvaus',
+        isNextVisible: true,
+        isPreviousVisible: true,
+        ...getNextStuff(state.kind),
+      }
     }
   }
 }
@@ -53,11 +103,14 @@ const getNextButtonText = (state: EventState): string => {
 export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
   const isReviewStep = state.activeStep === ActiveStep.STEP_REVIEW
 
+  const { nextTitle, prevTitle, NextIcon, isNextVisible, isPreviousVisible } =
+    getButtonAttributes(state)
+
   return (
     <>
       <Grid justify="center" mt="xl">
         <Grid.Col span={6}>
-          {isPreviousVisible(state) && (
+          {isPreviousVisible && (
             <Button
               mt="xs"
               leftIcon={<IconArrowLeft size={18} />}
@@ -68,16 +121,16 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
               })}
               onClick={onPreviousStep}
             >
-              Edellinen
+              {prevTitle}
             </Button>
           )}
         </Grid.Col>
         <Grid.Col span={6}>
-          {isNextVisible(state) && (
+          {isNextVisible && (
             <Group position="right">
               <Button
                 mt="xs"
-                rightIcon={<IconArrowRight size={18} />}
+                rightIcon={<NextIcon size={18} />}
                 styles={() => ({
                   leftIcon: {
                     marginRight: 15,
@@ -86,7 +139,7 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
                 color={isReviewStep ? 'dtPink.3' : 'blue'}
                 onClick={onNextStep}
               >
-                {getNextButtonText(state)}
+                {nextTitle}
               </Button>
             </Group>
           )}
