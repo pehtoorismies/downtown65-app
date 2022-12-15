@@ -1,7 +1,11 @@
 import type { StackContext } from '@serverless-stack/resources'
 import { Config, Table } from '@serverless-stack/resources'
+import { RemovalPolicy } from 'aws-cdk-lib'
 
-export const DynamoStack = ({ stack }: StackContext) => {
+export const DynamoStack = ({ app, stack }: StackContext) => {
+  const removalPolicy =
+    app.stage === 'production' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY
+
   const table = new Table(stack, 'dt65Table', {
     fields: {
       PK: 'string',
@@ -14,6 +18,11 @@ export const DynamoStack = ({ stack }: StackContext) => {
       GSI1: { partitionKey: 'GSI1PK', sortKey: 'GSI1SK' },
     },
     stream: true,
+    cdk: {
+      table: {
+        removalPolicy,
+      },
+    },
   })
 
   return {
