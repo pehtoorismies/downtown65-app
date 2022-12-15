@@ -13,11 +13,8 @@ export const EventCardExtended = (props: EventCardExtendedProps) => {
   return (
     <EventCardRoot {...props}>
       <Divider my="xs" label="Osallistujat" labelPosition="center" />
-
       <Participants participants={props.participants} me={props.me} />
-
       <Divider my="xs" label="Lisätiedot" labelPosition="center" />
-
       {hasDescription ? (
         <TypographyStylesProvider p={0} mt="sm">
           <div dangerouslySetInnerHTML={{ __html: props.description }} />

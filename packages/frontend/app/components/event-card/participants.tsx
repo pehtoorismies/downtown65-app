@@ -1,4 +1,4 @@
-import { Badge, Group, ThemeIcon, Text } from '@mantine/core'
+import { Badge, Group, ThemeIcon, Text, Avatar } from '@mantine/core'
 import { IconUserOff } from '@tabler/icons'
 import { Gradient } from '~/components/colors'
 import type { User } from '~/domain/user'
@@ -31,11 +31,15 @@ export const Participants = ({ me, participants }: Props) => {
         return (
           <Badge
             m={2}
-            radius="sm"
+            radius="md"
             key={p.id}
             styles={{ inner: { textTransform: 'none' } }}
             variant="gradient"
+            sx={{ paddingLeft: 0 }}
             gradient={gradient}
+            leftSection={
+              <Avatar alt="Avatar for badge" size={24} mr={5} src={p.picture} />
+            }
           >
             {p.nickname}
           </Badge>
