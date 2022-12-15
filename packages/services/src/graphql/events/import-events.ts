@@ -16,7 +16,6 @@ export const importEvents: AppSyncResolverHandler<
     const response = await fetch(importUrl)
 
     const body = await response.text()
-    // console.log(body.slice(0, 199))
     const oldEvents = getImportedEvents(body, start, end)
 
     await Event.importEvents(oldEvents)
