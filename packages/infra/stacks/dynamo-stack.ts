@@ -1,6 +1,8 @@
 import type { StackContext } from '@serverless-stack/resources'
 import { Config, Table } from '@serverless-stack/resources'
 import { RemovalPolicy } from 'aws-cdk-lib'
+import backup from 'aws-cdk-lib/aws-backup'
+import dynamodb from 'aws-cdk-lib/aws-dynamodb'
 
 export const DynamoStack = ({ app, stack }: StackContext) => {
   const removalPolicy =
@@ -24,6 +26,21 @@ export const DynamoStack = ({ app, stack }: StackContext) => {
       },
     },
   })
+
+  if (app.stage === 'production') {
+    const productionTable = dynamodb.Table.fromTableName(
+      stack,
+      'dt65Table-prod-table',
+      table.tableName
+    )
+    const plan = backup.BackupPlan.dailyMonthly1YearRetention(
+      stack,
+      'Production-Plan'
+    )
+    plan.addSelection('Selection', {
+      resources: [backup.BackupResource.fromDynamoDbTable(productionTable)],
+    })
+  }
 
   return {
     table,
