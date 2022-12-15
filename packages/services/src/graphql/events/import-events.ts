@@ -1,14 +1,14 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import fetch from 'node-fetch'
+import type { MutationImportEventsArgs } from '~/appsync.gen'
 import * as Event from '~/core/event'
-import type { EmptyArgs } from '~/graphql/support/empty-args'
 import { getImportedEvents } from '~/import-old/get-imported-events'
 
 const importUrl =
   'https://storage.googleapis.com/downtown65/events/prod-events.json'
 
 export const importEvents: AppSyncResolverHandler<
-  EmptyArgs,
+  MutationImportEventsArgs,
   string
 > = async () => {
   const response = await fetch(importUrl)
