@@ -13,6 +13,7 @@ import type {
   QueryEventArgs as QueryEventArguments,
   UsersResponse,
   QueryUsersArgs,
+  MutationImportEventsArgs,
 } from '../appsync.gen'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
@@ -32,6 +33,7 @@ export type Inputs =
   | EmptyArgs
   | MutationCreateEventArgs
   | MutationDeleteEventArgs
+  | MutationImportEventsArgs
   | MutationUpdateEventArgs
   | MutationUpdateMeArgs
   | QueryEventArguments
@@ -148,7 +150,7 @@ export const privateResolver = (
       case 'importEvents': {
         allowScopes(['write:events'])
         return importEvents(
-          event as AppSyncResolverEvent<EmptyArgs>,
+          event as AppSyncResolverEvent<MutationImportEventsArgs>,
           context,
           callback
         )

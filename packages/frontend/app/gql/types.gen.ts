@@ -174,6 +174,12 @@ export type MutationForgotPasswordArgs = {
 };
 
 
+export type MutationImportEventsArgs = {
+  end: Scalars['Int'];
+  start: Scalars['Int'];
+};
+
+
 export type MutationLeaveEventArgs = {
   eventId: Scalars['ID'];
 };
