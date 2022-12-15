@@ -1,5 +1,6 @@
 import { ulid } from 'ulid'
 import type { CreateEventInput } from '~/appsync.gen'
+import { getUserById } from '~/import-old/users'
 
 const parseMongoString = (s: string | undefined) => {
   if (s) {
@@ -39,7 +40,7 @@ const formatMongoEvent = (mongoEvent: any): FormattedEvent => {
     createdBy: {
       id: mongoEvent.creator.sub,
       nickname: mongoEvent.creator.nickname,
-      picture: '--MISSING--',
+      picture: getUserById(mongoEvent.creator.sub)?.picture ?? 'NOT_FOUND',
     },
     dateStart: {
       year: date.getFullYear(),
@@ -57,7 +58,7 @@ const formatMongoEvent = (mongoEvent: any): FormattedEvent => {
         return {
           id: p.sub,
           nickname: p.nickname,
-          picture: '--MISSING--',
+          picture: getUserById(p.sub)?.picture ?? 'NOT_FOUND',
         }
       }
     ),
@@ -67,7 +68,9 @@ const formatMongoEvent = (mongoEvent: any): FormattedEvent => {
 }
 
 export const getImportedEvents = (
-  oldEvensSemiJSON: string
+  oldEvensSemiJSON: string,
+  start: number,
+  end: number
 ): FormattedEvent[] => {
   const parts = oldEvensSemiJSON.split(/\r?\n/).slice(1, -1)
   const objects = []
@@ -78,5 +81,7 @@ export const getImportedEvents = (
   }
 
   // @ts-ignore
-  return objects.map((oldEvent) => formatMongoEvent(oldEvent))
+  return objects
+    .map((oldEvent) => formatMongoEvent(oldEvent))
+    .slice(start - 1, end)
 }
