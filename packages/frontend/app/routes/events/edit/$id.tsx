@@ -179,7 +179,7 @@ export default function EditEvent() {
       })
       dispatch({ kind: 'formSubmitted' })
     }
-  }, [fetcher, eventState])
+  }, [fetcher, eventState, eventId])
 
   return (
     <>

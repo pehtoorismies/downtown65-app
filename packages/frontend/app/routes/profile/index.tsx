@@ -39,7 +39,9 @@ export const meta: MetaFunction = () => {
 interface ActionData {}
 
 export const action: ActionFunction = async ({ request }) => {
-  const { headers, accessToken, user } = await actionAuthenticate(request)
+  // TODO: how to sync user and cookie user ?
+  // const { headers, accessToken, user } = await actionAuthenticate(request)
+  const { headers, accessToken } = await actionAuthenticate(request)
 
   const formData = await request.formData()
   const weekly = !!formData.get('weekly')
