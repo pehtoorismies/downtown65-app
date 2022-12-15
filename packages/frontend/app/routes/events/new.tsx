@@ -28,7 +28,7 @@ export const meta: MetaFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const { accessToken, user } = await loaderAuthenticate(request)
+  const { user } = await loaderAuthenticate(request)
 
   return json<PrivateRoute>({
     user,
