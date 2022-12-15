@@ -1,6 +1,6 @@
 import { ulid } from 'ulid'
+import { getUserById } from './users'
 import type { CreateEventInput } from '~/appsync.gen'
-import { getUserById } from '~/import-old/users'
 
 const parseMongoString = (s: string | undefined) => {
   if (s) {
@@ -49,7 +49,7 @@ const formatMongoEvent = (mongoEvent: any): FormattedEvent => {
     },
     timeStart: mongoEvent.exactTime
       ? {
-          hours: date.getHours(),
+          hours: date.getHours() + 2, // hack to GTM to +2
           minutes: date.getMinutes(),
         }
       : undefined, // fi time?
