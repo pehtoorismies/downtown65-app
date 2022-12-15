@@ -57,7 +57,13 @@ import {
 } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
-export const meta: MetaFunction = ({ data, location }) => {
+export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
+  if (!data) {
+    return {
+      title: 'Not found',
+    }
+  }
+
   const { eventItem, origin } = data
   const typeData = mapToData(eventItem.type)
   return {
@@ -104,6 +110,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       status: 404,
       statusText: 'Tapahtumaa ei löydy',
     })
+    return
   }
 
   const ddt = new DynamoDatetime({
@@ -313,6 +320,7 @@ export default function GetEvent() {
 }
 
 export const CatchBoundary = () => {
+  console.log('Catch boundary')
   const caught = useCatch()
   const { imageUrl } = mapToData('ORIENTEERING')
 
