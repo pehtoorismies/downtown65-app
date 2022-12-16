@@ -27,7 +27,8 @@ const Jwt = z.object({
   exp: z.number(),
 })
 
-const SEVEN_DAYS: number = 60 * 60 * 24 * 7
+const TWO_DAYS: number = 60 * 60 * 24 * 2
+const ONE_YEAR: number = 60 * 60 * 24 * 365
 
 const sessionStorage = createCookieSessionStorage({
   cookie: {
@@ -35,7 +36,6 @@ const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     path: '/',
     sameSite: 'lax',
-    // TODO: add proper secret
     secrets: [getCookieSecret()],
     secure: process.env.NODE_ENV === 'production',
   },
@@ -50,6 +50,7 @@ interface CreateUserSession {
   request: Request
   tokens: Tokens
   redirectTo: string
+  rememberMe: boolean
 }
 
 const fetchRenewTokens = async (
@@ -171,6 +172,7 @@ export const createUserSession = async ({
   request,
   tokens,
   redirectTo,
+  rememberMe,
 }: CreateUserSession) => {
   const session = await getSession(request)
   const user = getUserFromJwt(tokens.idToken)
@@ -183,7 +185,7 @@ export const createUserSession = async ({
   headers.append(
     'Set-Cookie',
     await sessionStorage.commitSession(session, {
-      maxAge: SEVEN_DAYS,
+      maxAge: rememberMe ? ONE_YEAR : TWO_DAYS,
     })
   )
 
