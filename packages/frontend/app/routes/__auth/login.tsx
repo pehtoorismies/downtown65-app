@@ -2,6 +2,7 @@ import {
   Alert,
   Anchor,
   Button,
+  Checkbox,
   Group,
   Paper,
   PasswordInput,
@@ -35,6 +36,7 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData()
   const email = formData.get('email')
   const password = formData.get('password')
+  const remember = formData.get('remember')
 
   if (!validateEmail(email)) {
     return json<ActionData>(
@@ -70,6 +72,7 @@ export const action: ActionFunction = async ({ request }) => {
       request,
       tokens,
       redirectTo: '/events',
+      rememberMe: remember === 'remember',
     })
   } catch (error) {
     console.error(error)
@@ -124,6 +127,13 @@ export default function Login() {
             mt="md"
             aria-describedby="password-error"
           />
+          <Checkbox
+            name="remember"
+            value="remember"
+            mt="md"
+            label="Muista minut tällä laitteella. Kirjautuminen voimassa 365 päivää."
+          />
+
           <Group position="right" mt="md">
             <Anchor component={Link} to="/forgot-password" size="sm">
               Unohditko salasanan?
