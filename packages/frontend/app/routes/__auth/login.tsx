@@ -84,7 +84,7 @@ export default function Login() {
   return (
     <AuthTemplate title="Kirjaudu">
       <Text color="dimmed" size="sm" align="center" mt={5}>
-        Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.
+        Rekisteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.{' '}
         <Anchor component={Link} to="/signup">
           Rekisteröidy tästä.
         </Anchor>
