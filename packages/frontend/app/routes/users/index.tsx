@@ -97,7 +97,7 @@ export default function Users() {
     <Container py="sm">
       <Title>Seuran jäsenet</Title>
       <Text c="dimmed" fw={500} mb="xs">
-        Seuralla jäseniä: {userCount}kpl
+        Jäseniä yhteensä: {userCount}
       </Text>
 
       {hasPagination && (
