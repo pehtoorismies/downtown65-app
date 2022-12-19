@@ -14,9 +14,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   const stage = app.stage
   const domainName =
-    stage === 'production'
-      ? 'beta.downtown65.events'
-      : `${stage}.downtown65.events`
+    stage === 'production' ? 'downtown65.events' : `${stage}.downtown65.events`
 
   const certificate = new acm.DnsValidatedCertificate(stack, 'Certificate', {
     domainName: `downtown65.events`,
@@ -38,6 +36,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     },
     customDomain: {
       domainName,
+      domainAlias: stage === 'production' ? 'www.downtown65.events' : undefined,
       cdk: {
         hostedZone,
         certificate,
