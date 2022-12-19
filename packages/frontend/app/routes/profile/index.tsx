@@ -187,8 +187,18 @@ export default function Profile() {
       )}
       <Divider my="sm" label="Sähköpostiasetukset" labelPosition="center" />
       <Group position="center">
+        <Alert
+          icon={<IconAlertCircle size={16} />}
+          title="Ei käytössä"
+          color="red"
+        >
+          Events ei vielä lähetä sähköpostia
+        </Alert>
+      </Group>
+      <Group position="center">
         <Form method="post">
           <Switch
+            disabled
             styles={switchStyles}
             name="eventCreated"
             label="Lähetä sähköposti, kun uusi tapahtuma luodaan."
@@ -204,6 +214,7 @@ export default function Profile() {
             size="md"
           />
           <Switch
+            disabled
             name="weekly"
             styles={switchStyles}
             label="Lähetä viikon tapahtumat sähköpostitse."
