@@ -1,11 +1,8 @@
 import { Config } from '@serverless-stack/node/config'
 import type {
-  DynamoDBRecord,
   DynamoDBStreamEvent,
   DynamoDBStreamHandler,
 } from 'aws-lambda/trigger/dynamodb-stream'
-import type { EmailableEvent } from '~/email/create-event-added-email'
-import { createEventAddedEmail } from '~/email/create-event-added-email'
 // import { getAuth0Management } from '~/support/auth0'
 
 // const fetchCreateEventSubscribers = async () => {
@@ -24,18 +21,6 @@ import { createEventAddedEmail } from '~/email/create-event-added-email'
 //   }
 // }
 
-const mapDynamoRecord = (dynamoRecord: DynamoDBRecord): EmailableEvent => {
-  console.log(JSON.stringify(dynamoRecord))
-  return {
-    eventImageUrl: 'some_url',
-    eventUrl: 'some_url',
-    title: 'Some title',
-    subtitle: 'Some subtitle',
-    date: 'Some date',
-    description: 'Some desc',
-  }
-}
-
 export const main: DynamoDBStreamHandler = async (
   event: DynamoDBStreamEvent
 ): Promise<void> => {
@@ -45,10 +30,13 @@ export const main: DynamoDBStreamHandler = async (
   // Send email to subscribers
   // const users = await fetchCreateEventSubscribers()
   const createdRecord = event.Records[0]
+  // console.log('DYNAMO RECORD--')
+  // console.log(JSON.stringify(createdRecord))
+  // console.log('--DYNAMO RECORD')
 
-  const emailEvent = mapDynamoRecord(createdRecord)
-  const body = createEventAddedEmail(emailEvent)
-  console.log(body)
+  // const emailEvent = mapDynamoRecord(createdRecord)
+  // const body = createEventAddedEmail(emailEvent)
+
   // await sendEmail({
   //   subject: 'Uusi tapahtuma',
   //   body: {
