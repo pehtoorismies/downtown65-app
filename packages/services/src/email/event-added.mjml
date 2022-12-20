@@ -12,7 +12,6 @@
         <mj-section background-url="{{eventImageUrl}}"
                     background-size="cover"
                     background-repeat="no-repeat">
-
             <mj-column>
                 <mj-text align="center"
                          color="#fff"
@@ -20,7 +19,6 @@
                          font-family="Helvetica Neue">
                     {{title}}
                 </mj-text>
-
                 <mj-button background-color="#FF80EA"
                            href="{{eventUrl}}">
                     Näytä tapahtuma
@@ -29,25 +27,26 @@
         </mj-section>
         <mj-section background-color="#fafafa">
             <mj-column width="400px">
+                <mj-text color="#525252">
+                    {{date}}
+                </mj-text>
                 <mj-text font-style="italic"
                          font-size="20px"
                          font-family="Helvetica Neue"
                          color="#626262">{{subtitle}}
                 </mj-text>
-
                 <mj-text color="#525252">
-                    {{date}}
+                    Paikka: {{location}}
                 </mj-text>
 
+                <!-- If you don't want Handlebars to escape a value, use the "triple-stash" -->
                 <mj-text color="#525252">
-                    {{description}}
+                    {{{description}}}
                 </mj-text>
-
                 <mj-button background-color="#FF80EA"
-                           href="{{url}}">
+                           href="{{eventUrl}}">
                     Näytä tapahtuma
                 </mj-button>
-
             </mj-column>
         </mj-section>
         <mj-section background-color="#e7e7e7">

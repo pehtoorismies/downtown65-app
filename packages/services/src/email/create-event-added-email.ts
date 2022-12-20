@@ -1,24 +1,34 @@
 import Handlebars from 'handlebars'
 import mjml2html from 'mjml'
 import type { EmailBody } from './email-body'
-import type { EmailableEvent } from './emailable-event'
 import eventAdded from './event-added.mjml'
 
-export const createEventAddedEmail = (event: EmailableEvent): EmailBody => {
-  const template = Handlebars.compile(eventAdded)
-  const mjmlTemplate = template(event)
+interface EmailParams {
+  date: string
+  description: string
+  eventImageUrl: string
+  eventUrl: string
+  location: string
+  preferencesUrl: string
+  subtitle: string
+  title: string
+}
+
+export const createEventAddedEmail = (emailParams: EmailParams): EmailBody => {
+  const handleBarsTemplate = Handlebars.compile(eventAdded)
 
   const plain = `
     Kippis, 
-    ${event.title}
-    ${event.subtitle}
-    ${event.date}
-    Tarkastele tapahtumaa: ${event.eventId}
+    ${emailParams.title}
+    ${emailParams.subtitle}
+    ${emailParams.date}
+    Tarkastele tapahtumaa: ${emailParams.eventUrl}
   
     Admin terveisin, 
     Kyttäki
   `
 
+  const mjmlTemplate = handleBarsTemplate(emailParams)
   const mjml = mjml2html(mjmlTemplate)
   if (mjml.errors) {
     console.error(mjml.errors)

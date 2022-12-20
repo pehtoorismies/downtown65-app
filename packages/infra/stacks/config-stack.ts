@@ -1,6 +1,6 @@
+import { getEnvironmentVariable } from '@downtown65-app/common'
 import type { Stack, StackContext } from '@serverless-stack/resources'
 import { Config } from '@serverless-stack/resources'
-import { getEnvironmentVariable } from './get-environment'
 
 const createConfigFromEnvironment = (stack: Stack, name: string) => {
   const config = new Config.Parameter(stack, name, {
@@ -16,9 +16,5 @@ export const ConfigStack = ({ stack }: StackContext) => {
     AUTH_DOMAIN: createConfigFromEnvironment(stack, 'AUTH_DOMAIN'),
     JWT_AUDIENCE: createConfigFromEnvironment(stack, 'JWT_AUDIENCE'),
     REGISTER_SECRET: new Config.Secret(stack, 'REGISTER_SECRET'),
-    EMAIL_SENDING_ENABLED: createConfigFromEnvironment(
-      stack,
-      'EMAIL_SENDING_ENABLED'
-    ),
   }
 }
