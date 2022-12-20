@@ -1,8 +1,9 @@
 import type { StackContext } from '@serverless-stack/resources'
 import { Cron, Function, use } from '@serverless-stack/resources'
 import { ConfigStack } from './config-stack'
+import { getDomain } from './support/get-domain'
 
-export const CronStack = ({ stack }: StackContext) => {
+export const CronStack = ({ app, stack }: StackContext) => {
   const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
 
   const weeklyEmailFun = new Function(stack, 'WeeklyEmail', {
@@ -15,6 +16,9 @@ export const CronStack = ({ stack }: StackContext) => {
       loader: {
         '.mjml': 'text',
       },
+    },
+    environment: {
+      DOMAIN_NAME: getDomain(app.stage),
     },
     permissions: ['ses:SendEmail', 'ses:SendRawEmail'],
   })

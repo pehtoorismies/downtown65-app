@@ -1,9 +1,10 @@
+import { getEnvironmentVariable } from '@downtown65-app/common'
 import type { StackContext } from '@serverless-stack/resources'
 import { RemixSite, use } from '@serverless-stack/resources'
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
 import * as route53 from 'aws-cdk-lib/aws-route53'
-import { getEnvironmentVariable } from './get-environment'
 import { GraphqlStack } from './graphql-stack'
+import { getDomain } from './support/get-domain'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
@@ -13,8 +14,8 @@ export const RemixStack = ({ stack, app }: StackContext) => {
   })
 
   const stage = app.stage
-  const domainName =
-    stage === 'production' ? 'downtown65.events' : `${stage}.downtown65.events`
+
+  const domainName = getDomain(stage)
 
   const certificate = new acm.DnsValidatedCertificate(stack, 'Certificate', {
     domainName: `downtown65.events`,

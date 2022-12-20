@@ -1,7 +1,7 @@
+import Handlebars from 'handlebars'
 import mjml2html from 'mjml'
-import mustache from 'mustache'
 import type { EmailBody } from './email-body'
-import weeklyTemplate from './weekly-template.mjml'
+import weeklyEmail from '~/email/weekly-template.mjml'
 
 interface EmailEvent {
   type: string
@@ -30,7 +30,7 @@ const eventToPlain = ({ title, subtitle, weekDay, date, url }: EmailEvent) =>
   `
 
 export const getWeeklyEmail = (properties: WeeklyMainProperties): EmailBody => {
-  const mjmlTemplate = mustache.render(weeklyTemplate, properties)
+  const template = Handlebars.compile(weeklyEmail)
 
   const plain = `
     Kippis, 
@@ -40,7 +40,7 @@ export const getWeeklyEmail = (properties: WeeklyMainProperties): EmailBody => {
     Kyttäki
   `
 
-  const mjml = mjml2html(mjmlTemplate)
+  const mjml = mjml2html(template(properties))
 
   console.error(mjml.errors)
 

@@ -9,7 +9,9 @@
     "lint": "eslint . --ext .ts",
     "find-deadcode": "ts-prune --ignore stacks/index.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@downtown65-app/common": "*"
+  },
   "devDependencies": {
     "@serverless-stack/resources": "1.18.4",
     "aws-cdk-lib": "2.50.0"
