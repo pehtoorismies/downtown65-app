@@ -17,10 +17,11 @@
     "aws-sdk": "2.1228.0",
     "dynamodb-toolbox": "0.5.2",
     "email-validator": "2.0.4",
+    "handlebars": "4.7.7",
     "mjml": "4.13.0",
-    "mustache": "4.2.0",
     "node-fetch": "^3.3.0",
     "superagent-proxy": "3.0.0",
+    "uglify-js": "3.17.4",
     "ulid": "2.3.0",
     "zod": "3.19.1"
   },

@@ -3,6 +3,9 @@ import type {
   DynamoDBStreamEvent,
   DynamoDBStreamHandler,
 } from 'aws-lambda/trigger/dynamodb-stream'
+import { createEventAddedEmail } from '~/email/create-event-added-email'
+import { EmailableEvent } from '~/email/emailable-event'
+import { sendEmail } from '~/email/send-email'
 // import { getAuth0Management } from '~/support/auth0'
 
 // const fetchCreateEventSubscribers = async () => {
@@ -34,18 +37,19 @@ export const main: DynamoDBStreamHandler = async (
   // console.log(JSON.stringify(createdRecord))
   // console.log('--DYNAMO RECORD')
 
-  // const emailEvent = mapDynamoRecord(createdRecord)
-  // const body = createEventAddedEmail(emailEvent)
+  const emailEvent = EmailableEvent.parse(createdRecord)
 
-  // await sendEmail({
-  //   subject: 'Uusi tapahtuma',
-  //   body: {
-  //     text: body.plain,
-  //     html: body.html,
-  //   },
-  //   from: 'kyttaki@downtown65.events',
-  //   to: 'pehtoorismies@gmail.com',
-  // })
+  const body = createEventAddedEmail(emailEvent)
+
+  await sendEmail({
+    subject: 'Uusi tapahtuma',
+    body: {
+      text: body.plain,
+      html: body.html,
+    },
+    from: 'kyttaki@downtown65.events',
+    to: 'pehtoorismies@gmail.com',
+  })
 
   //downtown65.events/event-images/trailrunning.jpg
 
