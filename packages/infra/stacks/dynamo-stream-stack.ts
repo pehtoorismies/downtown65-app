@@ -21,6 +21,7 @@ export const DynamoStreamStack = ({ stack }: StackContext) => {
       AUTH_DOMAIN,
       EMAIL_SENDING_ENABLED,
     ],
+    permissions: ['ses:SendEmail', 'ses:SendRawEmail'],
   })
 
   dynamo.table.addConsumers(stack, {

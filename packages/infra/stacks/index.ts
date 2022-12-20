@@ -12,13 +12,15 @@ export default function (app: App) {
     app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY)
   }
   app.setDefaultFunctionProps({
-    runtime: 'nodejs16.x',
+    // these are needed for mjml library to work
     bundle: {
+      nodeModules: ['uglify-js'],
       format: 'esm',
       loader: {
         '.mjml': 'text',
       },
     },
+    runtime: 'nodejs16.x',
     logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
   })
   app

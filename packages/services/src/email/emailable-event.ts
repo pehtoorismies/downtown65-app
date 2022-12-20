@@ -67,6 +67,14 @@ const stringObject = z
   })
   .transform(({ S }) => S)
 
+const optionalStringObject = z
+  .optional(
+    z.object({
+      S: z.string(),
+    })
+  )
+  .transform((o) => o?.S)
+
 export const EmailableEvent = z
   .object({
     dynamodb: z.object({
@@ -76,7 +84,7 @@ export const EmailableEvent = z
         eventId: stringObject,
         location: stringObject,
         subtitle: stringObject,
-        timeStart: stringObject,
+        timeStart: optionalStringObject,
         title: stringObject,
         type: stringObject,
       }),
