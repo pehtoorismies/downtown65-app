@@ -189,16 +189,15 @@ export default function Profile() {
       <Group position="center">
         <Alert
           icon={<IconAlertCircle size={16} />}
-          title="Ei käytössä"
+          title="Fun fact"
           color="red"
         >
-          Events ei vielä lähetä sähköpostia
+          Viikkosähköposti ei käytössä.
         </Alert>
       </Group>
       <Group position="center">
         <Form method="post">
           <Switch
-            disabled
             styles={switchStyles}
             name="eventCreated"
             label="Lähetä sähköposti, kun uusi tapahtuma luodaan."
