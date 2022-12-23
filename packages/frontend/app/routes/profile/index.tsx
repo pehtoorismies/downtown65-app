@@ -10,6 +10,7 @@ import {
   SimpleGrid,
   Switch,
   Text,
+  LoadingOverlay,
 } from '@mantine/core'
 import type {
   MetaFunction,
@@ -17,9 +18,10 @@ import type {
   ActionFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Form, useLoaderData, useSubmit, useTransition } from '@remix-run/react'
-import { IconAlertCircle, IconLogout, IconX } from '@tabler/icons'
-import { useRef, useState } from 'react'
+import { Form, useFetcher, useLoaderData, useSubmit } from '@remix-run/react'
+import { IconAlertCircle, IconLogout } from '@tabler/icons'
+import type { ChangeEventHandler } from 'react'
+import React, { useRef, useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import {
@@ -44,8 +46,9 @@ export const action: ActionFunction = async ({ request }) => {
   const { headers, accessToken } = await actionAuthenticate(request)
 
   const formData = await request.formData()
-  const weekly = !!formData.get('weekly')
-  const eventCreated = !!formData.get('eventCreated')
+
+  const eventCreated = formData.get('eventCreated') === 'on'
+  const weekly = formData.get('weekly') === 'on'
 
   await getGqlSdk().UpdateMe(
     {
@@ -125,9 +128,10 @@ interface UserPreferences {
 
 export default function Profile() {
   const submit = useSubmit()
+  const fetcher = useFetcher()
 
-  const formReference = useRef(null)
-  const transition = useTransition()
+  const gravatarFormReference = useRef(null)
+
   const { name, user, preferences, email, showGravatarTip } =
     useLoaderData<LoaderData>()
   const [hasGravatarTip, setGravatarTip] = useState(showGravatarTip)
@@ -137,11 +141,18 @@ export default function Profile() {
     eventCreated: preferences.subscribeEventCreationEmail,
   })
 
-  const resetEmailPreferences = () => {
+  const handleCreatedChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setEmailSettings({
-      eventCreated: preferences.subscribeEventCreationEmail,
-      weekly: preferences.subscribeWeeklyEmail,
+      ...emailSettings,
+      eventCreated: event.currentTarget.checked,
     })
+    fetcher.submit(
+      {
+        eventCreated: event.currentTarget.checked ? 'on' : 'off',
+        weekly: emailSettings.weekly ? 'on' : 'off',
+      },
+      { method: 'post' }
+    )
   }
 
   return (
@@ -158,14 +169,18 @@ export default function Profile() {
       </Text>
       {hasGravatarTip && (
         <>
-          <Form method="post" action="/profile/user-prefs" ref={formReference}>
+          <Form
+            method="post"
+            action="/profile/user-prefs"
+            ref={gravatarFormReference}
+          >
             <input type="hidden" name="showGravatarTip" value="hidden" />
           </Form>
           <Center>
             <Alert
               onClose={() => {
                 setGravatarTip(false)
-                submit(formReference.current)
+                submit(gravatarFormReference.current)
               }}
               withCloseButton
               closeButtonLabel="Sulje"
@@ -196,18 +211,14 @@ export default function Profile() {
         </Alert>
       </Group>
       <Group position="center">
-        <Form method="post">
+        <div style={{ position: 'relative' }}>
+          {fetcher.state === 'submitting' && <LoadingOverlay visible />}
           <Switch
             styles={switchStyles}
             name="eventCreated"
             label="Lähetä sähköposti, kun uusi tapahtuma luodaan."
             checked={emailSettings.eventCreated}
-            onChange={(event) => {
-              setEmailSettings({
-                weekly: emailSettings.weekly,
-                eventCreated: event.currentTarget.checked,
-              })
-            }}
+            onChange={handleCreatedChange}
             onLabel="ON"
             offLabel="OFF"
             size="md"
@@ -219,49 +230,10 @@ export default function Profile() {
             label="Lähetä viikon tapahtumat sähköpostitse."
             onLabel="ON"
             offLabel="OFF"
-            checked={emailSettings.weekly}
-            onChange={(event) => {
-              setEmailSettings({
-                weekly: event.currentTarget.checked,
-                eventCreated: emailSettings.eventCreated,
-              })
-            }}
+            checked={preferences.subscribeWeeklyEmail}
             size="md"
           />
-          <SimpleGrid
-            mt="sm"
-            cols={2}
-            breakpoints={[{ maxWidth: 600, cols: 1, spacing: 'sm' }]}
-          >
-            <Button
-              type="submit"
-              loading={
-                transition.state === 'submitting' ||
-                transition.state === 'loading'
-              }
-              disabled={
-                preferences.subscribeWeeklyEmail === emailSettings.weekly &&
-                preferences.subscribeEventCreationEmail ===
-                  emailSettings.eventCreated
-              }
-              leftIcon={<IconLogout size={18} />}
-            >
-              Tallenna asetukset
-            </Button>
-            <Button
-              leftIcon={<IconX size={18} />}
-              variant="light"
-              onClick={resetEmailPreferences}
-              disabled={
-                preferences.subscribeWeeklyEmail === emailSettings.weekly &&
-                preferences.subscribeEventCreationEmail ===
-                  emailSettings.eventCreated
-              }
-            >
-              Palauta muutokset
-            </Button>
-          </SimpleGrid>
-        </Form>
+        </div>
       </Group>
       <Divider my="sm" label="Kirjaudu ulos" labelPosition="center" />
       <Group position="center">
