@@ -201,15 +201,7 @@ export default function Profile() {
         </>
       )}
       <Divider my="sm" label="Sähköpostiasetukset" labelPosition="center" />
-      <Group position="center">
-        <Alert
-          icon={<IconAlertCircle size={16} />}
-          title="Fun fact"
-          color="red"
-        >
-          Viikkosähköposti ei käytössä.
-        </Alert>
-      </Group>
+
       <Group position="center">
         <div style={{ position: 'relative' }}>
           {fetcher.state === 'submitting' && <LoadingOverlay visible />}
@@ -234,6 +226,15 @@ export default function Profile() {
             size="md"
           />
         </div>
+      </Group>
+      <Group position="center" mt="sm">
+        <Alert
+          icon={<IconAlertCircle size={16} />}
+          title="Fun fact"
+          color="red"
+        >
+          Viikkosähköposti ei vielä käytössä.
+        </Alert>
       </Group>
       <Divider my="sm" label="Kirjaudu ulos" labelPosition="center" />
       <Group position="center">
