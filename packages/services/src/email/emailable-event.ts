@@ -80,7 +80,7 @@ export const EmailableEvent = z
     dynamodb: z.object({
       NewImage: z.object({
         dateStart: stringObject,
-        description: stringObject,
+        description: optionalStringObject,
         eventId: stringObject,
         location: stringObject,
         subtitle: stringObject,
