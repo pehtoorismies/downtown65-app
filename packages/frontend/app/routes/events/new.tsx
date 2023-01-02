@@ -88,7 +88,7 @@ export default function NewEvent() {
   const [eventState, dispatch] = useReducer(reducer, {
     activeStep: ActiveStep.STEP_EVENT_TYPE,
     date: new Date(),
-    description: 'asdadsjdasladskj adlkjadsladksj adlskj',
+    description: '',
     isRace: false,
     location: '',
     participants: [],
