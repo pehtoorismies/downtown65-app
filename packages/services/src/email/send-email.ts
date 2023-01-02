@@ -9,6 +9,7 @@ interface SendEmail {
     text: string
   }
   recipients: string[]
+  bccRecipients: string[]
   from: string
 }
 
@@ -16,6 +17,7 @@ export const sendEmail = async ({
   subject,
   body,
   recipients,
+  bccRecipients,
   from,
 }: SendEmail) => {
   try {
@@ -40,11 +42,13 @@ export const sendEmail = async ({
       },
       Destination: {
         ToAddresses: recipients,
+        BccAddresses: bccRecipients,
       },
       FromEmailAddress: from,
       // ReplyToAddresses: [from],
       // ConfigurationSetName: 'Dt65Set',
     }
+
     await ses.sendEmail(params).promise()
 
     return {
