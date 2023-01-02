@@ -84,8 +84,8 @@ interface LoaderData extends PrivateRoute {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const cookieHeader = request.headers.get('Cookie')
-  const userPrefs = (await userPrefsCookie.parse(cookieHeader)) ?? {}
-  const showGravatarTip = userPrefs.showGravatarTip ?? true
+  const userPreferences = (await userPrefsCookie.parse(cookieHeader)) ?? {}
+  const showGravatarTip = userPreferences.showGravatarTip ?? true
   // TODO: get user as well
   const { accessToken } = await loaderAuthenticate(request)
 
