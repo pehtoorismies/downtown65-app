@@ -13,7 +13,6 @@ import type {
   QueryEventArgs as QueryEventArguments,
   UsersResponse,
   QueryUsersArgs,
-  MutationImportEventsArgs,
 } from '../appsync.gen'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
@@ -24,7 +23,6 @@ import { assertUnreachable } from './support/assert-unreachable'
 import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
 import { getUsers } from './users/get-users'
-import { importEvents } from '~/graphql/events/import-events'
 import { participateEvent } from '~/graphql/events/participate-event'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
 import { updateMe } from '~/graphql/users/update-me'
@@ -33,7 +31,6 @@ export type Inputs =
   | EmptyArgs
   | MutationCreateEventArgs
   | MutationDeleteEventArgs
-  | MutationImportEventsArgs
   | MutationUpdateEventArgs
   | MutationUpdateMeArgs
   | QueryEventArguments
@@ -54,7 +51,6 @@ const PRIVATE_FIELDS = [
   'createEvent',
   'deleteEvent',
   'events',
-  'importEvents',
   'leaveEvent',
   'me',
   'participateEvent',
@@ -143,14 +139,6 @@ export const privateResolver = (
         allowScopes(['write:me'])
         return updateMe(
           event as AppSyncResolverEvent<MutationUpdateMeArgs>,
-          context,
-          callback
-        )
-      }
-      case 'importEvents': {
-        allowScopes(['write:events'])
-        return importEvents(
-          event as AppSyncResolverEvent<MutationImportEventsArgs>,
           context,
           callback
         )
