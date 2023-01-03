@@ -96,7 +96,7 @@ test('DynamoDatetime: date and time', () => {
   expect(ddt.getDates()).toEqual({ year: 2022, month: 12, day: 12 })
 })
 
-test('DynamoDatetie format date fi', () => {
+test('DynamoDatetime format date fi', () => {
   expect(
     new DynamoDatetime({
       dates: { year: 2022, month: 12, day: 12 },
