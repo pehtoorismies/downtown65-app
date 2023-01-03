@@ -244,8 +244,6 @@ type Mutation {
     refreshToken(
         refreshToken: String!
     ): RefreshPayload! @aws_api_key
-
-    importEvents(start: Int!, end: Int!): String!
 }
 
 

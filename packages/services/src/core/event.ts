@@ -14,7 +14,6 @@ import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
 import { mapDynamoToEvent } from './map-dynamo-to-event'
-import type { FormattedEvent } from '~/import-old/get-imported-events'
 
 const Table = getTable()
 
@@ -65,80 +64,6 @@ const getExpression = (d: Date) => {
 
 const isEventType = (event: string): event is EventType => {
   return Object.values(EventType).includes(event as EventType)
-}
-
-// TODO: remove after release
-export const importEvents = async (
-  events: FormattedEvent[]
-): Promise<{ id: string }> => {
-  // return { id: '123' }
-  for await (const event of events) {
-    const {
-      id,
-      createdBy,
-      dateStart,
-      description,
-      location,
-      participants,
-      race,
-      subtitle,
-      timeStart,
-      title,
-      type,
-    } = event
-
-    const eventId = id
-
-    if (!isEventType(type)) {
-      throw new Error(`Wrong event type provided '${type}'`)
-    }
-
-    const ddt = new DynamoDatetime({
-      dates: dateStart,
-      times: timeStart,
-    })
-
-    const gsi1sk = ddt.getIsoDatetime()
-    const now = formatISO(new Date()).slice(0, 19)
-
-    const parts = participants ?? []
-    const participantHashMap = {}
-
-    for (const participant of parts) {
-      Object.assign(participantHashMap, {
-        [participant.id]: {
-          joinedAt: now,
-          nickname: participant.nickname,
-          picture: participant.picture,
-          id: participant.id,
-        },
-      })
-    }
-
-    const persistableEvent: PersistableEvent = {
-      // add keys
-      ...getPrimaryKey(eventId),
-      GSI1PK: `EVENT#FUTURE`,
-      GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
-      // add props
-      createdBy,
-      dateStart: ddt.getDate(),
-      description,
-      id: eventId,
-      location,
-      participants: participantHashMap,
-      race: race ?? false,
-      subtitle,
-      timeStart: ddt.getTime(),
-      title,
-      type,
-    }
-
-    await Table.Dt65Event.put(persistableEvent, { returnValues: 'none' })
-  }
-  return {
-    id: '123',
-  }
 }
 
 export const create = async (
