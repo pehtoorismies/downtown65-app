@@ -1,3 +1,5 @@
+import format from 'date-fns/format'
+import fi from 'date-fns/locale/fi'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import type { User } from '~/domain/user'
 import type { EventState } from '~/routes/events/modules/components/event-state'
@@ -12,10 +14,7 @@ const getDate = (date: EventState['date']) => {
   if (!date) {
     return 'Missing date'
   }
-
-  return `${prefixZero(date.getDate())}.${prefixZero(
-    date.getMonth() + 1
-  )}.${date.getFullYear()}`
+  return format(date, 'd.M.yyyy (EEEEEE)', { locale: fi })
 }
 
 const getTime = ({ hours, minutes }: EventState['time']) => {
