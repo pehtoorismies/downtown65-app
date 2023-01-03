@@ -132,4 +132,9 @@ test('DynamoDatetime format date fi', () => {
       dates: { year: 2022, month: 12, day: 18 },
     }).getFormattedDate()
   ).toEqual('18.12.2022 (su)')
+  expect(
+    new DynamoDatetime({
+      dates: { year: 2023, month: 4, day: 5 },
+    }).getFormattedDate()
+  ).toEqual('5.4.2023 (ke)')
 })

@@ -148,7 +148,7 @@ export class DynamoDatetime {
   getFormattedDate(): string {
     return format(
       new Date(this.dates.year, this.dates.month - 1, this.dates.day),
-      `dd.MM.yyyy (EEEEEE)`,
+      `d.M.yyyy (EEEEEE)`,
       { locale: fi }
     )
   }
