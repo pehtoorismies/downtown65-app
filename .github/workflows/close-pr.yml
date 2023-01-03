@@ -22,7 +22,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install
-        run: yarn install --immutable --immutable-cache --check-cache
+        run: |
+          yarn install --immutable --immutable-cache --check-cache
+          npx lerna run build
       - name: Remove common sst secrets
         run: |
           npx sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
