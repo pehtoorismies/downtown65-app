@@ -19,14 +19,16 @@ export const HeaderLoggedOut = () => {
           <Group>
             <Text sx={{ userSelect: 'none' }}>Dt65 Events</Text>
           </Group>
-          <Group className={classes.hiddenMobile}>
-            <Button component={Link} to="/login" variant="default">
-              Kirjaudu
-            </Button>
-            <Button component={Link} to="/signup">
-              Rekisteröidy
-            </Button>
-          </Group>
+          <nav>
+            <Group className={classes.hiddenMobile}>
+              <Button component={Link} to="/login" variant="default">
+                Kirjaudu
+              </Button>
+              <Button component={Link} to="/signup">
+                Rekisteröidy
+              </Button>
+            </Group>
+          </nav>
         </Group>
       </Header>
     </Box>

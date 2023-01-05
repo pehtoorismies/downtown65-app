@@ -33,7 +33,9 @@ export const Layout = ({
       )}
       {!user && <HeaderLoggedOut />}
       {user && <HeaderLoggedIn user={user} />}
-      <Box mt={60}>{children}</Box>
+      <Box mt={60} component="main">
+        {children}
+      </Box>
     </>
   )
 }
