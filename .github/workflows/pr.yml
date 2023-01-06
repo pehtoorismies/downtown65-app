@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: PR
+name: PullRequest
 
 # Controls when the workflow will run
 on:
@@ -11,48 +9,73 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  PR_NAME: pr-${{ github.event.pull_request.id }}
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_DEFAULT_REGION: eu-north-1
+  AWS_REGION: eu-north-1
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  logging:
     runs-on: ubuntu-latest
     environment: development
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: eu-north-1
-      AWS_REGION: eu-north-1
-      PR_NAME: pr-${{ github.event.pull_request.id }}
-      COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: Print stage
+        run: |
+          echo Stage is $PR_NAME
+          echo to remove: sst remove --stage $PR_NAME
+  build:
+    runs-on: ubuntu-latest
+    environment: development
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Install
         run: yarn install --immutable --immutable-cache --check-cache
-      - name: Set common sst secrets
+      - name: Set default common sst secrets
         run: |
           npx sst secrets --stage $PR_NAME set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
           npx sst secrets --stage $PR_NAME set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
-      - name: Print stage
-        run: |
-          echo Stage is $PR_NAME
-          echo to remove: sst remove --stage $PR_NAME
       - name: Bootstrap
         run: npx lerna bootstrap
       - name: Build
         run: |
           npx lerna run build
           npx sst build --stage $PR_NAME
-      - name: Lint and typecheck
-        run: |
-          yarn lint
-          yarn typecheck
+  lint:
+    needs: [ "build" ]
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: 'lint'
+        run: yarn lint
+  typecheck:
+    needs: [ "build" ]
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: 'typecheck'
+        run: yarn typecheck
+  deploy:
+    needs: [ "lint", "typecheck" ]
+    runs-on: ubuntu-latest
+    environment: development
+    env:
+      COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+    steps:
       - name: Deploy infra
-        run: |
-          npx sst deploy --stage $PR_NAME
-      - name: Test
-        run: |
-          npx sst bind --stage $PR_NAME -- vitest run
+        run: npx sst deploy --stage $PR_NAME
+  unit_test:
+    needs: [ "deploy" ]
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Unit test
+        run: npx sst bind --stage $PR_NAME -- vitest run
+
+
+
+
      
