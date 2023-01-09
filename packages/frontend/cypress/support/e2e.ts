@@ -17,9 +17,15 @@
 // eslint-disable-next-line unicorn/prevent-abbreviations
 import './commands'
 
-Cypress.on('uncaught:exception', (error, runnable) => {
-  console.log(error.name)
-  // returning false here prevents Cypress from
-  // failing the test
-  return false
+Cypress.on('uncaught:exception', (error) => {
+  // Cypress and React Hydrating the document don't get along
+  // for some unknown reason. Hopefully, we figure out why eventually
+  // so we can remove this.
+  if (
+    /hydrat/i.test(error.message) ||
+    /Minified React error #418/.test(error.message) ||
+    /Minified React error #423/.test(error.message)
+  ) {
+    return false
+  }
 })

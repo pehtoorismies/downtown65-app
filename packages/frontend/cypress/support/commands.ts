@@ -1,5 +1,4 @@
-// empty export to fix isolated modules error
-export {}
+/// <reference types="cypress" />
 
 Cypress.Commands.add('login', (user: LoginUser) => {
   cy.session(
@@ -24,12 +23,4 @@ type LoginUser = {
   email: string
   password: string
   nick: string
-}
-
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(user: LoginUser): Chainable<void>
-    }
-  }
 }

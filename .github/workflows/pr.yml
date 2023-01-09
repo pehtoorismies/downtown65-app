@@ -44,11 +44,21 @@ jobs:
         run: |
           npx lerna run build
           npx sst build --stage $PR_NAME
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
   lint:
     needs: [ "build" ]
     runs-on: ubuntu-latest
     environment: development
     steps:
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
       - name: 'lint'
         run: yarn lint
   typecheck:
@@ -56,6 +66,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
       - name: 'typecheck'
         run: yarn typecheck
   deploy:
@@ -65,6 +80,11 @@ jobs:
     env:
       COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
     steps:
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
       - name: Deploy infra
         run: npx sst deploy --stage $PR_NAME
   unit_test:
@@ -72,6 +92,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
       - name: Unit test
         run: npx sst bind --stage $PR_NAME -- vitest run
 

@@ -1,8 +1,8 @@
 {
   "include": [
     "remix.env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    "app/**/*.ts",
+    "app/**/*.tsx"
   ],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
