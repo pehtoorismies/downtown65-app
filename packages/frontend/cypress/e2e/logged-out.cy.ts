@@ -2,15 +2,14 @@ describe('Logged out user', () => {
   it('navigation', () => {
     cy.visit('/login')
     cy.title()
-    // cy.title().contains('Dt65 - login')
     cy.get('h1').contains('Kirjaudu')
     cy.get('main').contains('Rekisteröidy tästä').click()
-    cy.location('pathname').should('equal', '/signup')
+    cy.get('h1').contains('Rekisteröidy')
     cy.get('main').contains('Kirjautumiseen').click()
     cy.get('main').contains('Unohditko salasanan?').click()
-    cy.location('pathname').should('equal', '/forgot-password')
+    cy.get('h1').contains('Salasana unohtunut')
     cy.get('main').contains('Kirjautumiseen').click()
-    cy.location('pathname').should('equal', '/login')
+    cy.get('h1').contains('Kirjaudu')
 
     cy.get('nav').contains('Rekisteröidy').click()
     cy.get('h1').contains('Rekisteröidy')
@@ -35,7 +34,7 @@ describe('Logged out user', () => {
     cy.visit('/events')
     cy.get('header').contains(Cypress.env('USER_NICK')).click() // username dropdown
     cy.get('header').contains('Logout').click()
-    cy.location('pathname').should('equal', '/login')
+    cy.get('h1').contains('Kirjaudu')
   })
 
   it('forgot password', () => {
