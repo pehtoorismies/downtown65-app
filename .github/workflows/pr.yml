@@ -1,4 +1,4 @@
-name: PullRequest
+name: Pull Request
 
 # Controls when the workflow will run
 on:
@@ -50,7 +50,7 @@ jobs:
         run: npx lerna bootstrap
       - name: Build
         run: |
-          npx lerna run build
+          npx lerna run build --scope @downtown65-app/common
           npx sst build --stage $PR_NAME
       - uses: actions/cache@v3
         id: restore-build
@@ -63,9 +63,9 @@ jobs:
           path: /home/runner/.cache/Cypress
           key: cypress12.3.0
   lint:
-    needs: [ "build" ]
     runs-on: ubuntu-latest
     environment: development
+    needs: [ "build" ]
     steps:
       - uses: actions/cache@v3
         id: restore-build
@@ -75,16 +75,16 @@ jobs:
       - name: 'lint'
         run: yarn lint
   typecheck:
-    needs: [ "build" ]
     runs-on: ubuntu-latest
     environment: development
+    needs: [ "build" ]
     steps:
       - uses: actions/cache@v3
         id: restore-build
         with:
           path: ./*
           key: ${{ github.sha }}
-      - name: 'typecheck'
+      - name: 'lint'
         run: yarn typecheck
   deploy:
     needs: [ "lint", "typecheck" ]
@@ -159,8 +159,3 @@ jobs:
           CYPRESS_USER_EMAIL: ${{ secrets.CYPRESS_USER_EMAIL }}
           CYPRESS_USER_PASSWORD: ${{ secrets.CYPRESS_USER_PASSWORD }}
           CYPRESS_USER_NICK: ${{ secrets.CYPRESS_USER_NICK }}
-
-
-
-
-     
