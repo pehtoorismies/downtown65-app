@@ -26,14 +26,22 @@ jobs:
         run: |
           echo Stage is $PR_NAME
           echo to remove: sst remove --stage $PR_NAME
+  #  - name: restore lerna
+  #    uses: actions/cache@v3
+  #    with:
+  #      path: '**/node_modules'
+  #      key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
   build:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
       - name: Install
-        run: yarn install --immutable --immutable-cache --check-cache
+        run: yarn install --immutable --immutable-cache
       - name: Set default common sst secrets
         run: |
           npx sst secrets --stage $PR_NAME set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
@@ -49,6 +57,11 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - uses: actions/cache@v3
+        id: restore-cypress
+        with:
+          path: /home/runner/.cache/Cypress
+          key: cypress12.3.0
   lint:
     needs: [ "build" ]
     runs-on: ubuntu-latest
@@ -116,13 +129,18 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - uses: actions/cache@v3
+        id: restore-cypress
+        with:
+          path: /home/runner/.cache/Cypress
+          key: cypress12.3.0
       - name: Cypress run
         uses: cypress-io/github-action@v5.0.4
         with:
           browser: chrome
-          project: ./packages/frontend/cypress
+          project: ./packages/frontend
           spec: |
-            cypress/e2e/**/*.ts
+            ./packages/frontend/cypress/e2e/**/*.ts
           # Starts web server for E2E tests - replace with your own server invocation
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
           #          start: npm start
@@ -131,7 +149,7 @@ jobs:
           # https://docs.cypress.io/guides/dashboard/projects#Set-up-a-project-to-record
           record: true
           parallel: true # Runs test in parallel using settings above
-          config: baseUrl=https://$PR_NAME.downtown65.events
+          config: baseUrl=https://${{ env.PR_NAME }}.downtown65.events
         env:
           # For recording and parallelization to work you must set your CYPRESS_RECORD_KEY
           # in GitHub repo → Settings → Secrets → Actions
