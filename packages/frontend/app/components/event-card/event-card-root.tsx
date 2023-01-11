@@ -15,7 +15,7 @@ import { IconMedal, IconUsers } from '@tabler/icons'
 import type { PropsWithChildren } from 'react'
 import { Gradient } from '~/components/colors'
 import {
-  DisabledInButton,
+  GotoLoginButton,
   ToggleJoinButton,
 } from '~/components/event-card/toggle-join-button'
 import type { User } from '~/domain/user'
@@ -193,7 +193,7 @@ export const EventCardRoot = ({
         </Grid.Col>
         <Grid.Col span={5}>
           <Group position="right">
-            {!me && <DisabledInButton />}
+            {!me && <GotoLoginButton />}
             {me && (
               <ToggleJoinButton isParticipating={meAttending} eventId={id} />
             )}

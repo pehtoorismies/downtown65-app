@@ -1,5 +1,6 @@
 import { Button } from '@mantine/core'
-import { IconHandOff, IconHandStop } from '@tabler/icons'
+import { Link } from '@remix-run/react'
+import { IconHandOff, IconHandStop, IconLogin } from '@tabler/icons'
 import { Gradient } from '~/components/colors'
 import { useParticipatingContext } from '~/contexts/participating-context'
 
@@ -10,11 +11,11 @@ const commonProperties = {
   paddingRight: 20,
 }
 
-export const DisabledInButton = () => (
+export const GotoLoginButton = () => (
   <Button
-    disabled
-    variant="gradient"
-    leftIcon={<IconHandStop size={18} />}
+    component={Link}
+    to="/login"
+    leftIcon={<IconLogin size={18} />}
     styles={() => ({
       root: {
         ...commonProperties,
@@ -24,7 +25,7 @@ export const DisabledInButton = () => (
       },
     })}
   >
-    Osallistu
+    Kirjaudu
   </Button>
 )
 
