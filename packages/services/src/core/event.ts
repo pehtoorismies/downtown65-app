@@ -212,25 +212,34 @@ export const participate = async (
   if (!documentClient) {
     throw new Error('No Dynamo Document client')
   }
-
-  await documentClient
-    .update({
-      TableName: Table.name,
-      Key: getPrimaryKey(eventId),
-      UpdateExpression: 'SET #participants.#userId = :user',
-      ConditionExpression: 'attribute_not_exists(#participants.#userId)',
-      ExpressionAttributeNames: {
-        '#participants': 'participants',
-        '#userId': user.id,
-      },
-      ExpressionAttributeValues: {
-        ':user': {
-          joinedAt: formatISO(new Date()),
-          ...user,
+  try {
+    await documentClient
+      .update({
+        TableName: Table.name,
+        Key: getPrimaryKey(eventId),
+        UpdateExpression: 'SET #participants.#userId = :user',
+        ConditionExpression: 'attribute_not_exists(#participants.#userId)',
+        ExpressionAttributeNames: {
+          '#participants': 'participants',
+          '#userId': user.id,
         },
-      },
-    })
-    .promise()
+        ExpressionAttributeValues: {
+          ':user': {
+            joinedAt: formatISO(new Date()).slice(0, 19),
+            ...user,
+          },
+        },
+      })
+      .promise()
+  } catch (error) {
+    if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
+      console.error(error)
+    }
+  }
+}
+
+function isError(error: unknown): error is Error {
+  return (error as Error).name !== undefined
 }
 
 export const leave = async (eventId: string, userId: string) => {
@@ -238,19 +247,22 @@ export const leave = async (eventId: string, userId: string) => {
   if (!documentClient) {
     throw new Error('No Dynamo Document client')
   }
-
-  await documentClient
-    .update({
-      TableName: Table.name,
-      Key: getPrimaryKey(eventId),
-      UpdateExpression: 'REMOVE #participants.#userId',
-      ConditionExpression: 'attribute_exists(#participants.#userId)',
-      ExpressionAttributeNames: {
-        '#participants': 'participants',
-        '#userId': userId,
-      },
-    })
-    .promise()
-
-  return true
+  try {
+    await documentClient
+      .update({
+        TableName: Table.name,
+        Key: getPrimaryKey(eventId),
+        UpdateExpression: 'REMOVE #participants.#userId',
+        ConditionExpression: 'attribute_exists(#participants.#userId)',
+        ExpressionAttributeNames: {
+          '#participants': 'participants',
+          '#userId': userId,
+        },
+      })
+      .promise()
+  } catch (error) {
+    if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
+      console.error(error)
+    }
+  }
 }
