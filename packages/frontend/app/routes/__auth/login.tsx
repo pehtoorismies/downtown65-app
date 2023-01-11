@@ -87,7 +87,8 @@ export default function Login() {
   return (
     <AuthTemplate title="Kirjaudu">
       <Text color="dimmed" size="sm" align="center" mt={5}>
-        Rekisteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.{' '}
+        Rekisteröitymiseen tarvitset seuran jäsenyyden ja
+        liittymistunnuksen.&nbsp;
         <Anchor component={Link} to="/signup">
           Rekisteröidy tästä.
         </Anchor>

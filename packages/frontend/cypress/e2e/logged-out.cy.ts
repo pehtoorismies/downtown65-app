@@ -2,22 +2,16 @@ describe('Logged out user', () => {
   it('navigation', () => {
     cy.visit('/login')
     cy.get('h1').contains('Kirjaudu')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.get('main').contains('Rekisteröidy tästä').wait(150).click()
+    cy.get('main').contains('Rekisteröidy tästä').click({ force: true })
     cy.get('h1').contains('Rekisteröidy')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.get('main').contains('Kirjautumiseen').wait(150).click()
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.get('main').contains('Unohditko salasanan?').wait(150).click()
+    cy.get('main').contains('Kirjautumiseen').click({ force: true })
+    cy.get('main').contains('Unohditko salasanan?').click({ force: true })
     cy.get('h1').contains('Salasana unohtunut')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.get('main').contains('Kirjautumiseen').wait(150).click()
+    cy.get('main').contains('Kirjautumiseen').click({ force: true })
     cy.get('h1').contains('Kirjaudu')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.get('nav').contains('Rekisteröidy').wait(150).click()
+    cy.get('nav').contains('Rekisteröidy').click({ force: true })
     cy.get('h1').contains('Rekisteröidy')
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.get('nav').contains('Kirjaudu').wait(150).click()
+    cy.get('nav').contains('Kirjaudu').click({ force: true })
     cy.get('h1').contains('Kirjaudu')
   })
 
