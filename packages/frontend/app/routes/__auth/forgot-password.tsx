@@ -79,7 +79,7 @@ export default function ForgotPassword() {
             </Text>
           )}
           <Group position="apart" mt="lg">
-            <Anchor component={Link} to="/login" size="sm">
+            <Anchor component={Link} to="/login" size="sm" data-cy="to-login">
               <Center inline>
                 <IconArrowLeft size={12} stroke={1.5} />
                 <Box ml={5}>Kirjautumiseen</Box>

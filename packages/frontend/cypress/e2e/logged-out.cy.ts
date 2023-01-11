@@ -2,16 +2,23 @@ describe('Logged out user', () => {
   it('navigation', () => {
     cy.visit('/login')
     cy.get('h1').contains('Kirjaudu')
-    cy.get('main').contains('Rekisteröidy tästä').click({ force: true })
+    cy.get('[data-cy="to-signup"]').click()
+
     cy.get('h1').contains('Rekisteröidy')
-    cy.get('main').contains('Kirjautumiseen').click({ force: true })
-    cy.get('main').contains('Unohditko salasanan?').click({ force: true })
-    cy.get('h1').contains('Salasana unohtunut')
-    cy.get('main').contains('Kirjautumiseen').click({ force: true })
+    cy.get('[data-cy="to-login"]').click()
+
     cy.get('h1').contains('Kirjaudu')
-    cy.get('nav').contains('Rekisteröidy').click({ force: true })
+    cy.get('[data-cy="to-forgot-password"]').click()
+
+    cy.get('h1').contains('Salasana unohtunut')
+    cy.get('[data-cy="to-login"]').click()
+
+    cy.get('h1').contains('Kirjaudu')
+    cy.get('[data-cy="button-to-signup"]').click()
+
     cy.get('h1').contains('Rekisteröidy')
-    cy.get('nav').contains('Kirjaudu').click({ force: true })
+    cy.get('[data-cy="button-to-login"]').click()
+
     cy.get('h1').contains('Kirjaudu')
   })
 

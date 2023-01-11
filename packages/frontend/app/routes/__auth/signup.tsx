@@ -154,7 +154,7 @@ export default function Signup() {
           )}
 
           <Group position="right" mt="md">
-            <Anchor component={Link} to="/login" size="sm">
+            <Anchor component={Link} to="/login" size="sm" data-cy="to-login">
               Kirjautumiseen
             </Anchor>
           </Group>
