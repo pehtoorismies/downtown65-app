@@ -45,10 +45,21 @@ export const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
     ...parsed,
     type: parsed.type as EventType, // should check for enum
     // eslint-disable-next-line no-unused-vars
-    participants: Object.entries(parsed.participants).map(([_, value]) => {
-      return {
-        ...value,
-      }
-    }),
+    participants: Object.entries(parsed.participants)
+      // eslint-disable-next-line no-unused-vars
+      .map(([_, value]) => {
+        return {
+          ...value,
+        }
+      })
+      .sort((a, b) => {
+        if (a.joinedAt < b.joinedAt) {
+          return -1
+        }
+        if (a.joinedAt > b.joinedAt) {
+          return 1
+        }
+        return 0
+      }),
   }
 }
