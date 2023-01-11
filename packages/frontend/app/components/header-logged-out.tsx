@@ -21,10 +21,15 @@ export const HeaderLoggedOut = () => {
           </Group>
           <nav>
             <Group className={classes.hiddenMobile}>
-              <Button component={Link} to="/login" variant="default">
+              <Button
+                component={Link}
+                to="/login"
+                variant="default"
+                data-cy="button-to-login"
+              >
                 Kirjaudu
               </Button>
-              <Button component={Link} to="/signup">
+              <Button component={Link} to="/signup" data-cy="button-to-signup">
                 Rekisteröidy
               </Button>
             </Group>
