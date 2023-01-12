@@ -69,6 +69,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export const meta: MetaFunction = () => ({
   charset: 'utf-8',
   title: 'Downtown65 Events',
+  description: 'Events calendar for Downtown 65 Endurance ry',
   viewport: 'width=device-width,initial-scale=1',
   'msapplication-TileColor': '#da532c',
   'theme-color': '#ffffff',
