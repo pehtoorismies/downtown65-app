@@ -26,6 +26,7 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
     .map(({ text, type }) => {
       return (
         <Button
+          data-cy={`button-${type}`}
           color={state.eventType === type ? 'dtPink' : 'blue'}
           key={type}
           onClick={() => {

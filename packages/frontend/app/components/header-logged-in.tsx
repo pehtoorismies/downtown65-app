@@ -126,6 +126,7 @@ export const HeaderLoggedIn = ({ user }: Props) => {
                   [classes.linkActive]: isActive,
                 })
               }}
+              data-cy="nav-create-new-event"
             >
               Luo uusi
             </NavLink>
