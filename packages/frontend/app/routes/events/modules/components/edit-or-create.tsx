@@ -110,15 +110,18 @@ export const EditOrCreate: FC<Props> = ({
   return (
     <>
       <Modal
+        data-cy="confirmation-modal"
         zIndex={2000}
         opened={opened}
         onClose={() => setOpened(false)}
         title={getModalTitle(state.kind)}
+        closeButtonLabel="Close"
       >
         <Group position="apart" mt={50}>
           <Button
             onClick={() => setOpened(false)}
             leftIcon={<IconCircleX size={18} />}
+            data-cy="modal-close"
           >
             Sulje
           </Button>
@@ -129,6 +132,7 @@ export const EditOrCreate: FC<Props> = ({
             type="submit"
             color="red"
             rightIcon={<IconCircleOff size={18} />}
+            data-cy="modal-cancel-event-creation"
           >
             Keskeytä
           </Button>
@@ -178,6 +182,7 @@ export const EditOrCreate: FC<Props> = ({
                 color="orange"
                 compact
                 onClick={() => setOpened(true)}
+                data-cy="cancel-event-creation-button"
               >
                 Keskeytä
               </Button>

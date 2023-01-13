@@ -35,11 +35,7 @@ describe('Logged out user', () => {
   })
 
   it('login and logout success', () => {
-    cy.login({
-      email: Cypress.env('USER_EMAIL'),
-      password: Cypress.env('USER_PASSWORD'),
-      nick: Cypress.env('USER_NICK'),
-    })
+    cy.loginWithDefaultUser()
     cy.visit('/events')
     cy.get('header').contains(Cypress.env('USER_NICK')).click() // username dropdown
     cy.get('header').contains('Logout').click()
