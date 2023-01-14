@@ -30,6 +30,7 @@ export const Participants = ({ me, participants }: Props) => {
 
         return (
           <Badge
+            data-cy="event-participant"
             m={2}
             radius="md"
             key={p.id}

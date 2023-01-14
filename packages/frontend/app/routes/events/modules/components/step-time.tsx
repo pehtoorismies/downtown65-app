@@ -118,6 +118,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
       </Grid>
       <Center>
         <Button
+          data-cy="clear-time"
           mt="md"
           variant="outline"
           compact

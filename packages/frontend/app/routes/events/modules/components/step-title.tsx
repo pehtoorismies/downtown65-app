@@ -7,6 +7,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
   return (
     <>
       <TextInput
+        name="title"
         my={spacing}
         placeholder="Jukola Konala"
         label="Tapahtuman nimi"
@@ -18,6 +19,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         value={state.title}
       />
       <TextInput
+        name="subtitle"
         my={spacing}
         placeholder="6-7 joukkuetta"
         label="Tarkenne"
@@ -29,6 +31,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         value={state.subtitle}
       />
       <TextInput
+        name="location"
         my={spacing}
         placeholder="Sijainti"
         label="Missä tapahtuma järjestetään?"
@@ -41,6 +44,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
       />
       <Center>
         <Switch
+          data-cy="race-switch"
           onLabel="ON"
           offLabel="EI"
           size="xl"

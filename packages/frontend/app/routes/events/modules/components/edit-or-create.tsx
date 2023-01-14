@@ -147,10 +147,14 @@ export const EditOrCreate: FC<Props> = ({
             dispatch({ kind: 'step', step: stepIndex })
           }}
         >
-          <Stepper.Step icon={<IconRun size={iconSize} />} />
+          <Stepper.Step
+            icon={<IconRun size={iconSize} />}
+            data-cy="step-type"
+          />
           <Stepper.Step
             allowStepSelect={state.eventType !== undefined}
             icon={<IconEdit size={iconSize} />}
+            data-cy="step-basic-info"
           />
           <Stepper.Step
             allowStepSelect={
@@ -160,18 +164,22 @@ export const EditOrCreate: FC<Props> = ({
               !!state.subtitle
             }
             icon={<IconCalendar size={iconSize} />}
+            data-cy="step-date"
           />
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconClockHour5 size={iconSize} />}
+            data-cy="step-time"
           />
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconAlignLeft size={iconSize} />}
+            data-cy="step-description"
           />
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconRocket size={iconSize} />}
+            data-cy="step-preview"
           />
         </Stepper>
         <Grid gutter="xs" my="sm" align="center">
@@ -196,6 +204,7 @@ export const EditOrCreate: FC<Props> = ({
           <Grid.Col span={3}>
             <Group position="right">
               <Button
+                data-cy="skip-step-button"
                 variant="outline"
                 compact
                 disabled={!TITLES[state.activeStep].isSkippable}

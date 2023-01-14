@@ -112,6 +112,7 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
         <Grid.Col span={6}>
           {isPreviousVisible && (
             <Button
+              data-cy="prev-button"
               mt="xs"
               leftIcon={<IconArrowLeft size={18} />}
               styles={() => ({
@@ -129,6 +130,7 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
           {isNextVisible && (
             <Group position="right">
               <Button
+                data-cy="next-button"
                 mt="xs"
                 rightIcon={<NextIcon size={18} />}
                 styles={() => ({
