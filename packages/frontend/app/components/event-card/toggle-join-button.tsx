@@ -57,6 +57,7 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
             marginRight: 15,
           },
         })}
+        data-cy="leave"
       >
         Poistu
       </Button>
@@ -79,6 +80,7 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
           marginRight: 15,
         },
       })}
+      data-cy="participate"
     >
       Osallistu
     </Button>

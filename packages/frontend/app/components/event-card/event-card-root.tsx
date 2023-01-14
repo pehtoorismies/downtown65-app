@@ -129,6 +129,7 @@ export const EventCardRoot = ({
                 color="#fff"
                 size={23}
                 className={classes.gridTitleText}
+                data-cy="event-title"
               >
                 {title}
               </Text>
@@ -143,10 +144,12 @@ export const EventCardRoot = ({
               radius="xs"
               variant="outline"
               color="blue.0"
+              data-cy="created-by"
             >
               by #{createdBy.nickname}
             </Badge>
             <Badge
+              data-cy="event-participant-count"
               m={BADGE_MARGIN}
               size="lg"
               leftSection={
@@ -163,6 +166,7 @@ export const EventCardRoot = ({
             </Badge>
             {isRace && (
               <ThemeIcon
+                data-cy="event-race"
                 m={BADGE_MARGIN}
                 py="xs"
                 px={4}
@@ -181,13 +185,13 @@ export const EventCardRoot = ({
       </Card.Section>
       <Grid align="center" my={2} gutter="xs">
         <Grid.Col span={7}>
-          <Text weight={700} mt={2}>
+          <Text weight={700} mt={2} data-cy="event-subtitle">
             {subtitle}
           </Text>
-          <Text size="sm" weight={500}>
+          <Text size="sm" weight={500} data-cy="event-date">
             {dateStart} {time}
           </Text>
-          <Text size="sm" color="dimmed" weight={400}>
+          <Text size="sm" color="dimmed" weight={400} data-cy="event-location">
             {location}
           </Text>
         </Grid.Col>
