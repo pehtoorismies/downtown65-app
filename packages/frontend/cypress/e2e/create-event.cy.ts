@@ -29,8 +29,9 @@ describe('Create event', () => {
     cy.location('pathname').should('equal', '/events')
   })
 
-  it.only('should create a new event', () => {
+  it('should create a new event', () => {
     const title = randSports()
+    const modifiedTitle = randSports()
     const subtitle = randProductName()
     const location = randCity()
     const userNick = Cypress.env('USER_NICK')
@@ -153,5 +154,48 @@ describe('Create event', () => {
     cy.getByDataCy('leave').click()
     cy.getByDataCy('event-participant-count').contains('0')
     cy.getByDataCy('participate').click()
+
+    // modify event
+    cy.getByDataCy('modify-event').click()
+    cy.location('pathname').should('contain', '/events/edit/')
+    cy.getByDataCy('step-basic-info').click()
+    cy.get('input[name=title]').clear()
+    cy.get('@next').should('not.exist')
+    // should not go anywhere
+    cy.getByDataCy('step-preview').click()
+    cy.get('h1').contains('Perustiedot')
+    cy.get('input[name=title]').type(modifiedTitle)
+    cy.getByDataCy('step-preview').click()
+    cy.get('@next').click()
+
+    // check modified event
+    cy.getByDataCy('event-race')
+    cy.getByDataCy('event-title').contains(modifiedTitle)
+    cy.getByDataCy('event-subtitle').contains(subtitle)
+    cy.getByDataCy('event-participant').first().contains(userNick)
+    cy.getByDataCy('event-participant-count').contains('1')
+
+    // remove
+    cy.getByDataCy('delete-event').click()
+    cy.getByDataCy('confirmation-modal').should('exist')
+    cy.get(`[aria-label="Close"]`).click()
+    cy.getByDataCy('confirmation-modal').should('not.exist')
+
+    cy.getByDataCy('delete-event').click()
+    cy.getByDataCy('modal-close').click()
+    cy.getByDataCy('confirmation-modal').should('not.exist')
+
+    cy.getByDataCy('delete-event').click()
+    cy.getByDataCy('confirm-delete').should('be.disabled')
+    cy.get('input[name=delete-confirm]').type('wrong text')
+    cy.getByDataCy('confirm-delete').should('be.disabled')
+    cy.get('input[name=delete-confirm]').clear().type('poista')
+    cy.getByDataCy('confirm-delete').should('not.be.disabled')
+
+    cy.location('pathname').then(($location) => {
+      cy.getByDataCy('confirm-delete').click()
+      cy.visit($location, { failOnStatusCode: false })
+      cy.contains('Tapahtumaa ei löydy')
+    })
   })
 })
