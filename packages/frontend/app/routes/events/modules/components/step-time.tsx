@@ -56,6 +56,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
             },
           })
         }}
+        data-cy={`hour-${prefixZero(hour)}`}
       >
         {prefixZero(hour)}
       </Button>
@@ -83,6 +84,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
             },
           })
         }}
+        data-cy={`minute-${suffixZero(minute)}`}
       >
         {suffixZero(minute)}
       </Button>
@@ -135,7 +137,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
           Tyhjennä aika
         </Button>
       </Center>
-      <Text align="center" fz="xl" fw={700} mt="md">
+      <Text align="center" fz="xl" fw={700} mt="md" data-cy="time-display">
         {getTime(state)}
       </Text>
     </Container>
