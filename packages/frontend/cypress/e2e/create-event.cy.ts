@@ -4,12 +4,13 @@ describe('Create event', () => {
   beforeEach(() => {
     cy.loginWithDefaultUser()
     cy.visit('/events/new')
+    cy.contains('Laji')
   })
 
   it('should cancel new event creation', () => {
     cy.getByDataCy('cancel-event-creation-button').as('cancel')
+    cy.get('@cancel').click({ force: true })
 
-    cy.get('@cancel').click()
     cy.get(`[aria-label="Close"]`).click()
     cy.getByDataCy('confirmation-modal').should('not.exist')
 
