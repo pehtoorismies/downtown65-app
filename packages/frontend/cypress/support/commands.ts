@@ -11,6 +11,7 @@ Cypress.Commands.add('login', (user: LoginUser) => {
     user.email,
     () => {
       cy.visit('/login')
+      cy.get('h1').contains('Kirjaudu')
       cy.get('input[name=email]').type(user.email)
       cy.get('input[name=password]').type(user.password)
       cy.get('form').contains('Kirjaudu').click()
@@ -30,6 +31,7 @@ Cypress.Commands.add('loginWithDefaultUser', () => {
     Cypress.env('USER_EMAIL'),
     () => {
       cy.visit('/login')
+      cy.get('h1').contains('Kirjaudu')
       cy.get('input[name=email]').type(Cypress.env('USER_EMAIL'))
       cy.get('input[name=password]').type(Cypress.env('USER_PASSWORD'))
       cy.get('form').contains('Kirjaudu').click()
