@@ -4,7 +4,7 @@ describe('Create event', () => {
   beforeEach(() => {
     cy.loginWithDefaultUser()
     cy.visit('/events')
-    cy.getByDataCy('nav-create-new-event').click()
+    cy.getByDataCy('nav-create-new-event').click({ force: true })
   })
 
   it('should cancel new event creation', () => {
