@@ -247,7 +247,11 @@ export default function Profile() {
       <Group position="center">
         <SimpleGrid cols={1} ml="lg">
           <Form action="/logout" method="post">
-            <Button type="submit" leftIcon={<IconLogout size={18} />}>
+            <Button
+              type="submit"
+              leftIcon={<IconLogout size={18} />}
+              data-cy="profile-logout"
+            >
               Kirjaudu ulos
             </Button>
           </Form>

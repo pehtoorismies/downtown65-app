@@ -1,5 +1,11 @@
 /// <reference types="cypress" />
 
+type LoginUser = {
+  email: string
+  password: string
+  nick: string
+}
+
 Cypress.Commands.add('login', (user: LoginUser) => {
   cy.session(
     user.email,
@@ -43,8 +49,22 @@ Cypress.Commands.add('getByDataCy', (dataCyName: string) => {
   cy.get(`[data-cy="${dataCyName}"]`)
 })
 
-type LoginUser = {
-  email: string
-  password: string
-  nick: string
+type EventBasicInfo = {
+  title: string
+  subtitle: string
+  location: string
 }
+
+Cypress.Commands.add(
+  'createEvent',
+  ({ title, subtitle, location }: EventBasicInfo) => {
+    cy.visit('/events/new')
+    cy.getByDataCy('button-CYCLING').click()
+    cy.get('input[name=title]').type(title)
+    cy.get('input[name=subtitle]').type(subtitle)
+    cy.get('input[name=location]').type(location)
+    cy.getByDataCy('next-button').as('next').click()
+    cy.getByDataCy('step-preview').click()
+    cy.get('@next').click()
+  }
+)
