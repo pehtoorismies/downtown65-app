@@ -194,6 +194,7 @@ describe('Create event', () => {
 
     cy.location('pathname').then(($path) => {
       cy.getByDataCy('confirm-delete').click()
+      cy.location('pathname').should('eq', '/events')
       cy.visit($path, { failOnStatusCode: false })
       cy.contains('Tapahtumaa ei löydy')
     })
