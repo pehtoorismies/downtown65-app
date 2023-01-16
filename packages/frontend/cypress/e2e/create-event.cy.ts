@@ -3,8 +3,7 @@ import { randSports, randProductName, randCity } from '@ngneat/falso'
 describe('Create event', () => {
   beforeEach(() => {
     cy.loginWithDefaultUser()
-    cy.visit('/events')
-    cy.getByDataCy('nav-create-new-event').click({ force: true })
+    cy.visit('/events/new')
   })
 
   it('should cancel new event creation', () => {
