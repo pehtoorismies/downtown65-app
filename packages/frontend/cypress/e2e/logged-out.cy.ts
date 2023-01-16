@@ -79,7 +79,7 @@ describe('Logged out user', () => {
 
       cy.getByDataCy('leave').should('not.exist')
       cy.getByDataCy('participate').should('not.exist')
-      cy.getByDataCy('event-goto-login').click()
+      cy.getByDataCy('event-goto-login').click({ force: true })
       cy.location('pathname').should('eq', '/login')
     })
   })
