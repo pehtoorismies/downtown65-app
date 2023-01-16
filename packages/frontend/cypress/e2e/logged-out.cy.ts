@@ -83,4 +83,22 @@ describe('Logged out user', () => {
       cy.location('pathname').should('eq', '/login')
     })
   })
+
+  it('should deny access and redirect to login', () => {
+    cy.visit('/members')
+    cy.location('pathname').should('eq', '/login')
+    cy.visit('/events')
+    cy.location('pathname').should('eq', '/login')
+    cy.visit('/profile')
+    cy.location('pathname').should('eq', '/login')
+    cy.visit('/events/new')
+    cy.location('pathname').should('eq', '/login')
+  })
+
+  it('should show not found', () => {
+    cy.visit('/some-page-that-does-not-exist')
+    cy.get('h1').contains('PUMMI')
+    cy.getByDataCy('navigate-home').click({ force: true })
+    cy.location('pathname').should('eq', '/login')
+  })
 })
