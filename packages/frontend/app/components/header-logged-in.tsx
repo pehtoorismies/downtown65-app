@@ -132,7 +132,7 @@ export const HeaderLoggedIn = ({ user }: Props) => {
             </NavLink>
             <NavLink
               end
-              to="/users"
+              to="/members"
               className={({ isActive }) => {
                 return cx(classes.link, {
                   [classes.linkActive]: isActive,
@@ -229,7 +229,7 @@ export const HeaderLoggedIn = ({ user }: Props) => {
           Profiili
         </Link>
         <Link
-          to="/users"
+          to="/members"
           onClick={closeDrawer}
           className={cx(classes.link, {
             [classes.linkActive]: false,
