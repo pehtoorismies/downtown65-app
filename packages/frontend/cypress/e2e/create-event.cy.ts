@@ -192,9 +192,9 @@ describe('Create event', () => {
     cy.get('input[name=delete-confirm]').clear().type('poista')
     cy.getByDataCy('confirm-delete').should('not.be.disabled')
 
-    cy.location('pathname').then(($location) => {
+    cy.location('pathname').then(($path) => {
       cy.getByDataCy('confirm-delete').click()
-      cy.visit($location, { failOnStatusCode: false })
+      cy.visit($path, { failOnStatusCode: false })
       cy.contains('Tapahtumaa ei löydy')
     })
   })
