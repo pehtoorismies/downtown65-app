@@ -60,6 +60,7 @@ Cypress.Commands.add(
   ({ title, subtitle, location }: EventBasicInfo) => {
     cy.visit('/events/new')
     cy.getByDataCy('button-CYCLING').click()
+    cy.get('h1').contains('Perustiedot')
     cy.get('input[name=title]').type(title)
     cy.get('input[name=subtitle]').type(subtitle)
     cy.get('input[name=location]').type(location)
