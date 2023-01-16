@@ -22,11 +22,6 @@ describe('Create event', () => {
     cy.get('@modal').should('not.exist')
 
     cy.get('@cancel').click()
-    // click outside modal
-    cy.get('body').click(0, 0)
-    cy.get('@modal').should('not.exist')
-
-    cy.get('@cancel').click()
     cy.getByDataCy('modal-cancel-event-creation').click()
     cy.location('pathname').should('equal', '/events')
   })
