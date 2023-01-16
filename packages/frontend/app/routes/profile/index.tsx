@@ -158,13 +158,19 @@ export default function Profile() {
   return (
     <Paper radius="md" withBorder p="lg" m="lg">
       <Avatar src={user.picture} size={120} radius={120} mx="auto" />
-      <Text align="center" size="lg" weight={500} mt="md">
+      <Text
+        align="center"
+        size="lg"
+        weight={500}
+        mt="md"
+        data-cy="profile-nick"
+      >
         {user.nickname}
       </Text>
       <Text align="center" fw={500} size="sm">
         {name}
       </Text>
-      <Text align="center" fw={500} size="sm">
+      <Text align="center" fw={500} size="sm" data-cy="profile-email">
         {email}
       </Text>
       {hasGravatarTip && (
@@ -214,6 +220,7 @@ export default function Profile() {
             onLabel="ON"
             offLabel="OFF"
             size="md"
+            data-cy="preference-event-created"
           />
           <Switch
             disabled
