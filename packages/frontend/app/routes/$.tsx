@@ -90,6 +90,7 @@ const NotFound = () => {
             mt="xl"
             className={classes.control}
             leftIcon={<IconArrowNarrowLeft size={18} />}
+            data-cy="navigate-home"
           >
             Etusivulle
           </Button>
