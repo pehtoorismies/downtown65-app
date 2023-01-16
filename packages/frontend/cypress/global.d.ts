@@ -7,5 +7,7 @@ declare namespace Cypress {
     loginWithDefaultUser(): Chainable<void>
 
     getByDataCy(dataCyName: string): Chainable<void>
+
+    createEvent(eventBasicInfo: EventBasicInfo)
   }
 }

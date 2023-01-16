@@ -1,3 +1,5 @@
+import { randCity, randProductName, randSports } from '@ngneat/falso'
+
 describe('Logged out user', () => {
   it('navigation', () => {
     cy.visit('/login')
@@ -46,5 +48,39 @@ describe('Logged out user', () => {
     cy.visit('/forgot-password')
     cy.get('input[name=email]').type('someone@example.com')
     cy.log('Forgot password')
+  })
+
+  it('can see event', () => {
+    const eventBasicInfo = {
+      title: randSports(),
+      subtitle: randProductName(),
+      location: randCity(),
+    }
+    cy.loginWithDefaultUser()
+    cy.createEvent(eventBasicInfo)
+
+    cy.location('pathname').should('not.eq', '/events/new')
+
+    cy.location('pathname').then(($path) => {
+      cy.get('header').contains(Cypress.env('USER_NICK')).click() // username dropdown
+      cy.get('header').contains('Profiili').click()
+      cy.getByDataCy('profile-logout').click()
+      cy.location('pathname').should('eq', '/login')
+      cy.visit($path)
+      cy.getByDataCy('event-race').should('not.exist')
+      cy.getByDataCy('event-title').contains(eventBasicInfo.title)
+      cy.getByDataCy('event-subtitle').contains(eventBasicInfo.subtitle)
+      cy.getByDataCy('event-location').contains(eventBasicInfo.location)
+      cy.getByDataCy('event-participant-count').contains('0')
+
+      cy.get('head meta[property="og:title"]')
+        .invoke('attr', 'contain')
+        .should('equal')
+
+      cy.getByDataCy('leave').should('not.exist')
+      cy.getByDataCy('participate').should('not.exist')
+      cy.getByDataCy('event-goto-login').click()
+      cy.location('pathname').should('eq', '/login')
+    })
   })
 })

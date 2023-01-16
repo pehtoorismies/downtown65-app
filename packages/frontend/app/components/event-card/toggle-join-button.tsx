@@ -24,6 +24,7 @@ export const GotoLoginButton = () => (
         marginRight: 15,
       },
     })}
+    data-cy="event-goto-login"
   >
     Kirjaudu
   </Button>
