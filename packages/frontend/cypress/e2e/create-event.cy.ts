@@ -9,20 +9,21 @@ describe('Create event', () => {
 
   it('should cancel new event creation', () => {
     cy.getByDataCy('cancel-event-creation-button').as('cancel')
+    cy.getByDataCy('confirmation-modal').as('modal')
     cy.get('@cancel').click({ force: true })
 
     cy.get(`[aria-label="Close"]`).click()
-    cy.getByDataCy('confirmation-modal').should('not.exist')
+    cy.get('@modal').should('not.exist')
 
     cy.getByDataCy('button-MEETING').click()
     cy.get('@cancel').click()
     cy.getByDataCy('modal-close').click()
-    cy.getByDataCy('confirmation-modal').should('not.exist')
+    cy.get('@modal').should('not.exist')
 
     cy.get('@cancel').click()
     // click outside modal
     cy.get('body').click(0, 0)
-    cy.getByDataCy('confirmation-modal').should('not.exist')
+    cy.get('@modal').should('not.exist')
 
     cy.get('@cancel').click()
     cy.getByDataCy('modal-cancel-event-creation').click()
@@ -177,13 +178,13 @@ describe('Create event', () => {
 
     // remove
     cy.getByDataCy('delete-event').click()
-    cy.getByDataCy('confirmation-modal').should('exist')
+    cy.getByDataCy('confirmation-modal').as('modal')
     cy.get(`[aria-label="Close"]`).click()
-    cy.getByDataCy('confirmation-modal').should('not.exist')
+    cy.get('@modal').should('not.exist')
 
     cy.getByDataCy('delete-event').click()
     cy.getByDataCy('modal-close').click()
-    cy.getByDataCy('confirmation-modal').should('not.exist')
+    cy.get('@modal').should('not.exist')
 
     cy.getByDataCy('delete-event').click()
     cy.getByDataCy('confirm-delete').should('be.disabled')
