@@ -42,15 +42,21 @@ describe('Events', () => {
     expect(event?.participants.length).toBe(1)
 
     await Event.leave(id, 'some_id')
+    // should allow leaving when already left
+    await Event.leave(id, 'some_id')
 
     const updatedEvent = await Event.getById(id)
     expect(updatedEvent?.participants.length).toBe(0)
 
-    await Event.participate(id, {
+    const user = {
       id: '123',
       picture: 'picture',
       nickname: 'nickname',
-    })
+    }
+
+    await Event.participate(id, user)
+    // should allow participating when already participated
+    await Event.participate(id, user)
 
     const updatedEvent2 = await Event.getById(id)
     expect(updatedEvent2?.participants.length).toBe(1)
