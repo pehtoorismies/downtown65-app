@@ -17,10 +17,10 @@
     "generate": "graphql-codegen"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "2.16.2",
-    "@graphql-codegen/typescript": "2.8.6",
+    "@graphql-codegen/cli": "2.16.4",
+    "@graphql-codegen/typescript": "2.8.7",
     "@graphql-codegen/typescript-graphql-request": "4.5.8",
-    "@graphql-codegen/typescript-operations": "2.5.11",
+    "@graphql-codegen/typescript-operations": "2.5.12",
     "@serverless-stack/cli": "1.18.4",
     "@serverless-stack/resources": "1.18.4",
     "@tsconfig/node16": "1.0.3",
@@ -35,6 +35,7 @@
     "lerna": "6.0.3",
     "prettier": "2.7.1",
     "prettier-eslint": "15.0.1",
+    "ts-node": "10.9.1",
     "ts-prune": "^0.10.3",
     "typescript": "4.8.4",
     "vite-tsconfig-paths": "3.5.2",
