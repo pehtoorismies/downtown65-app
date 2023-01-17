@@ -57,7 +57,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     users: { users, total, length, limit, start },
   } = response
 
-  const extra = total % limit !== 0 ? 1 : 0
+  const extra = total % limit === 0 ? 0 : 1
   const numberPages = Math.floor(total / limit) + extra
   const currentPage = Math.floor(start / limit) + 1
 

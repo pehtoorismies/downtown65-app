@@ -99,10 +99,10 @@ export class DynamoDatetime {
   dates: Dates
 
   public constructor({ date, time, times, dates }: Input) {
-    if (date !== undefined) {
+    if (date) {
       this.dates = parseDate(date)
       this.times = parseTime(time)
-    } else if (dates !== undefined) {
+    } else if (dates) {
       this.dates = parseDates(dates)
       this.times = parseTimes(times)
     } else {
