@@ -8,9 +8,8 @@ describe('Create event', () => {
   })
 
   it('should cancel new event creation', () => {
-    cy.getByDataCy('cancel-event-creation-button')
-      .as('cancel')
-      .click({ force: true })
+    cy.getByDataCy('cancel-event-creation-button').as('cancel')
+    cy.get('@cancel').click()
     cy.getByDataCy('confirmation-modal').as('modal')
 
     cy.get(`[aria-label="Close"]`).click()
