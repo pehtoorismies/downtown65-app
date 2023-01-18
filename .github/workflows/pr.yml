@@ -112,7 +112,32 @@ jobs:
           key: ${{ github.sha }}
       - name: Unit test
         run: npx sst bind --stage $PR_NAME -- vitest run
+  playwright:
+    needs: [ "deploy" ]
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: ./*
+          key: ${{ github.sha }}
+      - name: Install Playwright Browsers
+        working-directory: ./packages/frontend
+        run: yarn playwright install --with-deps
+      - name: Run Playwright tests
+        working-directory: ./packages/frontend
+        run: yarn playwright test
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
   cypress-run:
+    # disable
+    if: github.repository == 'octo-org/octo-repo-prod'
     needs: [ "deploy" ]
     runs-on: ubuntu-latest
     environment: development
