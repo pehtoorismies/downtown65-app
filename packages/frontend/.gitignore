@@ -5,3 +5,6 @@ node_modules
 /public/build
 .env
 cypress.env.json
+/test-results/
+/playwright-report/
+/playwright/.cache/

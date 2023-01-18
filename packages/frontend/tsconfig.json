@@ -2,7 +2,8 @@
   "include": [
     "remix.env.d.ts",
     "app/**/*.ts",
-    "app/**/*.tsx"
+    "app/**/*.tsx",
+    "playwright.config.ts"
   ],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
