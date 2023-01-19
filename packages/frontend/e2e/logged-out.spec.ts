@@ -10,6 +10,7 @@ test.describe('Logged out uses', () => {
     await expect(
       page.getByRole('heading', { name: 'Rekisteröidy' })
     ).toBeVisible()
+    await expect(page).toHaveTitle('Dt65 - signup')
 
     await page.getByTestId('to-login').click()
     await expect(page.getByRole('heading', { name: 'Kirjaudu' })).toBeVisible()
@@ -18,6 +19,7 @@ test.describe('Logged out uses', () => {
     await expect(
       page.getByRole('heading', { name: 'Salasana unohtunut' })
     ).toBeVisible()
+    await expect(page).toHaveTitle('Dt65 - forgot password')
 
     await page.getByTestId('to-login').click()
     await expect(page.getByRole('heading', { name: 'Kirjaudu' })).toBeVisible()
