@@ -1,11 +1,12 @@
 /// <reference types="vitest" />
 
 import tsconfigPaths from 'vite-tsconfig-paths'
-import { defineConfig } from 'vitest/config'
+import { defineConfig, configDefaults } from 'vitest/config'
 
 export default defineConfig({
   test: {
     testTimeout: 90_000,
+    exclude: [...configDefaults.exclude, './packages/frontend/e2e/**/*.ts'],
   },
   logLevel: 'info',
   esbuild: {
