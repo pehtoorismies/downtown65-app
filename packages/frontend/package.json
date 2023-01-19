@@ -10,7 +10,8 @@
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit && tsc --noEmit --project cypress",
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx|app/gql/types.gen.ts|remix.env.d.ts'",
-    "cypress": "cypress open"
+    "cypress": "cypress open",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "@downtown65-app/common": "*",
