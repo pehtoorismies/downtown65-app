@@ -125,7 +125,7 @@ jobs:
           key: ${{ github.sha }}
       - name: Get installed Playwright version
         id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').dependencies['@playwright/test'].version)")" >> $GITHUB_ENV
+        run: echo "PLAYWRIGHT_VERSION=$(yarn info --json @playwright/test version | jq -r '.data')" >> $GITHUB_ENV
       - name: Cache playwright binaries
         uses: actions/cache@v3
         id: playwright-cache
@@ -141,12 +141,12 @@ jobs:
         run: yarn playwright test
         env:
           BASE_URL: https://${{ env.PR_NAME }}.downtown65.events
-      - uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 30
+  #      - uses: actions/upload-artifact@v3
+  #        if: always()
+  #        with:
+  #          name: playwright-report
+  #          path: playwright-report/
+  #          retention-days: 30
   cypress-run:
     # disable
     if: github.repository == 'octo-org/octo-repo-prod'
