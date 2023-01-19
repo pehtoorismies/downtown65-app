@@ -123,12 +123,24 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').dependencies['@playwright/test'].version)")" >> $GITHUB_ENV
+      - name: Cache playwright binaries
+        uses: actions/cache@v3
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright Browsers
         working-directory: ./packages/frontend
         run: yarn playwright install --with-deps
       - name: Run Playwright tests
         working-directory: ./packages/frontend
         run: yarn playwright test
+        env:
+          BASE_URL: https://${{ env.PR_NAME }}.downtown65.events
       - uses: actions/upload-artifact@v3
         if: always()
         with:
