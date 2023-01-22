@@ -25,11 +25,15 @@ export const HeaderLoggedOut = () => {
                 component={Link}
                 to="/login"
                 variant="default"
-                data-cy="button-to-login"
+                data-testid="button-to-login"
               >
                 Kirjaudu
               </Button>
-              <Button component={Link} to="/signup" data-cy="button-to-signup">
+              <Button
+                component={Link}
+                to="/signup"
+                data-testid="button-to-signup"
+              >
                 Rekisteröidy
               </Button>
             </Group>

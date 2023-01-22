@@ -24,7 +24,7 @@ export const GotoLoginButton = () => (
         marginRight: 15,
       },
     })}
-    data-cy="event-goto-login"
+    data-testid="event-goto-login"
   >
     Kirjaudu
   </Button>
@@ -58,7 +58,7 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
             marginRight: 15,
           },
         })}
-        data-cy="leave"
+        data-testid="leave"
       >
         Poistu
       </Button>
@@ -81,7 +81,7 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
           marginRight: 15,
         },
       })}
-      data-cy="participate"
+      data-testid="participate"
     >
       Osallistu
     </Button>

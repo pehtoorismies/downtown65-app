@@ -89,7 +89,7 @@ export default function Login() {
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Rekisteröitymiseen tarvitset seuran jäsenyyden ja
         liittymistunnuksen.&nbsp;
-        <Anchor component={Link} to="/signup" data-cy="to-signup">
+        <Anchor component={Link} to="/signup" data-testid="to-signup">
           Rekisteröidy tästä.
         </Anchor>
       </Text>
@@ -140,7 +140,7 @@ export default function Login() {
               component={Link}
               to="/forgot-password"
               size="sm"
-              data-cy="to-forgot-password"
+              data-testid="to-forgot-password"
             >
               Unohditko salasanan?
             </Anchor>
@@ -150,6 +150,7 @@ export default function Login() {
             mt="xl"
             type="submit"
             loading={transition.state === 'submitting'}
+            data-testid="submit-login"
           >
             Kirjaudu
           </Button>

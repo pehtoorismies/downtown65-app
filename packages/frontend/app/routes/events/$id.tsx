@@ -248,7 +248,7 @@ export default function GetEvent() {
         onClose={onCloseModal}
         title="Tapahtuman poisto"
         closeButtonLabel="Close"
-        data-cy="confirmation-modal"
+        data-testid="confirmation-modal"
       >
         <LoadingOverlay
           visible={transition.state === 'submitting'}
@@ -275,7 +275,7 @@ export default function GetEvent() {
             <Button
               onClick={onCloseModal}
               leftIcon={<IconCircleX size={18} />}
-              data-cy="modal-close"
+              data-testid="modal-close"
             >
               Peruuta
             </Button>
@@ -286,7 +286,7 @@ export default function GetEvent() {
               color="red"
               disabled={formValue !== 'poista'}
               rightIcon={<IconCircleOff size={18} />}
-              data-cy="confirm-delete"
+              data-testid="confirm-delete"
             >
               Poista
             </Button>
@@ -308,7 +308,7 @@ export default function GetEvent() {
                 component={Link}
                 to={`/events/edit/${eventItem.id}`}
                 rightIcon={<IconPencil size={18} />}
-                data-cy="modify-event"
+                data-testid="modify-event"
               >
                 Muokkaa
               </Button>
@@ -316,7 +316,7 @@ export default function GetEvent() {
                 color="grape"
                 onClick={() => setOpened(true)}
                 rightIcon={<IconCircleOff size={18} />}
-                data-cy="delete-event"
+                data-testid="delete-event"
               >
                 Poista tapahtuma
               </Button>

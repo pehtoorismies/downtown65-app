@@ -8,7 +8,7 @@ describe('Logged out user', () => {
     // cypress can't click element if not forced
     // some hydration issue?
     // see also ./support/e2e.ts error handling <= remix mantine combo related issue perhaps
-    cy.get('[data-cy="to-signup"]').click({ force: true })
+    cy.get('[data-testid="to-signup"]').click({ force: true })
 
     cy.get('h1').contains('Rekisteröidy')
     cy.get('[data-cy="to-login"]').click({ force: true })

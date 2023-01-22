@@ -26,7 +26,7 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
     .map(({ text, type }) => {
       return (
         <Button
-          data-cy={
+          data-testid={
             state.eventType === type
               ? `button-${type}-selected`
               : `button-${type}`
