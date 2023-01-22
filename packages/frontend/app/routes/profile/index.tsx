@@ -163,14 +163,14 @@ export default function Profile() {
         size="lg"
         weight={500}
         mt="md"
-        data-cy="profile-nick"
+        data-testid="profile-nick"
       >
         {user.nickname}
       </Text>
       <Text align="center" fw={500} size="sm">
         {name}
       </Text>
-      <Text align="center" fw={500} size="sm" data-cy="profile-email">
+      <Text align="center" fw={500} size="sm" data-testid="profile-email">
         {email}
       </Text>
       {hasGravatarTip && (
@@ -220,7 +220,7 @@ export default function Profile() {
             onLabel="ON"
             offLabel="OFF"
             size="md"
-            data-cy="preference-event-created"
+            data-testid="preference-event-created"
           />
           <Switch
             disabled
@@ -250,7 +250,7 @@ export default function Profile() {
             <Button
               type="submit"
               leftIcon={<IconLogout size={18} />}
-              data-cy="profile-logout"
+              data-testid="profile-logout"
             >
               Kirjaudu ulos
             </Button>

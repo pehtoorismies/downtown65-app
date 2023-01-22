@@ -3,7 +3,8 @@
     "remix.env.d.ts",
     "app/**/*.ts",
     "app/**/*.tsx",
-    "playwright.config.ts"
+    "playwright.config.ts",
+    "e2e/**/*.ts"
   ],
   "extends": "../../tsconfig.json",
   "compilerOptions": {

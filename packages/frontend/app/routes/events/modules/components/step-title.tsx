@@ -44,7 +44,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
       />
       <Center>
         <Switch
-          data-cy="race-switch"
+          data-testid="race-switch"
           onLabel="ON"
           offLabel="EI"
           size="xl"

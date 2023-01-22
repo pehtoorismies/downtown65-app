@@ -110,7 +110,7 @@ export const EditOrCreate: FC<Props> = ({
   return (
     <>
       <Modal
-        data-cy="confirmation-modal"
+        data-testid="confirmation-modal"
         zIndex={2000}
         opened={opened}
         onClose={() => setOpened(false)}
@@ -121,7 +121,7 @@ export const EditOrCreate: FC<Props> = ({
           <Button
             onClick={() => setOpened(false)}
             leftIcon={<IconCircleX size={18} />}
-            data-cy="modal-close"
+            data-testid="modal-close"
           >
             Sulje
           </Button>
@@ -132,7 +132,7 @@ export const EditOrCreate: FC<Props> = ({
             type="submit"
             color="red"
             rightIcon={<IconCircleOff size={18} />}
-            data-cy="modal-cancel-event-creation"
+            data-testid="modal-cancel-event-creation"
           >
             Keskeytä
           </Button>
@@ -149,12 +149,12 @@ export const EditOrCreate: FC<Props> = ({
         >
           <Stepper.Step
             icon={<IconRun size={iconSize} />}
-            data-cy="step-type"
+            data-testid="step-type"
           />
           <Stepper.Step
             allowStepSelect={state.eventType !== undefined}
             icon={<IconEdit size={iconSize} />}
-            data-cy="step-basic-info"
+            data-testid="step-basic-info"
           />
           <Stepper.Step
             allowStepSelect={
@@ -164,22 +164,22 @@ export const EditOrCreate: FC<Props> = ({
               !!state.subtitle
             }
             icon={<IconCalendar size={iconSize} />}
-            data-cy="step-date"
+            data-testid="step-date"
           />
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconClockHour5 size={iconSize} />}
-            data-cy="step-time"
+            data-testid="step-time"
           />
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconAlignLeft size={iconSize} />}
-            data-cy="step-description"
+            data-testid="step-description"
           />
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconRocket size={iconSize} />}
-            data-cy="step-preview"
+            data-testid="step-preview"
           />
         </Stepper>
         <Grid gutter="xs" my="sm" align="center">
@@ -190,7 +190,7 @@ export const EditOrCreate: FC<Props> = ({
                 color="orange"
                 compact
                 onClick={() => setOpened(true)}
-                data-cy="cancel-event-creation-button"
+                data-testid="cancel-event-creation-button"
               >
                 Keskeytä
               </Button>
@@ -204,7 +204,7 @@ export const EditOrCreate: FC<Props> = ({
           <Grid.Col span={3}>
             <Group position="right">
               <Button
-                data-cy="skip-step-button"
+                data-testid="skip-step-button"
                 variant="outline"
                 compact
                 disabled={!TITLES[state.activeStep].isSkippable}

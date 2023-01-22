@@ -1,16 +1,15 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
+// eslint-disable-next-line unicorn/prefer-module
+require('dotenv').config()
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
+  // eslint-disable-next-line unicorn/prefer-module
+  globalSetup: require.resolve('./e2e/global-setup'),
   testDir: './e2e',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
@@ -21,6 +20,7 @@ const config: PlaywrightTestConfig = {
      */
     timeout: 5000,
   },
+
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -37,9 +37,10 @@ const config: PlaywrightTestConfig = {
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: process.env.CI ? process.env.BASE_URL : 'http://localhost:3000',
-    testIdAttribute: 'data-cy',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    headless: false,
+    storageState: 'storageState.json',
   },
 
   /* Configure projects for major browsers */
