@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
+import type { EventType } from '~/gql/types.gen'
 
 export class NewEventPage {
   readonly page: Page
@@ -12,16 +13,56 @@ export class NewEventPage {
     await this.page.goto('/events/new')
   }
 
+  async cancelClick() {
+    await this.page.getByTestId('cancel-event-creation-button').click()
+    await expect(this.getCancelModal()).toBeVisible()
+  }
+
+  getCancelModal() {
+    return this.page.getByTestId('confirmation-modal')
+  }
+
+  async headerVisible(text: string) {
+    await expect(this.page.getByRole('heading', { level: 1 })).toContainText(
+      text
+    )
+  }
+
+  async modalClick(kind: 'closeWithX' | 'closeWithButton' | 'confirmCancel') {
+    switch (kind) {
+      case 'closeWithButton': {
+        await this.page.getByTestId('modal-close').click()
+        await expect(this.getCancelModal()).toBeHidden()
+        return
+      }
+      case 'closeWithX': {
+        await this.page.locator("button[aria-label='Close']").click()
+        await expect(this.getCancelModal()).toBeHidden()
+        return
+      }
+      case 'confirmCancel': {
+        await this.page.getByTestId('modal-cancel-event-creation').click()
+        return
+      }
+    }
+  }
+
+  async eventTypeClick(eventType: EventType) {
+    await this.page.getByTestId(`button-${eventType}`).click()
+  }
+
   async createEvent({
     title,
     subtitle,
     location,
+    type,
   }: {
     title: string
     subtitle: string
     location: string
+    type: EventType
   }): Promise<string> {
-    await this.page.getByTestId('button-CYCLING').click()
+    await this.page.getByTestId(`button-${type}`).click()
     await expect(
       this.page.getByRole('heading', { name: 'Perustiedot' })
     ).toBeVisible()

@@ -9,3 +9,4 @@ cypress.env.json
 /playwright-report/
 /playwright/.cache/
 storageState.json
+.idea/

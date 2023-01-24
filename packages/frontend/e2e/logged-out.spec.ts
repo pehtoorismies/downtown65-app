@@ -1,10 +1,17 @@
 import { getEnvironmentVariable } from '@downtown65-app/common'
-import { randCity, randProductName, randSports, randUser } from '@ngneat/falso'
+import {
+  randCity,
+  randNumber,
+  randProductName,
+  randSports,
+  randUser,
+} from '@ngneat/falso'
 import { test, expect } from '@playwright/test'
 import format from 'date-fns/format'
 import { EventPage } from './page-objects/event-page'
 import { LoginPage } from './page-objects/login-page'
 import { NewEventPage } from './page-objects/new-event-page'
+import { EventType } from '~/gql/types.gen'
 
 test.describe('Logged out users', () => {
   test('should be able to navigate', async ({ page, context }) => {
@@ -86,10 +93,13 @@ test.describe('Logged out users', () => {
   })
 
   test('can see event', async ({ page }) => {
+    const eventTypes = Object.values(EventType)
+
     const eventBasicInfo = {
       title: randSports(),
       subtitle: randProductName(),
       location: randCity(),
+      type: eventTypes[randNumber({ min: 0, max: eventTypes.length - 1 })],
     }
 
     const userName = getEnvironmentVariable('USER_NICK')
