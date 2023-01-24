@@ -39,7 +39,7 @@ const config: PlaywrightTestConfig = {
     baseURL: process.env.CI ? process.env.BASE_URL : 'http://localhost:3000',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    headless: false,
+    headless: process.env.CI ? true : false,
     storageState: 'storageState.json',
   },
 
