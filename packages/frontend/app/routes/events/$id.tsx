@@ -248,7 +248,7 @@ export default function GetEvent() {
         onClose={onCloseModal}
         title="Tapahtuman poisto"
         closeButtonLabel="Close"
-        data-testid="confirmation-modal"
+        data-testid="delete-confirmation-modal"
       >
         <LoadingOverlay
           visible={transition.state === 'submitting'}
@@ -346,6 +346,7 @@ export const CatchBoundary = () => {
         size="md"
         mt="xl"
         leftIcon={<IconArrowNarrowLeft size={18} />}
+        data-testid="to-frontpage-button"
       >
         Etusivulle
       </Button>

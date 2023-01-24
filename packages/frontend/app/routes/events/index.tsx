@@ -85,7 +85,7 @@ export default function GetEvents() {
   }
 
   return (
-    <Container py={12}>
+    <Container py={12} data-testid="events">
       <ParticipatingContext.Provider value={participationActions}>
         <SimpleGrid
           cols={2}
