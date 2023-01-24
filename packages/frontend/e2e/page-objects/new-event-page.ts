@@ -1,12 +1,11 @@
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
+import { EventPage } from './event-page'
 import type { EventType } from '~/gql/types.gen'
 
-export class NewEventPage {
-  readonly page: Page
-
+export class NewEventPage extends EventPage {
   constructor(page: Page) {
-    this.page = page
+    super(page, 'not-found')
   }
 
   async goto() {
@@ -51,29 +50,112 @@ export class NewEventPage {
     await this.page.getByTestId(`button-${eventType}`).click()
   }
 
-  async createEvent({
+  async eventTypeSelected(eventType: EventType) {
+    await expect(
+      this.page.getByTestId(`button-${eventType}-selected`)
+    ).toBeDefined()
+  }
+
+  nextBtn() {
+    return this.page.getByTestId('next-button')
+  }
+
+  prevBtn() {
+    return this.page.getByTestId('prev-button')
+  }
+
+  skipStepBtn() {
+    return this.page.getByTestId('skip-step-button')
+  }
+
+  async stepBtnClick(
+    step: 'type' | 'basic-info' | 'date' | 'time' | 'description' | 'preview'
+  ) {
+    await this.page.getByTestId(`step-${step}`).click()
+  }
+
+  async nextBtnClick() {
+    await this.nextBtn().click()
+  }
+
+  async prevBtnClick() {
+    await this.prevBtn().click()
+  }
+
+  async clearTitle() {
+    await this.page.getByRole('textbox', { name: 'Tapahtuman nimi' }).clear()
+  }
+
+  async fillTitle(title: string) {
+    await this.page
+      .getByRole('textbox', { name: 'Tapahtuman nimi' })
+      .fill(title)
+  }
+
+  async fillSubtitle(subtitle: string) {
+    await this.page.getByRole('textbox', { name: 'Tarkenne' }).fill(subtitle)
+  }
+
+  async fillLocation(location: string) {
+    await this.page
+      .getByRole('textbox', { name: 'Missä tapahtuma järjestetään?' })
+      .fill(location)
+  }
+
+  getTimeDisplay() {
+    return this.page.getByTestId('time-display')
+  }
+
+  async hourClick(hour: number) {
+    if (!Number.isInteger(hour) || hour > 24 || hour < 0) {
+      throw new Error('Wrong hour provided')
+    }
+    await this.page.getByTestId(`hour-${hour}`).click()
+  }
+
+  async minuteClick(minute: number) {
+    if (!Number.isInteger(minute) || minute < 0 || minute % 5 !== 0) {
+      throw new Error('Wrong minute provided')
+    }
+    await this.page.getByTestId(`minute-${minute}`).click()
+  }
+
+  async clearTimeClick() {
+    await this.page.getByTestId('clear-time').click()
+  }
+
+  getParticipants() {
+    return this.page.getByTestId('event-participant')
+  }
+
+  async raceSwitchClick() {
+    // cy.getByDataCy('race-switch').parent().click()
+    await this.page.getByText('Onko kilpailu?').click()
+  }
+
+  async fillBasicInfo({
     title,
     subtitle,
     location,
-    type,
   }: {
+    title: string
+    subtitle: string
+    location: string
+  }) {
+    await this.fillTitle(title)
+    await this.fillSubtitle(subtitle)
+    await this.fillLocation(location)
+  }
+
+  async createEvent(basicInfo: {
     title: string
     subtitle: string
     location: string
     type: EventType
   }): Promise<string> {
-    await this.page.getByTestId(`button-${type}`).click()
-    await expect(
-      this.page.getByRole('heading', { name: 'Perustiedot' })
-    ).toBeVisible()
-
-    await this.page
-      .getByRole('textbox', { name: 'Tapahtuman nimi' })
-      .fill(title)
-    await this.page.getByRole('textbox', { name: 'Tarkenne' }).fill(subtitle)
-    await this.page
-      .getByRole('textbox', { name: 'Missä tapahtuma järjestetään?' })
-      .fill(location)
+    await this.page.getByTestId(`button-${basicInfo.type}`).click()
+    await this.headerVisible('Perustiedot')
+    await this.fillBasicInfo(basicInfo)
 
     await this.page.getByTestId('next-button').click()
     await this.page.getByTestId('step-preview').click()

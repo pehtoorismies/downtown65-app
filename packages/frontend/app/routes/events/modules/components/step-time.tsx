@@ -56,7 +56,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
             },
           })
         }}
-        data-testid={`hour-${prefixZero(hour)}`}
+        data-testid={`hour-${hour}`}
       >
         {prefixZero(hour)}
       </Button>
@@ -84,7 +84,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
             },
           })
         }}
-        data-testid={`minute-${suffixZero(minute)}`}
+        data-testid={`minute-${minute}`}
       >
         {suffixZero(minute)}
       </Button>

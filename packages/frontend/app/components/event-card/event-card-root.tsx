@@ -144,7 +144,7 @@ export const EventCardRoot = ({
               radius="xs"
               variant="outline"
               color="blue.0"
-              data-testid="created-by"
+              data-testid="event-created-by"
             >
               by #{createdBy.nickname}
             </Badge>

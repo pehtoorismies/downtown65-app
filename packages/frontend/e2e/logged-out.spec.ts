@@ -119,7 +119,7 @@ test.describe('Logged out users', () => {
     await expect(eventPage.getTitle()).toContainText(eventBasicInfo.title)
     await expect(eventPage.getSubtitle()).toContainText(eventBasicInfo.subtitle)
     await expect(eventPage.getLocation()).toContainText(eventBasicInfo.location)
-    await expect(eventPage.getParticipantCount()).toContainText('0')
+    await eventPage.expectParticipantCount(0)
 
     await expect(eventPage.getMeta('property', 'og:title')).toHaveAttribute(
       'content',

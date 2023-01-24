@@ -1,3 +1,4 @@
+import { expect } from '@playwright/test'
 import type { Page } from '@playwright/test'
 import { DtPage } from './dt-page'
 
@@ -29,8 +30,14 @@ export class EventPage extends DtPage {
     return this.page.getByTestId('event-location')
   }
 
-  getParticipantCount() {
-    return this.page.getByTestId('event-participant-count')
+  getDate() {
+    return this.page.getByTestId('event-date')
+  }
+
+  async expectParticipantCount(count: number) {
+    await expect(this.page.getByTestId('event-participant-count')).toHaveText(
+      String(count)
+    )
   }
 
   getLeaveButton() {
@@ -41,7 +48,54 @@ export class EventPage extends DtPage {
     return this.page.getByTestId('participate')
   }
 
+  async participateClick() {
+    await this.getParticipateButton().click()
+  }
+
+  async leaveClick() {
+    await this.getLeaveButton().click()
+  }
+
+  getCreatedBy() {
+    return this.page.getByTestId('event-created-by')
+  }
+
   getGotoLoginButton() {
     return this.page.getByTestId('event-goto-login')
+  }
+
+  getModifyEventBtn() {
+    return this.page.getByTestId('modify-event')
+  }
+
+  getDeleteEventBtn() {
+    return this.page.getByTestId('delete-event')
+  }
+
+  getDeleteConfirmationModal() {
+    return this.page.getByTestId('delete-confirmation-modal')
+  }
+
+  async deleteModalClick(kind: 'closeWithX' | 'closeWithButton') {
+    switch (kind) {
+      case 'closeWithButton': {
+        await this.page.getByTestId('modal-close').click()
+        await expect(this.getDeleteConfirmationModal()).toBeHidden()
+        return
+      }
+      case 'closeWithX': {
+        await this.page.locator("button[aria-label='Close']").click()
+        await expect(this.getDeleteConfirmationModal()).toBeHidden()
+        return
+      }
+    }
+  }
+
+  getDeleteConfirmationInput() {
+    return this.page.locator('input[name=delete-confirm]')
+  }
+
+  getDeleteConfirmationBtn() {
+    return this.page.getByTestId('confirm-delete')
   }
 }
