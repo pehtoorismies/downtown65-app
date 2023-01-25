@@ -8,9 +8,8 @@
     "dev": "sst-env -- remix dev",
     "start": "remix-serve build",
     "lint": "eslint . --ext .ts,.tsx",
-    "typecheck": "tsc --noEmit && tsc --noEmit --project cypress",
+    "typecheck": "tsc --noEmit",
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx|app/gql/types.gen.ts|remix.env.d.ts'",
-    "cypress": "cypress open",
     "e2e": "playwright test"
   },
   "dependencies": {
@@ -44,7 +43,6 @@
     "@serverless-stack/static-site-env": "1.18.4",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
-    "cypress": "12.3.0",
     "eslint-plugin-cypress": "2.12.1",
     "eslint-plugin-unused-imports": "2.0.0"
   },
