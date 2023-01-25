@@ -1,4 +1,3 @@
-import { getEnvironmentVariable } from '@downtown65-app/common'
 import {
   randCity,
   randNumber,
@@ -7,6 +6,7 @@ import {
 } from '@ngneat/falso'
 import { test as base, expect } from '@playwright/test'
 import { NewEventPage } from './page-objects/new-event-page'
+import { testUser } from './test-user'
 import { EventType } from '~/gql/types.gen'
 
 const test = base.extend<{ newEventPage: NewEventPage }>({
@@ -62,7 +62,7 @@ test.describe('Create event', () => {
     const updatedTitle = randSports()
     const subtitle = randProductName()
     const location = randCity()
-    const userNick = getEnvironmentVariable('USER_NICK')
+    const userNick = testUser.nick
     const initType = shuffled[0]
     const selectedType = shuffled[1]
 

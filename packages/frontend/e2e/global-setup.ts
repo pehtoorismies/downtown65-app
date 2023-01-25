@@ -1,8 +1,8 @@
 import * as fs from 'node:fs'
-import { getEnvironmentVariable } from '@downtown65-app/common'
 import type { FullConfig } from '@playwright/test'
 import { chromium } from '@playwright/test'
 import { LoginPage } from './page-objects/login-page'
+import { testUser } from './test-user'
 
 async function globalSetup(config: FullConfig) {
   // already has auth cookies
@@ -18,8 +18,8 @@ async function globalSetup(config: FullConfig) {
   await loginPage.goto()
 
   await loginPage.submitLogin({
-    email: getEnvironmentVariable('USER_EMAIL'),
-    password: getEnvironmentVariable('USER_PASSWORD'),
+    email: testUser.email,
+    password: testUser.password,
   })
 
   await page.waitForURL('**/events')
