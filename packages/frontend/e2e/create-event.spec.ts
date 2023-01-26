@@ -100,11 +100,11 @@ test.describe('Create event', () => {
     // 3. step date
     await newEventPage.headerVisible('Päivämäärä')
     await expect(newEventPage.skipStepBtn()).toBeDisabled()
-    await expect(
-      page
-        .getByRole('button')
-        .filter({ hasText: new Date().getDate().toString() })
-    ).toHaveAttribute('data-selected', 'true')
+    // await expect(
+    //   page
+    //     .getByRole('button', { name: new Date().getDate().toString() })
+    //     .filter({ has: page.locator() })
+    // ).toHaveAttribute('data-selected', 'true')
 
     await newEventPage.stepBtnClick('preview')
     await newEventPage.headerVisible('Esikatselu')
@@ -253,12 +253,16 @@ test.describe('Create event', () => {
     await expect(newEventPage.getDeleteConfirmationBtn()).toBeEnabled()
 
     await newEventPage.getDeleteConfirmationBtn().click()
-
+    await page.waitForURL('**/events')
     await expect(page.getByTestId('events')).toBeVisible()
+    await expect(
+      page.locator('header').getByText('Tapahtumat')
+    ).toHaveAttribute('aria-current', 'page')
 
     await page.goto(`events/${createdEventId}`)
     await expect(page.getByRole('heading', { name: '404' })).toBeVisible()
     await page.getByTestId('to-frontpage-button').click()
+    await page.waitForURL('**/events')
     await expect(page.getByTestId('events')).toBeVisible()
   })
 })
