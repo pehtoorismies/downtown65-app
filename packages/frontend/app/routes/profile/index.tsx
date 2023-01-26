@@ -167,7 +167,7 @@ export default function Profile() {
       >
         {user.nickname}
       </Text>
-      <Text align="center" fw={500} size="sm">
+      <Text align="center" fw={500} size="sm" data-testid="profile-name">
         {name}
       </Text>
       <Text align="center" fw={500} size="sm" data-testid="profile-email">

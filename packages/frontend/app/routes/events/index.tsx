@@ -60,7 +60,7 @@ export default function GetEvents() {
 
   if (eventItems.length === 0) {
     return (
-      <Container pt={12} mt="lg">
+      <Container pt={12} mt="lg" data-testid="events">
         <Title order={1} align="center">
           Ei tulevia tapahtumia
         </Title>
