@@ -136,9 +136,9 @@ jobs:
         run: yarn playwright test
         env:
           BASE_URL: https://${{ env.PR_NAME }}.downtown65.events
-          USER_EMAIL: ${{ secrets.CYPRESS_USER_EMAIL }}
-          USER_PASSWORD: ${{ secrets.CYPRESS_USER_PASSWORD }}
-          USER_NICK: ${{ secrets.CYPRESS_USER_NICK }}
+          USER_EMAIL: ${{ vars.TEST_USER_EMAIL }}
+          USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          USER_NICK: ${{ vars.TEST_USER_NICK }}
   #      - uses: actions/upload-artifact@v3
   #        if: always()
   #        with:
