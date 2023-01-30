@@ -58,7 +58,7 @@ export const getTable = () => {
     },
   } as const)
 
-  table.entities = [Dt65EventEntity]
+  table.addEntity(Dt65EventEntity)
 
   return table
 }
