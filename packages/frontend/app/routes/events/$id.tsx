@@ -204,7 +204,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function GetEvent() {
   const { eventItem, user } = useLoaderData<LoaderData>()
-  const transition = useNavigation()
+  const navigation = useNavigation()
 
   const participationActions = useParticipationActions()
   const [opened, setOpened] = useState(false)
@@ -232,7 +232,7 @@ export default function GetEvent() {
     setOpened(false)
   }
 
-  if (transition.state === 'loading') {
+  if (navigation.state === 'loading') {
     return (
       <Center py={100}>
         <Loader />
@@ -251,7 +251,7 @@ export default function GetEvent() {
         data-testid="delete-confirmation-modal"
       >
         <LoadingOverlay
-          visible={transition.state === 'submitting'}
+          visible={navigation.state === 'submitting'}
           transitionDuration={200}
         />
         <TypographyStylesProvider my="sm">

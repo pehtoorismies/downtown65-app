@@ -55,7 +55,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function ForgotPassword() {
   const actionData = useActionData<ActionData>()
-  const transition = useNavigation()
+  const navigation = useNavigation()
 
   return (
     <AuthTemplate title="Salasana unohtunut">
@@ -91,7 +91,7 @@ export default function ForgotPassword() {
               </Center>
             </Anchor>
 
-            <Button type="submit" loading={transition.state === 'submitting'}>
+            <Button type="submit" loading={navigation.state === 'submitting'}>
               Lähetä ohjeet
             </Button>
           </Group>

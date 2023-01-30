@@ -97,11 +97,11 @@ export const EditOrCreate: FC<Props> = ({
   cancelRedirectPath,
 }): JSX.Element => {
   const [opened, setOpened] = useState(false)
-  const transition = useNavigation()
+  const navigation = useNavigation()
   const navigate = useNavigate()
   const fetcher = useFetcher()
 
-  if (transition.state === 'loading') {
+  if (navigation.state === 'loading') {
     return (
       <Center py={100}>
         <Loader />
