@@ -35,6 +35,7 @@ module.exports = {
     ],
     "no-console": ["error", { allow: ["error"] }],
     "prettier/prettier": ["error"],
+    "sort-imports": ["error", { "ignoreDeclarationSort": true }],
     "unicorn/prevent-abbreviations": [
       "error",
       {

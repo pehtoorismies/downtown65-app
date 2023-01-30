@@ -1,6 +1,6 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
-import type { UsersResponse, QueryUsersArgs } from '~/appsync.gen'
+import type { QueryUsersArgs, UsersResponse } from '~/appsync.gen'
 import { getAuth0Management } from '~/graphql/support/auth0'
 
 const Auth0UserResponse = z.object({

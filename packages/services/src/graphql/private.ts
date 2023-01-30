@@ -5,14 +5,14 @@ import type {
   MeUser,
   MutationCreateEventArgs,
   MutationDeleteEventArgs,
-  MutationParticipateEventArgs,
   MutationLeaveEventArgs,
+  MutationParticipateEventArgs,
   MutationUpdateEventArgs,
   MutationUpdateMeArgs,
   OtherUser,
   QueryEventArgs as QueryEventArguments,
-  UsersResponse,
   QueryUsersArgs,
+  UsersResponse,
 } from '../appsync.gen'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'

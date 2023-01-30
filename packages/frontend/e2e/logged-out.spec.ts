@@ -6,7 +6,7 @@ import {
   randSports,
   randUser,
 } from '@ngneat/falso'
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import format from 'date-fns/format'
 import { EventPage } from './page-objects/event-page'
 import { LoginPage } from './page-objects/login-page'

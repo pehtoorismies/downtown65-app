@@ -1,15 +1,15 @@
 import type { MantineShadow } from '@mantine/core'
 import {
-  Card,
-  Text,
-  createStyles,
   BackgroundImage,
-  Center,
   Badge,
-  ThemeIcon,
   Box,
+  Card,
+  Center,
   Grid,
   Group,
+  Text,
+  ThemeIcon,
+  createStyles,
 } from '@mantine/core'
 import { IconMedal, IconUsers } from '@tabler/icons-react'
 import type { PropsWithChildren } from 'react'

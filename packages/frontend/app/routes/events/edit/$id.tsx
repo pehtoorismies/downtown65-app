@@ -9,9 +9,9 @@ import {
   Text,
 } from '@mantine/core'
 import type {
-  MetaFunction,
-  LoaderFunction,
   ActionFunction,
+  LoaderFunction,
+  MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useFetcher, useLoaderData } from '@remix-run/react'
