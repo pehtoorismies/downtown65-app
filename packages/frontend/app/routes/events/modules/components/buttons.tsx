@@ -1,5 +1,5 @@
 import { Button, Grid, Group } from '@mantine/core'
-import type { TablerIcon } from '@tabler/icons-react'
+import type { Icon } from '@tabler/icons-react'
 import {
   IconArrowLeft,
   IconArrowRight,
@@ -18,14 +18,14 @@ interface Props {
 type ButtonAttributes = {
   nextTitle: string
   prevTitle: string
-  NextIcon: TablerIcon
+  NextIcon: Icon
   isNextVisible: boolean
   isPreviousVisible: boolean
 }
 
 const getNextStuff = (
   kind: EventState['kind']
-): { nextTitle: string; NextIcon: TablerIcon } => {
+): { nextTitle: string; NextIcon: Icon } => {
   switch (kind) {
     case 'create': {
       return {
