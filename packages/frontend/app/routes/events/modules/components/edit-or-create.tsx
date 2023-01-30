@@ -9,7 +9,7 @@ import {
   Stepper,
   Title,
 } from '@mantine/core'
-import { useNavigate, useNavigation } from '@remix-run/react'
+import { useFetcher, useNavigate, useNavigation } from '@remix-run/react'
 import {
   IconAlignLeft,
   IconCalendar,
@@ -39,6 +39,7 @@ import { StepPreview } from '~/routes/events/modules/components/step-preview'
 import { StepTime } from '~/routes/events/modules/components/step-time'
 import { StepTitle } from '~/routes/events/modules/components/step-title'
 import { StepType } from '~/routes/events/modules/components/step-type'
+import { eventStateToSubmittable } from '~/routes/events/modules/event-state-to-submittable'
 
 const iconSize = 20
 
@@ -98,6 +99,7 @@ export const EditOrCreate: FC<Props> = ({
   const [opened, setOpened] = useState(false)
   const transition = useNavigation()
   const navigate = useNavigate()
+  const fetcher = useFetcher()
 
   if (transition.state === 'loading') {
     return (
@@ -240,7 +242,13 @@ export const EditOrCreate: FC<Props> = ({
         <Buttons
           state={state}
           onNextStep={() => {
-            dispatch({ kind: 'nextStep' })
+            if (state.activeStep === ActiveStep.STEP_PREVIEW) {
+              fetcher.submit(eventStateToSubmittable(state), {
+                method: 'post',
+              })
+            } else {
+              dispatch({ kind: 'nextStep' })
+            }
           }}
           onPreviousStep={() => {
             dispatch({ kind: 'previousStep' })

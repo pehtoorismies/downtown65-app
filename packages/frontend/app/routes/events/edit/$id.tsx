@@ -14,15 +14,14 @@ import type {
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Link, useFetcher, useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { IconRocket } from '@tabler/icons-react'
-import { useEffect, useReducer } from 'react'
+import { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import { EditOrCreate } from '../modules/components/edit-or-create'
 import type { EventState } from '../modules/components/event-state'
 import { isValidStateToSave } from '../modules/components/event-state'
 import { ActiveStep, reducer } from '../modules/components/reducer'
-import { eventStateToSubmittable } from '../modules/event-state-to-submittable'
 import { getEventForm } from '../modules/get-event-form'
 import type { Context } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
@@ -125,7 +124,6 @@ export const action: ActionFunction = async ({ request, params }) => {
 }
 
 export default function EditEvent() {
-  const fetcher = useFetcher()
   const {
     user: me,
     initState,
@@ -170,16 +168,6 @@ export default function EditEvent() {
       <Text key={index}>{item.title}</Text>
     )
   })
-
-  useEffect(() => {
-    if (eventState.submitEvent) {
-      fetcher.submit(eventStateToSubmittable(eventState), {
-        method: 'post',
-        action: `/events/edit/${eventId}`,
-      })
-      dispatch({ kind: 'formSubmitted' })
-    }
-  }, [fetcher, eventState, eventId])
 
   return (
     <>

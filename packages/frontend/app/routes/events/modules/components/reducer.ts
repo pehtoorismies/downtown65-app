@@ -68,9 +68,6 @@ type LeaveEventAction = {
   kind: 'leaveEvent'
   me: User
 }
-type FormSubmittedAction = {
-  kind: 'formSubmitted'
-}
 export type ToPreviewAction = {
   kind: 'toPreview'
 }
@@ -78,7 +75,6 @@ export type ToPreviewAction = {
 export type EventAction =
   | DateAction
   | DescriptionAction
-  | FormSubmittedAction
   | LeaveEventAction
   | LocationAction
   | NextStepAction
@@ -122,12 +118,6 @@ export const reducer = (state: EventState, action: EventAction): EventState => {
       return { ...state, activeStep: action.step }
     }
     case 'nextStep': {
-      if (state.activeStep === ActiveStep.STEP_PREVIEW) {
-        return {
-          ...state,
-          submitEvent: true,
-        }
-      }
       return {
         ...state,
         activeStep: (state.activeStep + 1) as StepNumber,
@@ -173,12 +163,6 @@ export const reducer = (state: EventState, action: EventAction): EventState => {
       return {
         ...state,
         participants: state.participants.filter((x) => x.id !== action.me.id),
-      }
-    }
-    case 'formSubmitted': {
-      return {
-        ...state,
-        submitEvent: false,
       }
     }
     case 'toPreview': {
