@@ -8220,10 +8220,10 @@ duplexify@^3.5.0, duplexify@^3.6.0:
     readable-stream "^2.0.0"
     stream-shift "^1.0.0"
 
-dynamodb-toolbox@0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/dynamodb-toolbox/-/dynamodb-toolbox-0.5.2.tgz#7e8129e16ce784c00e27a24851396a6f9e27e1a3"
-  integrity sha512-AJ1SjDz1Bdu77iZKjG9vZ1BplcEduGLBQRJPC8F9LXxqkxcUB+/1Koak6awny4Q2ECQjEcLffrArFwpl+Ka6AA==
+dynamodb-toolbox@0.6.4:
+  version "0.6.4"
+  resolved "https://registry.yarnpkg.com/dynamodb-toolbox/-/dynamodb-toolbox-0.6.4.tgz#1a37e8fe5305801cb137a5131b450ca2e523f3bb"
+  integrity sha512-3ZvR4vl4JDe11FzyjTliu2y+mGokIZ1kElHfk7+QzvgYAm2VwCpp2REshHxThFgxnXK4YiCnlxa9b91kTn0WtA==
   dependencies:
     deep-copy "^1.4.2"
     ts-toolbelt "^9.6.0"
