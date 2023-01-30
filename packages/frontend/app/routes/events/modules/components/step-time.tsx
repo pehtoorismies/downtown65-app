@@ -1,5 +1,5 @@
 import 'dayjs/locale/fi'
-import { Center, Button, Text, Grid, Stack, Container } from '@mantine/core'
+import { Button, Center, Container, Grid, Stack, Text } from '@mantine/core'
 import type { EventState } from '~/routes/events/modules/components/event-state'
 import type { ReducerProps } from '~/routes/events/modules/components/reducer'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'

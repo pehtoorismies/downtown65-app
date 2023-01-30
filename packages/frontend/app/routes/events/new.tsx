@@ -1,8 +1,8 @@
 import { Divider, Text } from '@mantine/core'
 import type {
-  MetaFunction,
-  LoaderFunction,
   ActionFunction,
+  LoaderFunction,
+  MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useFetcher, useLoaderData } from '@remix-run/react'
@@ -19,7 +19,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { loaderAuthenticate, actionAuthenticate } from '~/session.server'
+import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
   return {

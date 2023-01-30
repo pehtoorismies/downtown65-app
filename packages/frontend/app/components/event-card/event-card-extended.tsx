@@ -1,4 +1,4 @@
-import { Divider, TypographyStylesProvider, Text } from '@mantine/core'
+import { Divider, Text, TypographyStylesProvider } from '@mantine/core'
 import type { EventCardRootProps } from '~/components/event-card/event-card-root'
 import { EventCardRoot } from '~/components/event-card/event-card-root'
 import { Participants } from '~/components/event-card/participants'

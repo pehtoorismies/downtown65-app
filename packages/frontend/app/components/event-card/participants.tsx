@@ -1,4 +1,4 @@
-import { Badge, Group, ThemeIcon, Text, Avatar } from '@mantine/core'
+import { Avatar, Badge, Group, Text, ThemeIcon } from '@mantine/core'
 import { IconUserOff } from '@tabler/icons-react'
 import { Gradient } from '~/components/colors'
 import type { User } from '~/domain/user'

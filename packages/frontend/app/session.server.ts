@@ -6,9 +6,9 @@ import { getCookieSecret } from '~/cookie-secret.server'
 import { User } from '~/domain/user'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import {
-  setSuccessMessage,
-  getMessageSession,
   commitMessageSession,
+  getMessageSession,
+  setSuccessMessage,
 } from '~/message.server'
 
 const REFRESH_TOKEN_KEY = 'refreshToken'

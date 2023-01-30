@@ -1,7 +1,7 @@
 /// <reference types="@remix-run/dev" />
 /// <reference types="@remix-run/node" />
 
-import type { Tuple, DefaultMantineColor } from '@mantine/core'
+import type { DefaultMantineColor, Tuple } from '@mantine/core'
 
 type ExtendedCustomColors = 'dtPink' | DefaultMantineColor
 

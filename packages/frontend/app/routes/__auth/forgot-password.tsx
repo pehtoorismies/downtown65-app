@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import type { MetaFunction, ActionFunction } from '@remix-run/node'
+import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useTransition } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons-react'

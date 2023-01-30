@@ -1,4 +1,4 @@
-import { MantineProvider, createEmotionCache, Title } from '@mantine/core'
+import { MantineProvider, Title, createEmotionCache } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import type {
   LinksFunction,
@@ -14,8 +14,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
   useCatch,
+  useLoaderData,
   useMatches,
 } from '@remix-run/react'
 import { useEffect } from 'react'

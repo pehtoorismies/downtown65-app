@@ -1,18 +1,18 @@
 import {
-  createStyles,
-  Image,
-  Container,
-  Title,
-  Text,
   Button,
+  Container,
+  Image,
   SimpleGrid,
+  Text,
+  Title,
+  createStyles,
 } from '@mantine/core'
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import type { PublicRoute } from '~/domain/public-route'
-import { publicLogout, getAuthenticatedUser } from '~/session.server'
+import { getAuthenticatedUser, publicLogout } from '~/session.server'
 
 const useStyles = createStyles((theme) => ({
   root: {

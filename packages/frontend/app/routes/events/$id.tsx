@@ -16,9 +16,9 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core'
 import type {
-  MetaFunction,
-  LoaderFunction,
   ActionFunction,
+  LoaderFunction,
+  MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import {
@@ -51,9 +51,9 @@ import {
   setSuccessMessage,
 } from '~/message.server'
 import {
-  publicLogout,
-  getAuthenticatedUser,
   actionAuthenticate,
+  getAuthenticatedUser,
+  publicLogout,
 } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 

@@ -1,4 +1,4 @@
-import { createStyles, Header, Group, Button, Text, Box } from '@mantine/core'
+import { Box, Button, Group, Header, Text, createStyles } from '@mantine/core'
 import { Link } from '@remix-run/react'
 
 const useStyles = createStyles((theme) => ({

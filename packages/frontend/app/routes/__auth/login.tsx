@@ -9,13 +9,13 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import type { MetaFunction, ActionFunction } from '@remix-run/node'
+import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useTransition } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import { createUserSession, Tokens } from '~/session.server'
+import { Tokens, createUserSession } from '~/session.server'
 import { validateEmail } from '~/util/validation.server'
 
 export { loader } from './modules/loader'

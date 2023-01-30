@@ -4,10 +4,10 @@ import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
 import { ulid } from 'ulid'
 import type {
-  Event,
-  MeInput,
-  IdPayload,
   CreateEventInput,
+  Event,
+  IdPayload,
+  MeInput,
   UpdateEventInput,
 } from '../appsync.gen'
 import { EventType } from '../appsync.gen'
