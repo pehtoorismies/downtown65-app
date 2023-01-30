@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
 import { Link } from '@remix-run/react'
-import { IconArrowNarrowRight } from '@tabler/icons'
+import { IconArrowNarrowRight } from '@tabler/icons-react'
 import type { EventCardRootProps } from '~/components/event-card/event-card-root'
 import { EventCardRoot } from '~/components/event-card/event-card-root'
 

@@ -11,7 +11,7 @@ import {
   Grid,
   Group,
 } from '@mantine/core'
-import { IconMedal, IconUsers } from '@tabler/icons'
+import { IconMedal, IconUsers } from '@tabler/icons-react'
 import type { PropsWithChildren } from 'react'
 import { Gradient } from '~/components/colors'
 import {

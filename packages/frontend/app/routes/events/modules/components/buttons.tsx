@@ -1,11 +1,11 @@
 import { Button, Grid, Group } from '@mantine/core'
-import type { TablerIcon } from '@tabler/icons'
+import type { TablerIcon } from '@tabler/icons-react'
 import {
   IconArrowLeft,
   IconArrowRight,
   IconArrowUp,
   IconDeviceFloppy,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 import type { EventState } from './event-state'
 import { ActiveStep } from './reducer'
 

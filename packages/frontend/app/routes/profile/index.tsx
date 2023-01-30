@@ -19,7 +19,7 @@ import type {
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, useFetcher, useLoaderData, useSubmit } from '@remix-run/react'
-import { IconAlertCircle, IconLogout } from '@tabler/icons'
+import { IconAlertCircle, IconLogout } from '@tabler/icons-react'
 import type { ChangeEventHandler } from 'react'
 import React, { useRef, useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'

@@ -33,7 +33,7 @@ import {
   IconCircleOff,
   IconCircleX,
   IconPencil,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 import type { ChangeEvent } from 'react'
 import { useState } from 'react'
 import invariant from 'tiny-invariant'

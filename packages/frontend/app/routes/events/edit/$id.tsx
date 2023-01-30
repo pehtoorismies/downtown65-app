@@ -15,7 +15,7 @@ import type {
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useFetcher, useLoaderData } from '@remix-run/react'
-import { IconRocket } from '@tabler/icons'
+import { IconRocket } from '@tabler/icons-react'
 import { useEffect, useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import { EditOrCreate } from '../modules/components/edit-or-create'

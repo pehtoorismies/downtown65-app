@@ -3,7 +3,7 @@ import { Button, Center, Container, SimpleGrid, Title } from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { IconSquarePlus } from '@tabler/icons'
+import { IconSquarePlus } from '@tabler/icons-react'
 import type { EventLoaderData } from './modules/event-loader-data'
 import { EventCard } from '~/components/event-card/event-card'
 import {

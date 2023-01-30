@@ -19,7 +19,7 @@ import {
   IconEdit,
   IconRocket,
   IconRun,
-} from '@tabler/icons'
+} from '@tabler/icons-react'
 import type { Dispatch, FC } from 'react'
 import { useState } from 'react'
 import type { Context } from '~/contexts/participating-context'
