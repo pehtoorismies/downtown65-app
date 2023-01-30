@@ -25,6 +25,9 @@ This starts your app in development mode, rebuilding assets on file changes.
 }
 ```
 
+3. Credentials are read from `storageState.json`. Delete the file to renew credentials. With wrong tests will fail.
+4. `npx install playwright` to install browsers
+
 Then run the app in production mode:
 
 ```sh
