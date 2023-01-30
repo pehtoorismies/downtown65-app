@@ -14,7 +14,7 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Form, Link, NavLink, useFetcher } from '@remix-run/react'
-import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons'
+import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react'
 import { useState } from 'react'
 import type { User } from '~/domain/user'
 

@@ -10,7 +10,7 @@ import {
 import type { LoaderFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link } from '@remix-run/react'
-import { IconArrowNarrowLeft } from '@tabler/icons'
+import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import type { PublicRoute } from '~/domain/public-route'
 import { publicLogout, getAuthenticatedUser } from '~/session.server'
 

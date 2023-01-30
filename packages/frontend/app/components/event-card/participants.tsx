@@ -1,5 +1,5 @@
 import { Badge, Group, ThemeIcon, Text, Avatar } from '@mantine/core'
-import { IconUserOff } from '@tabler/icons'
+import { IconUserOff } from '@tabler/icons-react'
 import { Gradient } from '~/components/colors'
 import type { User } from '~/domain/user'
 

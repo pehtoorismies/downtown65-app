@@ -12,7 +12,7 @@ import {
 import type { MetaFunction, ActionFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useTransition } from '@remix-run/react'
-import { IconAlertCircle } from '@tabler/icons'
+import { IconAlertCircle } from '@tabler/icons-react'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import { createUserSession, Tokens } from '~/session.server'

@@ -11,7 +11,7 @@ import {
 import type { MetaFunction, ActionFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useTransition } from '@remix-run/react'
-import { IconArrowLeft } from '@tabler/icons'
+import { IconArrowLeft } from '@tabler/icons-react'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import {

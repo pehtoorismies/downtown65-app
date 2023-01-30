@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core'
 import { Link } from '@remix-run/react'
-import { IconHandOff, IconHandStop, IconLogin } from '@tabler/icons'
+import { IconHandOff, IconHandStop, IconLogin } from '@tabler/icons-react'
 import { Gradient } from '~/components/colors'
 import { useParticipatingContext } from '~/contexts/participating-context'
 
