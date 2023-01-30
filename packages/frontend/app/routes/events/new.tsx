@@ -5,11 +5,10 @@ import type {
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useFetcher, useLoaderData } from '@remix-run/react'
-import { useEffect, useReducer } from 'react'
+import { useLoaderData } from '@remix-run/react'
+import { useReducer } from 'react'
 import { EditOrCreate } from './modules/components/edit-or-create'
 import { ActiveStep, reducer } from './modules/components/reducer'
-import { eventStateToSubmittable } from './modules/event-state-to-submittable'
 import { getEventForm } from './modules/get-event-form'
 import type { Context } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
@@ -83,7 +82,6 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function NewEvent() {
-  const fetcher = useFetcher()
   const { user: me } = useLoaderData<PrivateRoute>()
   const [eventState, dispatch] = useReducer(reducer, {
     activeStep: ActiveStep.STEP_EVENT_TYPE,
@@ -109,15 +107,6 @@ export default function NewEvent() {
     state: 'idle',
     loadingEventId: 'not-defined',
   }
-
-  useEffect(() => {
-    if (eventState.submitEvent) {
-      fetcher.submit(eventStateToSubmittable(eventState), {
-        method: 'post',
-      })
-      dispatch({ kind: 'formSubmitted' })
-    }
-  }, [fetcher, eventState])
 
   return (
     <>
