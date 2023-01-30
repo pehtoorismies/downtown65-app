@@ -12,7 +12,7 @@ export const ActiveStep = {
   STEP_PREVIEW: 5,
 } as const
 
-export type StepNumber = typeof ActiveStep[keyof typeof ActiveStep]
+export type StepNumber = (typeof ActiveStep)[keyof typeof ActiveStep]
 
 type TitleAction = {
   kind: 'title'

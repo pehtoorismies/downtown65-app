@@ -44,7 +44,7 @@ const PUBLIC_FIELDS = [
   'signup',
 ] as const
 
-type PublicField = typeof PUBLIC_FIELDS[number]
+type PublicField = (typeof PUBLIC_FIELDS)[number]
 
 export const isPublicField = (s: string): s is PublicField => {
   return PUBLIC_FIELDS.includes(s as PublicField)

@@ -58,7 +58,7 @@ const PRIVATE_FIELDS = [
   'updateMe',
   'users',
 ] as const
-type PrivateField = typeof PRIVATE_FIELDS[number]
+type PrivateField = (typeof PRIVATE_FIELDS)[number]
 
 export const isPrivateField = (s: string): s is PrivateField => {
   return PRIVATE_FIELDS.includes(s as PrivateField)
