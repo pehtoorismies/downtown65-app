@@ -9,7 +9,7 @@ import {
   Stepper,
   Title,
 } from '@mantine/core'
-import { useNavigate, useTransition } from '@remix-run/react'
+import { useNavigate, useNavigation } from '@remix-run/react'
 import {
   IconAlignLeft,
   IconCalendar,
@@ -96,7 +96,7 @@ export const EditOrCreate: FC<Props> = ({
   cancelRedirectPath,
 }): JSX.Element => {
   const [opened, setOpened] = useState(false)
-  const transition = useTransition()
+  const transition = useNavigation()
   const navigate = useNavigate()
 
   if (transition.state === 'loading') {

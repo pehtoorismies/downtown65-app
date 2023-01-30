@@ -26,7 +26,7 @@ import {
   Link,
   useCatch,
   useLoaderData,
-  useTransition,
+  useNavigation,
 } from '@remix-run/react'
 import {
   IconArrowNarrowLeft,
@@ -204,7 +204,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 
 export default function GetEvent() {
   const { eventItem, user } = useLoaderData<LoaderData>()
-  const transition = useTransition()
+  const transition = useNavigation()
 
   const participationActions = useParticipationActions()
   const [opened, setOpened] = useState(false)
