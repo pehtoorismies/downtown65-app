@@ -9,7 +9,7 @@ import {
 } from '@mantine/core'
 import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, Link, useActionData, useTransition } from '@remix-run/react'
+import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { z } from 'zod'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
@@ -79,7 +79,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Signup() {
   const actionData = useActionData<ActionData>()
-  const transition = useTransition()
+  const transition = useNavigation()
 
   return (
     <AuthTemplate title="Rekisteröidy">
