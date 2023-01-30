@@ -81,7 +81,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function Login() {
-  const transition = useNavigation()
+  const navigation = useNavigation()
   const actionData = useActionData<ActionData>()
 
   return (
@@ -149,7 +149,7 @@ export default function Login() {
             fullWidth
             mt="xl"
             type="submit"
-            loading={transition.state === 'submitting'}
+            loading={navigation.state === 'submitting'}
             data-testid="submit-login"
           >
             Kirjaudu

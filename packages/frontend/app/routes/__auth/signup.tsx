@@ -79,7 +79,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 export default function Signup() {
   const actionData = useActionData<ActionData>()
-  const transition = useNavigation()
+  const navigation = useNavigation()
 
   return (
     <AuthTemplate title="Rekisteröidy">
@@ -167,7 +167,7 @@ export default function Signup() {
             fullWidth
             mt="xl"
             type="submit"
-            loading={transition.state === 'submitting'}
+            loading={navigation.state === 'submitting'}
           >
             Rekisteröidy
           </Button>
