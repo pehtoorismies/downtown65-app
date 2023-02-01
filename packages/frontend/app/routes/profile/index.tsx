@@ -231,6 +231,7 @@ export default function Profile() {
             offLabel="OFF"
             checked={preferences.subscribeWeeklyEmail}
             size="md"
+            my="sm"
           />
         </div>
       </Group>
