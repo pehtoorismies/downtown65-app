@@ -1,7 +1,14 @@
-import { Container, Pagination, Table, Text, Title } from '@mantine/core'
+import {
+  Anchor,
+  Container,
+  Pagination,
+  Table,
+  Text,
+  Title,
+} from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { useLoaderData, useNavigate } from '@remix-run/react'
+import { Link, useLoaderData, useNavigate } from '@remix-run/react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
@@ -88,7 +95,11 @@ export default function Users() {
 
   const rows = users.map((u) => (
     <tr key={u.id}>
-      <td>{u.nickname}</td>
+      <td>
+        <Anchor component={Link} to={`/profile/${u.nickname}`}>
+          {u.nickname}
+        </Anchor>
+      </td>
       <td>{u.name}</td>
     </tr>
   ))
