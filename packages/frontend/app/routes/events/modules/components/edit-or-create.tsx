@@ -186,7 +186,7 @@ export const EditOrCreate: FC<Props> = ({
         </Stepper>
         <Grid gutter="xs" my="sm" align="center">
           <Grid.Col span={3}>
-            <Group position="right">
+            <Group position="left">
               <Button
                 variant="outline"
                 color="orange"
