@@ -1,16 +1,14 @@
 import {
   Alert,
   Anchor,
-  Avatar,
   Button,
   Center,
+  Container,
   Divider,
   Group,
   LoadingOverlay,
-  Paper,
   SimpleGrid,
   Switch,
-  Text,
 } from '@mantine/core'
 import type {
   ActionFunction,
@@ -29,6 +27,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { ProfileBox } from '~/routes/profile/modules/profile-box'
 import { userPrefsCookie } from '~/routes/profile/modules/user-prefs-cookie'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
@@ -126,6 +125,8 @@ interface UserPreferences {
   eventCreated: boolean
 }
 
+const BOX_SIZE = 'xs'
+
 export default function Profile() {
   const submit = useSubmit()
   const fetcher = useFetcher()
@@ -156,108 +157,105 @@ export default function Profile() {
   }
 
   return (
-    <Paper radius="md" withBorder p="lg" m="lg">
-      <Avatar src={user.picture} size={120} radius={120} mx="auto" />
-      <Text
-        align="center"
-        size="lg"
-        weight={500}
-        mt="md"
-        data-testid="profile-nick"
-      >
-        {user.nickname}
-      </Text>
-      <Text align="center" fw={500} size="sm" data-testid="profile-name">
-        {name}
-      </Text>
-      <Text align="center" fw={500} size="sm" data-testid="profile-email">
-        {email}
-      </Text>
-      {hasGravatarTip && (
-        <>
-          <Form
-            method="post"
-            action="/profile/user-prefs"
-            ref={gravatarFormReference}
-          >
-            <input type="hidden" name="showGravatarTip" value="hidden" />
-          </Form>
-          <Center>
-            <Alert
-              onClose={() => {
-                setGravatarTip(false)
-                submit(gravatarFormReference.current)
-              }}
-              withCloseButton
-              closeButtonLabel="Sulje"
-              icon={<IconAlertCircle size={16} />}
-              title="Info"
-              color="gray"
+    <>
+      <Container size={BOX_SIZE} mt={75}>
+        <ProfileBox
+          picture={user.picture}
+          nickname={user.nickname}
+          name={name}
+          email={email}
+        />
+      </Container>
+      <Container size={BOX_SIZE}>
+        {hasGravatarTip && (
+          <>
+            <Form
+              method="post"
+              action="/profile/user-prefs"
+              ref={gravatarFormReference}
+            >
+              <input type="hidden" name="showGravatarTip" value="hidden" />
+            </Form>
+            <Center>
+              <Alert
+                onClose={() => {
+                  setGravatarTip(false)
+                  submit(gravatarFormReference.current)
+                }}
+                withCloseButton
+                closeButtonLabel="Sulje"
+                icon={<IconAlertCircle size={16} />}
+                title="Info"
+                color="gray"
+                my="sm"
+                sx={{ maxWidth: 300, width: '100%' }}
+              >
+                Profiilikuvasi on haettu palvelusta{' '}
+                <Anchor href="https://gravatar.com" target="_blank">
+                  Gravatar
+                </Anchor>
+                , kun tilisi luotiin. Jos näet vain nimikirjaimet sinulla ei ole
+                Gravatar-tiliä osoitteella {email}.
+              </Alert>
+            </Center>
+          </>
+        )}
+      </Container>
+      <Container size={BOX_SIZE}>
+        <Divider my="sm" label="Sähköpostiasetukset" labelPosition="center" />
+        <Group position="center">
+          <div style={{ position: 'relative' }}>
+            {fetcher.state === 'submitting' && <LoadingOverlay visible />}
+            <Switch
+              styles={switchStyles}
+              name="eventCreated"
+              label="Lähetä sähköposti, kun uusi tapahtuma luodaan."
+              checked={emailSettings.eventCreated}
+              onChange={handleCreatedChange}
+              onLabel="ON"
+              offLabel="OFF"
+              size="md"
+              data-testid="preference-event-created"
+            />
+            <Switch
+              disabled
+              name="weekly"
+              styles={switchStyles}
+              label="Lähetä viikon tapahtumat sähköpostitse."
+              onLabel="ON"
+              offLabel="OFF"
+              checked={preferences.subscribeWeeklyEmail}
+              size="md"
               my="sm"
-              sx={{ maxWidth: 300, width: '100%' }}
-            >
-              Profiilikuvasi on haettu palvelusta{' '}
-              <Anchor href="https://gravatar.com" target="_blank">
-                Gravatar
-              </Anchor>
-              , kun tilisi luotiin. Jos näet vain nimikirjaimet sinulla ei ole
-              Gravatar-tiliä osoitteella {email}.
-            </Alert>
-          </Center>
-        </>
-      )}
-      <Divider my="sm" label="Sähköpostiasetukset" labelPosition="center" />
-
-      <Group position="center">
-        <div style={{ position: 'relative' }}>
-          {fetcher.state === 'submitting' && <LoadingOverlay visible />}
-          <Switch
-            styles={switchStyles}
-            name="eventCreated"
-            label="Lähetä sähköposti, kun uusi tapahtuma luodaan."
-            checked={emailSettings.eventCreated}
-            onChange={handleCreatedChange}
-            onLabel="ON"
-            offLabel="OFF"
-            size="md"
-            data-testid="preference-event-created"
-          />
-          <Switch
-            disabled
-            name="weekly"
-            styles={switchStyles}
-            label="Lähetä viikon tapahtumat sähköpostitse."
-            onLabel="ON"
-            offLabel="OFF"
-            checked={preferences.subscribeWeeklyEmail}
-            size="md"
-            my="sm"
-          />
-        </div>
-      </Group>
-      <Group position="center" mt="sm">
-        <Alert
-          icon={<IconAlertCircle size={16} />}
-          title="Fun fact"
-          color="red"
-        >
-          Viikkosähköposti ei vielä käytössä.
-        </Alert>
-      </Group>
-      <Divider my="sm" label="Kirjaudu ulos" labelPosition="center" />
-      <Group position="center">
-        <SimpleGrid cols={1} ml="lg">
-          <Form action="/logout" method="post">
-            <Button
-              type="submit"
-              leftIcon={<IconLogout size={18} />}
-              data-testid="profile-logout"
-            >
-              Kirjaudu ulos
-            </Button>
-          </Form>
-        </SimpleGrid>
-      </Group>
-    </Paper>
+            />
+          </div>
+        </Group>
+        <Group position="center" mt="sm">
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            title="Fun fact"
+            color="red"
+          >
+            Viikkosähköposti ei vielä käytössä.
+          </Alert>
+        </Group>
+      </Container>
+      <Container size={BOX_SIZE}>
+        <Divider my="sm" label="Kirjaudu ulos" labelPosition="center" />
+        <Group position="center">
+          <SimpleGrid cols={1} ml="lg">
+            <Form action="/logout" method="post">
+              <Button
+                type="submit"
+                leftIcon={<IconLogout size={18} />}
+                data-testid="profile-logout"
+              >
+                Kirjaudu ulos
+              </Button>
+            </Form>
+          </SimpleGrid>
+        </Group>
+      </Container>
+    </>
   )
 }
