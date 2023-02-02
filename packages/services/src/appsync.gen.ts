@@ -233,6 +233,7 @@ export type Query = {
   events: Array<Event>;
   eventsByUser: Array<Event>;
   me: MeUser;
+  user?: Maybe<OtherUser>;
   users: UsersResponse;
 };
 
@@ -244,6 +245,11 @@ export type QueryEventArgs = {
 
 export type QueryEventsByUserArgs = {
   userId: Scalars['String'];
+};
+
+
+export type QueryUserArgs = {
+  nickname: Scalars['String'];
 };
 
 
