@@ -96,11 +96,15 @@ export default function Users() {
   const rows = users.map((u) => (
     <tr key={u.id}>
       <td>
-        <Anchor component={Link} to={`/members/${u.nickname}`}>
+        <Anchor
+          component={Link}
+          to={`/members/${u.nickname}`}
+          data-testid="member-nick"
+        >
           {u.nickname}
         </Anchor>
       </td>
-      <td>{u.name}</td>
+      <td data-testid="member-name">{u.name}</td>
     </tr>
   ))
 
