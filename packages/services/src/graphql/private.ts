@@ -11,6 +11,7 @@ import type {
   MutationUpdateMeArgs,
   OtherUser,
   QueryEventArgs as QueryEventArguments,
+  QueryUserArgs,
   QueryUsersArgs,
   UsersResponse,
 } from '../appsync.gen'
@@ -22,6 +23,7 @@ import { updateEvent } from './events/update-event'
 import { assertUnreachable } from './support/assert-unreachable'
 import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
+import { getUser } from './users/get-user'
 import { getUsers } from './users/get-users'
 import { participateEvent } from '~/graphql/events/participate-event'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
@@ -34,6 +36,7 @@ export type Inputs =
   | MutationUpdateEventArgs
   | MutationUpdateMeArgs
   | QueryEventArguments
+  | QueryUserArgs
   | QueryUsersArgs
 
 export type Outputs =
@@ -41,6 +44,7 @@ export type Outputs =
   | Dt65Event[]
   | IdPayload
   | MeUser
+  | OtherUser
   | OtherUser[]
   | UsersResponse
   | boolean
@@ -57,6 +61,7 @@ const PRIVATE_FIELDS = [
   'updateEvent',
   'updateMe',
   'users',
+  'user',
 ] as const
 type PrivateField = (typeof PRIVATE_FIELDS)[number]
 
@@ -123,6 +128,14 @@ export const privateResolver = (
         allowScopes(['read:me'])
         return getMe(
           event as AppSyncResolverEvent<EmptyArgs>,
+          context,
+          callback
+        )
+      }
+      case 'user': {
+        allowScopes(['read:users'])
+        return getUser(
+          event as AppSyncResolverEvent<QueryUserArgs>,
           context,
           callback
         )

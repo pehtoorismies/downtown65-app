@@ -72,6 +72,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       'Query    events': 'gql',
       'Query    me': 'gql',
       'Query    users': 'gql',
+      'Query    user': 'gql',
       'Mutation createEvent': 'gql',
       'Mutation updateEvent': 'gql',
       'Mutation deleteEvent': 'gql',
