@@ -3,9 +3,9 @@ import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Link, useCatch, useLoaderData } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import invariant from 'tiny-invariant'
+import { ProfileBox } from '~/components/profile-box'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { ProfileBox } from '~/routes/profile/modules/profile-box'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {

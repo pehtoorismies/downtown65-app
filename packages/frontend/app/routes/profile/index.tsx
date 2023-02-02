@@ -20,6 +20,7 @@ import { Form, useFetcher, useLoaderData, useSubmit } from '@remix-run/react'
 import { IconAlertCircle, IconLogout } from '@tabler/icons-react'
 import type { ChangeEventHandler } from 'react'
 import React, { useRef, useState } from 'react'
+import { ProfileBox } from '~/components/profile-box'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import {
@@ -27,7 +28,6 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { ProfileBox } from '~/routes/profile/modules/profile-box'
 import { userPrefsCookie } from '~/routes/profile/modules/user-prefs-cookie'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
