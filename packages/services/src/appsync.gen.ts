@@ -209,6 +209,7 @@ export type MutationUpdateMeArgs = {
 
 export type OtherUser = DetailedUser & User & {
   __typename?: 'OtherUser';
+  createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];

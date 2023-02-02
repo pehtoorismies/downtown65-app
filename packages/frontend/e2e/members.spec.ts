@@ -32,6 +32,9 @@ test.describe('Members page', () => {
 
     await expect(page.getByTestId('profile-nick')).toHaveText(nickname)
     await expect(page.getByTestId('profile-name')).toHaveText(name)
+    await expect(page.getByTestId('member-created-at')).toHaveText(
+      /.*(?:\d{1,2}\.){2}\d{4}$/
+    )
 
     await page.getByTestId('to-members-link').click()
 

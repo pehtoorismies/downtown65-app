@@ -40,6 +40,7 @@ export const Auth0QueryUsersResponse = z.object({
   email: z.string(),
   nickname: z.string(),
   picture: z.string(),
+  created_at: z.string(),
 })
 
 type Auth0QueryUsersResponse = z.infer<typeof Auth0QueryUsersResponse>
@@ -51,5 +52,15 @@ export const mapToOtherUser = (user: Auth0QueryUsersResponse): OtherUser => {
     name: user.name,
     nickname: user.nickname,
     picture: user.picture,
+    createdAt: user.created_at,
   }
 }
+
+export const QUERY_USER_RETURNED_FIELDS = [
+  'nickname',
+  'name',
+  'user_id',
+  'picture',
+  'email',
+  'created_at',
+].join(',')

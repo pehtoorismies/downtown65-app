@@ -74,6 +74,7 @@ type OtherUser implements User & DetailedUser {
     picture: String!
     name: String!
     nickname: String!
+    createdAt: String!
 }
 
 
