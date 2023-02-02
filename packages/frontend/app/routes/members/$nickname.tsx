@@ -30,12 +30,12 @@ interface LoaderData extends PrivateRoute {
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  invariant(params.nick, 'Expected params.nick')
+  invariant(params.nickname, 'Expected params.nickname')
   const { user, accessToken } = await loaderAuthenticate(request)
 
   const response = await getGqlSdk().GetUserByNick(
     {
-      nickname: params.nick,
+      nickname: params.nickname,
     },
     {
       Authorization: `Bearer ${accessToken}`,
