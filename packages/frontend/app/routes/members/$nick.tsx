@@ -83,7 +83,7 @@ export const CatchBoundary = () => {
       <Image
         radius="md"
         src="/profile/not-found.jpg"
-        alt="Random event image"
+        alt="Anonymous holding fire"
       />
       <Text align="center"> {caught.statusText}</Text>
       <Button
