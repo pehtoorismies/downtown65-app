@@ -11,3 +11,13 @@ query GetUsers($perPage: Int!, $page: Int!) {
         total
     }
 }
+
+query GetUserByNick($nickname: String!) {
+    user(nickname: $nickname) {
+        id
+        name
+        nickname
+        email
+        picture
+    }
+}

@@ -428,6 +428,13 @@ export type GetUsersQueryVariables = Exact<{
 
 export type GetUsersQuery = { __typename?: 'Query', users: { __typename?: 'UsersResponse', length: number, limit: number, start: number, total: number, users: Array<{ __typename?: 'OtherUser', id: string, name: string, nickname: string }> } };
 
+export type GetUserByNickQueryVariables = Exact<{
+  nickname: Scalars['String'];
+}>;
+
+
+export type GetUserByNickQuery = { __typename?: 'Query', user?: { __typename?: 'OtherUser', id: string, name: string, nickname: string, email: string, picture: string } |  undefined };
+
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -440,13 +447,6 @@ export type UpdateMeMutationVariables = Exact<{
 
 
 export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename?: 'MeUser', id: string, nickname: string, name: string, preferences: { __typename?: 'Preferences', subscribeWeeklyEmail: boolean, subscribeEventCreationEmail: boolean } } };
-
-export type GetUserByNickQueryVariables = Exact<{
-  nickname: Scalars['String'];
-}>;
-
-
-export type GetUserByNickQuery = { __typename?: 'Query', user?: { __typename?: 'OtherUser', id: string, name: string, nickname: string, email: string, picture: string } |  undefined };
 
 export const BaseFieldsFragmentDoc = gql`
     fragment baseFields on Event {
@@ -579,6 +579,17 @@ export const GetUsersDocument = gql`
   }
 }
     `;
+export const GetUserByNickDocument = gql`
+    query GetUserByNick($nickname: String!) {
+  user(nickname: $nickname) {
+    id
+    name
+    nickname
+    email
+    picture
+  }
+}
+    `;
 export const GetProfileDocument = gql`
     query GetProfile {
   me {
@@ -606,17 +617,6 @@ export const UpdateMeDocument = gql`
       subscribeWeeklyEmail
       subscribeEventCreationEmail
     }
-  }
-}
-    `;
-export const GetUserByNickDocument = gql`
-    query GetUserByNick($nickname: String!) {
-  user(nickname: $nickname) {
-    id
-    name
-    nickname
-    email
-    picture
   }
 }
     `;
@@ -664,14 +664,14 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     GetUsers(variables: GetUsersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUsersQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetUsersQuery>(GetUsersDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetUsers', 'query');
     },
+    GetUserByNick(variables: GetUserByNickQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUserByNickQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetUserByNickQuery>(GetUserByNickDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetUserByNick', 'query');
+    },
     GetProfile(variables?: GetProfileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetProfileQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetProfileQuery>(GetProfileDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetProfile', 'query');
     },
     UpdateMe(variables: UpdateMeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMeMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateMeMutation>(UpdateMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateMe', 'mutation');
-    },
-    GetUserByNick(variables: GetUserByNickQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUserByNickQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetUserByNickQuery>(GetUserByNickDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetUserByNick', 'query');
     }
   };
 }
