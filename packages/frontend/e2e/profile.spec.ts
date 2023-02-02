@@ -1,12 +1,10 @@
 import { expect, test } from '@playwright/test'
+import { testUser } from './test-user'
 
-test.describe('Members page', () => {
+test.describe('Profile page', () => {
   test('should show members', async ({ page }) => {
-    await page.goto('/events')
-    await page.getByRole('link', { name: 'Jäsenet' }).click()
-    await expect(
-      page.getByRole('heading', { name: 'Seuran jäsenet' })
-    ).toBeVisible()
-    await expect(page.getByText(/^Jäseniä yhteensä: \d+$/)).toBeVisible()
+    await page.goto('/profile')
+    await expect(page.getByTestId('profile-nick')).toHaveText(testUser.nick)
+    await expect(page.getByTestId('profile-email')).toHaveText(testUser.email)
   })
 })
