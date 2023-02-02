@@ -19,5 +19,6 @@ query GetUserByNick($nickname: String!) {
         nickname
         email
         picture
+        createdAt
     }
 }

@@ -3,6 +3,7 @@ import {
   Button,
   Center,
   Container,
+  Divider,
   Image,
   Text,
   Title,
@@ -10,6 +11,8 @@ import {
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Link, useCatch, useLoaderData } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
+import format from 'date-fns/format'
+import React from 'react'
 import invariant from 'tiny-invariant'
 import { ProfileBox } from '~/components/profile-box'
 import type { PrivateRoute } from '~/domain/private-route'
@@ -27,6 +30,7 @@ interface LoaderData extends PrivateRoute {
   nickname: string
   email: string
   picture: string
+  createdAt: string
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
@@ -49,20 +53,35 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     })
   }
 
+  const createdAt = format(new Date(response.user.createdAt), 'd.M.yyyy')
+
   return {
     user,
     ...response.user,
+    createdAt,
   }
 }
 
-export default function ProfilePage() {
+export default function MemberPage() {
   const data = useLoaderData<LoaderData>()
+  const createdAt = `käyttäjä luotu: ${data.createdAt}`
   return (
     <Container size="xs" mt={75}>
       <Title ta="center" order={1}>
         Jäsenprofiili
       </Title>
       <ProfileBox {...data} />
+      <Divider my="sm" label="System stats" labelPosition="center" />
+      <Text
+        ta="center"
+        fz="sm"
+        fw={500}
+        fs="italic"
+        data-testid="member-created-at"
+      >
+        {createdAt}
+      </Text>
+
       <Center mt="xl">
         <Anchor component={Link} to="/members" data-testid="to-members-link">
           Jäsenet-sivulle &#187;

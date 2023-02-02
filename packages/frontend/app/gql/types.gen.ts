@@ -212,6 +212,7 @@ export type MutationUpdateMeArgs = {
 
 export type OtherUser = DetailedUser & User & {
   __typename?: 'OtherUser';
+  createdAt: Scalars['String'];
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -433,7 +434,7 @@ export type GetUserByNickQueryVariables = Exact<{
 }>;
 
 
-export type GetUserByNickQuery = { __typename?: 'Query', user?: { __typename?: 'OtherUser', id: string, name: string, nickname: string, email: string, picture: string } |  undefined };
+export type GetUserByNickQuery = { __typename?: 'Query', user?: { __typename?: 'OtherUser', id: string, name: string, nickname: string, email: string, picture: string, createdAt: string } |  undefined };
 
 export type GetProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -587,6 +588,7 @@ export const GetUserByNickDocument = gql`
     nickname
     email
     picture
+    createdAt
   }
 }
     `;

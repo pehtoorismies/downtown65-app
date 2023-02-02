@@ -4,6 +4,7 @@ import type { QueryUsersArgs, UsersResponse } from '~/appsync.gen'
 import { getAuth0Management } from '~/graphql/support/auth0'
 import {
   Auth0QueryUsersResponse,
+  QUERY_USER_RETURNED_FIELDS,
   mapToOtherUser,
 } from '~/graphql/support/auth0-user'
 
@@ -19,7 +20,7 @@ export const getUsers: AppSyncResolverHandler<
     page: page,
     per_page: perPage,
     include_totals: true,
-    fields: 'nickname,name,user_id,picture,email',
+    fields: QUERY_USER_RETURNED_FIELDS,
     sort: 'created_at:1',
   })
   const auth0Users = Auth0Users.parse(response.users)
