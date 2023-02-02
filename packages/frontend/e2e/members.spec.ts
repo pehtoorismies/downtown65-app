@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test.describe('Members page', () => {
-  test('should show members', async ({ page }) => {
+  test('should navigate to members', async ({ page }) => {
     await page.goto('/events')
     await page.getByRole('link', { name: 'Jäsenet' }).click()
     await expect(
