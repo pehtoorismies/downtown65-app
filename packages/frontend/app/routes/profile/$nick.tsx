@@ -1,7 +1,9 @@
 import { Container, Title } from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
+import invariant from 'tiny-invariant'
 import type { PrivateRoute } from '~/domain/private-route'
+import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { ProfileBox } from '~/routes/profile/modules/profile-box'
 import { loaderAuthenticate } from '~/session.server'
 
@@ -18,15 +20,29 @@ interface LoaderData extends PrivateRoute {
   picture: string
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
+  invariant(params.nick, 'Expected params.nick')
   const { user, accessToken } = await loaderAuthenticate(request)
 
+  const response = await getGqlSdk().GetUserByNick(
+    {
+      nickname: params.nick,
+    },
+    {
+      Authorization: `Bearer ${accessToken}`,
+    }
+  )
+
+  if (!response.user) {
+    throw new Response('Not Found', {
+      status: 404,
+      statusText: 'KÄyttäjää ei löydy',
+    })
+  }
+
   return {
-    name: 'Kissa Mies',
-    nickname: 'kissamies86',
-    email: 'asdas@fdssfd.fi',
-    picture: 'https://via.placeholder.com/150 ',
     user,
+    ...response.user,
   }
 }
 
