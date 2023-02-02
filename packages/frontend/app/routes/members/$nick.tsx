@@ -1,4 +1,12 @@
-import { Button, Container, Image, Text, Title } from '@mantine/core'
+import {
+  Anchor,
+  Button,
+  Center,
+  Container,
+  Image,
+  Text,
+  Title,
+} from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { Link, useCatch, useLoaderData } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
@@ -55,6 +63,11 @@ export default function ProfilePage() {
         Jäsenprofiili
       </Title>
       <ProfileBox {...data} />
+      <Center mt="xl">
+        <Anchor component={Link} to="/members" data-testid="to-members-link">
+          Jäsenet-sivulle &#187;
+        </Anchor>
+      </Center>
     </Container>
   )
 }
