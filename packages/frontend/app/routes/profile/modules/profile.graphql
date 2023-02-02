@@ -31,12 +31,3 @@ mutation UpdateMe($subscribeWeeklyEmail: Boolean!, $subscribeEventCreationEmail:
     }
 }
 
-query GetUserByNick($nickname: String!) {
-    user(nickname: $nickname) {
-        id
-        name
-        nickname
-        email
-        picture
-    }
-}
