@@ -1,6 +1,7 @@
-import { Container, Title } from '@mantine/core'
+import { Button, Container, Image, Text, Title } from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Link, useCatch, useLoaderData } from '@remix-run/react'
+import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import invariant from 'tiny-invariant'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
@@ -36,7 +37,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   if (!response.user) {
     throw new Response('Not Found', {
       status: 404,
-      statusText: 'KÄyttäjää ei löydy',
+      statusText: 'Käyttäjää ei löydy',
     })
   }
 
@@ -54,6 +55,35 @@ export default function ProfilePage() {
         Jäsenprofiili
       </Title>
       <ProfileBox {...data} />
+    </Container>
+  )
+}
+
+export const CatchBoundary = () => {
+  const caught = useCatch()
+
+  return (
+    <Container py="lg">
+      <Title my="sm" align="center" size={40}>
+        {caught.status}
+      </Title>
+      <Image
+        radius="md"
+        src="/profile/not-found.jpg"
+        alt="Random event image"
+      />
+      <Text align="center"> {caught.statusText}</Text>
+      <Button
+        component={Link}
+        to="/members"
+        variant="outline"
+        size="md"
+        mt="xl"
+        leftIcon={<IconArrowNarrowLeft size={18} />}
+        data-testid="to-members-button"
+      >
+        Jäsensivulle
+      </Button>
     </Container>
   )
 }
