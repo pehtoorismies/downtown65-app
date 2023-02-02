@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { MeUser } from '~/appsync.gen'
+import type { MeUser, OtherUser } from '~/appsync.gen'
 
 const ROLES = ['USER', 'ADMIN'] as const
 
@@ -31,5 +31,25 @@ export const toUser = (auth0User: Auth0UserResponse): MeUser => {
     // updatedAt: auth0User.updated_at,
     // createdAt: auth0User.created_at,
     preferences: auth0User.user_metadata,
+  }
+}
+
+export const Auth0QueryUsersResponse = z.object({
+  user_id: z.string(),
+  name: z.string(),
+  email: z.string(),
+  nickname: z.string(),
+  picture: z.string(),
+})
+
+type Auth0QueryUsersResponse = z.infer<typeof Auth0QueryUsersResponse>
+
+export const mapToOtherUser = (user: Auth0QueryUsersResponse): OtherUser => {
+  return {
+    id: user.user_id,
+    email: user.email,
+    name: user.name,
+    nickname: user.nickname,
+    picture: user.picture,
   }
 }

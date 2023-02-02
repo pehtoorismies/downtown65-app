@@ -1,10 +1,13 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
-import { Auth0UserResponse, mapToOtherUser } from './auth0-user-response'
 import type { OtherUser, QueryUserArgs } from '~/appsync.gen'
 import { getAuth0Management } from '~/graphql/support/auth0'
+import {
+  Auth0QueryUsersResponse,
+  mapToOtherUser,
+} from '~/graphql/support/auth0-user'
 
-const Auth0Users = z.array(Auth0UserResponse)
+const Auth0Users = z.array(Auth0QueryUsersResponse)
 
 export const getUser: AppSyncResolverHandler<
   QueryUserArgs,
