@@ -95,7 +95,6 @@ interface LoaderData extends PublicRoute {
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.id, 'Expected params.id')
-  // console.log('secret secrererrer', process.env['COOKIE_SECRET'])
   const user = await getAuthenticatedUser(request)
 
   const { event } = await getGqlSdk().GetEvent(
