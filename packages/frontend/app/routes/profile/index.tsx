@@ -45,7 +45,6 @@ export const action: ActionFunction = async ({ request }) => {
   const { headers, accessToken } = await actionAuthenticate(request)
 
   const formData = await request.formData()
-
   const eventCreated = formData.get('eventCreated') === 'on'
   const weekly = formData.get('weekly') === 'on'
 
@@ -142,7 +141,9 @@ export default function Profile() {
     eventCreated: preferences.subscribeEventCreationEmail,
   })
 
-  const handleCreatedChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onChangeEventCreatedSubscription: ChangeEventHandler<
+    HTMLInputElement
+  > = (event) => {
     setEmailSettings({
       ...emailSettings,
       eventCreated: event.currentTarget.checked,
@@ -164,7 +165,15 @@ export default function Profile() {
           nickname={user.nickname}
           name={name}
           email={email}
-        />
+        >
+          <Center mt="sm">
+            <Form action="/profile/change-avatar">
+              <Button compact size="xs" variant="outline" type="submit">
+                Vaihda
+              </Button>
+            </Form>
+          </Center>
+        </ProfileBox>
       </Container>
       <Container size={BOX_SIZE}>
         {hasGravatarTip && (
@@ -211,7 +220,7 @@ export default function Profile() {
               name="eventCreated"
               label="Lähetä sähköposti, kun uusi tapahtuma luodaan."
               checked={emailSettings.eventCreated}
-              onChange={handleCreatedChange}
+              onChange={onChangeEventCreatedSubscription}
               onLabel="ON"
               offLabel="OFF"
               size="md"
