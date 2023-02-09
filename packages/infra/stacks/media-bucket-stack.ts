@@ -1,6 +1,12 @@
 import type { StackContext } from '@serverless-stack/resources'
 import { Bucket } from '@serverless-stack/resources'
 import { RemovalPolicy } from 'aws-cdk-lib'
+import cloudfront, {
+  AllowedMethods,
+  CachePolicy,
+  ViewerProtocolPolicy,
+} from 'aws-cdk-lib/aws-cloudfront'
+import { S3Origin } from 'aws-cdk-lib/aws-cloudfront-origins'
 
 export const MediaBucketStack = ({ app, stack }: StackContext) => {
   const removalPolicy =
@@ -15,11 +21,31 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
     },
   })
 
+  const mediaCloudFront = new cloudfront.Distribution(
+    stack,
+    'mediaDistribution',
+    {
+      defaultBehavior: {
+        origin: new S3Origin(bucket.cdk.bucket),
+        cachePolicy: CachePolicy.CACHING_OPTIMIZED,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
+      },
+      comment: `Serve from S3 media ${app.stage}`,
+    }
+  )
+  mediaCloudFront.applyRemovalPolicy(
+    app.stage === 'production' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY
+  )
+
   stack.addOutputs({
     mediaBucketName: bucket.bucketName,
+    // cloudfrontDomainName: mediaCloudFront.distributionDomainName,
   })
 
   return {
     MediaBucketName: bucket.bucketName,
+    CloudfrontDomainName: mediaCloudFront.distributionDomainName,
+    // MediaBucketS3: bucket.cdk.bucket,
   }
 }

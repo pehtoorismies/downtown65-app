@@ -9,7 +9,7 @@ import { getDomain } from './support/get-domain'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
-  const { MediaBucketName } = use(MediaBucketStack)
+  const { MediaBucketName, CloudfrontDomainName } = use(MediaBucketStack)
 
   const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
     domainName: 'downtown65.events',
@@ -36,6 +36,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       DOMAIN_NAME: domainName,
       COOKIE_SECRET: getEnvironmentVariable('COOKIE_SECRET'),
       STORAGE_BUCKET: MediaBucketName,
+      MEDIA_DOMAIN: CloudfrontDomainName,
       // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
     },
     customDomain: {
@@ -47,6 +48,12 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       },
     },
   })
+
+  // site.cdk.distribution.addBehavior('media/*', new S3Origin(MediaBucketS3), {
+  //   cachePolicy: CachePolicy.CACHING_OPTIMIZED,
+  //   viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+  //   allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
+  // })
 
   // Add the site's URL to stack output
   stack.addOutputs({

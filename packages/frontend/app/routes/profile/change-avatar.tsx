@@ -24,8 +24,8 @@ import {
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
-import { s3UploadHandler } from '~/routes/profile/modules/s3-upload.server'
-import { loaderAuthenticate } from '~/session.server'
+import { createProfileUploadHandler } from '~/routes/profile/modules/s3-upload.server'
+import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 const MEGA_BYTE = 1024 ** 2
 
@@ -41,12 +41,21 @@ type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const { accessToken, headers, user } = await actionAuthenticate(request)
+
+  const s3UploadHandler = createProfileUploadHandler({
+    userId: user.id,
+  })
+
   const formData = await parseMultipartFormData(request, s3UploadHandler)
-  const imgSource = formData.get('img')
-  const imgDesc = formData.get('desc')
+  const imgSource = formData.get('file')
   console.log(imgSource)
-  console.log(imgDesc)
-  return json({})
+  return json(
+    {},
+    {
+      headers,
+    }
+  )
 }
 
 export const loader: LoaderFunction = async ({ request }) => {

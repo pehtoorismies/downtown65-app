@@ -6,6 +6,7 @@ import {
   Container,
   Divider,
   Group,
+  Image,
   LoadingOverlay,
   SimpleGrid,
   Switch,
@@ -160,6 +161,7 @@ export default function Profile() {
   return (
     <>
       <Container size={BOX_SIZE} mt={75}>
+        <Image src="https://dltevjmlvb6xo.cloudfront.net/users/auth0|5d9ae9cef5515f0e30d9b42a/avatar-711a0461dfe5dc44a251833b8a92b92f39ff3e95.jpeg" />
         <ProfileBox
           picture={user.picture}
           nickname={user.nickname}
