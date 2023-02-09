@@ -20,6 +20,6 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
   })
 
   return {
-    mediaBucketName: bucket.bucketName,
+    MediaBucketName: bucket.bucketName,
   }
 }

@@ -8,10 +8,14 @@ import {
   Text,
   ThemeIcon,
 } from '@mantine/core'
+import type { FileWithPath } from '@mantine/dropzone'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
-import type { LoaderFunction } from '@remix-run/node'
-import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import type { ActionFunction, LoaderFunction } from '@remix-run/node'
+import {
+  json,
+  unstable_parseMultipartFormData as parseMultipartFormData,
+} from '@remix-run/node'
+import { useFetcher, useLoaderData } from '@remix-run/react'
 import {
   IconAlertCircle,
   IconDownload,
@@ -20,7 +24,30 @@ import {
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
+import { s3UploadHandler } from '~/routes/profile/modules/s3-upload.server'
 import { loaderAuthenticate } from '~/session.server'
+
+const MEGA_BYTE = 1024 ** 2
+
+type State =
+  | { kind: 'error'; error: string; picture: string }
+  | { kind: 'init'; picture: string }
+  | { kind: 'newImageSet'; picture: string; fileWithPath: FileWithPath }
+
+type ActionData = {
+  errorMsg?: string
+  imgSrc?: string
+  imgDesc?: string
+}
+
+export const action: ActionFunction = async ({ request }) => {
+  const formData = await parseMultipartFormData(request, s3UploadHandler)
+  const imgSource = formData.get('img')
+  const imgDesc = formData.get('desc')
+  console.log(imgSource)
+  console.log(imgDesc)
+  return json({})
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
   const { user } = await loaderAuthenticate(request)
@@ -28,19 +55,22 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<PrivateRoute>({ user })
 }
 
-const MEGA_BYTE = 1024 ** 2
-
-type State =
-  | { kind: 'error'; error: string; picture: string }
-  | { kind: 'init'; picture: string }
-  | { kind: 'newImageSet'; picture: string }
-
 export default function ChangeAvatar() {
+  const fetcher = useFetcher<ActionData>()
   const { user } = useLoaderData()
   const [state, setState] = useState<State>({
     kind: 'init',
     picture: user.picture,
   })
+
+  const uploadImage = () => {
+    if (state.kind !== 'newImageSet') {
+      return
+    }
+    const formData = new FormData()
+    formData.append('file', state.fileWithPath)
+    fetcher.submit(formData, { method: 'post', encType: 'multipart/form-data' })
+  }
 
   return (
     <Container pt="xl">
@@ -59,7 +89,11 @@ export default function ChangeAvatar() {
         maxFiles={1}
         onDrop={(files) => {
           const imageUrl = URL.createObjectURL(files[0])
-          setState({ kind: 'newImageSet', picture: imageUrl })
+          setState({
+            kind: 'newImageSet',
+            picture: imageUrl,
+            fileWithPath: files[0],
+          })
         }}
         onReject={() => {
           setState({ kind: 'error', error: 'Virhe', picture: user.picture })
@@ -114,7 +148,7 @@ export default function ChangeAvatar() {
       </Dropzone>
       {state.kind === 'newImageSet' && (
         <Stack align="center" m="xl">
-          <Button leftIcon={<IconUpload size={14} />}>
+          <Button leftIcon={<IconUpload size={14} />} onClick={uploadImage}>
             Vaihda profiilikuva
           </Button>
           <Button
