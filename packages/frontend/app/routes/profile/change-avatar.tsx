@@ -49,7 +49,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   const formData = await parseMultipartFormData(request, s3UploadHandler)
   const imgSource = formData.get('file')
-  console.log(imgSource)
+
   return json(
     {},
     {

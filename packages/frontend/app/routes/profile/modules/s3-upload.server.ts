@@ -1,9 +1,9 @@
 import * as crypto from 'node:crypto'
-import { PassThrough } from 'node:stream'
+import Stream, { PassThrough } from 'node:stream'
 import { getEnvironmentVariable } from '@downtown65-app/common'
 import type { UploadHandler } from '@remix-run/node'
-import { writeAsyncIterableToWritable } from '@remix-run/node'
 import AWS from 'aws-sdk'
+import sharp from 'sharp'
 import invariant from 'tiny-invariant'
 
 const STORAGE_BUCKET = getEnvironmentVariable('STORAGE_BUCKET')
@@ -23,18 +23,14 @@ const uploadStream = ({
   }
 }
 
-async function uploadStreamToS3(
-  data: AsyncIterable<Uint8Array>,
-  filename: string,
-  contentType: string
-) {
-  const stream = uploadStream({
-    Key: filename,
-    ContentType: contentType,
-  })
-  await writeAsyncIterableToWritable(data, stream.writeStream)
-  const file = await stream.promise
-  return file.Key
+const getProfileImage = (originalFileName: string, userId: string) => {
+  const extension = originalFileName.split('.').pop()
+  if (!extension) {
+    throw new Error(`Incorrect file image extension for ${originalFileName}`)
+  }
+
+  const rand = crypto.randomBytes(20).toString('hex')
+  return `users/${userId}/avatar-${rand}.${extension}`
 }
 
 export const createProfileUploadHandler = ({
@@ -46,20 +42,22 @@ export const createProfileUploadHandler = ({
     if (name !== 'file') {
       throw new Error(`Incorrect formData field '${name}. Should be 'file'`)
     }
-
-    const extension = filename?.split('.').pop()
-
     invariant(data, 'Expected data')
-    invariant(extension, 'Expected image file extension')
+    invariant(filename, 'Expected filename')
 
-    const rand = crypto.randomBytes(20).toString('hex')
-    const profileFilename = `users/${userId}/avatar-${rand}.${extension}`
-    const uploadedFileLocation = await uploadStreamToS3(
-      data,
-      profileFilename,
-      contentType
-    )
+    const profileFilename = getProfileImage(filename, userId)
 
-    return `https://${MEDIA_DOMAIN}/${uploadedFileLocation}`
+    const resizer = sharp().resize(200, 200)
+
+    const s3Stream = uploadStream({
+      Key: profileFilename,
+      ContentType: contentType,
+    })
+
+    Stream.Readable.from(data).pipe(resizer).pipe(s3Stream.writeStream)
+
+    await s3Stream.promise
+
+    return `https://${MEDIA_DOMAIN}/${profileFilename}`
   }
 }
