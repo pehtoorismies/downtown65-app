@@ -16,11 +16,12 @@ export default function (app: App) {
     // these are needed for mjml library to work
     bundle: {
       nodeModules: [
-        'uglify-js', // mjml email templates
-      ],
-      externalModules: [
+        'uglify-js', // mjml email templates,
         'sharp', // remix image processing
       ],
+      // externalModules: [
+      //
+      // ],
       format: 'esm',
       loader: {
         '.mjml': 'text',
