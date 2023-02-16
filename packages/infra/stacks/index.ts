@@ -19,9 +19,9 @@ export default function (app: App) {
         'uglify-js', // mjml email templates,
         'sharp', // remix image processing
       ],
-      // externalModules: [
-      //
-      // ],
+      externalModules: [
+        'sharp', // remix image processing
+      ],
       format: 'esm',
       loader: {
         '.mjml': 'text',

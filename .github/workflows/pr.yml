@@ -45,6 +45,7 @@ jobs:
         run: |
           cd packages/frontend
           echo "SHARP_VERSION=$(yarn info --json sharp version | jq -r '.data')" >> $GITHUB_ENV
+          echo "::debug::Use sharp version: ${{ env.SHARP_VERSION }}"
       - name: Install
         run: |
           yarn install --immutable --immutable-cache
