@@ -52,7 +52,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   site.cdk.function?.addLayers(
     new lambda.LayerVersion(stack, 'AppLayer', {
-      code: lambda.Code.fromAsset('layers/sharp'),
+      code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
     })
   )
 
