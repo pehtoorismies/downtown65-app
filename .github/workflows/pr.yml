@@ -47,8 +47,8 @@ jobs:
           echo "SHARP_VERSION=$(yarn info --json sharp version | jq -r '.data')" >> $GITHUB_ENV
       - name: Install
         run: |
-          (cd packages/frontend && SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn add sharp@${{ env.SHARP_VERSION }})
           yarn install --immutable --immutable-cache
+          (cd packages/frontend && SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn add sharp@${{ env.SHARP_VERSION }})
       - name: Set default common sst secrets
         run: |
           npx sst secrets --stage $PR_NAME set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
