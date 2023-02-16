@@ -40,9 +40,14 @@ jobs:
         with:
           node-version: 16
           cache: 'yarn'
+      - name: Get installed Sharp version
+        id: sharp-version
+        run: |
+          cd packages/frontend
+          echo "SHARP_VERSION=$(yarn info --json sharp version | jq -r '.data')" >> $GITHUB_ENV
       - name: Install
         run: |
-          SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn add sharp@0.31.3
+          (cd packages/frontend && SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn add sharp@${{ env.SHARP_VERSION }})
           yarn install --immutable --immutable-cache
       - name: Set default common sst secrets
         run: |
