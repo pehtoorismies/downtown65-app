@@ -15,7 +15,12 @@ export default function (app: App) {
   app.setDefaultFunctionProps({
     // these are needed for mjml library to work
     bundle: {
-      nodeModules: ['uglify-js'],
+      nodeModules: [
+        'uglify-js', // mjml email templates
+      ],
+      externalModules: [
+        'sharp', // remix image processing
+      ],
       format: 'esm',
       loader: {
         '.mjml': 'text',
