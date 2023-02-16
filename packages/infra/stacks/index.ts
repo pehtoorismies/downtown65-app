@@ -17,7 +17,7 @@ export default function (app: App) {
     bundle: {
       nodeModules: [
         'uglify-js', // mjml email templates,
-        'sharp', // remix image processing
+        // 'sharp', // remix image processing
       ],
       externalModules: [
         'sharp', // remix image processing
