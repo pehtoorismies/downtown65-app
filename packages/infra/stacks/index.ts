@@ -1,5 +1,6 @@
 import type { App } from '@serverless-stack/resources'
 import { RemovalPolicy } from 'aws-cdk-lib'
+import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { ConfigStack } from './config-stack'
 import { CronStack } from './cron-stack'
 import { DynamoStack } from './dynamo-stack'
@@ -14,6 +15,11 @@ export default function (app: App) {
   }
   app.setDefaultFunctionProps({
     // these are needed for mjml library to work
+    // layers: [
+    //   new lambda.LayerVersion(app, 'AppLayer', {
+    //     code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
+    //   }),
+    // ],
     bundle: {
       nodeModules: [
         'uglify-js', // mjml email templates,
@@ -27,6 +33,12 @@ export default function (app: App) {
         '.mjml': 'text',
       },
     },
+    layers: [
+      new lambda.LayerVersion(app, 'AppLayer', {
+        code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
+      }),
+    ],
+
     runtime: 'nodejs16.x',
     logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
   })

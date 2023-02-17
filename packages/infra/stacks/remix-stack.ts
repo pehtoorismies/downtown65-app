@@ -2,7 +2,6 @@ import { getEnvironmentVariable } from '@downtown65-app/common'
 import type { StackContext } from '@serverless-stack/resources'
 import { RemixSite, use } from '@serverless-stack/resources'
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
-import * as lambda from 'aws-cdk-lib/aws-lambda'
 import * as route53 from 'aws-cdk-lib/aws-route53'
 import { GraphqlStack } from './graphql-stack'
 import { MediaBucketStack } from './media-bucket-stack'
@@ -50,11 +49,11 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     },
   })
 
-  site.cdk.function?.addLayers(
-    new lambda.LayerVersion(stack, 'AppLayer', {
-      code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
-    })
-  )
+  // site.cdk.function?.addLayers(
+  //   new lambda.LayerVersion(stack, 'AppLayer', {
+  //     code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
+  //   })
+  // )
 
   // site.cdk.distribution.addBehavior('media/*', new S3Origin(MediaBucketS3), {
   //   cachePolicy: CachePolicy.CACHING_OPTIMIZED,
