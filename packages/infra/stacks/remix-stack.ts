@@ -4,10 +4,12 @@ import { RemixSite, use } from '@serverless-stack/resources'
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
 import * as route53 from 'aws-cdk-lib/aws-route53'
 import { GraphqlStack } from './graphql-stack'
+import { MediaBucketStack } from './media-bucket-stack'
 import { getDomain } from './support/get-domain'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
+  const { MediaBucketName, CloudfrontDomainName } = use(MediaBucketStack)
 
   const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
     domainName: 'downtown65.events',
@@ -33,6 +35,8 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       SST_STAGE: stage,
       DOMAIN_NAME: domainName,
       COOKIE_SECRET: getEnvironmentVariable('COOKIE_SECRET'),
+      STORAGE_BUCKET: MediaBucketName,
+      MEDIA_DOMAIN: CloudfrontDomainName,
       // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
     },
     customDomain: {
