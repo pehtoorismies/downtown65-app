@@ -2,9 +2,12 @@ import { PassThrough } from 'node:stream'
 import type { S3Handler } from 'aws-lambda'
 import AWS from 'aws-sdk'
 import type { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
+import pino from 'pino'
 import { getAvatarAttributes } from '~/functions/image/get-avatar-attributes'
 
 const S3 = new AWS.S3()
+
+const logger = pino({ level: 'debug' })
 
 const readStreamFromS3 = ({
   Bucket,
@@ -35,13 +38,13 @@ const writeStreamToS3 = ({
 export const main: S3Handler = async (event) => {
   const s3Record = event.Records[0].s3
   const Key = s3Record.object.key
-  console.log('Uploads', Key)
+  logger.debug({ Key }, 'Received uploads file')
   const Bucket = s3Record.bucket.name
 
   const attributes = getAvatarAttributes(Key)
 
   if (!attributes) {
-    console.log('Uploads: no effect')
+    logger.debug({ Key }, 'Not avatar compliant upload')
     return
   }
 
@@ -54,7 +57,13 @@ export const main: S3Handler = async (event) => {
 
   // Trigger the streams
   readStream.pipe(attributes.filterStream).pipe(writeStream)
-
+  logger.debug(
+    {
+      Key: attributes.Key,
+      ContentType: attributes.ContentType,
+    },
+    'Start upload transformed file'
+  )
   // Wait for the file to upload
   await upload
 }
