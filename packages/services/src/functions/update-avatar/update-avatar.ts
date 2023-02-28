@@ -1,5 +1,6 @@
 import { getEnvironmentVariable } from '@downtown65-app/common'
 import type { S3Handler } from 'aws-lambda'
+import pino from 'pino'
 import { getAuth0Management } from '~/graphql/support/auth0'
 
 // image/png, image/gif, image/jpeg, image/svg+xml, image/webp, image/avif
@@ -7,6 +8,8 @@ const AVATAR_REGEXP =
   /^avatars\/(?<s3compliantUserId>\w+)\/avatar-.+\.(gif|jpe?g|webp|jpeg|png|avif|svg)$/
 
 const USER_ID_REGEXP = /^auth0_(?<auth0userId>\w+)$/
+
+const logger = pino({ level: 'debug' })
 
 const getAuth0UserId = (Key: string) => {
   const keyMatches = Key.match(AVATAR_REGEXP)
@@ -36,12 +39,10 @@ export const main: S3Handler = async (event) => {
   const Key = s3Record.object.key
   const MEDIA_DOMAIN = getEnvironmentVariable('MEDIA_DOMAIN')
 
-  console.log('Avatar change', Key)
   const userId = getAuth0UserId(Key)
 
-  console.log('User id', userId)
-
   if (!userId) {
+    logger.debug('No avatar updates.Nothing to do with Key', Key)
     return
   }
 
@@ -50,5 +51,5 @@ export const main: S3Handler = async (event) => {
   const management = await getAuth0Management()
   await management.updateUser({ id: userId }, { picture })
 
-  console.log('Succefully updated picture')
+  logger.info({ userId, picture }, 'Successfully updated avatar')
 }
