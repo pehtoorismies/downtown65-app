@@ -1,3 +1,4 @@
+import { s3Key } from '@downtown65-app/common'
 import type { StackContext } from '@serverless-stack/resources'
 import { Bucket, use } from '@serverless-stack/resources'
 import { RemovalPolicy } from 'aws-cdk-lib'
@@ -46,6 +47,19 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
   )
 
   // TODO: remove notifications when https://github.com/serverless-stack/sst/issues/2522 is resolved
+  /**
+   * This should be done already inside Remix lambda, but it does not support
+   * "sharp".
+   * see: https://github.com/serverless-stack/sst/issues/2522
+   *
+   * So we have to count on S3 Key to provide all the information
+   *
+   * Logic here:
+   * uploads/avatars/auth0_12341234/avatar-123132.gif
+   * =>
+   * avatars/auth0_12341234/avatar.webp
+   *
+   */
   bucket.addNotifications(stack, {
     resize: {
       function: {
@@ -60,7 +74,7 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
         ],
       },
       events: ['object_created'],
-      filters: [{ prefix: 'uploads/' }],
+      filters: [{ prefix: s3Key.DIRECTORY_AVATAR_UPLOADS }],
     },
   })
   bucket.attachPermissionsToNotification('resize', [bucket])
@@ -76,7 +90,7 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
         bind: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
       },
       events: ['object_created'],
-      filters: [{ prefix: 'avatars/' }],
+      filters: [{ prefix: s3Key.DIRECTORY_AVATARS }],
     },
   })
   bucket.attachPermissionsToNotification('updateAvatar', [bucket])

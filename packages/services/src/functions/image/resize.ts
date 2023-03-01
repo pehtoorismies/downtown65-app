@@ -1,9 +1,10 @@
 import { PassThrough } from 'node:stream'
+import { s3Key } from '@downtown65-app/common'
 import type { S3Handler } from 'aws-lambda'
 import AWS from 'aws-sdk'
 import type { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
 import pino from 'pino'
-import { getAvatarAttributes } from '~/functions/image/get-avatar-attributes'
+import sharp from 'sharp'
 
 const S3 = new AWS.S3()
 
@@ -35,32 +36,37 @@ const writeStreamToS3 = ({
   }
 }
 
+const AVATAR_WIDTH = 200
+
+/**
+ * Notification for avatar file upload
+ *
+ * @param event
+ */
 export const main: S3Handler = async (event) => {
   const s3Record = event.Records[0].s3
   const Key = s3Record.object.key
   logger.debug({ Key }, 'Received uploads file')
   const Bucket = s3Record.bucket.name
 
-  const attributes = getAvatarAttributes(Key)
-
-  if (!attributes) {
-    logger.debug({ Key }, 'Not avatar compliant upload')
-    return
-  }
+  const userAvatarDir = s3Key.getAvatarDir(Key)
+  const filename = `avatar-w${AVATAR_WIDTH}.webp`
+  const avatarKey = `${userAvatarDir}/${filename}`
 
   const readStream = readStreamFromS3({ Key, Bucket })
   const { writeStream, upload } = writeStreamToS3({
     Bucket,
-    Key: attributes.Key,
-    ContentType: attributes.ContentType,
+    Key: avatarKey,
+    ContentType: 'image/webp',
   })
 
+  const filterStream = sharp().resize(AVATAR_WIDTH).webp()
+
   // Trigger the streams
-  readStream.pipe(attributes.filterStream).pipe(writeStream)
+  readStream.pipe(filterStream).pipe(writeStream)
   logger.debug(
     {
-      Key: attributes.Key,
-      ContentType: attributes.ContentType,
+      Key: avatarKey,
     },
     'Start upload transformed file'
   )

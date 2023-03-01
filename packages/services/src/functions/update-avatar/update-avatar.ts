@@ -1,55 +1,27 @@
-import { getEnvironmentVariable } from '@downtown65-app/common'
+import { getEnvironmentVariable, s3Key } from '@downtown65-app/common'
 import type { S3Handler } from 'aws-lambda'
 import pino from 'pino'
 import { getAuth0Management } from '~/graphql/support/auth0'
 
-// image/png, image/gif, image/jpeg, image/svg+xml, image/webp, image/avif
-const AVATAR_REGEXP =
-  /^avatars\/(?<s3compliantUserId>\w+)\/avatar-.+\.(gif|jpe?g|webp|jpeg|png|avif|svg)$/
-
-const USER_ID_REGEXP = /^auth0_(?<auth0userId>\w+)$/
-
 const logger = pino({ level: 'debug' })
-
-const getAuth0UserId = (Key: string) => {
-  const keyMatches = Key.match(AVATAR_REGEXP)
-
-  if (!keyMatches || !keyMatches.groups?.s3compliantUserId) {
-    return
-  }
-
-  const s3compliantUserId = keyMatches.groups?.s3compliantUserId
-
-  if (!s3compliantUserId) {
-    throw new Error(`Wrong s3compliantUserId in avatar update ${Key}`)
-  }
-
-  const userIdMatches = s3compliantUserId.match(USER_ID_REGEXP)
-
-  if (!userIdMatches || !userIdMatches.groups?.auth0userId) {
-    throw new Error(`Wrong auth0userId in avatar update ${Key}`)
-  }
-
-  const { auth0userId } = userIdMatches.groups
-  return `auth0|${auth0userId}`
-}
 
 export const main: S3Handler = async (event) => {
   const s3Record = event.Records[0].s3
   const Key = s3Record.object.key
   const MEDIA_DOMAIN = getEnvironmentVariable('MEDIA_DOMAIN')
 
-  const userId = getAuth0UserId(Key)
+  logger.debug({ Key }, 'Start to change avatar')
 
-  if (!userId) {
-    logger.debug('No avatar updates.Nothing to do with Key', Key)
-    return
-  }
+  const auth0serId = s3Key.getAuth0UserIdFromAvatarKey(Key)
+
+  logger.debug({ auth0serId }, 'Grabbed user id from S3 key')
 
   const picture = `https://${MEDIA_DOMAIN}/${Key}`
 
-  const management = await getAuth0Management()
-  await management.updateUser({ id: userId }, { picture })
+  logger.debug({ pictureUrl: picture }, 'Created picture url')
 
-  logger.info({ userId, picture }, 'Successfully updated avatar')
+  const management = await getAuth0Management()
+  await management.updateUser({ id: auth0serId }, { picture })
+
+  logger.info({ auth0serId, picture }, 'Successfully updated avatar')
 }

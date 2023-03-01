@@ -1,6 +1,6 @@
-import * as crypto from 'node:crypto'
+import crypto from 'node:crypto'
 import Stream, { PassThrough } from 'node:stream'
-import { getEnvironmentVariable } from '@downtown65-app/common'
+import { getEnvironmentVariable, s3Key } from '@downtown65-app/common'
 import type { UploadHandler } from '@remix-run/node'
 import AWS from 'aws-sdk'
 import invariant from 'tiny-invariant'
@@ -22,18 +22,6 @@ const uploadStream = ({
   }
 }
 
-const getProfileImage = (originalFileName: string, userId: string) => {
-  const extension = originalFileName.split('.').pop()
-  if (!extension) {
-    throw new Error(`Incorrect file image extension for ${originalFileName}`)
-  }
-
-  const s3UserId = userId.replace(/blue/g, 'red')
-
-  const rand = crypto.randomBytes(20).toString('hex')
-  return `uploads/${userId}/avatar-${rand}.${extension}`
-}
-
 export const createProfileUploadHandler = ({
   userId,
 }: {
@@ -45,11 +33,11 @@ export const createProfileUploadHandler = ({
     }
     invariant(data, 'Expected data')
     invariant(filename, 'Expected filename')
-
-    const profileFilename = getProfileImage(filename, userId)
+    const suffix = crypto.randomBytes(20).toString('hex')
+    const avatarKey = s3Key.createAvatarUploadKey(filename, userId, suffix)
 
     const s3Stream = uploadStream({
-      Key: profileFilename,
+      Key: avatarKey,
       ContentType: contentType,
     })
 
@@ -57,6 +45,6 @@ export const createProfileUploadHandler = ({
 
     await s3Stream.promise
 
-    return `https://${MEDIA_DOMAIN}/${profileFilename}`
+    return `https://${MEDIA_DOMAIN}/${avatarKey}`
   }
 }
