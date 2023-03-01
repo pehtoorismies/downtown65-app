@@ -47,7 +47,8 @@ module.exports = {
           params: false,
           env: false,
           args: false,
-          props: false
+          props: false,
+          dir: false
         }
       }
     ],
