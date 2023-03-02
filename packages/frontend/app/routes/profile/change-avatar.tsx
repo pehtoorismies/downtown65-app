@@ -93,30 +93,12 @@ export default function ChangeAvatar() {
           color="red"
           m="xl"
         >
-          Kuva on liian iso tai vääränlainen. Käytä tyyppejä: gif, jpg, png.
+          Kuva on todennäköisesti liian suuri tai tiedostotyyppi on väärän.
+          Käytä tyyppejä: gif, jpg, png.
         </Alert>
       )}
-      <Title>Vaihda profiilikuva</Title>
-      <Paper shadow="xs" p="md" my="sm">
-        <Text>
-          Profiilikuvasi tulisi olla&nbsp;
-          <Text fw={700} span>
-            neliön
-          </Text>{' '}
-          muotoinen. Voit tehdä kuvistasi neliömuotoisia esim. palvelussa{' '}
-          <Anchor href="https://croppola.com" target="_blank">
-            croppola.com
-          </Anchor>
-          . Hyväksyttävät kuvaformaatit:&nbsp;
-          <Code>
-            {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
-              ', '
-            )}
-          </Code>
-          . Jos uusi profiilikuvasi ei näy päivtyksen jälkeen, loggaudu ulos ja
-          uudelleen sisään.
-        </Text>
-      </Paper>
+      <Title align="center">Vaihda profiilikuva</Title>
+
       <Dropzone
         maxFiles={1}
         onDrop={(files) => {
@@ -169,7 +151,7 @@ export default function ChangeAvatar() {
                 color="blue"
               />
               <Text size="xl" inline>
-                Drägää kuva tähän
+                Drägää kuva tähän (max. 2Mb)
               </Text>
               <Text size="md" color="dimmed">
                 Tai klikkaa valitaksesi tiedosto
@@ -194,6 +176,36 @@ export default function ChangeAvatar() {
           </Button>
         </Stack>
       )}
+      <Paper shadow="xs" p="md" my="sm">
+        <Title order={3}>Ohje</Title>
+        <Text>
+          Optimaalisesti profiilikuvasi tulisi olla&nbsp;
+          <Text fw={700} span>
+            neliön
+          </Text>{' '}
+          muotoinen (työkalu tähän esim.{' '}
+          <Anchor href="https://croppola.com" target="_blank">
+            croppola.com
+          </Anchor>
+          ). Eventsiin hyväksyttävät profiilikuvaformaatit:&nbsp;
+          <Code>
+            {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
+              ', '
+            )}
+          </Code>
+          . Jos uusi profiilikuvasi ei näy päivityksen jälkeen, loggaudu ulos ja
+          kirjaudu uudelleen sisään.
+        </Text>
+        <Title order={3} mt="sm">
+          Profiilikuva tapahtumissa
+        </Title>
+        <Text>
+          Kun muutat profiilikuvaasi, se päivittyy ainoastaan tuleviin
+          ilmoittautumisiin. Toisin sanoen profiilikuvasi tapahtumassa on se
+          mikä sinulla oli liittyessäsi. Jos haluat uuden profiilikuvasi
+          näkyvän, niin poistu ja liity tapahtumaan uudelleen.
+        </Text>
+      </Paper>
     </Container>
   )
 }
