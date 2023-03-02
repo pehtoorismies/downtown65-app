@@ -49,9 +49,8 @@ export const main: S3Handler = async (event) => {
   logger.debug({ Key }, 'Received uploads file')
   const Bucket = s3Record.bucket.name
 
-  const userAvatarDir = s3Key.getAvatarDir(Key)
-  const filename = `avatar-w${AVATAR_WIDTH}.webp`
-  const avatarKey = `${userAvatarDir}/${filename}`
+  const { dir, file } = s3Key.getAvatarDir(Key)
+  const avatarKey = `${dir}/${file}.webp`
 
   const readStream = readStreamFromS3({ Key, Bucket })
   const { writeStream, upload } = writeStreamToS3({

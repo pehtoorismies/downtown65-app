@@ -45,16 +45,22 @@ describe('getAvatarDir', () => {
   test.each([
     {
       s3UploadKey: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_123123/avatar-123.gif`,
-      expected: `${s3Key.DIRECTORY_AVATARS}/auth0_123123`,
+      expected: {
+        dir: `${s3Key.DIRECTORY_AVATARS}/auth0_123123`,
+        file: 'avatar-123',
+      },
     },
     {
       s3UploadKey: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_123123/avatar-321.jpg`,
-      expected: `${s3Key.DIRECTORY_AVATARS}/auth0_123123`,
+      expected: {
+        dir: `${s3Key.DIRECTORY_AVATARS}/auth0_123123`,
+        file: 'avatar-321',
+      },
     },
   ])(
     'createAvatarUploadKey($s3UploadedKey) -> $expected',
     ({ s3UploadKey, expected }) => {
-      expect(s3Key.getAvatarDir(s3UploadKey)).toEqual(expected)
+      expect(s3Key.getAvatarDir(s3UploadKey)).toMatchObject(expected)
     }
   )
 
