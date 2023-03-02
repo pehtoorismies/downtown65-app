@@ -1,12 +1,16 @@
 import {
   Alert,
+  Anchor,
   Avatar,
   Button,
+  Code,
   Container,
   Group,
+  Paper,
   Stack,
   Text,
   ThemeIcon,
+  Title,
 } from '@mantine/core'
 import type { FileWithPath } from '@mantine/dropzone'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
@@ -41,14 +45,13 @@ type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const { accessToken, headers, user } = await actionAuthenticate(request)
+  const { headers, user } = await actionAuthenticate(request)
 
   const s3UploadHandler = createProfileUploadHandler({
     userId: user.id,
   })
 
-  const formData = await parseMultipartFormData(request, s3UploadHandler)
-  const imgSource = formData.get('file')
+  await parseMultipartFormData(request, s3UploadHandler)
 
   return json(
     {},
@@ -93,7 +96,27 @@ export default function ChangeAvatar() {
           Kuva on liian iso tai vääränlainen. Käytä tyyppejä: gif, jpg, png.
         </Alert>
       )}
-
+      <Title>Vaihda profiilikuva</Title>
+      <Paper shadow="xs" p="md" my="sm">
+        <Text>
+          Profiilikuvasi tulisi olla&nbsp;
+          <Text fw={700} span>
+            neliön
+          </Text>{' '}
+          muotoinen. Voit tehdä kuvistasi neliömuotoisia esim. palvelussa{' '}
+          <Anchor href="https://croppola.com" target="_blank">
+            croppola.com
+          </Anchor>
+          . Hyväksyttävät kuvaformaatit:&nbsp;
+          <Code>
+            {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
+              ', '
+            )}
+          </Code>
+          . Jos uusi profiilikuvasi ei näy päivtyksen jälkeen, loggaudu ulos ja
+          uudelleen sisään.
+        </Text>
+      </Paper>
       <Dropzone
         maxFiles={1}
         onDrop={(files) => {
