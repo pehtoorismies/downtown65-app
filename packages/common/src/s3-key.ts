@@ -31,16 +31,16 @@ const createAvatarUploadKey = (
 
 const getAvatarDir = (s3UploadKey: string) => {
   const UPLOADED_AVATAR_REGEXP =
-    /^uploads\/(?<dir>avatars\/auth0_[\dA-Za-z]+)\/avatar-.+\.(gif|jpe?g|webp|jpeg|png|avif|svg)$/
+    /^uploads\/(?<dir>avatars\/auth0_[\dA-Za-z]+)\/(?<file>avatar-.+)\.(gif|jpe?g|webp|jpeg|png|avif|svg)$/
 
   const matches = s3UploadKey.match(UPLOADED_AVATAR_REGEXP)
-  if (!matches || !matches.groups?.dir) {
+  if (!matches || !matches.groups?.dir || !matches.groups?.file) {
     throw new Error(
       `Illegal S3 Key for avatar upload '${s3UploadKey}'. Should be: ${DIRECTORY_AVATAR_UPLOADS}/auth0_123/avatar-123.ext`
     )
   }
 
-  return matches.groups.dir
+  return { dir: matches.groups.dir, file: matches.groups.file }
 }
 
 const getAuth0UserIdFromAvatarKey = (avatarS3Key: string) => {
