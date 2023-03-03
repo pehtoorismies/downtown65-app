@@ -2,6 +2,7 @@ import {
   Alert,
   Anchor,
   Avatar,
+  Breadcrumbs,
   Button,
   Code,
   Container,
@@ -20,7 +21,7 @@ import {
   unstable_parseMultipartFormData as parseMultipartFormData,
   redirect,
 } from '@remix-run/node'
-import { useFetcher, useLoaderData } from '@remix-run/react'
+import { Link, useFetcher, useLoaderData } from '@remix-run/react'
 import {
   IconAlertCircle,
   IconDownload,
@@ -118,6 +119,12 @@ export default function ChangeAvatar() {
 
   return (
     <Container pt="xl">
+      <Breadcrumbs mb="xs">
+        <Anchor component={Link} to="/profile">
+          Profiili
+        </Anchor>
+        <Text>Vaihda profiilikuva</Text>
+      </Breadcrumbs>
       {state.kind === 'error' && (
         <Alert
           icon={<IconAlertCircle size={16} />}
