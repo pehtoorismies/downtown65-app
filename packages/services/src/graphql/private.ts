@@ -7,6 +7,7 @@ import type {
   MutationDeleteEventArgs,
   MutationLeaveEventArgs,
   MutationParticipateEventArgs,
+  MutationUpdateAvatarArgs,
   MutationUpdateEventArgs,
   MutationUpdateMeArgs,
   OtherUser,
@@ -27,12 +28,14 @@ import { getUser } from './users/get-user'
 import { getUsers } from './users/get-users'
 import { participateEvent } from '~/graphql/events/participate-event'
 import type { EmptyArgs } from '~/graphql/support/empty-args'
+import { updateAvatar } from '~/graphql/users/update-avatar'
 import { updateMe } from '~/graphql/users/update-me'
 
 export type Inputs =
   | EmptyArgs
   | MutationCreateEventArgs
   | MutationDeleteEventArgs
+  | MutationUpdateAvatarArgs
   | MutationUpdateEventArgs
   | MutationUpdateMeArgs
   | QueryEventArguments
@@ -59,6 +62,7 @@ const PRIVATE_FIELDS = [
   'me',
   'participateEvent',
   'updateEvent',
+  'updateAvatar',
   'updateMe',
   'users',
   'user',
@@ -152,6 +156,14 @@ export const privateResolver = (
         allowScopes(['write:me'])
         return updateMe(
           event as AppSyncResolverEvent<MutationUpdateMeArgs>,
+          context,
+          callback
+        )
+      }
+      case 'updateAvatar': {
+        allowScopes(['write:me'])
+        return updateAvatar(
+          event as AppSyncResolverEvent<MutationUpdateAvatarArgs>,
           context,
           callback
         )

@@ -2,12 +2,15 @@ import * as appsync from '@aws-cdk/aws-appsync-alpha'
 import type { StackContext } from '@serverless-stack/resources'
 import { AppSyncApi, Function, use } from '@serverless-stack/resources'
 import * as cdk from 'aws-cdk-lib'
+import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
 import { DynamoStack } from './dynamo-stack'
+import { MediaBucketStack } from './media-bucket-stack'
 
 export const GraphqlStack = ({ app, stack }: StackContext) => {
   const { TABLE_NAME, table } = use(DynamoStack)
+  const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN } = use(MediaBucketStack)
   const {
     AUTH_CLIENT_ID,
     AUTH_CLIENT_SECRET,
@@ -26,6 +29,13 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       JWT_AUDIENCE,
       REGISTER_SECRET,
       TABLE_NAME,
+      MEDIA_BUCKET_DOMAIN,
+      MEDIA_BUCKET_NAME,
+    ],
+    layers: [
+      new lambda.LayerVersion(stack, 'AppLayer', {
+        code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
+      }),
     ],
   })
 
@@ -79,6 +89,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       'Mutation leaveEvent': 'gql',
       'Mutation participateEvent': 'gql',
       'Mutation updateMe': 'gql',
+      'Mutation updateAvatar': 'gql',
       'Mutation login': 'gql',
       'Mutation signup': 'gql',
       'Mutation refreshToken': 'gql',
