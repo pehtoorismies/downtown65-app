@@ -16,6 +16,7 @@ export default function (app: App) {
     // these are needed for mjml library to work
     bundle: {
       nodeModules: ['uglify-js'],
+      externalModules: ['sharp'],
       format: 'esm',
       loader: {
         '.mjml': 'text',

@@ -7,26 +7,35 @@ describe('createAvatarUploadKey', () => {
       filename: 'kissa koira.jpg',
       uploaderAuth0UserId: 'auth0|123123',
       suffix: '123',
-      expected: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_123123/avatar-123.jpg`,
+      expected: {
+        key: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_123123/avatar-123.jpg`,
+        filename: 'avatar-123.jpg',
+      },
     },
     {
       filename: 'kissa koira.jpeg',
       uploaderAuth0UserId: 'auth0|abc',
       suffix: 'asd',
-      expected: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_abc/avatar-asd.jpeg`,
+      expected: {
+        key: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_abc/avatar-asd.jpeg`,
+        filename: 'avatar-asd.jpeg',
+      },
     },
     {
       filename: 'kissa koira.gif',
       uploaderAuth0UserId: 'auth0|abc',
       suffix: 'asd',
-      expected: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_abc/avatar-asd.gif`,
+      expected: {
+        key: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_abc/avatar-asd.gif`,
+        filename: 'avatar-asd.gif',
+      },
     },
   ])(
     'createAvatarUploadKey($uploaderAuth0UserId) -> $expected',
     ({ filename, uploaderAuth0UserId, suffix, expected }) => {
       expect(
         s3Key.createAvatarUploadKey(filename, uploaderAuth0UserId, suffix)
-      ).toEqual(expected)
+      ).toMatchObject(expected)
     }
   )
 

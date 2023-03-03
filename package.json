@@ -45,6 +45,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "date-fns": "2.29.3"
+    "date-fns": "2.29.3",
+    "pino": "8.11.0"
   }
 }

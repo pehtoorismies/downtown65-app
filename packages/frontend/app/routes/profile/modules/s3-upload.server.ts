@@ -3,10 +3,12 @@ import Stream, { PassThrough } from 'node:stream'
 import { getEnvironmentVariable, s3Key } from '@downtown65-app/common'
 import type { UploadHandler } from '@remix-run/node'
 import AWS from 'aws-sdk'
+import pino from 'pino'
 import invariant from 'tiny-invariant'
 
+const logger = pino({ level: 'debug' })
+
 const STORAGE_BUCKET = getEnvironmentVariable('STORAGE_BUCKET')
-const MEDIA_DOMAIN = getEnvironmentVariable('MEDIA_DOMAIN')
 
 const uploadStream = ({
   Key,
@@ -37,7 +39,7 @@ export const createProfileUploadHandler = ({
     const avatarKey = s3Key.createAvatarUploadKey(filename, userId, suffix)
 
     const s3Stream = uploadStream({
-      Key: avatarKey,
+      Key: avatarKey.key,
       ContentType: contentType,
     })
 
@@ -45,6 +47,8 @@ export const createProfileUploadHandler = ({
 
     await s3Stream.promise
 
-    return `https://${MEDIA_DOMAIN}/${avatarKey}`
+    logger.debug({ avatarKey }, 'Successfully upload avatar')
+
+    return avatarKey.filename
   }
 }

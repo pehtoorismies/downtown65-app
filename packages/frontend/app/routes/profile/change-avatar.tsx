@@ -51,7 +51,9 @@ export const action: ActionFunction = async ({ request }) => {
     userId: user.id,
   })
 
-  await parseMultipartFormData(request, s3UploadHandler)
+  const formData = await parseMultipartFormData(request, s3UploadHandler)
+  const file = formData.get('file')
+  console.log('file', file)
 
   return json(
     {},

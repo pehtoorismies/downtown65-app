@@ -150,6 +150,7 @@ export type Mutation = {
   participateEvent?: Maybe<Scalars['Boolean']>;
   refreshToken: RefreshPayload;
   signup: SignupPayload;
+  updateAvatar: Scalars['Boolean'];
   updateEvent: Event;
   updateMe: MeUser;
 };
@@ -194,6 +195,11 @@ export type MutationRefreshTokenArgs = {
 
 export type MutationSignupArgs = {
   input: SignupInput;
+};
+
+
+export type MutationUpdateAvatarArgs = {
+  s3Key: Scalars['String'];
 };
 
 

@@ -26,7 +26,10 @@ const createAvatarUploadKey = (
   const avatarFilename = `avatar-${suffix}.${fileExtension}`
   const s3Key = `${DIRECTORY_AVATAR_UPLOADS}/${s3CompliantUserId}/${avatarFilename}`
 
-  return s3Key
+  return {
+    key: s3Key,
+    filename: avatarFilename,
+  }
 }
 
 const getAvatarDir = (s3UploadKey: string) => {
