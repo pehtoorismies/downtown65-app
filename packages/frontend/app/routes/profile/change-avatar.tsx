@@ -34,6 +34,7 @@ import { createProfileUploadHandler } from '~/routes/profile/modules/s3-upload.s
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 const MEGA_BYTE = 1024 ** 2
+const MAX_IMAGE_SIZE = 2 * MEGA_BYTE
 
 type State =
   | { kind: 'error'; error: string; picture: string }
@@ -74,6 +75,30 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<PrivateRoute>({ user })
 }
 
+function humanFileSize(bytes: number, si = true, dp = 1) {
+  const thresh = si ? 1000 : 1024
+
+  if (Math.abs(bytes) < thresh) {
+    return bytes + ' B'
+  }
+
+  const units = si
+    ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+    : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
+  let u = -1
+  const r = 10 ** dp
+
+  do {
+    bytes /= thresh
+    ++u
+  } while (
+    Math.round(Math.abs(bytes) * r) / r >= thresh &&
+    u < units.length - 1
+  )
+
+  return bytes.toFixed(dp) + ' ' + units[u]
+}
+
 export default function ChangeAvatar() {
   const fetcher = useFetcher<ActionData>()
   const { user } = useLoaderData()
@@ -107,6 +132,7 @@ export default function ChangeAvatar() {
       <Title align="center">Vaihda profiilikuva</Title>
 
       <Dropzone
+        loading={fetcher.state === 'submitting'}
         maxFiles={1}
         onDrop={(files) => {
           const imageUrl = URL.createObjectURL(files[0])
@@ -119,7 +145,7 @@ export default function ChangeAvatar() {
         onReject={() => {
           setState({ kind: 'error', error: 'Virhe', picture: user.picture })
         }}
-        maxSize={1 * MEGA_BYTE}
+        maxSize={MAX_IMAGE_SIZE}
         accept={IMAGE_MIME_TYPE}
       >
         <Group
@@ -158,7 +184,7 @@ export default function ChangeAvatar() {
                 color="blue"
               />
               <Text size="xl" inline>
-                Drägää kuva tähän (max. 2Mb)
+                Drägää kuva tähän (max. {humanFileSize(MAX_IMAGE_SIZE)})
               </Text>
               <Text size="md" color="dimmed">
                 Tai klikkaa valitaksesi tiedosto
@@ -169,7 +195,11 @@ export default function ChangeAvatar() {
       </Dropzone>
       {state.kind === 'newImageSet' && (
         <Stack align="center" m="xl">
-          <Button leftIcon={<IconUpload size={14} />} onClick={uploadImage}>
+          <Button
+            leftIcon={<IconUpload size={14} />}
+            onClick={uploadImage}
+            disabled={fetcher.state === 'submitting'}
+          >
             Vaihda profiilikuva
           </Button>
           <Button
