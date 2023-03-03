@@ -199,7 +199,7 @@ export type MutationSignupArgs = {
 
 
 export type MutationUpdateAvatarArgs = {
-  s3Key: Scalars['String'];
+  uploadedFilename: Scalars['String'];
 };
 
 

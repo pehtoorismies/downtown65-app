@@ -202,7 +202,7 @@ export type MutationSignupArgs = {
 
 
 export type MutationUpdateAvatarArgs = {
-  s3Key: Scalars['String'];
+  uploadedFilename: Scalars['String'];
 };
 
 
@@ -455,6 +455,13 @@ export type UpdateMeMutationVariables = Exact<{
 
 export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename?: 'MeUser', id: string, nickname: string, name: string, preferences: { __typename?: 'Preferences', subscribeWeeklyEmail: boolean, subscribeEventCreationEmail: boolean } } };
 
+export type UpdateAvatarMutationVariables = Exact<{
+  uploadedFilename: Scalars['String'];
+}>;
+
+
+export type UpdateAvatarMutation = { __typename?: 'Mutation', updateAvatar: boolean };
+
 export const BaseFieldsFragmentDoc = gql`
     fragment baseFields on Event {
   id
@@ -628,6 +635,11 @@ export const UpdateMeDocument = gql`
   }
 }
     `;
+export const UpdateAvatarDocument = gql`
+    mutation UpdateAvatar($uploadedFilename: String!) {
+  updateAvatar(uploadedFilename: $uploadedFilename)
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
@@ -680,6 +692,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     UpdateMe(variables: UpdateMeMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMeMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<UpdateMeMutation>(UpdateMeDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateMe', 'mutation');
+    },
+    UpdateAvatar(variables: UpdateAvatarMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateAvatarMutation> {
+      return withWrapper((wrappedRequestHeaders) => client.request<UpdateAvatarMutation>(UpdateAvatarDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'UpdateAvatar', 'mutation');
     }
   };
 }

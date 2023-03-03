@@ -231,7 +231,7 @@ type Mutation {
 
     updateMe(input: UpdateMeInput!): MeUser!
 
-    updateAvatar(s3Key: String!): Boolean!
+    updateAvatar(uploadedFilename: String!): Boolean!
 
     login(
         email: String!
