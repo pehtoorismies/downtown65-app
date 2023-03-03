@@ -18,6 +18,7 @@ import type { ActionFunction, LoaderFunction } from '@remix-run/node'
 import {
   json,
   unstable_parseMultipartFormData as parseMultipartFormData,
+  redirect,
 } from '@remix-run/node'
 import { useFetcher, useLoaderData } from '@remix-run/react'
 import {
@@ -28,6 +29,7 @@ import {
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
+import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { createProfileUploadHandler } from '~/routes/profile/modules/s3-upload.server'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
@@ -45,22 +47,25 @@ type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const { headers, user } = await actionAuthenticate(request)
+  const { accessToken, headers, user } = await actionAuthenticate(request)
 
   const s3UploadHandler = createProfileUploadHandler({
     userId: user.id,
   })
 
   const formData = await parseMultipartFormData(request, s3UploadHandler)
-  const file = formData.get('file')
-  console.log('file', file)
+  const file = formData.get('file') as string
 
-  return json(
-    {},
+  await getGqlSdk().UpdateAvatar(
+    { uploadedFilename: file },
     {
-      headers,
+      Authorization: `Bearer ${accessToken}`,
     }
   )
+
+  return redirect('/profile', {
+    headers,
+  })
 }
 
 export const loader: LoaderFunction = async ({ request }) => {

@@ -21,9 +21,6 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
     },
   })
 
-  // Allow the notification functions to access the bucket
-  bucket.attachPermissions([bucket])
-
   const mediaCloudFront = new cloudfront.Distribution(
     stack,
     'mediaDistribution',
@@ -52,5 +49,6 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
     MEDIA_BUCKET_DOMAIN: new Config.Parameter(stack, 'MEDIA_BUCKET_DOMAIN', {
       value: mediaCloudFront.distributionDomainName,
     }),
+    mediaBucket: bucket,
   }
 }

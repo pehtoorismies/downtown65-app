@@ -10,7 +10,8 @@ import { MediaBucketStack } from './media-bucket-stack'
 
 export const GraphqlStack = ({ app, stack }: StackContext) => {
   const { TABLE_NAME, table } = use(DynamoStack)
-  const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN } = use(MediaBucketStack)
+  const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN, mediaBucket } =
+    use(MediaBucketStack)
   const {
     AUTH_CLIENT_ID,
     AUTH_CLIENT_SECRET,
@@ -38,6 +39,8 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       }),
     ],
   })
+
+  gqlFunction.attachPermissions([mediaBucket])
 
   //  Create the AppSync GraphQL API
   const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {

@@ -31,3 +31,6 @@ mutation UpdateMe($subscribeWeeklyEmail: Boolean!, $subscribeEventCreationEmail:
     }
 }
 
+mutation UpdateAvatar($uploadedFilename: String!) {
+    updateAvatar(uploadedFilename: $uploadedFilename)
+}
