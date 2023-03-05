@@ -70,18 +70,17 @@ export const updateAvatar: AppSyncResolverHandler<
   logger.debug(identity, 'updateAvatar')
 
   const auth0serId = identity.sub
-
   const { uploadedFilename } = event.arguments
 
-  const s3UserDir = auth0serId.replace('auth0|', 'auth0_')
+  const { sourceKey, targetFilename } = s3Key.getAvatarResizeKeys(
+    uploadedFilename,
+    identity.sub
+  )
 
-  const uploadedKey = `${s3Key.DIRECTORY_AVATAR_UPLOADS}/${s3UserDir}/${uploadedFilename}`
-
-  const { dir, file } = s3Key.getAvatarDir(uploadedKey)
-  const avatarKey = `${dir}/${file}.webp`
+  const avatarKey = `${targetFilename}.webp`
 
   const readStream = readStreamFromS3({
-    Key: uploadedKey,
+    Key: sourceKey,
     Bucket: MEDIA_BUCKET_NAME,
   })
   const filterStream = sharp().resize(AVATAR_WIDTH).webp()

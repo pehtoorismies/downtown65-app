@@ -8,7 +8,7 @@ describe('createAvatarUploadKey', () => {
       uploaderAuth0UserId: 'auth0|123123',
       suffix: '123',
       expected: {
-        key: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_123123/avatar-123.jpg`,
+        key: 'uploads/avatars/auth0_123123/avatar-123.jpg',
         filename: 'avatar-123.jpg',
       },
     },
@@ -17,7 +17,7 @@ describe('createAvatarUploadKey', () => {
       uploaderAuth0UserId: 'auth0|abc',
       suffix: 'asd',
       expected: {
-        key: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_abc/avatar-asd.jpeg`,
+        key: 'uploads/avatars/auth0_abc/avatar-asd.jpeg',
         filename: 'avatar-asd.jpeg',
       },
     },
@@ -26,7 +26,7 @@ describe('createAvatarUploadKey', () => {
       uploaderAuth0UserId: 'auth0|abc',
       suffix: 'asd',
       expected: {
-        key: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_abc/avatar-asd.gif`,
+        key: 'uploads/avatars/auth0_abc/avatar-asd.gif',
         filename: 'avatar-asd.gif',
       },
     },
@@ -50,84 +50,51 @@ describe('createAvatarUploadKey', () => {
   })
 })
 
-describe('getAvatarDir', () => {
+describe('getAvatarResizeKeys', () => {
   test.each([
     {
-      s3UploadKey: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_123123/avatar-123.gif`,
+      filename: 'avatar-123.gif',
+      auth0UserId: 'auth0|321321',
       expected: {
-        dir: `${s3Key.DIRECTORY_AVATARS}/auth0_123123`,
-        file: 'avatar-123',
+        sourceKey: `uploads/avatars/auth0_321321/avatar-123.gif`,
+        targetFilename: 'avatars/auth0_321321/avatar-123',
       },
     },
     {
-      s3UploadKey: `${s3Key.DIRECTORY_AVATAR_UPLOADS}/auth0_123123/avatar-321.jpg`,
+      filename: 'avatar-321.jpg',
+      auth0UserId: 'auth0|123123',
       expected: {
-        dir: `${s3Key.DIRECTORY_AVATARS}/auth0_123123`,
-        file: 'avatar-321',
+        sourceKey: 'uploads/avatars/auth0_123123/avatar-321.jpg',
+        targetFilename: 'avatars/auth0_123123/avatar-321',
       },
     },
   ])(
     'createAvatarUploadKey($s3UploadedKey) -> $expected',
-    ({ s3UploadKey, expected }) => {
-      expect(s3Key.getAvatarDir(s3UploadKey)).toMatchObject(expected)
-    }
-  )
-
-  test('wrong avatar upload directory', () => {
-    expect(() => s3Key.getAvatarDir('kissa koira.jpg')).toThrowError(
-      /Illegal S3 Key for avatar upload/
-    )
-
-    expect(() =>
-      s3Key.getAvatarDir(`${s3Key.DIRECTORY_AVATAR_UPLOADS}/123.jpeg`)
-    ).toThrowError(/Illegal S3 Key for avatar upload/)
-
-    expect(() =>
-      s3Key.getAvatarDir(
-        `${s3Key.DIRECTORY_AVATAR_UPLOADS}/tmp/avatar-123.jpeg`
+    ({ filename, auth0UserId, expected }) => {
+      expect(s3Key.getAvatarResizeKeys(filename, auth0UserId)).toMatchObject(
+        expected
       )
-    ).toThrowError(/Illegal S3 Key for avatar upload/)
-  })
-})
-
-describe('getAuth0UserIdFromAvatarKey', () => {
-  test.each([
-    {
-      s3UploadedKey: `${s3Key.DIRECTORY_AVATARS}/auth0_123123/avatar-123.gif`,
-      expected: 'auth0|123123',
-    },
-    {
-      s3UploadedKey: `${s3Key.DIRECTORY_AVATARS}/auth0_asd1231/avatar-123.gif`,
-      expected: 'auth0|asd1231',
-    },
-  ])(
-    'createAvatarUploadKey($s3UploadedKey) -> $expected',
-    ({ s3UploadedKey, expected }) => {
-      expect(s3Key.getAuth0UserIdFromAvatarKey(s3UploadedKey)).toEqual(expected)
     }
   )
 
   test('wrong avatar upload directory', () => {
     expect(() =>
-      s3Key.getAuth0UserIdFromAvatarKey('kissa koira.jpg')
-    ).toThrowError(/Illegal S3 Key for avatar/)
+      s3Key.getAvatarResizeKeys('kissa koira.jpg', 'auth0|123')
+    ).toThrowError(/Illegal file name/)
 
     expect(() =>
-      s3Key.getAuth0UserIdFromAvatarKey(
-        `${s3Key.DIRECTORY_AVATAR_UPLOADS}/123.jpeg`
-      )
-    ).toThrowError(/Illegal S3 Key for avatar/)
+      s3Key.getAvatarResizeKeys(`uploades/123.jpeg`, 'auth0|123')
+    ).toThrowError(/Illegal file name/)
 
     expect(() =>
-      s3Key.getAuth0UserIdFromAvatarKey(
-        `${s3Key.DIRECTORY_AVATARS}/tmp/koira.jpeg`
+      s3Key.getAvatarResizeKeys(
+        `uploads/auth0_123/tmp/avatar-123.jpeg`,
+        'auth0|123'
       )
-    ).toThrowError(/Illegal S3 Key for avatar/)
+    ).toThrowError(/Illegal file name/)
 
     expect(() =>
-      s3Key.getAuth0UserIdFromAvatarKey(
-        `${s3Key.DIRECTORY_AVATARS}/avatar.jpeg`
-      )
-    ).toThrowError(/Illegal S3 Key for avatar/)
+      s3Key.getAvatarResizeKeys(`avatar-123.jpeg`, 'auth0123')
+    ).toThrowError(/Illegal Auth0 userId/)
   })
 })
