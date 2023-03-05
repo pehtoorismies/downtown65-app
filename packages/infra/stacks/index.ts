@@ -5,6 +5,7 @@ import { CronStack } from './cron-stack'
 import { DynamoStack } from './dynamo-stack'
 import { DynamoStreamStack } from './dynamo-stream-stack'
 import { GraphqlStack } from './graphql-stack'
+import { LambdaLayerStack } from './lambda-layer-stack'
 import { MediaBucketStack } from './media-bucket-stack'
 import { RemixStack } from './remix-stack'
 
@@ -27,6 +28,7 @@ export default function (app: App) {
   })
   app
     .stack(ConfigStack)
+    .stack(LambdaLayerStack)
     .stack(MediaBucketStack)
     .stack(DynamoStack)
     .stack(DynamoStreamStack)

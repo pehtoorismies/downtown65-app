@@ -103,6 +103,17 @@ const getUserFromJwt = (idTokenJWT: string): User => {
   return User.parse(decoded)
 }
 
+const renewSession = async (refreshToken: string, session: Session) => {
+  const renewResponse = await fetchRenewTokens(refreshToken)
+  const user = getUserFromJwt(renewResponse.idToken)
+  session.set(REFRESH_TOKEN_KEY, refreshToken)
+  session.set(USER_KEY, JSON.stringify(user))
+  session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
+  const headers = new Headers()
+  headers.append('Set-Cookie', await sessionStorage.commitSession(session))
+  return { headers, user, accessToken: renewResponse.accessToken }
+}
+
 const getAuthentication = async (
   request: Request
 ): Promise<
@@ -126,19 +137,16 @@ const getAuthentication = async (
     }
   }
 
-  const renewResponse = await fetchRenewTokens(values.refreshToken)
-  const user = getUserFromJwt(renewResponse.idToken)
-  session.set(REFRESH_TOKEN_KEY, values.refreshToken)
-  session.set(USER_KEY, JSON.stringify(user))
-  session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
-  const headers = new Headers()
-  headers.append('Set-Cookie', await sessionStorage.commitSession(session))
+  const { user, headers, accessToken } = await renewSession(
+    values.refreshToken,
+    session
+  )
 
   if (request.method === 'GET') {
     throw redirect(request.url, { headers })
   }
 
-  return { user, accessToken: renewResponse.accessToken, headers }
+  return { user, accessToken, headers }
 }
 
 export const getAuthenticatedUser = async (
@@ -166,6 +174,18 @@ export const actionAuthenticate = async (
     throw redirect('/login')
   }
   return result
+}
+
+export const renewUserSession = async (request: Request) => {
+  const session = await getSession(request)
+  const values = getValues(session)
+  if (!values) {
+    throw new Error('Error renewing session. No data in session')
+  }
+
+  const { headers } = await renewSession(values.refreshToken, session)
+
+  return headers
 }
 
 export const createUserSession = async ({
