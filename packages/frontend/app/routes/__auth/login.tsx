@@ -13,6 +13,7 @@ import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
+import pino from 'pino'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import { Tokens, createUserSession } from '~/session.server'
@@ -33,6 +34,9 @@ export interface ActionData {
 }
 
 export const action: ActionFunction = async ({ request }) => {
+  const logger = pino({ level: 'debug' })
+  logger.info({ NODE_PATH: process.env.NODE_PATH }, 'Node path')
+
   const formData = await request.formData()
   const email = formData.get('email')
   const password = formData.get('password')
