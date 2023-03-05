@@ -6,7 +6,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { ConfigStack } from './config-stack'
 import { DynamoStack } from './dynamo-stack'
-import { LambdaLayerStack } from './lambda-layer-stack'
+// import { LambdaLayerStack } from './lambda-layer-stack'
 import { MediaBucketStack } from './media-bucket-stack'
 
 export const GraphqlStack = ({ app, stack }: StackContext) => {
@@ -21,7 +21,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
     REGISTER_SECRET,
   } = use(ConfigStack)
 
-  const { lambdaLayerArn } = use(LambdaLayerStack)
+  // const { lambdaLayerArn } = use(LambdaLayerStack)
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
     srcPath: 'packages/services',
@@ -45,14 +45,14 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
     //   },
     // },
     layers: [
-      // new lambda.LayerVersion(stack, 'AppLayer', {
-      //   code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
-      // }),
-      lambda.LayerVersion.fromLayerVersionArn(
-        stack,
-        'LambdaLayer',
-        lambdaLayerArn
-      ),
+      new lambda.LayerVersion(stack, 'AppLayer', {
+        code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
+      }),
+      // lambda.LayerVersion.fromLayerVersionArn(
+      //   stack,
+      //   'LambdaLayer',
+      //   lambdaLayerArn
+      // ),
     ],
   })
 
