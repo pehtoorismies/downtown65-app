@@ -10,13 +10,13 @@ export const CronStack = ({ app, stack }: StackContext) => {
     srcPath: 'packages/services',
     handler: 'src/functions/scheduled/send-weekly-email.main',
     bind: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
-    bundle: {
-      nodeModules: ['uglify-js'],
-      format: 'esm',
-      loader: {
-        '.mjml': 'text',
-      },
-    },
+    // bundle: {
+    //   nodeModules: ['uglify-js'],
+    //   format: 'esm',
+    //   loader: {
+    //     '.mjml': 'text',
+    //   },
+    // },
     environment: {
       DOMAIN_NAME: getDomain(app.stage),
     },

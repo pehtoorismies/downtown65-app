@@ -32,7 +32,11 @@ import React, { useState } from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { createProfileUploadHandler } from '~/routes/profile/modules/s3-upload.server'
-import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
+import {
+  actionAuthenticate,
+  loaderAuthenticate,
+  renewUserSession,
+} from '~/session.server'
 
 const MEGA_BYTE = 1024 ** 2
 const MAX_IMAGE_SIZE = 2 * MEGA_BYTE
@@ -49,7 +53,7 @@ type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const { accessToken, headers, user } = await actionAuthenticate(request)
+  const { accessToken, user } = await actionAuthenticate(request)
 
   const s3UploadHandler = createProfileUploadHandler({
     userId: user.id,
@@ -64,6 +68,8 @@ export const action: ActionFunction = async ({ request }) => {
       Authorization: `Bearer ${accessToken}`,
     }
   )
+
+  const headers = await renewUserSession(request)
 
   return redirect('/profile', {
     headers,
