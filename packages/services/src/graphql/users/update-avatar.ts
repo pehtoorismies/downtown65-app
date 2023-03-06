@@ -6,9 +6,10 @@ import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import AWS from 'aws-sdk'
 import type { GetObjectRequest, PutObjectRequest } from 'aws-sdk/clients/s3'
 import pino from 'pino'
-import sharp from 'sharp'
 import type { MutationUpdateAvatarArgs } from '~/appsync.gen'
 import { getAuth0Management } from '~/graphql/support/auth0'
+// eslint-disable-next-line unicorn/prefer-module
+const sharp = require('sharp')
 
 const MEDIA_BUCKET_NAME = Config.MEDIA_BUCKET_NAME
 const MEDIA_BUCKET_DOMAIN = Config.MEDIA_BUCKET_DOMAIN
