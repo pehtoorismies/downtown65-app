@@ -3,10 +3,10 @@ import Stream, { PassThrough } from 'node:stream'
 import { getEnvironmentVariable, s3Key } from '@downtown65-app/common'
 import type { UploadHandler } from '@remix-run/node'
 import AWS from 'aws-sdk'
-import pino from 'pino'
 import invariant from 'tiny-invariant'
+import { logger } from '~/util/logger.server'
 
-const logger = pino({ level: 'debug' })
+const pageLogger = logger.child({ function: 'UploadHandler' })
 
 const STORAGE_BUCKET = getEnvironmentVariable('STORAGE_BUCKET')
 
@@ -45,9 +45,11 @@ export const createProfileUploadHandler = ({
 
     Stream.Readable.from(data).pipe(s3Stream.writeStream)
 
+    pageLogger.debug({ avatarKey }, 'Start uploadingavatar')
+
     await s3Stream.promise
 
-    logger.debug({ avatarKey }, 'Successfully upload avatar')
+    pageLogger.debug({ avatarKey }, 'Successfully uploaded avatar')
 
     return avatarKey.filename
   }

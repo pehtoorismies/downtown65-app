@@ -30,6 +30,7 @@ import {
 } from '~/message.server'
 import { userPrefsCookie } from '~/routes/profile/modules/user-prefs-cookie'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
+import { logger } from '~/util/logger.server'
 
 export const meta: MetaFunction = () => {
   return {
@@ -81,11 +82,17 @@ interface LoaderData extends PrivateRoute {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const pageLogger = logger.child({
+    page: { path: 'profile', function: 'loader' },
+  })
+  pageLogger.info('Load page: profile')
+
   const cookieHeader = request.headers.get('Cookie')
   const userPreferences = (await userPrefsCookie.parse(cookieHeader)) ?? {}
   const showGravatarTip = userPreferences.showGravatarTip ?? true
   // TODO: get user as well
-  const { accessToken } = await loaderAuthenticate(request)
+  const { accessToken, user } = await loaderAuthenticate(request)
+  pageLogger.debug({ user }, 'Authenticated user')
 
   const { me } = await getGqlSdk().GetProfile(
     {},

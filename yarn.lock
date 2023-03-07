@@ -14462,6 +14462,11 @@ pino-abstract-transport@^1.0.0, pino-abstract-transport@v1.0.0:
     readable-stream "^4.0.0"
     split2 "^4.0.0"
 
+pino-lambda@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/pino-lambda/-/pino-lambda-4.1.0.tgz#8d901897e6d09dc5505be6c8abbde402dba1ebcd"
+  integrity sha512-yA2aPttqH80l5O0DEOjC/lqfLiQAK7N1+OTtNFhseo/Z3v+WCEh1VOZFLbq7fOE+rDuE4CZmaK35Gf31P/Wq1A==
+
 pino-pretty@9.4.0:
   version "9.4.0"
   resolved "https://registry.yarnpkg.com/pino-pretty/-/pino-pretty-9.4.0.tgz#fc4026e83c87272cbdfb7afed121770e6000940c"

@@ -37,6 +37,7 @@ import {
   loaderAuthenticate,
   renewUserSession,
 } from '~/session.server'
+import { logger } from '~/util/logger.server'
 
 const MEGA_BYTE = 1024 ** 2
 const MAX_IMAGE_SIZE = 2 * MEGA_BYTE
@@ -77,7 +78,14 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const pageLogger = logger.child({
+    page: { path: 'profile/changeAvatar', function: 'loader' },
+  })
+  pageLogger.info('Load page: profile/changeAvatar')
+
   const { user } = await loaderAuthenticate(request)
+
+  pageLogger.debug({ user }, 'Authenticated user')
 
   return json<PrivateRoute>({ user })
 }
