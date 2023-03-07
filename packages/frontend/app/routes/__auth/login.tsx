@@ -13,13 +13,11 @@ import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
-import pino from 'pino'
 import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import { Tokens, createUserSession } from '~/session.server'
+import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
-
-export { loader } from './modules/loader'
 
 export const meta: MetaFunction = () => {
   return {
@@ -34,24 +32,27 @@ export interface ActionData {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  const logger = pino({ level: 'debug' })
-  logger.info({ NODE_PATH: process.env.NODE_PATH }, 'Node path')
+  const pageLogger = logger.child({
+    page: { path: 'login', function: 'action' },
+  })
 
   const formData = await request.formData()
   const email = formData.get('email')
   const password = formData.get('password')
   const remember = formData.get('remember')
 
+  pageLogger.info({ email }, 'Login action')
+
   if (!validateEmail(email)) {
     return json<ActionData>(
-      { emailError: 'Väärä sähköpostiosoite' },
+      { emailError: 'Väärän muotoinen sähköpostiosoite' },
       { status: 400 }
     )
   }
 
   if (typeof password !== 'string') {
     return json<ActionData>(
-      { passwordError: 'Salasana tarvitaan' },
+      { passwordError: 'Salasana puuttuu' },
       { status: 400 }
     )
   }
@@ -63,6 +64,13 @@ export const action: ActionFunction = async ({ request }) => {
     )
 
     if (login.loginError && login.loginError.code === 'invalid_grant') {
+      pageLogger.info(
+        {
+          error: login.loginError,
+          email,
+        },
+        'Login error'
+      )
       return json<ActionData>(
         { generalError: 'Email or password is invalid' },
         { status: 400 }
@@ -72,6 +80,13 @@ export const action: ActionFunction = async ({ request }) => {
     // TODO: use discrimination
     const tokens = Tokens.parse(login.tokens)
 
+    pageLogger.debug(
+      {
+        email,
+      },
+      'Successful login'
+    )
+
     return createUserSession({
       request,
       tokens,
@@ -79,7 +94,13 @@ export const action: ActionFunction = async ({ request }) => {
       rememberMe: remember === 'remember',
     })
   } catch (error) {
-    console.error(error)
+    pageLogger.error(
+      {
+        error,
+        email,
+      },
+      'Unable login user'
+    )
     return json<ActionData>({ generalError: 'Server error' }, { status: 500 })
   }
 }

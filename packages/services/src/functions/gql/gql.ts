@@ -1,5 +1,5 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import pino from 'pino'
+import { lambdaRequestTracker } from 'pino-lambda'
 import type {
   Inputs as PrivateIn,
   Outputs as PrivateOut,
@@ -8,7 +8,7 @@ import { isPrivateField, privateResolver } from '~/graphql/private'
 import type { Inputs as PublicIn, Outputs as PublicOut } from '~/graphql/public'
 import { isPublicField, publicResolver } from '~/graphql/public'
 
-const logger = pino({ level: 'debug' })
+const withRequest = lambdaRequestTracker()
 
 type Inputs = PrivateIn & PublicIn
 type Outputs = PrivateOut | PublicOut
@@ -18,8 +18,7 @@ export const main: AppSyncResolverHandler<Inputs, Outputs> = (
   context,
   callback
 ) => {
-  logger.info({ NODE_PATH: process.env.NODE_PATH }, 'Node path')
-
+  withRequest(event, context)
   const { fieldName } = event.info
   if (isPrivateField(fieldName)) {
     return privateResolver(fieldName)(event, context, callback)
