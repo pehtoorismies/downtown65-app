@@ -9,7 +9,8 @@ import { getDomain } from './support/get-domain'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
-  const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN } = use(MediaBucketStack)
+  const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN, mediaBucket } =
+    use(MediaBucketStack)
 
   const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
     domainName: 'downtown65.events',
@@ -48,6 +49,8 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       },
     },
   })
+
+  site.attachPermissions([mediaBucket])
 
   // Add the site's URL to stack output
   stack.addOutputs({
