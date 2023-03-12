@@ -4,7 +4,6 @@ import {
   Avatar,
   Breadcrumbs,
   Button,
-  Code,
   Container,
   Group,
   Paper,
@@ -237,20 +236,18 @@ export default function ChangeAvatar() {
       <Paper shadow="xs" p="md" my="sm">
         <Title order={3}>Ohje</Title>
         <Text>
-          Optimaalisesti profiilikuvasi tulisi olla&nbsp;
+          Paras muoto profiilikuvallesi on&nbsp;
           <Text fw={700} span>
-            neliön
+            neliö
           </Text>{' '}
-          muotoinen (työkalu tähän esim.{' '}
+          (työkalu tähän esim.{' '}
           <Anchor href="https://croppola.com" target="_blank">
             croppola.com
           </Anchor>
           ). Eventsiin hyväksyttävät profiilikuvaformaatit:&nbsp;
-          <Code>
-            {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
-              ', '
-            )}
-          </Code>
+          {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
+            ', '
+          )}
           . Jos uusi profiilikuvasi ei näy päivityksen jälkeen, loggaudu ulos ja
           kirjaudu uudelleen sisään.
         </Text>
@@ -259,9 +256,11 @@ export default function ChangeAvatar() {
         </Title>
         <Text>
           Kun muutat profiilikuvaasi, se päivittyy ainoastaan tuleviin
-          ilmoittautumisiin. Toisin sanoen profiilikuvasi tapahtumassa on se
-          mikä sinulla oli liittyessäsi. Jos haluat uuden profiilikuvasi
-          näkyvän, niin poistu ja liity tapahtumaan uudelleen.
+          ilmoittautumisiin. Profiilikuvasi tapahtumassa on se mikä sinulla oli
+          profiilikuvanasi tapahtumaan liittyessäsi. Jos haluat uuden
+          profiilikuvasi näkyvän, niin poistu ja liity tapahtumaan uudelleen.
+          Jos olet kirjautunut monella eri laitteella, vaatii profiilikuvan
+          päivitys uloskirjautumisen kaikilta laitteilta.
         </Text>
       </Paper>
     </Container>
