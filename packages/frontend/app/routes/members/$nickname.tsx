@@ -17,6 +17,7 @@ import invariant from 'tiny-invariant'
 import { ProfileBox } from '~/components/profile-box'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
+import notFoundProfileImage from '~/images/not-found.jpg'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
@@ -101,7 +102,7 @@ export const CatchBoundary = () => {
       </Title>
       <Image
         radius="md"
-        src="/profile/not-found.jpg"
+        src={notFoundProfileImage}
         alt="Anonymous holding fire"
       />
       <Text align="center"> {caught.statusText}</Text>
