@@ -14,12 +14,10 @@ export const ProfileBox: FC<Properties> = ({
   name,
   nickname,
   email,
-  children,
 }: Properties) => {
   return (
     <Paper p="sm">
       <Avatar src={picture} size={120} radius={120} mx="auto" />
-      {children}
       <Text
         ta="center"
         fz={30}
