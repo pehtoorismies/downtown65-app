@@ -1,6 +1,5 @@
 import {
   Alert,
-  Anchor,
   Button,
   Center,
   Container,
@@ -16,10 +15,10 @@ import type {
   MetaFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Form, useFetcher, useLoaderData, useSubmit } from '@remix-run/react'
+import { Form, useFetcher, useLoaderData } from '@remix-run/react'
 import { IconAlertCircle, IconLogout } from '@tabler/icons-react'
 import type { ChangeEventHandler } from 'react'
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { ProfileBox } from '~/components/profile-box'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
@@ -28,7 +27,6 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { userPrefsCookie } from '~/routes/profile/modules/user-prefs-cookie'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 import { logger } from '~/util/logger.server'
 
@@ -78,7 +76,6 @@ interface LoaderData extends PrivateRoute {
     subscribeWeeklyEmail: boolean
     subscribeEventCreationEmail: boolean
   }
-  showGravatarTip: boolean
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -87,9 +84,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
   pageLogger.info('Load page: profile')
 
-  const cookieHeader = request.headers.get('Cookie')
-  const userPreferences = (await userPrefsCookie.parse(cookieHeader)) ?? {}
-  const showGravatarTip = userPreferences.showGravatarTip ?? true
   // TODO: get user as well
   const { accessToken, user } = await loaderAuthenticate(request)
   pageLogger.debug({ user }, 'Authenticated user')
@@ -102,7 +96,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   )
   // TODO: can user / loaded data be not in sync: yes
   return json<LoaderData>({
-    showGravatarTip,
     user: {
       nickname: me.nickname,
       id: me.id,
@@ -134,14 +127,9 @@ interface UserPreferences {
 const BOX_SIZE = 'xs'
 
 export default function Profile() {
-  const submit = useSubmit()
   const fetcher = useFetcher()
 
-  const gravatarFormReference = useRef(null)
-
-  const { name, user, preferences, email, showGravatarTip } =
-    useLoaderData<LoaderData>()
-  const [hasGravatarTip, setGravatarTip] = useState(showGravatarTip)
+  const { name, user, preferences, email } = useLoaderData<LoaderData>()
 
   const [emailSettings, setEmailSettings] = useState<UserPreferences>({
     weekly: preferences.subscribeWeeklyEmail,
@@ -172,50 +160,14 @@ export default function Profile() {
           nickname={user.nickname}
           name={name}
           email={email}
-        >
-          <Center mt="sm">
-            <Form action="/profile/change-avatar">
-              <Button compact size="xs" variant="outline" type="submit">
-                Vaihda
-              </Button>
-            </Form>
-          </Center>
-        </ProfileBox>
-      </Container>
-      <Container size={BOX_SIZE}>
-        {hasGravatarTip && (
-          <>
-            <Form
-              method="post"
-              action="/profile/user-prefs"
-              ref={gravatarFormReference}
-            >
-              <input type="hidden" name="showGravatarTip" value="hidden" />
-            </Form>
-            <Center>
-              <Alert
-                onClose={() => {
-                  setGravatarTip(false)
-                  submit(gravatarFormReference.current)
-                }}
-                withCloseButton
-                closeButtonLabel="Sulje"
-                icon={<IconAlertCircle size={16} />}
-                title="Info"
-                color="gray"
-                my="sm"
-                sx={{ maxWidth: 300, width: '100%' }}
-              >
-                Profiilikuvasi on haettu palvelusta{' '}
-                <Anchor href="https://gravatar.com" target="_blank">
-                  Gravatar
-                </Anchor>
-                , kun tilisi luotiin. Jos näet vain nimikirjaimet sinulla ei ole
-                Gravatar-tiliä osoitteella {email}.
-              </Alert>
-            </Center>
-          </>
-        )}
+        ></ProfileBox>
+        <Center mt="sm">
+          <Form action="/profile/change-avatar">
+            <Button compact size="xs" variant="outline" type="submit">
+              Vaihda profiilikuva
+            </Button>
+          </Form>
+        </Center>
       </Container>
       <Container size={BOX_SIZE}>
         <Divider my="sm" label="Sähköpostiasetukset" labelPosition="center" />
