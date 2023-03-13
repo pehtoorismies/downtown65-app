@@ -134,10 +134,14 @@ export default function ChangeAvatar() {
     <>
       <Container fluid mt={75}>
         <Breadcrumbs mb="xs">
-          <Anchor component={Link} to="/profile">
+          <Anchor
+            data-testid="breadcrumbs-parent"
+            component={Link}
+            to="/profile"
+          >
             Oma profiili
           </Anchor>
-          <Text>Vaihda profiilikuva</Text>
+          <Text data-testid="breadcrumbs-current">Vaihda profiilikuva</Text>
         </Breadcrumbs>
       </Container>
       <Container size="sm">

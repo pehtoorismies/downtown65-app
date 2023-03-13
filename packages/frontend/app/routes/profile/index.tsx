@@ -157,7 +157,7 @@ export default function Profile() {
     <>
       <Container fluid mt={75}>
         <Breadcrumbs mb="xs">
-          <Text>Oma profiili</Text>
+          <Text data-testid="breadcrumbs-current">Oma profiili</Text>
         </Breadcrumbs>
       </Container>
       <Container size={BOX_SIZE}>
@@ -169,7 +169,13 @@ export default function Profile() {
         ></ProfileBox>
         <Center mt="sm">
           <Form action="/profile/change-avatar">
-            <Button compact size="xs" variant="outline" type="submit">
+            <Button
+              compact
+              size="xs"
+              variant="outline"
+              type="submit"
+              data-testid="change-avatar-btn"
+            >
               Vaihda profiilikuva
             </Button>
           </Form>
