@@ -71,10 +71,14 @@ export default function MemberPage() {
     <>
       <Container fluid mt={75}>
         <Breadcrumbs mb="xs">
-          <Anchor component={Link} to="/members">
+          <Anchor
+            component={Link}
+            to="/members"
+            data-testid="breadcrumbs-parent"
+          >
             Jäsenet
           </Anchor>
-          <Text>{data.nickname}</Text>
+          <Text data-testid="breadcrumbs-current">{data.nickname}</Text>
         </Breadcrumbs>
       </Container>
       <Container size="xs">

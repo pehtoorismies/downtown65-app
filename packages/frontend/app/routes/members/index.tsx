@@ -114,11 +114,11 @@ export default function Users() {
     <>
       <Container fluid mt={75}>
         <Breadcrumbs mb="xs">
-          <Text>Jäsenet</Text>
+          <Text data-testid="breadcrumbs-current">Jäsenet</Text>
         </Breadcrumbs>
       </Container>
       <Container>
-        <Title>Seuran jäsenet</Title>
+        <Title>Jäsenet</Title>
         <Text c="dimmed" fw={500} mb="xs">
           Jäseniä yhteensä: {userCount}
         </Text>
