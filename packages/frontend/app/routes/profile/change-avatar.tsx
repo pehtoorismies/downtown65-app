@@ -161,6 +161,7 @@ export default function ChangeAvatar() {
           mt="sm"
           loading={fetcher.state === 'submitting'}
           maxFiles={1}
+          multiple={false}
           onDrop={(files) => {
             const imageUrl = URL.createObjectURL(files[0])
             setState({
