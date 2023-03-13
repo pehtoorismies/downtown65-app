@@ -1,5 +1,6 @@
 import {
   Anchor,
+  Breadcrumbs,
   Button,
   Center,
   Container,
@@ -67,28 +68,38 @@ export default function MemberPage() {
   const data = useLoaderData<LoaderData>()
   const createdAt = `käyttäjä luotu: ${data.createdAt}`
   return (
-    <Container size="xs" mt={75}>
-      <Title ta="center" order={1}>
-        Jäsenprofiili
-      </Title>
-      <ProfileBox {...data} />
-      <Divider my="sm" label="System stats" labelPosition="center" />
-      <Text
-        ta="center"
-        fz="sm"
-        fw={500}
-        fs="italic"
-        data-testid="member-created-at"
-      >
-        {createdAt}
-      </Text>
+    <>
+      <Container fluid mt={75}>
+        <Breadcrumbs mb="xs">
+          <Anchor component={Link} to="/members">
+            Jäsenet
+          </Anchor>
+          <Text>{data.nickname}</Text>
+        </Breadcrumbs>
+      </Container>
+      <Container size="xs">
+        <Title ta="center" order={1} mt="sm">
+          Jäsenprofiili
+        </Title>
+        <ProfileBox {...data} />
+        <Divider my="sm" label="System stats" labelPosition="center" />
+        <Text
+          ta="center"
+          fz="sm"
+          fw={500}
+          fs="italic"
+          data-testid="member-created-at"
+        >
+          {createdAt}
+        </Text>
 
-      <Center mt="xl">
-        <Anchor component={Link} to="/members" data-testid="to-members-link">
-          Jäsenet-sivulle &#187;
-        </Anchor>
-      </Center>
-    </Container>
+        <Center mt="xl">
+          <Anchor component={Link} to="/members" data-testid="to-members-link">
+            Jäsenet-sivulle &#187;
+          </Anchor>
+        </Center>
+      </Container>
+    </>
   )
 }
 
