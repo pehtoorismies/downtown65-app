@@ -131,138 +131,142 @@ export default function ChangeAvatar() {
   }
 
   return (
-    <Container pt="xl">
-      <Breadcrumbs mb="xs">
-        <Anchor component={Link} to="/profile">
-          Profiili
-        </Anchor>
-        <Text>Vaihda profiilikuva</Text>
-      </Breadcrumbs>
-      {state.kind === 'error' && (
-        <Alert
-          icon={<IconAlertCircle size={16} />}
-          title="Virhe kuvatiedostossa"
-          color="red"
-          m="xl"
-        >
-          Kuva on todennäköisesti liian suuri tai tiedostotyyppi on väärän.
-          Käytä tyyppejä: gif, jpg, png.
-        </Alert>
-      )}
-      <Title align="center">Vaihda profiilikuva</Title>
-
-      <Dropzone
-        loading={fetcher.state === 'submitting'}
-        maxFiles={1}
-        onDrop={(files) => {
-          const imageUrl = URL.createObjectURL(files[0])
-          setState({
-            kind: 'newImageSet',
-            picture: imageUrl,
-            fileWithPath: files[0],
-          })
-        }}
-        onReject={() => {
-          setState({ kind: 'error', error: 'Virhe', picture: user.picture })
-        }}
-        maxSize={MAX_IMAGE_SIZE}
-        accept={IMAGE_MIME_TYPE}
-      >
-        <Group
-          position="center"
-          spacing="xl"
-          style={{ minHeight: 220, pointerEvents: 'none' }}
-        >
-          <Dropzone.Accept>
-            <Stack align="center">
-              <IconDownload size={50} />
-              <Text size="xl" color="dimmed" inline>
-                Drop drop drop
-              </Text>
-            </Stack>
-          </Dropzone.Accept>
-          <Dropzone.Reject>
-            <Stack align="center">
-              <ThemeIcon color="red" size={80}>
-                <IconX size={50} />
-              </ThemeIcon>
-              <Text size="xl" inline>
-                Vääräntyyppinen tiedosto tai kuva liian iso
-              </Text>
-              <Text size="md" color="dimmed">
-                Valitse: jpg, png.
-              </Text>
-            </Stack>
-          </Dropzone.Reject>
-          <Dropzone.Idle>
-            <Stack align="center">
-              <Avatar
-                src={state.picture}
-                size={120}
-                radius={120}
-                mx="auto"
-                color="blue"
-              />
-              <Text size="xl" inline>
-                Drägää kuva tähän (max. {humanFileSize(MAX_IMAGE_SIZE)})
-              </Text>
-              <Text size="md" color="dimmed">
-                Tai klikkaa valitaksesi tiedosto
-              </Text>
-            </Stack>
-          </Dropzone.Idle>
-        </Group>
-      </Dropzone>
-      {state.kind === 'newImageSet' && (
-        <Stack align="center" m="xl">
-          <Button
-            leftIcon={<IconUpload size={14} />}
-            onClick={uploadImage}
-            disabled={fetcher.state === 'submitting'}
-          >
-            Vaihda profiilikuva
-          </Button>
-          <Button
-            color="dtPink.3"
-            leftIcon={<IconX size={14} />}
-            onClick={() => {
-              setState({ kind: 'init', picture: user.picture })
-            }}
-          >
-            Pidä alkuperäinen
-          </Button>
-        </Stack>
-      )}
-      <Paper shadow="xs" p="md" my="sm">
-        <Title order={3}>Ohje</Title>
-        <Text>
-          Paras muoto profiilikuvallesi on&nbsp;
-          <Text fw={700} span>
-            neliö
-          </Text>{' '}
-          (työkalu tähän esim.{' '}
-          <Anchor href="https://croppola.com" target="_blank">
-            croppola.com
+    <>
+      <Container fluid mt={75}>
+        <Breadcrumbs mb="xs">
+          <Anchor component={Link} to="/profile">
+            Oma profiili
           </Anchor>
-          ). Eventsiin hyväksyttävät profiilikuvaformaatit:&nbsp;
-          {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
-            ', '
-          )}
-          . Jos uusi profiilikuvasi ei näy päivityksen jälkeen, loggaudu ulos ja
-          kirjaudu uudelleen sisään.
-        </Text>
-        <Title order={3} mt="sm">
-          Profiilikuva tapahtumissa
-        </Title>
-        <Text>
-          Kun muutat profiilikuvaasi, se päivittyy ainoastaan tuleviin
-          ilmoittautumisiin. Profiilikuvasi tapahtumassa on se mikä sinulla oli
-          profiilikuvanasi tapahtumaan liittyessäsi. Jos haluat uuden
-          profiilikuvasi näkyvän, niin poistu ja liity tapahtumaan uudelleen.
-          Jos olet kirjautunut monella eri laitteella, vaatii profiilikuvan
-          päivitys uloskirjautumisen kaikilta laitteilta.
-        </Text>
-      </Paper>
-    </Container>
+          <Text>Vaihda profiilikuva</Text>
+        </Breadcrumbs>
+      </Container>
+      <Container size="sm">
+        {state.kind === 'error' && (
+          <Alert
+            icon={<IconAlertCircle size={16} />}
+            title="Virhe kuvatiedostossa"
+            color="red"
+            m="xl"
+          >
+            Kuva on todennäköisesti liian suuri tai tiedostotyyppi on väärän.
+            Käytä tyyppejä: gif, jpg, png.
+          </Alert>
+        )}
+        <Title align="center">Vaihda profiilikuva</Title>
+        <Dropzone
+          mt="sm"
+          loading={fetcher.state === 'submitting'}
+          maxFiles={1}
+          onDrop={(files) => {
+            const imageUrl = URL.createObjectURL(files[0])
+            setState({
+              kind: 'newImageSet',
+              picture: imageUrl,
+              fileWithPath: files[0],
+            })
+          }}
+          onReject={() => {
+            setState({ kind: 'error', error: 'Virhe', picture: user.picture })
+          }}
+          maxSize={MAX_IMAGE_SIZE}
+          accept={IMAGE_MIME_TYPE}
+        >
+          <Group
+            position="center"
+            spacing="xl"
+            style={{ minHeight: 220, pointerEvents: 'none' }}
+          >
+            <Dropzone.Accept>
+              <Stack align="center">
+                <IconDownload size={50} />
+                <Text size="xl" color="dimmed" inline>
+                  Drop drop drop
+                </Text>
+              </Stack>
+            </Dropzone.Accept>
+            <Dropzone.Reject>
+              <Stack align="center">
+                <ThemeIcon color="red" size={80}>
+                  <IconX size={50} />
+                </ThemeIcon>
+                <Text size="xl" inline>
+                  Vääräntyyppinen tiedosto tai kuva liian iso
+                </Text>
+                <Text size="md" color="dimmed">
+                  Valitse: jpg, png.
+                </Text>
+              </Stack>
+            </Dropzone.Reject>
+            <Dropzone.Idle>
+              <Stack align="center">
+                <Avatar
+                  src={state.picture}
+                  size={120}
+                  radius={120}
+                  mx="auto"
+                  color="blue"
+                />
+                <Text size="xl" inline>
+                  Drägää kuva tähän (max. {humanFileSize(MAX_IMAGE_SIZE)})
+                </Text>
+                <Text size="md" color="dimmed">
+                  Tai klikkaa valitaksesi tiedosto
+                </Text>
+              </Stack>
+            </Dropzone.Idle>
+          </Group>
+        </Dropzone>
+        {state.kind === 'newImageSet' && (
+          <Stack align="center" m="xl">
+            <Button
+              leftIcon={<IconUpload size={14} />}
+              onClick={uploadImage}
+              disabled={fetcher.state === 'submitting'}
+            >
+              Vaihda profiilikuva
+            </Button>
+            <Button
+              color="dtPink.3"
+              leftIcon={<IconX size={14} />}
+              onClick={() => {
+                setState({ kind: 'init', picture: user.picture })
+              }}
+            >
+              Pidä alkuperäinen
+            </Button>
+          </Stack>
+        )}
+        <Paper shadow="xs" p="md" my="sm">
+          <Title order={3}>Ohje</Title>
+          <Text>
+            Paras muoto profiilikuvallesi on&nbsp;
+            <Text fw={700} span>
+              neliö
+            </Text>{' '}
+            (työkalu tähän esim.{' '}
+            <Anchor href="https://croppola.com" target="_blank">
+              croppola.com
+            </Anchor>
+            ). Eventsiin hyväksyttävät profiilikuvaformaatit:&nbsp;
+            {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
+              ', '
+            )}
+            . Jos uusi profiilikuvasi ei näy päivityksen jälkeen, loggaudu ulos
+            ja kirjaudu uudelleen sisään.
+          </Text>
+          <Title order={3} mt="sm">
+            Profiilikuva tapahtumissa
+          </Title>
+          <Text>
+            Kun muutat profiilikuvaasi, se päivittyy ainoastaan tuleviin
+            ilmoittautumisiin. Profiilikuvasi tapahtumassa on se mikä sinulla
+            oli profiilikuvanasi tapahtumaan liittyessäsi. Jos haluat uuden
+            profiilikuvasi näkyvän, niin poistu ja liity tapahtumaan uudelleen.
+            Jos olet kirjautunut monella eri laitteella, vaatii profiilikuvan
+            päivitys uloskirjautumisen kaikilta laitteilta.
+          </Text>
+        </Paper>
+      </Container>
+    </>
   )
 }

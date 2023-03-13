@@ -1,5 +1,6 @@
 import {
   Anchor,
+  Breadcrumbs,
   Container,
   Pagination,
   Table,
@@ -9,6 +10,7 @@ import {
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
+import React from 'react'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
@@ -109,48 +111,54 @@ export default function Users() {
   ))
 
   return (
-    <Container py="sm">
-      <Title>Seuran jäsenet</Title>
-      <Text c="dimmed" fw={500} mb="xs">
-        Jäseniä yhteensä: {userCount}
-      </Text>
-
-      {hasPagination && (
-        <Pagination
-          withControls={false}
-          total={numPages}
-          page={currentPage}
-          position="left"
-          my="md"
-          onChange={(page) => {
-            navigate(`?page=${page}&per_page=${perPage}`)
-          }}
-        />
-      )}
-      <Table striped withColumnBorders>
-        <thead>
-          <tr>
-            <th>Nick</th>
-            <th>Nimi</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </Table>
-      {hasPagination && (
-        <Pagination
-          withControls={false}
-          total={numPages}
-          page={currentPage}
-          position="left"
-          my="md"
-          onChange={(page) => {
-            navigate(`?page=${page}&per_page=${perPage}`)
-          }}
-        />
-      )}
-      <Text c="dimmed" fw={500} my="sm">
-        Tulokset: {start + 1} - {start + usersOnPage} ({userCount})
-      </Text>
-    </Container>
+    <>
+      <Container fluid mt={75}>
+        <Breadcrumbs mb="xs">
+          <Text>Jäsenet</Text>
+        </Breadcrumbs>
+      </Container>
+      <Container>
+        <Title>Seuran jäsenet</Title>
+        <Text c="dimmed" fw={500} mb="xs">
+          Jäseniä yhteensä: {userCount}
+        </Text>
+        {hasPagination && (
+          <Pagination
+            withControls={false}
+            total={numPages}
+            page={currentPage}
+            position="left"
+            my="md"
+            onChange={(page) => {
+              navigate(`?page=${page}&per_page=${perPage}`)
+            }}
+          />
+        )}
+        <Table striped withColumnBorders>
+          <thead>
+            <tr>
+              <th>Nick</th>
+              <th>Nimi</th>
+            </tr>
+          </thead>
+          <tbody>{rows}</tbody>
+        </Table>
+        {hasPagination && (
+          <Pagination
+            withControls={false}
+            total={numPages}
+            page={currentPage}
+            position="left"
+            my="md"
+            onChange={(page) => {
+              navigate(`?page=${page}&per_page=${perPage}`)
+            }}
+          />
+        )}
+        <Text c="dimmed" fw={500} my="sm">
+          Tulokset: {start + 1} - {start + usersOnPage} ({userCount})
+        </Text>
+      </Container>
+    </>
   )
 }

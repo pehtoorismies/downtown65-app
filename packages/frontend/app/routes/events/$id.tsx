@@ -35,7 +35,7 @@ import {
   IconPencil,
 } from '@tabler/icons-react'
 import type { ChangeEvent } from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import invariant from 'tiny-invariant'
 import type { EventLoaderData } from './modules/event-loader-data'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
@@ -292,8 +292,10 @@ export default function GetEvent() {
           </Group>
         </Form>
       </Modal>
-      <Container pt={12}>
+      <Container fluid pt={12}>
         <Breadcrumbs mb="xs">{items}</Breadcrumbs>
+      </Container>
+      <Container>
         <ParticipatingContext.Provider value={participationActions}>
           <EventCardExtended {...eventItem} />
         </ParticipatingContext.Provider>

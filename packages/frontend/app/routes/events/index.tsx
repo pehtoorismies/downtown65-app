@@ -1,9 +1,18 @@
 import { DynamoDatetime } from '@downtown65-app/common'
-import { Button, Center, Container, SimpleGrid, Title } from '@mantine/core'
+import {
+  Breadcrumbs,
+  Button,
+  Center,
+  Container,
+  SimpleGrid,
+  Text,
+  Title,
+} from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { IconSquarePlus } from '@tabler/icons-react'
+import React from 'react'
 import type { EventLoaderData } from './modules/event-loader-data'
 import { EventCard } from '~/components/event-card/event-card'
 import {
@@ -60,46 +69,60 @@ export default function GetEvents() {
 
   if (eventItems.length === 0) {
     return (
-      <Container pt={12} mt="lg" data-testid="events">
-        <Title order={1} align="center">
-          Ei tulevia tapahtumia
-        </Title>
-        <Center>
-          <Button
-            component={Link}
-            to="/events/new"
-            size="lg"
-            mt="xs"
-            rightIcon={<IconSquarePlus size={30} />}
-            styles={() => ({
-              leftIcon: {
-                marginRight: 15,
-              },
-            })}
-          >
-            Luo uusi tapahtuma
-          </Button>
-        </Center>
-      </Container>
+      <>
+        <Container fluid py={12} mt="lg">
+          <Breadcrumbs mb="xs">
+            <Text>Tapahtumat</Text>
+          </Breadcrumbs>
+        </Container>
+        <Container data-testid="events">
+          <Title order={1} align="center">
+            Ei tulevia tapahtumia
+          </Title>
+          <Center>
+            <Button
+              component={Link}
+              to="/events/new"
+              size="lg"
+              mt="xs"
+              rightIcon={<IconSquarePlus size={30} />}
+              styles={() => ({
+                leftIcon: {
+                  marginRight: 15,
+                },
+              })}
+            >
+              Luo uusi tapahtuma
+            </Button>
+          </Center>
+        </Container>
+      </>
     )
   }
 
   return (
-    <Container py={12} data-testid="events">
-      <ParticipatingContext.Provider value={participationActions}>
-        <SimpleGrid
-          cols={2}
-          breakpoints={[
-            { maxWidth: 980, cols: 2, spacing: 'md' },
-            { maxWidth: 755, cols: 2, spacing: 'sm' },
-            { maxWidth: 600, cols: 1, spacing: 'sm' },
-          ]}
-        >
-          {eventItems.map((m) => {
-            return <EventCard key={m.id} {...m} shadow="xs" />
-          })}
-        </SimpleGrid>
-      </ParticipatingContext.Provider>
-    </Container>
+    <>
+      <Container fluid py={12}>
+        <Breadcrumbs mb="xs">
+          <Text>Tapahtumat</Text>
+        </Breadcrumbs>
+      </Container>
+      <Container data-testid="events">
+        <ParticipatingContext.Provider value={participationActions}>
+          <SimpleGrid
+            cols={2}
+            breakpoints={[
+              { maxWidth: 980, cols: 2, spacing: 'md' },
+              { maxWidth: 755, cols: 2, spacing: 'sm' },
+              { maxWidth: 600, cols: 1, spacing: 'sm' },
+            ]}
+          >
+            {eventItems.map((m) => {
+              return <EventCard key={m.id} {...m} shadow="xs" />
+            })}
+          </SimpleGrid>
+        </ParticipatingContext.Provider>
+      </Container>
+    </>
   )
 }

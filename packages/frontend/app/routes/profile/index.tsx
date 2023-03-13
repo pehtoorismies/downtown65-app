@@ -1,5 +1,5 @@
 import {
-  Alert,
+  Breadcrumbs,
   Button,
   Center,
   Container,
@@ -8,6 +8,7 @@ import {
   LoadingOverlay,
   SimpleGrid,
   Switch,
+  Text,
 } from '@mantine/core'
 import type {
   ActionFunction,
@@ -16,7 +17,7 @@ import type {
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, useFetcher, useLoaderData } from '@remix-run/react'
-import { IconAlertCircle, IconLogout } from '@tabler/icons-react'
+import { IconLogout } from '@tabler/icons-react'
 import type { ChangeEventHandler } from 'react'
 import React, { useState } from 'react'
 import { ProfileBox } from '~/components/profile-box'
@@ -154,7 +155,12 @@ export default function Profile() {
 
   return (
     <>
-      <Container size={BOX_SIZE} mt={75}>
+      <Container fluid mt={75}>
+        <Breadcrumbs mb="xs">
+          <Text>Oma profiili</Text>
+        </Breadcrumbs>
+      </Container>
+      <Container size={BOX_SIZE}>
         <ProfileBox
           picture={user.picture}
           nickname={user.nickname}
@@ -189,7 +195,7 @@ export default function Profile() {
               disabled
               name="weekly"
               styles={switchStyles}
-              label="Lähetä viikon tapahtumat sähköpostitse."
+              label="Lähetä viikon tapahtumat sähköpostitse. (Ei käytössä)"
               onLabel="ON"
               offLabel="OFF"
               checked={preferences.subscribeWeeklyEmail}
@@ -197,15 +203,6 @@ export default function Profile() {
               my="sm"
             />
           </div>
-        </Group>
-        <Group position="center" mt="sm">
-          <Alert
-            icon={<IconAlertCircle size={16} />}
-            title="Fun fact"
-            color="red"
-          >
-            Viikkosähköposti ei vielä käytössä.
-          </Alert>
         </Group>
       </Container>
       <Container size={BOX_SIZE}>
