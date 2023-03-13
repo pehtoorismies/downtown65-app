@@ -12,10 +12,12 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
   const removalPolicy =
     app.stage === 'production' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY
 
+  const autoDeleteObjects = app.stage !== 'production'
+
   const bucket = new Bucket(stack, 'mediaBucket', {
     cdk: {
       bucket: {
-        autoDeleteObjects: true,
+        autoDeleteObjects,
         removalPolicy,
       },
     },
