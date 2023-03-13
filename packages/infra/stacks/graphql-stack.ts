@@ -36,23 +36,10 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       MEDIA_BUCKET_DOMAIN,
       MEDIA_BUCKET_NAME,
     ],
-    // bundle: {
-    //   nodeModules: ['uglify-js'],
-    //   externalModules: ['sharp'],
-    //   format: 'esm',
-    //   loader: {
-    //     '.mjml': 'text',
-    //   },
-    // },
     layers: [
       new lambda.LayerVersion(stack, 'AppLayer', {
         code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
       }),
-      // lambda.LayerVersion.fromLayerVersionArn(
-      //   stack,
-      //   'LambdaLayer',
-      //   lambdaLayerArn
-      // ),
     ],
   })
 
