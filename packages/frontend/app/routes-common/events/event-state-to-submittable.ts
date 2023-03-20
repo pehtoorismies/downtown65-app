@@ -1,4 +1,4 @@
-import type { EventState } from '~/routes/events/modules/components/event-state'
+import type { EventState } from './components/event-state'
 
 const getDateComponents = (
   d?: Date

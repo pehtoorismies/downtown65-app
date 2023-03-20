@@ -13,11 +13,13 @@ import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
-import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
+import { AuthTemplate } from '~/routes-common/auth/auth-template'
 import { Tokens, createUserSession } from '~/session.server'
 import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
+
+export { loader } from '~/routes-common/auth/loader'
 
 export const meta: MetaFunction = () => {
   return {

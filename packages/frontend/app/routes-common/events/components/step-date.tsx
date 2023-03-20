@@ -1,7 +1,7 @@
 import 'dayjs/locale/fi'
 import { Calendar } from '@mantine/dates'
 import dayjs from 'dayjs'
-import type { ReducerProps } from '~/routes/events/modules/components/reducer'
+import type { ReducerProps } from './reducer'
 
 export const StepDate = ({ state, dispatch }: ReducerProps) => {
   return (

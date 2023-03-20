@@ -1,5 +1,5 @@
 import { RichTextEditor } from '@mantine/rte'
-import type { ReducerProps } from '~/routes/events/modules/components/reducer'
+import type { ReducerProps } from './reducer'
 
 /**
  * This component is available only client side

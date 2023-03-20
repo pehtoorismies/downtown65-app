@@ -1,8 +1,8 @@
 import format from 'date-fns/format'
 import fi from 'date-fns/locale/fi'
+import type { EventState } from './event-state'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import type { User } from '~/domain/user'
-import type { EventState } from '~/routes/events/modules/components/event-state'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 interface Properties {

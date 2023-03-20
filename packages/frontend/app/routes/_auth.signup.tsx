@@ -11,7 +11,6 @@ import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { z } from 'zod'
-import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import type { SignupField, SignupPayload } from '~/gql/types.gen'
 import {
@@ -19,8 +18,9 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { AuthTemplate } from '~/routes-common/auth/auth-template'
 
-export { loader } from './modules/loader'
+export { loader } from '~/routes-common/auth/loader'
 
 export const meta: MetaFunction = () => {
   return {

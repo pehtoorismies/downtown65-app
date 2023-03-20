@@ -28,9 +28,9 @@ import {
   IconX,
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
+import { createProfileUploadHandler } from './s3-upload.server'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import { createProfileUploadHandler } from '~/routes/profile/modules/s3-upload.server'
 import {
   actionAuthenticate,
   loaderAuthenticate,

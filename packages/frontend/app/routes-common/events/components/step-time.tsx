@@ -1,7 +1,7 @@
 import 'dayjs/locale/fi'
 import { Button, Center, Container, Grid, Stack, Text } from '@mantine/core'
-import type { EventState } from '~/routes/events/modules/components/event-state'
-import type { ReducerProps } from '~/routes/events/modules/components/reducer'
+import type { EventState } from './event-state'
+import type { ReducerProps } from './reducer'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 const HOURS = [
