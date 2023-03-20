@@ -63,6 +63,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
 }
 
+const EventsBreadcrumb = () => {
+  return (
+    <Container fluid py={12} mt="lg">
+      <Breadcrumbs mb="xs">
+        <Text data-testid="breadcrumbs-current">Tapahtumat</Text>
+      </Breadcrumbs>
+    </Container>
+  )
+}
+
 export default function GetEvents() {
   const { eventItems } = useLoaderData<LoaderData>()
   const participationActions = useParticipationActions()
@@ -70,11 +80,7 @@ export default function GetEvents() {
   if (eventItems.length === 0) {
     return (
       <>
-        <Container fluid py={12} mt="lg">
-          <Breadcrumbs mb="xs">
-            <Text>Tapahtumat</Text>
-          </Breadcrumbs>
-        </Container>
+        <EventsBreadcrumb />
         <Container data-testid="events">
           <Title order={1} align="center">
             Ei tulevia tapahtumia
@@ -102,11 +108,7 @@ export default function GetEvents() {
 
   return (
     <>
-      <Container fluid py={12}>
-        <Breadcrumbs mb="xs">
-          <Text>Tapahtumat</Text>
-        </Breadcrumbs>
-      </Container>
+      <EventsBreadcrumb />
       <Container data-testid="events">
         <ParticipatingContext.Provider value={participationActions}>
           <SimpleGrid
