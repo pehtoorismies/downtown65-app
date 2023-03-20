@@ -10,15 +10,16 @@ import {
   Title,
 } from '@mantine/core'
 import type { LoaderFunction, MetaFunction } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import { Link, useCatch, useLoaderData } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import format from 'date-fns/format'
 import React from 'react'
 import invariant from 'tiny-invariant'
+import notFoundProfileImage from './not-found.jpg'
 import { ProfileBox } from '~/components/profile-box'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import notFoundProfileImage from '~/images/not-found.jpg'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
@@ -57,11 +58,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const createdAt = format(new Date(response.user.createdAt), 'd.M.yyyy')
 
-  return {
+  return json<LoaderData>({
     user,
     ...response.user,
     createdAt,
-  }
+  })
 }
 
 export default function MemberPage() {
