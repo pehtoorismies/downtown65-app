@@ -146,7 +146,7 @@ export const HeaderLoggedIn = ({ user }: Props) => {
           <Menu
             width={160}
             position="bottom-end"
-            transition="pop-top-right"
+            transitionProps={{ transition: 'pop-top-right' }}
             onClose={() => setUserMenuOpened(false)}
             onOpen={() => setUserMenuOpened(true)}
           >

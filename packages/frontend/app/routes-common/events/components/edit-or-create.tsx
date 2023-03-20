@@ -114,7 +114,6 @@ export const EditOrCreate: FC<Props> = ({
         opened={opened}
         onClose={() => setOpened(false)}
         title={getModalTitle(state.kind)}
-        closeButtonLabel="Close"
       >
         <Group position="apart" mt={50}>
           <Button

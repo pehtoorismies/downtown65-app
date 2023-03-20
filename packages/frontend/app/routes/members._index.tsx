@@ -126,7 +126,7 @@ export default function Users() {
           <Pagination
             withControls={false}
             total={numPages}
-            page={currentPage}
+            value={currentPage}
             position="left"
             my="md"
             onChange={(page) => {
@@ -147,7 +147,7 @@ export default function Users() {
           <Pagination
             withControls={false}
             total={numPages}
-            page={currentPage}
+            value={currentPage}
             position="left"
             my="md"
             onChange={(page) => {

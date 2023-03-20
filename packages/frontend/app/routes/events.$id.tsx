@@ -246,7 +246,6 @@ export default function GetEvent() {
         opened={opened}
         onClose={onCloseModal}
         title="Tapahtuman poisto"
-        closeButtonLabel="Close"
         data-testid="delete-confirmation-modal"
       >
         <LoadingOverlay
