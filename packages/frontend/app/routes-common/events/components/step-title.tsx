@@ -1,5 +1,5 @@
 import { Center, Switch, TextInput } from '@mantine/core'
-import type { ReducerProps } from '~/routes/events/modules/components/reducer'
+import type { ReducerProps } from './reducer'
 
 const spacing = 'md'
 

@@ -37,7 +37,6 @@ import {
 import type { ChangeEvent } from 'react'
 import React, { useState } from 'react'
 import invariant from 'tiny-invariant'
-import type { EventLoaderData } from './modules/event-loader-data'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import {
   ParticipatingContext,
@@ -50,6 +49,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import type { EventLoaderData } from '~/routes-common/events/event-loader-data'
 import {
   actionAuthenticate,
   getAuthenticatedUser,

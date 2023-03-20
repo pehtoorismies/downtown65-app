@@ -12,16 +12,16 @@ import type { ActionFunction, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons-react'
-import { AuthTemplate } from './modules/auth-template'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { AuthTemplate } from '~/routes-common/auth/auth-template'
 import { validateEmail } from '~/util/validation.server'
 
-export { loader } from './modules/loader'
+export { loader } from '~/routes-common/auth/loader'
 
 export const meta: MetaFunction = () => {
   return {

@@ -18,11 +18,6 @@ import { Link, useLoaderData } from '@remix-run/react'
 import { IconRocket } from '@tabler/icons-react'
 import { useReducer } from 'react'
 import invariant from 'tiny-invariant'
-import { EditOrCreate } from '../modules/components/edit-or-create'
-import type { EventState } from '../modules/components/event-state'
-import { isValidStateToSave } from '../modules/components/event-state'
-import { ActiveStep, reducer } from '../modules/components/reducer'
-import { getEventForm } from '../modules/get-event-form'
 import type { Context } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
@@ -31,6 +26,11 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { EditOrCreate } from '~/routes-common/events/components/edit-or-create'
+import type { EventState } from '~/routes-common/events/components/event-state'
+import { isValidStateToSave } from '~/routes-common/events/components/event-state'
+import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
+import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {

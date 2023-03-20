@@ -22,24 +22,21 @@ import {
 } from '@tabler/icons-react'
 import type { Dispatch, FC } from 'react'
 import { useState } from 'react'
-import type { Context } from '~/contexts/participating-context'
+import { eventStateToSubmittable } from '../event-state-to-submittable'
+import { Buttons } from './buttons'
+import type { EventState } from './event-state'
+import { isValidStateToSave } from './event-state'
+import type { EventAction, StepNumber } from './reducer'
+import { ActiveStep } from './reducer'
+import { StepDate } from './step-date'
+import { StepDescriptionClient } from './step-description.client'
+import { StepPreview } from './step-preview'
+import { StepTime } from './step-time'
+import { StepTitle } from './step-title'
+import { StepType } from './step-type'
 import { ParticipatingContext } from '~/contexts/participating-context'
+import type { Context } from '~/contexts/participating-context'
 import type { User } from '~/domain/user'
-import { Buttons } from '~/routes/events/modules/components/buttons'
-import type { EventState } from '~/routes/events/modules/components/event-state'
-import { isValidStateToSave } from '~/routes/events/modules/components/event-state'
-import type {
-  EventAction,
-  StepNumber,
-} from '~/routes/events/modules/components/reducer'
-import { ActiveStep } from '~/routes/events/modules/components/reducer'
-import { StepDate } from '~/routes/events/modules/components/step-date'
-import { StepDescriptionClient } from '~/routes/events/modules/components/step-description.client'
-import { StepPreview } from '~/routes/events/modules/components/step-preview'
-import { StepTime } from '~/routes/events/modules/components/step-time'
-import { StepTitle } from '~/routes/events/modules/components/step-title'
-import { StepType } from '~/routes/events/modules/components/step-type'
-import { eventStateToSubmittable } from '~/routes/events/modules/event-state-to-submittable'
 
 const iconSize = 20
 

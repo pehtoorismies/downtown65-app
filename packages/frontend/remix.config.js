@@ -7,4 +7,7 @@ module.exports = {
   publicPath: '/build/',
   serverBuildTarget: 'node-cjs',
   server: undefined,
+  future: {
+    v2_routeConvention: true,
+  },
 }

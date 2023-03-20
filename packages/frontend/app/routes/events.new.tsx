@@ -7,9 +7,6 @@ import type {
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { useReducer } from 'react'
-import { EditOrCreate } from './modules/components/edit-or-create'
-import { ActiveStep, reducer } from './modules/components/reducer'
-import { getEventForm } from './modules/get-event-form'
 import type { Context } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
@@ -18,6 +15,9 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { EditOrCreate } from '~/routes-common/events/components/edit-or-create'
+import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
+import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {

@@ -13,7 +13,6 @@ import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { IconSquarePlus } from '@tabler/icons-react'
 import React from 'react'
-import type { EventLoaderData } from './modules/event-loader-data'
 import { EventCard } from '~/components/event-card/event-card'
 import {
   ParticipatingContext,
@@ -21,6 +20,7 @@ import {
 } from '~/contexts/participating-context'
 import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
+import type { EventLoaderData } from '~/routes-common/events/event-loader-data'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {

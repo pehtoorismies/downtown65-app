@@ -1,7 +1,7 @@
 import { Button, SimpleGrid } from '@mantine/core'
+import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
 import { EventType } from '~/gql/types.gen'
-import type { ReducerProps } from '~/routes/events/modules/components/reducer'
 import { mapToData } from '~/util/event-type'
 
 export const StepType = ({ state, dispatch }: ReducerProps) => {
