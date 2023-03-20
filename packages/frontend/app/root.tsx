@@ -1,4 +1,4 @@
-import { MantineProvider, Title, createEmotionCache } from '@mantine/core'
+import { MantineProvider, createEmotionCache } from '@mantine/core'
 import { StylesPlaceholder } from '@mantine/remix'
 import type {
   LinksFunction,
@@ -14,7 +14,6 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  useCatch,
   useLoaderData,
   useMatches,
 } from '@remix-run/react'
@@ -161,15 +160,5 @@ export default function App() {
         </body>
       </html>
     </MantineProvider>
-  )
-}
-
-export function CatchBoundary() {
-  const caught = useCatch()
-
-  return (
-    <Title>
-      {caught.status} {caught.statusText}
-    </Title>
   )
 }
