@@ -1,4 +1,5 @@
 import { MantineProvider, createEmotionCache } from '@mantine/core'
+import { Notifications, notifications } from '@mantine/notifications'
 import { StylesPlaceholder } from '@mantine/remix'
 import type {
   LinksFunction,
@@ -18,7 +19,6 @@ import {
   useMatches,
 } from '@remix-run/react'
 import { useEffect } from 'react'
-import { Toaster, toast } from 'react-hot-toast'
 import { Layout } from '~/components/layout'
 import type { User } from '~/domain/user'
 import type { ToastMessage } from '~/message.server'
@@ -128,11 +128,11 @@ export default function App() {
 
     switch (type) {
       case 'success': {
-        toast.success(message, { duration: 3000 })
+        notifications.show({ message, color: 'green', autoClose: 2500 })
         break
       }
       case 'error': {
-        toast.error(message)
+        notifications.show({ message, color: 'red', autoClose: 2500 })
         break
       }
       default: {
@@ -151,7 +151,11 @@ export default function App() {
         </head>
         <body>
           <Layout user={user} stage={stage}>
-            <Toaster />
+            <Notifications
+              position="top-center"
+              zIndex={3000}
+              containerWidth={300}
+            />
             <Outlet />
           </Layout>
           <ScrollRestoration />
