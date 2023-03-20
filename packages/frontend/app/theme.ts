@@ -37,7 +37,7 @@ export const theme: MantineThemeOverride = {
   headings: {
     fontFamily: 'Roboto, sans-serif',
     sizes: {
-      h1: { fontSize: 30 },
+      h1: { fontSize: '2rem' },
     },
   },
 }
