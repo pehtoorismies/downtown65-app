@@ -15203,10 +15203,10 @@ remark-rehype@^9.0.0:
     mdast-util-to-hast "^11.0.0"
     unified "^10.0.0"
 
-remeda@1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/remeda/-/remeda-1.6.1.tgz#9cd7b53217b90bd9bafffadefe883c4120f4dcde"
-  integrity sha512-ywn4Tv2cPBj6hk0TEYMHusWVXu72yJNCaWUdMK7kc7x/PjQPBSvtMbmBWP4PQH791kpl3rPBe3ZVkJyPj3c+0g==
+remeda@1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/remeda/-/remeda-1.9.1.tgz#e8321ccf579be33dd64eb7b569b5df89b7a6af85"
+  integrity sha512-n8vx5dg27jRCUYlM7RXQ9MbJCspb18/9wmrRTLKNNECivtAZBuxok0Ei6yV0jcFsnKLr8Y6oiuLyDXU1jt5UKw==
 
 remeda@^0.0.32:
   version "0.0.32"
