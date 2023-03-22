@@ -14,11 +14,11 @@ export class NewEventPage extends EventPage {
 
   async cancelClick() {
     await this.page.getByTestId('cancel-event-creation-button').click()
-    await expect(this.getCancelModal()).toBeVisible()
+    await expect(this.getCancelModalContent()).toBeVisible()
   }
 
-  getCancelModal() {
-    return this.page.getByTestId('confirmation-modal')
+  getCancelModalContent() {
+    return this.page.getByTestId('confirmation-modal-content')
   }
 
   async headerVisible(text: string) {
@@ -31,12 +31,12 @@ export class NewEventPage extends EventPage {
     switch (kind) {
       case 'closeWithButton': {
         await this.page.getByTestId('modal-close').click()
-        await expect(this.getCancelModal()).toBeHidden()
+        await expect(this.getCancelModalContent()).toBeHidden()
         return
       }
       case 'closeWithX': {
         await this.page.locator("button[aria-label='Close']").click()
-        await expect(this.getCancelModal()).toBeHidden()
+        await expect(this.getCancelModalContent()).toBeHidden()
         return
       }
       case 'confirmCancel': {

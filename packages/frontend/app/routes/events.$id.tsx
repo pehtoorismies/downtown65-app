@@ -246,13 +246,16 @@ export default function GetEvent() {
         opened={opened}
         onClose={onCloseModal}
         title="Tapahtuman poisto"
-        data-testid="delete-confirmation-modal"
+        closeButtonProps={{ 'aria-label': 'Close' }}
       >
         <LoadingOverlay
           visible={navigation.state === 'submitting'}
           transitionDuration={200}
         />
-        <TypographyStylesProvider my="sm">
+        <TypographyStylesProvider
+          my="sm"
+          data-testid="delete-confirmation-modal-content"
+        >
           <p>
             Varmista tapahtuman <strong>{eventItem.title}</strong> poisto.
             Kirjoita allaolevaan kenttään <i>poista</i> ja klikkaa Poista.
@@ -308,7 +311,7 @@ export default function GetEvent() {
                 component={Link}
                 to={`/events/edit/${eventItem.id}`}
                 rightIcon={<IconPencil size={18} />}
-                data-testid="modify-event"
+                data-testid="modify-event-btn"
               >
                 Muokkaa
               </Button>
@@ -316,7 +319,7 @@ export default function GetEvent() {
                 color="grape"
                 onClick={() => setOpened(true)}
                 rightIcon={<IconCircleOff size={18} />}
-                data-testid="delete-event"
+                data-testid="delete-event-btn"
               >
                 Poista tapahtuma
               </Button>

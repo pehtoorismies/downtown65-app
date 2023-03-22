@@ -34,7 +34,7 @@ test.describe('Create event', () => {
   test('should cancel new event creation', async ({ page, newEventPage }) => {
     await newEventPage.cancelClick()
     await newEventPage.modalClick('closeWithX')
-    await expect(newEventPage.getCancelModal()).toBeHidden()
+    await expect(newEventPage.getCancelModalContent()).toBeHidden()
 
     const eventTypes = Object.values(EventType)
 
@@ -43,12 +43,12 @@ test.describe('Create event', () => {
     )
     await newEventPage.headerVisible('Perustiedot')
     await newEventPage.cancelClick()
-    await expect(newEventPage.getCancelModal()).toBeVisible()
+    await expect(newEventPage.getCancelModalContent()).toBeVisible()
     await newEventPage.modalClick('closeWithButton')
-    await expect(newEventPage.getCancelModal()).toBeHidden()
+    await expect(newEventPage.getCancelModalContent()).toBeHidden()
 
     await newEventPage.cancelClick()
-    await expect(newEventPage.getCancelModal()).toBeVisible()
+    await expect(newEventPage.getCancelModalContent()).toBeVisible()
     await newEventPage.modalClick('confirmCancel')
     await page.waitForURL('**/events')
   })
@@ -235,14 +235,14 @@ test.describe('Create event', () => {
 
     // remove
     await newEventPage.getDeleteEventBtn().click()
-    await expect(newEventPage.getDeleteConfirmationModal()).toBeVisible()
+    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeVisible()
     await newEventPage.deleteModalClick('closeWithX')
-    await expect(newEventPage.getDeleteConfirmationModal()).toBeHidden()
+    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeHidden()
 
     await newEventPage.getDeleteEventBtn().click()
-    await expect(newEventPage.getDeleteConfirmationModal()).toBeVisible()
+    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeVisible()
     await newEventPage.deleteModalClick('closeWithButton')
-    await expect(newEventPage.getDeleteConfirmationModal()).toBeHidden()
+    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeHidden()
 
     await newEventPage.getDeleteEventBtn().click()
     await expect(newEventPage.getDeleteConfirmationBtn()).toBeDisabled()

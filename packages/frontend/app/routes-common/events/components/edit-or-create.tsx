@@ -109,13 +109,17 @@ export const EditOrCreate: FC<Props> = ({
   return (
     <>
       <Modal
-        data-testid="confirmation-modal"
         zIndex={2000}
         opened={opened}
         onClose={() => setOpened(false)}
         title={getModalTitle(state.kind)}
+        closeButtonProps={{ 'aria-label': 'Close' }}
       >
-        <Group position="apart" mt={50}>
+        <Group
+          position="apart"
+          mt={50}
+          data-testid="confirmation-modal-content"
+        >
           <Button
             onClick={() => setOpened(false)}
             leftIcon={<IconCircleX size={18} />}
