@@ -65,27 +65,27 @@ export class EventPage extends DtPage {
   }
 
   getModifyEventBtn() {
-    return this.page.getByTestId('modify-event')
+    return this.page.getByTestId('modify-event-btn')
   }
 
   getDeleteEventBtn() {
-    return this.page.getByTestId('delete-event')
+    return this.page.getByTestId('delete-event-btn')
   }
 
-  getDeleteConfirmationModal() {
-    return this.page.getByTestId('delete-confirmation-modal')
+  getDeleteConfirmationModalContent() {
+    return this.page.getByTestId('delete-confirmation-modal-content')
   }
 
   async deleteModalClick(kind: 'closeWithX' | 'closeWithButton') {
     switch (kind) {
       case 'closeWithButton': {
         await this.page.getByTestId('modal-close').click()
-        await expect(this.getDeleteConfirmationModal()).toBeHidden()
+        await expect(this.getDeleteConfirmationModalContent()).toBeHidden()
         return
       }
       case 'closeWithX': {
         await this.page.locator("button[aria-label='Close']").click()
-        await expect(this.getDeleteConfirmationModal()).toBeHidden()
+        await expect(this.getDeleteConfirmationModalContent()).toBeHidden()
         return
       }
     }
