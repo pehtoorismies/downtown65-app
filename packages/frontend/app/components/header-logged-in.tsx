@@ -87,6 +87,17 @@ interface Props {
   user: User
 }
 
+const navLinks = [
+  { id: 10, title: 'Tapahtumat', to: '/events' },
+  {
+    id: 30,
+    title: 'Luo uusi',
+    to: '/events/new',
+    testId: 'nav-create-new-event',
+  },
+  { id: 40, title: 'Jäsenet', to: '/members' },
+]
+
 export const HeaderLoggedIn = ({ user }: Props) => {
   const fetcher = useFetcher()
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
@@ -107,40 +118,21 @@ export const HeaderLoggedIn = ({ user }: Props) => {
             <Text sx={{ userSelect: 'none' }}>Dt65 Events</Text>
           </Group>
           <Group className={classes.hiddenMobile}>
-            <NavLink
-              end
-              to="/events"
-              className={({ isActive }) => {
-                return cx(classes.link, {
-                  [classes.linkActive]: isActive,
-                })
-              }}
-            >
-              Tapahtumat
-            </NavLink>
-            <NavLink
-              end
-              to="/events/new"
-              className={({ isActive }) => {
-                return cx(classes.link, {
-                  [classes.linkActive]: isActive,
-                })
-              }}
-              data-testid="nav-create-new-event"
-            >
-              Luo uusi
-            </NavLink>
-            <NavLink
-              end
-              to="/members"
-              className={({ isActive }) => {
-                return cx(classes.link, {
-                  [classes.linkActive]: isActive,
-                })
-              }}
-            >
-              Jäsenet
-            </NavLink>
+            {navLinks.map(({ id, to, title, testId }) => (
+              <NavLink
+                key={id}
+                end
+                to={to}
+                className={({ isActive }) => {
+                  return cx(classes.link, {
+                    [classes.linkActive]: isActive,
+                  })
+                }}
+                data-testid={testId}
+              >
+                {title}
+              </NavLink>
+            ))}
           </Group>
 
           <Menu
@@ -201,42 +193,19 @@ export const HeaderLoggedIn = ({ user }: Props) => {
         zIndex={1_000_000}
       >
         <Divider my="sm" color="gray.1" />
-        <Link
-          to="/events"
-          onClick={closeDrawer}
-          className={cx(classes.link, {
-            [classes.linkActive]: false,
-          })}
-        >
-          Tapahtumat
-        </Link>
-        <Link
-          to="/events/new"
-          onClick={closeDrawer}
-          className={cx(classes.link, {
-            [classes.linkActive]: false,
-          })}
-        >
-          Luo uusi tapahtuma
-        </Link>
-        <Link
-          to="/profile"
-          onClick={closeDrawer}
-          className={cx(classes.link, {
-            [classes.linkActive]: false,
-          })}
-        >
-          Profiili
-        </Link>
-        <Link
-          to="/members"
-          onClick={closeDrawer}
-          className={cx(classes.link, {
-            [classes.linkActive]: false,
-          })}
-        >
-          Jäsenet
-        </Link>
+        {navLinks.map(({ id, to, title, testId }) => (
+          <Link
+            key={id}
+            to={to}
+            onClick={closeDrawer}
+            className={cx(classes.link, {
+              [classes.linkActive]: false,
+            })}
+            data-testid={testId}
+          >
+            {title}
+          </Link>
+        ))}
         <Group position="center" grow pb="xl" px="md">
           <Form action="/logout" method="post">
             <Button type="submit" leftIcon={<IconLogout size={18} />} fullWidth>
