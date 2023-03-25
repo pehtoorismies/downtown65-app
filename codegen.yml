@@ -9,7 +9,7 @@ generates:
     plugins:
       - typescript
     config:
-      enumsAsConst: true
+      #      enumsAsConst: true
       inputMaybeValue: T | undefined
       maybeValue: T |  undefined
   packages/frontend/app/gql/types.gen.ts:
@@ -18,7 +18,7 @@ generates:
       - typescript-operations
       - typescript-graphql-request
     config:
-      enumsAsConst: true
+      #      enumsAsConst: true
       inputMaybeValue: T | undefined
       maybeValue: T |  undefined
 

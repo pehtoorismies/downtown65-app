@@ -1,59 +1,59 @@
-import type { EventType } from '~/gql/types.gen'
+import { EventType } from '~/gql/types.gen'
 
 const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
-  CYCLING: {
+  [EventType.Cycling]: {
     text: 'Pyöräily',
     imageUrl: '/event-images/cycling.jpg',
   },
-  KARONKKA: {
+  [EventType.Karonkka]: {
     text: 'Karonkka',
     imageUrl: '/event-images/karonkka.jpg',
   },
-  MEETING: {
+  [EventType.Meeting]: {
     text: 'Kokous',
     imageUrl: '/event-images/meeting.jpg',
   },
-  NORDIC_WALKING: {
+  [EventType.NordicWalking]: {
     text: 'Sauvakävely',
     imageUrl: '/event-images/nordicwalking.jpg',
   },
-  ORIENTEERING: {
+  [EventType.Orienteering]: {
     text: 'Suunnistus',
     imageUrl: '/event-images/orienteering.jpg',
   },
-  OTHER: {
+  [EventType.Other]: {
     text: 'Muu',
     imageUrl: '/event-images/other.jpg',
   },
-  RUNNING: {
+  [EventType.Running]: {
     text: 'Juoksu',
     imageUrl: '/event-images/running.jpg',
   },
-  SKIING: {
+  [EventType.Skiing]: {
     text: 'Hiihto',
     imageUrl: '/event-images/skiing.jpg',
   },
-  SPINNING: {
+  [EventType.Spinning]: {
     text: 'Spinning',
     imageUrl: '/event-images/spinning.jpg',
   },
-  SWIMMING: {
+  [EventType.Swimming]: {
     text: 'Uinti',
     imageUrl: '/event-images/swimming.jpg',
   },
-  TRACK_RUNNING: {
+  [EventType.TrackRunning]: {
     text: 'Ratajuoksu',
     imageUrl: '/event-images/trackrunning.jpg',
   },
-  TRAIL_RUNNING: {
+  [EventType.TrailRunning]: {
     text: 'Polkujuoksu',
     imageUrl: '/event-images/trailrunning.jpg',
   },
-  TRIATHLON: {
+  [EventType.Triathlon]: {
     text: 'Triathlon',
     imageUrl: '/event-images/triathlon.jpg',
   },
-  ULTRAS: {
+  [EventType.Ultras]: {
     text: 'Ultras',
     imageUrl: '/event-images/ultras.jpg',
   },

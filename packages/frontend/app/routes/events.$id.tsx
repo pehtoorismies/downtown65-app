@@ -44,6 +44,7 @@ import {
 } from '~/contexts/participating-context'
 import type { PublicRoute } from '~/domain/public-route'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
+import { EventType } from '~/gql/types.gen'
 import {
   commitMessageSession,
   getMessageSession,
@@ -333,7 +334,7 @@ export default function GetEvent() {
 
 export const CatchBoundary = () => {
   const caught = useCatch()
-  const { imageUrl } = mapToData('ORIENTEERING')
+  const { imageUrl } = mapToData(EventType.Orienteering)
 
   return (
     <Container py="lg">
