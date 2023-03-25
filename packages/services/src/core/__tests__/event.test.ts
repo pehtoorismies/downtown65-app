@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import * as Event from '../event'
+import { EventType } from '~/appsync.gen'
 
 const creatableEvent = {
   createdBy: {
@@ -29,7 +30,7 @@ const creatableEvent = {
     minutes: 30,
   },
   title: 'Title',
-  type: 'KARONKKA',
+  type: EventType.Karonkka,
 }
 
 describe('Events', () => {
@@ -75,7 +76,7 @@ describe('Events', () => {
         minutes: 30,
       },
       title: 'Updated title',
-      type: 'OTHER',
+      type: EventType.Other,
     })
 
     const titleUpdateEvent = await Event.getById(id)

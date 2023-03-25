@@ -34,7 +34,7 @@ export type CreateEventInput = {
   subtitle: Scalars['String'];
   timeStart?: InputMaybe<TimeInput>;
   title: Scalars['String'];
-  type: Scalars['String'];
+  type: EventType;
 };
 
 export type Creator = User & {
@@ -315,7 +315,7 @@ export type UpdateEventInput = {
   subtitle: Scalars['String'];
   timeStart?: InputMaybe<TimeInput>;
   title: Scalars['String'];
-  type: Scalars['String'];
+  type: EventType;
 };
 
 export type UpdateMeInput = {
