@@ -140,10 +140,6 @@ export const update = async (
 ): Promise<Event> => {
   const { dateStart, timeStart, type, ...rest } = updateEventInput
 
-  if (!isEventType(type)) {
-    throw new Error(`Wrong event type provided '${type}'`)
-  }
-
   const ddt = new DynamoDatetime({
     dates: dateStart,
     times: timeStart,

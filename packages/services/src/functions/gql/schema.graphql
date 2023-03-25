@@ -106,7 +106,7 @@ input CreateEventInput {
     subtitle: String!
     title: String!
     timeStart: TimeInput
-    type: String!
+    type: EventType!
 }
 
 type AuthPayload @aws_api_key {
@@ -133,7 +133,7 @@ input UpdateEventInput {
     subtitle: String!
     title: String!
     timeStart: TimeInput
-    type: String!
+    type: EventType!
 }
 
 interface Error {
