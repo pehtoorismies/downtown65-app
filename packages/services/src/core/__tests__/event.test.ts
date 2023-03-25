@@ -2,12 +2,14 @@ import { describe, expect, it } from 'vitest'
 import * as Event from '../event'
 import { EventType } from '~/appsync.gen'
 
+const userId = 'auth0|123'
+
 const creatableEvent = {
   createdBy: {
     nickname: 'some_nick',
     picture:
       'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png',
-    id: 'some_id',
+    id: userId,
   },
   dateStart: {
     year: 2018,
@@ -20,7 +22,7 @@ const creatableEvent = {
       nickname: 'some_nick',
       picture:
         'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png',
-      id: 'some_id',
+      id: userId,
     },
   ],
   race: false,
@@ -29,7 +31,7 @@ const creatableEvent = {
     hours: 9,
     minutes: 30,
   },
-  title: 'Title',
+  title: 'Title   ',
   type: EventType.Karonkka,
 }
 
@@ -42,16 +44,16 @@ describe('Events', () => {
     expect(event?.timeStart).toBe('09:30')
     expect(event?.participants.length).toBe(1)
 
-    await Event.leave(id, 'some_id')
+    await Event.leave(id, userId)
     // should allow leaving when already left
-    await Event.leave(id, 'some_id')
+    await Event.leave(id, userId)
 
     const updatedEvent = await Event.getById(id)
     expect(updatedEvent?.participants.length).toBe(0)
 
     const user = {
-      id: '123',
-      picture: 'picture',
+      id: 'auth0|123',
+      picture: 'https://server.com/picture.gif',
       nickname: 'nickname',
     }
 

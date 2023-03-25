@@ -3,56 +3,21 @@ import { format } from 'date-fns'
 import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
 import { ulid } from 'ulid'
+import { mapDynamoToEvent } from './map-dynamo-to-event'
 import type {
   CreateEventInput,
   Event,
-  EventType,
   IdPayload,
-  MeInput,
   UpdateEventInput,
-} from '../appsync.gen'
-import { getTable } from '../dynamo/table'
-import { getPrimaryKey } from './event-primary-key'
-import { mapDynamoToEvent } from './map-dynamo-to-event'
+} from '~/appsync.gen'
+import {
+  Dt65EventCreateSchema,
+  Dt65EventUpdateSchema,
+  ParticipatingUserSchema,
+} from '~/core/dynamo-schemas/dt65-event-schema'
+import { getTable } from '~/dynamo/table'
 
 const Table = getTable()
-
-// use zod for date formats
-interface PersistableEvent {
-  PK: string
-  SK: string
-  GSI1PK: 'EVENT#FUTURE'
-  GSI1SK: string
-  createdBy: MeInput
-  dateStart: string
-  description?: string
-  id: string
-  location: string
-  participants: Record<
-    string,
-    | MeInput
-    | {
-        joinedAt: string
-      }
-  >
-  race: boolean
-  subtitle: string
-  timeStart?: string
-  title: string
-  type: EventType
-}
-
-interface UpdateableEvent {
-  dateStart: string
-  description?: string
-  location: string
-  race: boolean
-  subtitle: string
-  timeStart?: string
-  title: string
-  type: EventType
-  GSI1SK: string
-}
 
 const getExpression = (d: Date) => {
   const lt = format(
@@ -60,6 +25,13 @@ const getExpression = (d: Date) => {
     'yyyy-MM-dd'
   )
   return `DATE#${lt}`
+}
+
+const getPrimaryKey = (eventId: string) => {
+  return {
+    PK: `EVENT#${eventId}`,
+    SK: `EVENT#${eventId}`,
+  }
 }
 
 export const create = async (
@@ -101,26 +73,27 @@ export const create = async (
     })
   }
 
-  const persistableEvent: PersistableEvent = {
-    // add keys
-    ...getPrimaryKey(eventId),
-    GSI1PK: `EVENT#FUTURE`,
-    GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
-    // add props
-    createdBy,
-    dateStart: ddt.getDate(),
-    description,
-    id: eventId,
-    location,
-    participants: participantHashMap,
-    race: race ?? false,
-    subtitle,
-    timeStart: ddt.getTime(),
-    title,
-    type,
-  }
-
-  await Table.Dt65Event.put(persistableEvent, { returnValues: 'none' })
+  await Table.Dt65Event.put(
+    Dt65EventCreateSchema.parse({
+      // add keys
+      ...getPrimaryKey(eventId),
+      GSI1PK: `EVENT#FUTURE`,
+      GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
+      // add props
+      createdBy,
+      dateStart: ddt.getDate(),
+      description,
+      id: eventId,
+      location,
+      participants: participantHashMap,
+      race: race ?? false,
+      subtitle,
+      timeStart: ddt.getTime(),
+      title,
+      type,
+    }),
+    { returnValues: 'none' }
+  )
 
   return {
     id: eventId,
@@ -140,7 +113,8 @@ export const update = async (
 
   const gsi1sk = ddt.getIsoDatetime()
 
-  const update: UpdateableEvent = {
+  const update: Dt65EventUpdateSchema = {
+    ...getPrimaryKey(eventId),
     ...rest,
     dateStart: ddt.getDate(),
     timeStart: ddt.getTime(),
@@ -149,10 +123,7 @@ export const update = async (
   }
 
   const result = await Table.Dt65Event.update(
-    {
-      ...getPrimaryKey(eventId),
-      ...update,
-    },
+    Dt65EventUpdateSchema.parse(update),
     {
       returnValues: 'all_new',
     }
@@ -201,6 +172,11 @@ export const participate = async (
   if (!documentClient) {
     throw new Error('No Dynamo Document client')
   }
+  const participatingUser: ParticipatingUserSchema = {
+    joinedAt: formatISO(new Date()).slice(0, 19),
+    ...user,
+  }
+
   try {
     await documentClient
       .update({
@@ -213,10 +189,7 @@ export const participate = async (
           '#userId': user.id,
         },
         ExpressionAttributeValues: {
-          ':user': {
-            joinedAt: formatISO(new Date()).slice(0, 19),
-            ...user,
-          },
+          ':user': ParticipatingUserSchema.parse(participatingUser),
         },
       })
       .promise()
