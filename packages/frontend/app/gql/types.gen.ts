@@ -85,24 +85,23 @@ export type EventParticipant = User & {
   picture: Scalars['String'];
 };
 
-export const EventType = {
-  Cycling: 'CYCLING',
-  Karonkka: 'KARONKKA',
-  Meeting: 'MEETING',
-  NordicWalking: 'NORDIC_WALKING',
-  Orienteering: 'ORIENTEERING',
-  Other: 'OTHER',
-  Running: 'RUNNING',
-  Skiing: 'SKIING',
-  Spinning: 'SPINNING',
-  Swimming: 'SWIMMING',
-  TrackRunning: 'TRACK_RUNNING',
-  TrailRunning: 'TRAIL_RUNNING',
-  Triathlon: 'TRIATHLON',
-  Ultras: 'ULTRAS'
-} as const;
+export enum EventType {
+  Cycling = 'CYCLING',
+  Karonkka = 'KARONKKA',
+  Meeting = 'MEETING',
+  NordicWalking = 'NORDIC_WALKING',
+  Orienteering = 'ORIENTEERING',
+  Other = 'OTHER',
+  Running = 'RUNNING',
+  Skiing = 'SKIING',
+  Spinning = 'SPINNING',
+  Swimming = 'SWIMMING',
+  TrackRunning = 'TRACK_RUNNING',
+  TrailRunning = 'TRAIL_RUNNING',
+  Triathlon = 'TRIATHLON',
+  Ultras = 'ULTRAS'
+}
 
-export type EventType = typeof EventType[keyof typeof EventType];
 export type FieldError = {
   __typename?: 'FieldError';
   message: Scalars['String'];
@@ -281,15 +280,14 @@ export type RefreshTokensPayload = {
   idToken: Scalars['String'];
 };
 
-export const SignupField = {
-  Email: 'email',
-  Name: 'name',
-  Nickname: 'nickname',
-  Password: 'password',
-  RegisterSecret: 'registerSecret'
-} as const;
+export enum SignupField {
+  Email = 'email',
+  Name = 'name',
+  Nickname = 'nickname',
+  Password = 'password',
+  RegisterSecret = 'registerSecret'
+}
 
-export type SignupField = typeof SignupField[keyof typeof SignupField];
 export type SignupInput = {
   email: Scalars['String'];
   name: Scalars['String'];

@@ -7,6 +7,7 @@ import type {
   MutationSignupArgs,
   SignupPayload,
 } from '~/appsync.gen'
+import { SignupField } from '~/appsync.gen'
 import { ErrorResponse } from '~/graphql/auth/support/error'
 import { getAuth0Management } from '~/graphql/support/auth0'
 
@@ -25,20 +26,20 @@ export const signup: AppSyncResolverHandler<
   if (hasWhiteSpace(input.email)) {
     errors.push({
       message: 'White space characters. Please remove empty spaces.',
-      path: 'email',
+      path: SignupField.Email,
     })
   }
   if (hasWhiteSpace(input.nickname)) {
     errors.push({
       message: 'White space characters. Please remove empty spaces.',
-      path: 'nickname',
+      path: SignupField.Nickname,
     })
   }
   if (input.name.trim().length !== input.name.length) {
     errors.push({
       message:
         'White space characters. Please remove empty spaces after or before.',
-      path: 'name',
+      path: SignupField.Name,
     })
   }
 
@@ -49,19 +50,19 @@ export const signup: AppSyncResolverHandler<
   if (input.registerSecret !== Config.REGISTER_SECRET) {
     errors.push({
       message: 'Wrong register secret',
-      path: 'registerSecret',
+      path: SignupField.RegisterSecret,
     })
   }
   if (input.password.length < 8) {
     errors.push({
       message: 'Password too short',
-      path: 'password',
+      path: SignupField.Password,
     })
   }
   if (!EmailValidator.validate(input.email)) {
     errors.push({
       message: 'Email format is incorrect',
-      path: 'email',
+      path: SignupField.Email,
     })
   }
 
@@ -81,13 +82,13 @@ export const signup: AppSyncResolverHandler<
     if (existingUsers[0].email === input.email) {
       errors.push({
         message: 'Email already exists',
-        path: 'email',
+        path: SignupField.Email,
       })
     }
     if (existingUsers[0].nickname === input.nickname) {
       errors.push({
         message: 'Nickname already exists',
-        path: 'nickname',
+        path: SignupField.Nickname,
       })
     }
     if (errors.length === 0) {
@@ -127,7 +128,7 @@ export const signup: AppSyncResolverHandler<
       errors: [
         {
           message: errorResponse.message,
-          path: 'email',
+          path: SignupField.Email,
         },
       ],
     }
