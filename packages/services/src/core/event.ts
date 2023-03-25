@@ -6,11 +6,11 @@ import { ulid } from 'ulid'
 import type {
   CreateEventInput,
   Event,
+  EventType,
   IdPayload,
   MeInput,
   UpdateEventInput,
 } from '../appsync.gen'
-import { EventType } from '../appsync.gen'
 import { getTable } from '../dynamo/table'
 import { getPrimaryKey } from './event-primary-key'
 import { mapDynamoToEvent } from './map-dynamo-to-event'
@@ -62,10 +62,6 @@ const getExpression = (d: Date) => {
   return `DATE#${lt}`
 }
 
-const isEventType = (event: string): event is EventType => {
-  return Object.values(EventType).includes(event as EventType)
-}
-
 export const create = async (
   creatableEvent: CreateEventInput
 ): Promise<IdPayload> => {
@@ -82,9 +78,6 @@ export const create = async (
     type,
   } = creatableEvent
   const eventId = ulid()
-  if (!isEventType(type)) {
-    throw new Error('Wrong event type provided')
-  }
 
   const ddt = new DynamoDatetime({
     dates: dateStart,
