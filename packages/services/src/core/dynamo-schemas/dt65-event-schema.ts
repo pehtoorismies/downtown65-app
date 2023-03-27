@@ -5,7 +5,7 @@ import { EventType } from '~/appsync.gen'
 // EVENT#<ulid>
 const KeyPattern = /^EVENT#(?<id>[\dA-HJKMNP-TV-Z]{26})$/
 // 2020-01-01T00:00:00
-const DateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
+const DateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z?/
 // 2020-01-01
 const DatePattern = /^\d{4}-\d{2}-\d{2}$/
 // 13:00
