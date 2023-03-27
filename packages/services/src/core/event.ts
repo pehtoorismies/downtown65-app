@@ -3,7 +3,6 @@ import { format } from 'date-fns'
 import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'
 import { ulid } from 'ulid'
-import { mapDynamoToEvent } from './map-dynamo-to-event'
 import type {
   CreateEventInput,
   Event,
@@ -12,6 +11,7 @@ import type {
 } from '~/appsync.gen'
 import {
   Dt65EventCreateSchema,
+  Dt65EventGetSchema,
   Dt65EventUpdateSchema,
   ParticipatingUserSchema,
 } from '~/core/dynamo-schemas/dt65-event-schema'
@@ -31,6 +31,38 @@ const getPrimaryKey = (eventId: string) => {
   return {
     PK: `EVENT#${eventId}`,
     SK: `EVENT#${eventId}`,
+  }
+}
+
+const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
+  const result = Dt65EventGetSchema.safeParse(persistedDynamoItem)
+
+  if (!result.success) {
+    throw new Error(
+      `Error in dynamo item: ${JSON.stringify(persistedDynamoItem)}. Error: ${
+        result.error
+      }`
+    )
+  }
+  const parsed = result.data
+  return {
+    ...parsed,
+    participants: Object.entries(parsed.participants)
+      // eslint-disable-next-line no-unused-vars
+      .map(([_, value]) => {
+        return {
+          ...value,
+        }
+      })
+      .sort((a, b) => {
+        if (a.joinedAt < b.joinedAt) {
+          return -1
+        }
+        if (a.joinedAt > b.joinedAt) {
+          return 1
+        }
+        return 0
+      }),
   }
 }
 
