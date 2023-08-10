@@ -4,6 +4,7 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
