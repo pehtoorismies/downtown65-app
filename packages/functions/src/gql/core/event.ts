@@ -1,4 +1,4 @@
-import { DynamoDatetime } from '@downtown65-app/common'
+import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type {
   CreateEventInput,
   Event,

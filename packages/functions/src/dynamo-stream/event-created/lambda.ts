@@ -1,14 +1,11 @@
 import * as process from 'node:process'
-import { getEnvironmentVariable } from '@downtown65-app/common'
-import type {
-  DynamoDBStreamEvent,
-  DynamoDBStreamHandler,
-} from 'aws-lambda/trigger/dynamodb-stream'
+import { createEventAddedEmail } from '@downtown65-app/core/email/create-event-added-email'
+import { EmailableEvent } from '@downtown65-app/core/email/emailable-event'
+import { sendEmail } from '@downtown65-app/core/email/send-email'
+import { getEnvironmentVariable } from '@downtown65-app/core/get-environment-variable'
+import type { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import { chunk } from 'remeda'
-import { createEventAddedEmail } from '~/email/create-event-added-email'
-import { EmailableEvent } from '~/email/emailable-event'
-import { sendEmail } from '~/email/send-email'
-import { getAuth0Management } from '~/graphql/support/auth0'
+import { getAuth0Management } from '~/gql/support/auth0'
 
 const TEST_RECIPIENTS = [
   'dt65eventstest@mailinator.com',

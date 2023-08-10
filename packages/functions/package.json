@@ -2,6 +2,7 @@
   "name": "@downtown65-app/functions",
   "version": "0.0.0",
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
@@ -25,5 +26,8 @@
     "zod": "3.21.4"
   },
   "devDependencies": {
+    "@types/mjml": "4.7.1",
+    "@types/aws-lambda": "8.10.119",
+    "@types/auth0": "3.3.3"
   }
 }

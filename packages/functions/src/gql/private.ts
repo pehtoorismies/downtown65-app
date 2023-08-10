@@ -1,4 +1,3 @@
-import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import type {
   Event as Dt65Event,
   IdPayload,
@@ -15,7 +14,8 @@ import type {
   QueryUserArgs,
   QueryUsersArgs,
   UsersResponse,
-} from './appsync.gen'
+} from '@downtown65-app/graphql/appsync.gen'
+import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
 import { getEvents } from './events/get-events'

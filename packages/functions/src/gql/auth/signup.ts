@@ -1,13 +1,13 @@
 import { SignupField } from '@downtown65-app/graphql/appsync.gen'
-import type { AppSyncResolverHandler } from 'aws-lambda'
-import * as EmailValidator from 'email-validator'
-import { Config } from 'sst/node/config'
-import { Auth0UserResponse, toUser } from '../support/auth0-user'
 import type {
   FieldError,
   MutationSignupArgs,
   SignupPayload,
-} from '~/gql/appsync.gen'
+} from '@downtown65-app/graphql/appsync.gen'
+import type { AppSyncResolverHandler } from 'aws-lambda'
+import * as EmailValidator from 'email-validator'
+import { Config } from 'sst/node/config'
+import { Auth0UserResponse, toUser } from '../support/auth0-user'
 import { ErrorResponse } from '~/gql/auth/support/error'
 import { getAuth0Management } from '~/gql/support/auth0'
 

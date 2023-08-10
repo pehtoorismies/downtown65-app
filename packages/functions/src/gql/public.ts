@@ -1,4 +1,3 @@
-import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import type {
   AuthPayload,
   Event as Dt65Event,
@@ -11,7 +10,8 @@ import type {
   QueryEventArgs as QueryEventArguments,
   RefreshPayload,
   SignupPayload,
-} from './appsync.gen'
+} from '@downtown65-app/graphql/appsync.gen'
+import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import { forgotPassword } from './auth/forgot-password'
 import { login } from './auth/login'
 import { refreshToken } from './auth/refresh-token'
