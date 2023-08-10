@@ -1,0 +1,22 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "include": [
+    "src/**/*"
+  ],
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@downtown65-app/graphql/*": [
+        "../graphql/src/*"
+      ],
+      "@downtown65-app/core/*": [
+        "../core/src/*"
+      ],
+      "~/*": [
+        "./src/*"
+      ]
+    }
+  }
+}

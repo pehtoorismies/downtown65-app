@@ -1,6 +1,9 @@
 {
   "extends": "@tsconfig/node16/tsconfig.json",
+  "exclude": [
+    "packages"
+  ],
   "compilerOptions": {
-    "noUnusedParameters": true
+    "moduleResolution": "node"
   }
 }
