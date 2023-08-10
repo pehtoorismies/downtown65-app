@@ -1,4 +1,3 @@
-import { getEnvironmentVariable } from '@downtown65-app/common'
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
 import * as route53 from 'aws-cdk-lib/aws-route53'
 import type { StackContext } from 'sst/constructs'
@@ -6,6 +5,7 @@ import { RemixSite, use } from 'sst/constructs'
 import { GraphqlStack } from './graphql-stack'
 import { MediaBucketStack } from './media-bucket-stack'
 import { getDomain } from './support/get-domain'
+import { getEnvironmentVariable } from './support/get-environment-variable'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
@@ -29,7 +29,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   // Create the Remix site
   const site = new RemixSite(stack, 'Downtown65-remix', {
-    path: 'packages/frontend',
+    path: 'packages/web',
     environment: {
       API_URL: ApiUrl,
       API_KEY: ApiKey,

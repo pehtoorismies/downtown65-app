@@ -3,9 +3,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts",
+    "test": "yarn --cwd ../../ sst bind vitest --dir packages/functions run"
   },
   "dependencies": {
-    "@downtown65-app/common": "*",
     "auth0": "3.1.2",
     "aws-lambda": "1.0.7",
     "aws-sdk": "2.1228.0",

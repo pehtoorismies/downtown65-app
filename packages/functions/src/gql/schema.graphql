@@ -1,0 +1,252 @@
+scalar AWSDate
+
+directive @aws_api_key on OBJECT | FIELD_DEFINITION
+directive @aws_oidc on OBJECT
+
+enum EventType {
+    CYCLING
+    KARONKKA
+    MEETING
+    NORDIC_WALKING
+    ORIENTEERING
+    OTHER
+    RUNNING
+    SKIING
+    SPINNING
+    SWIMMING
+    TRACK_RUNNING
+    TRAIL_RUNNING
+    TRIATHLON
+    ULTRAS
+}
+
+interface User {
+    id: ID!
+    nickname: String!
+}
+
+interface DetailedUser  {
+    picture: String!
+    email: String!
+    name: String!
+}
+
+type EventParticipant implements User @aws_api_key @aws_oidc {
+    id: ID!
+    nickname: String!
+    joinedAt: String!
+    picture: String!
+}
+
+type Creator implements User @aws_api_key @aws_oidc {
+    id: ID!
+    nickname: String!
+    picture: String!
+}
+
+type Event @aws_api_key @aws_oidc {
+    createdBy: Creator!
+    dateStart: AWSDate!
+    description: String
+    id: ID!
+    location: String!
+    participants: [EventParticipant!]!
+    race: Boolean!
+    timeStart: String
+    subtitle: String!
+    title: String!
+    type: EventType!
+}
+
+
+type MeUser implements User & DetailedUser @aws_api_key @aws_oidc {
+    email: String!
+    id: ID!
+    name: String!
+    nickname: String!
+    picture: String!
+    preferences: Preferences!
+}
+
+type OtherUser implements User & DetailedUser {
+    email: String!
+    id: ID!
+    picture: String!
+    name: String!
+    nickname: String!
+    createdAt: String!
+}
+
+
+input MeInput {
+    id: ID!
+    picture: String!
+    nickname: String!
+}
+
+input TimeInput {
+    hours: Int!
+    minutes: Int!
+}
+
+input DateInput {
+    year: Int!
+    month: Int!
+    day: Int!
+}
+
+
+input CreateEventInput {
+    createdBy: MeInput!
+    dateStart: DateInput!
+    description: String
+    location: String!
+    participants: [MeInput!]
+    race: Boolean!
+    subtitle: String!
+    title: String!
+    timeStart: TimeInput
+    type: EventType!
+}
+
+type AuthPayload @aws_api_key {
+    accessToken: String!
+    expiresIn: Int!
+    idToken: String!
+    refreshToken: String!
+}
+
+type Preferences {
+    subscribeEventCreationEmail: Boolean!
+    subscribeWeeklyEmail: Boolean!
+}
+
+type IDPayload {
+    id: ID!
+}
+
+input UpdateEventInput {
+    dateStart: DateInput!
+    description: String
+    location: String!
+    race: Boolean!
+    subtitle: String!
+    title: String!
+    timeStart: TimeInput
+    type: EventType!
+}
+
+interface Error {
+    message: String!
+    path: String!
+    code: String!
+}
+
+type LoginError implements Error @aws_api_key {
+    message: String!
+    path: String!
+    code: String!
+}
+
+type LoginPayload @aws_api_key {
+    tokens: AuthPayload
+    loginError: LoginError
+}
+
+type RefreshTokensPayload @aws_api_key {
+    accessToken: String!
+    expiresIn: Int!
+    idToken: String!
+}
+
+type RefreshPayload @aws_api_key {
+    tokens: RefreshTokensPayload
+    refreshError: String
+}
+
+input PreferencesInput {
+    subscribeEventCreationEmail: Boolean!
+    subscribeWeeklyEmail: Boolean!
+}
+
+input SignupInput {
+    email: String!
+    nickname: String!
+    password: String!
+    name: String!
+    registerSecret: String!
+}
+
+interface UserError {
+    message: String!
+    path: String!
+}
+
+enum SignupField {
+    name
+    password
+    registerSecret
+    nickname
+    email
+}
+
+type FieldError @aws_api_key{
+    message: String!
+    path: SignupField!
+}
+
+type SignupPayload @aws_api_key {
+    user: User
+    errors: [FieldError!]
+}
+
+input UpdateMeInput {
+    preferences: PreferencesInput!
+}
+
+type UsersResponse {
+    length: Int!
+    limit: Int!
+    start: Int!
+    total: Int!
+    users: [OtherUser!]!
+}
+
+type Query {
+    event(eventId: ID!): Event @aws_api_key
+    # Future events
+    events: [Event!]!
+    eventsByUser(userId: String!): [Event!]!
+    me: MeUser!
+    users(page: Int!, perPage: Int!): UsersResponse!
+    user(nickname: String!): OtherUser
+}
+
+type Mutation {
+    createEvent(input: CreateEventInput!): IDPayload!
+    updateEvent(eventId: ID!, input: UpdateEventInput!): Event!
+    deleteEvent(eventId: ID!): IDPayload
+    leaveEvent(eventId: ID!): Boolean
+    participateEvent(eventId: ID!, me: MeInput!): Boolean
+
+    updateMe(input: UpdateMeInput!): MeUser!
+
+    updateAvatar(uploadedFilename: String!): Boolean!
+
+    login(
+        email: String!
+        password: String!
+    ): LoginPayload! @aws_api_key
+
+    signup(input: SignupInput!): SignupPayload! @aws_api_key
+
+    forgotPassword(
+        email: String!
+    ): Boolean! @aws_api_key
+
+
+    refreshToken(
+        refreshToken: String!
+    ): RefreshPayload! @aws_api_key
+}
+

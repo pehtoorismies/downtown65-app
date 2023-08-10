@@ -1,4 +1,4 @@
-import { DynamoDatetime } from '@downtown65-app/common/dist'
+import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type { EventType } from '@downtown65-app/graphql/appsync.gen'
 import { z } from 'zod'
 

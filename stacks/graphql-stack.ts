@@ -38,7 +38,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
     ],
     layers: [
       new lambda.LayerVersion(stack, 'AppLayer', {
-        code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
+        code: lambda.Code.fromAsset('layers/sharp'),
       }),
     ],
   })

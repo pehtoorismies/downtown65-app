@@ -1,18 +1,11 @@
 overwrite: true
 schema:
-  - 'packages/services/src/functions/gql/schema.graphql'
+  - 'packages/functions/src/gql/schema.graphql'
 documents:
-  - 'packages/frontend/app/**/*.graphql'
+  - 'packages/web/app/**/*.graphql'
 
 generates:
-  packages/services/src/appsync.gen.ts:
-    plugins:
-      - typescript
-    config:
-      #      enumsAsConst: true
-      inputMaybeValue: T | undefined
-      maybeValue: T |  undefined
-  packages/frontend/app/gql/types.gen.ts:
+  packages/graphql/src/appsync.gen.ts:
     plugins:
       - typescript
       - typescript-operations
@@ -21,4 +14,3 @@ generates:
       #      enumsAsConst: true
       inputMaybeValue: T | undefined
       maybeValue: T |  undefined
-

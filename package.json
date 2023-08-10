@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "license": "MIT",
   "scripts": {
     "start": "sst start",
     "build": "lerna run build --scope @downtown65-app/common && sst build",
