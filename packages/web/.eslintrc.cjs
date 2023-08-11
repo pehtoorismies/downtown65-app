@@ -1,14 +1,14 @@
 const OFF = 0;
 
 module.exports = {
+  root: true,
   extends: [
     "@remix-run/eslint-config",
     "@remix-run/eslint-config/node",
     "plugin:cypress/recommended"
   ],
-  plugins: ["unused-imports", "cypress"],
+  plugins: ["cypress", "unicorn"],
   rules: {
-    "unicorn/text-encoding-identifier-case": OFF,
     "@typescript-eslint/no-redeclare": OFF,
     "cypress/no-assigning-return-values": "error",
     "cypress/no-unnecessary-waiting": "error",
@@ -16,6 +16,7 @@ module.exports = {
     "cypress/no-force": "warn",
     "cypress/no-async-tests": "error",
     "cypress/no-pause": "error",
+    "unicorn/text-encoding-identifier-case": OFF,
     "unicorn/filename-case": [
       "error",
       {
