@@ -1,5 +1,5 @@
 import { RemovalPolicy } from 'aws-cdk-lib'
-import { SSTConfig } from 'sst'
+import type { SSTConfig } from 'sst'
 import { ConfigStack } from './stacks/config-stack'
 import { CronStack } from './stacks/cron-stack'
 import { DynamoStack } from './stacks/dynamo-stack'
@@ -21,14 +21,23 @@ export default {
     }
     app.setDefaultFunctionProps({
       // these are needed for mjml library to work
-      bundle: {
-        nodeModules: ['uglify-js'],
-        externalModules: ['sharp'],
+      nodejs: {
         format: 'esm',
-        loader: {
-          '.mjml': 'text',
+        esbuild: {
+          loader: {
+            '.mjml': 'text',
+          },
+          external: ['uglify-js'],
         },
       },
+      // bundle: {
+      //   nodeModules: ['uglify-js'],
+      //   externalModules: ['sharp'],
+      //   format: 'esm',
+      //   loader: {
+      //     '.mjml': 'text',
+      //   },
+      // },
       runtime: 'nodejs16.x',
       logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
     })

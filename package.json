@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "sst start",
-    "build": "lerna run build --scope @downtown65-app/common && sst build",
+    "build": "sst build",
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
@@ -19,6 +19,7 @@
     "generate": "graphql-codegen"
   },
   "devDependencies": {
+    "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",
     "@graphql-codegen/cli": "3.2.2",
     "@graphql-codegen/typescript": "3.0.2",
     "@graphql-codegen/typescript-graphql-request": "4.5.8",
@@ -26,7 +27,8 @@
     "@tsconfig/node16": "16.1.0",
     "@typescript-eslint/eslint-plugin": "6.3.0",
     "@typescript-eslint/parser": "6.3.0",
-    "aws-cdk-lib": "2.84.0",
+    "aws-cdk-lib": "2.91.0",
+    "aws-sdk": "2.1434.0",
     "constructs": "10.2.69",
     "eslint": "8.46.0",
     "eslint-config-prettier": "9.0.0",

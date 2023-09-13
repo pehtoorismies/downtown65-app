@@ -1,4 +1,5 @@
-import { Cron, Function, StackContext, use } from 'sst/constructs'
+import type { StackContext } from 'sst/constructs'
+import { Cron, Function, use } from 'sst/constructs'
 import { ConfigStack } from './config-stack'
 import { getDomain } from './support/get-domain'
 
@@ -6,8 +7,7 @@ export const CronStack = ({ app, stack }: StackContext) => {
   const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
 
   const weeklyEmailFun = new Function(stack, 'WeeklyEmail', {
-    srcPath: 'packages/functions',
-    handler: 'src/cron/send-weekly-email/lambda.handler',
+    handler: 'packages/functions/src/cron/send-weekly-email/lambda.handler',
     bind: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
     environment: {
       DOMAIN_NAME: getDomain(app.stage),

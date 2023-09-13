@@ -1,7 +1,8 @@
 import { RemovalPolicy } from 'aws-cdk-lib'
 import backup from 'aws-cdk-lib/aws-backup'
 import dynamodb from 'aws-cdk-lib/aws-dynamodb'
-import { Config, StackContext, Table } from 'sst/constructs'
+import type { StackContext } from 'sst/constructs'
+import { Config, Table } from 'sst/constructs'
 
 export const DynamoStack = ({ app, stack }: StackContext) => {
   const removalPolicy =

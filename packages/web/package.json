@@ -3,11 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "sideEffects": false,
-  "type": "module",
   "license": "MIT",
   "scripts": {
     "build": "remix build",
-    "dev": "sst-env -- remix dev",
+    "dev": "sst bind remix dev",
     "start": "remix-serve build",
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",

@@ -9,8 +9,7 @@ export const DynamoStreamStack = ({ app, stack }: StackContext) => {
   const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
 
   const eventCreatedFunction = new Function(stack, 'EventCreated', {
-    srcPath: 'packages/functions',
-    handler: 'src/dynamo-stream/event-created/lambda.main',
+    handler: 'packages/functions/src/dynamo-stream/event-created/lambda.main',
     bind: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
     permissions: ['ses:SendEmail', 'ses:SendRawEmail'],
     environment: {

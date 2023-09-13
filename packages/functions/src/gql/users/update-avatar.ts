@@ -1,6 +1,6 @@
 import { PassThrough } from 'node:stream'
-import { s3Key } from '@downtown65-app/common'
 import { logger } from '@downtown65-app/core/logger/logger'
+import { s3Key } from '@downtown65-app/core/s3-key'
 import type { MutationUpdateAvatarArgs } from '@downtown65-app/graphql/appsync.gen'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
