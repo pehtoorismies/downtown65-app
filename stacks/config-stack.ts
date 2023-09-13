@@ -3,8 +3,6 @@ import { Config } from 'sst/constructs'
 import { getEnvironmentVariable } from './support/get-environment-variable'
 
 const createConfigFromEnvironment = (stack: Stack, name: string) => {
-  console.log(getEnvironmentVariable(name))
-
   const config = new Config.Parameter(stack, name, {
     value: getEnvironmentVariable(name),
   })
