@@ -10,6 +10,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { Config } from '~/config/config'
 
 const REFRESH_TOKEN_KEY = 'refreshToken'
 const USER_KEY = 'user'
@@ -36,7 +37,7 @@ const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     path: '/',
     sameSite: 'lax',
-    secrets: [getCookieSecret()],
+    secrets: [Config.COOKIE_SECRET],
     secure: process.env.NODE_ENV === 'production',
   },
 })

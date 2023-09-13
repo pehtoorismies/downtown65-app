@@ -24,6 +24,7 @@ import type { User } from '~/domain/user'
 import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
 import { theme } from '~/theme'
+import { Config } from '~/config/config'
 
 type LoaderData = {
   stage: string
@@ -36,11 +37,8 @@ export const getStage = (): string => {
   if (process.env.NODE_ENV === 'development') {
     return 'local-development'
   }
-  const value = process.env['SST_STAGE']
-  if (!value) {
-    throw new Error(`Environment value 'process.env.SST_STAGE' is not set`)
-  }
-  return value
+
+  return Config.SST_STAGE
 }
 
 export const loader: LoaderFunction = async ({ request }) => {

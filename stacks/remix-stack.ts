@@ -9,8 +9,7 @@ import { getEnvironmentVariable } from './support/get-environment-variable'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
-  const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN, mediaBucket } =
-    use(MediaBucketStack)
+  const { MEDIA_BUCKET_NAME, mediaBucket } = use(MediaBucketStack)
 
   const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
     domainName: 'downtown65.events',
@@ -37,7 +36,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       DOMAIN_NAME: domainName,
       COOKIE_SECRET: getEnvironmentVariable('COOKIE_SECRET'),
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
-      MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
+      // MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
       // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
     },
     customDomain: {

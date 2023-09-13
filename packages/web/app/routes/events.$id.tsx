@@ -57,6 +57,7 @@ import {
   publicLogout,
 } from '~/session.server'
 import { mapToData } from '~/util/event-type'
+import { Config } from '~/config/config'
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   if (!data) {
@@ -82,11 +83,7 @@ const getOriginForMeta = (): string => {
   if (process.env.NODE_ENV === 'development') {
     return 'http://localhost:3000'
   }
-  const domainName = process.env['DOMAIN_NAME']
-  if (!domainName) {
-    throw new Error(`Environment value 'process.env.DOMAIN_NAME' is not set`)
-  }
-  return `https://${domainName}`
+  return `https://${Config.DOMAIN_NAME}`
 }
 
 interface LoaderData extends PublicRoute {

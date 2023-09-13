@@ -1,15 +1,13 @@
 import crypto from 'node:crypto'
 import Stream, { PassThrough } from 'node:stream'
-import { getEnvironmentVariable } from '@downtown65-app/core/get-environment-variable'
 import { s3Key } from '@downtown65-app/core/s3-key'
 import type { UploadHandler } from '@remix-run/node'
 import AWS from 'aws-sdk'
 import invariant from 'tiny-invariant'
 import { logger } from '~/util/logger.server'
+import { Config } from '~/config/config'
 
 const pageLogger = logger.child({ function: 'UploadHandler' })
-
-const STORAGE_BUCKET = getEnvironmentVariable('STORAGE_BUCKET')
 
 const uploadStream = ({
   Key,
@@ -20,7 +18,7 @@ const uploadStream = ({
   return {
     writeStream: pass,
     promise: s3
-      .upload({ Bucket: STORAGE_BUCKET, Key, Body: pass, ContentType })
+      .upload({ Bucket: Config.STORAGE_BUCKET, Key, Body: pass, ContentType })
       .promise(),
   }
 }

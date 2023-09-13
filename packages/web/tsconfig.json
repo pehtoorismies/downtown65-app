@@ -4,11 +4,16 @@
     "app/**/*.ts",
     "app/**/*.tsx",
     "playwright.config.ts",
-    "e2e/**/*.ts"
+    "e2e/**/*.ts",
+    "sst-env.d.ts"
   ],
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "lib": [
+      "DOM",
+      "DOM.Iterable",
+      "ES2019"
+    ],
     "isolatedModules": true,
     "jsx": "react-jsx",
     "resolveJsonModule": true,
@@ -17,9 +22,15 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@downtown65-app/graphql/*": ["../graphql/src/*"],
-      "@downtown65-app/core/*": ["../core/src/*"],
-      "~/*": ["./app/*"]
+      "@downtown65-app/graphql/*": [
+        "../graphql/src/*"
+      ],
+      "@downtown65-app/core/*": [
+        "../core/src/*"
+      ],
+      "~/*": [
+        "./app/*"
+      ]
     },
     "noEmit": true,
     "forceConsistentCasingInFileNames": true,
