@@ -7214,22 +7214,6 @@ aws-lambda@1.0.7:
     js-yaml "^3.14.1"
     watchpack "^2.0.0-beta.10"
 
-aws-sdk@2.1228.0:
-  version "2.1228.0"
-  resolved "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1228.0.tgz"
-  integrity sha512-fc/eQEUiw+rOYl7SoIJBnmigFaET3t1zZiSUlMfnLfmpv2KGuhOoMaBTGQn9KkaFI1sSbeeoUjof7bxItgFDRA==
-  dependencies:
-    buffer "4.9.2"
-    events "1.1.1"
-    ieee754 "1.1.13"
-    jmespath "0.16.0"
-    querystring "0.2.0"
-    sax "1.2.1"
-    url "0.10.3"
-    util "^0.12.4"
-    uuid "8.0.0"
-    xml2js "0.4.19"
-
 aws-sdk@2.1466.0, aws-sdk@^2.1451.0:
   version "2.1466.0"
   resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1466.0.tgz#ad7f4766b1d5feb54dacd3289e7a2e033803838e"
@@ -9208,14 +9192,6 @@ duplexify@^4.1.1:
     inherits "^2.0.3"
     readable-stream "^3.1.1"
     stream-shift "^1.0.0"
-
-dynamodb-toolbox@0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/dynamodb-toolbox/-/dynamodb-toolbox-0.7.0.tgz#379dccc30855de184d2d1bb8d9b3b52272e77990"
-  integrity sha512-LvWciwtBZm5UKAXuseYoTTjoR3+9FIqGcqPQl/LcQTP36nOoXQ6ldXxkhSJCKglO4v4JNWR7fooD+79SoD05vg==
-  dependencies:
-    deep-copy "^1.4.2"
-    ts-toolbelt "^9.6.0"
 
 dynamodb-toolbox@0.8.5:
   version "0.8.5"
@@ -17924,10 +17900,10 @@ typedarray@^0.0.6:
   resolved "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
 
-typescript@5.2.2:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.2.2.tgz#5ebb5e5a5b75f085f22bc3f8460fba308310fa78"
-  integrity sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
+typescript@5.1.6:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.6.tgz#02f8ac202b6dad2c0dd5e0913745b47a37998274"
+  integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
 
 "typescript@^3 || ^4":
   version "4.8.4"
