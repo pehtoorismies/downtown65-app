@@ -8,18 +8,17 @@ An example serverless app created with SST.
 
 ## Dynamo single table design
 
-
 ### Getting started
-
 
 ```bash
 $ yarn
-$ yarn start  
+$ yarn dev  
 ```
 
-Give your local dev environment some name like: `downtown65-app-yourusername`. This will be your default stage. All the AWS resources will be named after
+Give your local dev environment some name like: `downtown65-app-yourusername`. This will be your default stage. All the
+AWS resources will be named after
 
-This name can be changed in `.sst/stage` 
+This name can be changed in `.sst/stage`
 
 ### Add secrets
 

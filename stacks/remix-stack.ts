@@ -34,6 +34,9 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       API_KEY: ApiKey,
       SST_STAGE: stage,
       DOMAIN_NAME: domainName,
+      // super problematic secret because Remix can't use SST provided Secret
+      // when upgrading to Remix 2.0 check if top level await works
+      // and if that works Secrets should work
       COOKIE_SECRET: getEnvironmentVariable('COOKIE_SECRET'),
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
     },

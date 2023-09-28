@@ -26,9 +26,11 @@ export const ConfigStack = ({ app, stack }: StackContext) => {
 
   return {
     AUTH_CLIENT_ID: getStaticConfig('AUTH_CLIENT_ID'),
+    // Auth0 Client Application secret
     AUTH_CLIENT_SECRET: new Config.Secret(stack, 'AUTH_CLIENT_SECRET'),
     AUTH_DOMAIN: getStaticConfig('AUTH_DOMAIN'),
     JWT_AUDIENCE: getStaticConfig('JWT_AUDIENCE'),
+    // secret string required when user fills the form to register to downtown65.events
     REGISTER_SECRET: new Config.Secret(stack, 'REGISTER_SECRET'),
   }
 }
