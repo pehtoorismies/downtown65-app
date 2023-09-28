@@ -12,7 +12,7 @@
   "dependencies": {
     "auth0": "3.1.2",
     "aws-lambda": "1.0.7",
-    "dynamodb-toolbox": "0.8.5",
+    "dynamodb-toolbox": "0.7.0",
     "email-validator": "2.0.4",
     "handlebars": "4.7.7",
     "mjml": "4.13.0",
