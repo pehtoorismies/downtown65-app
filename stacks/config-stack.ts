@@ -1,20 +1,34 @@
-import type { Stack, StackContext } from 'sst/constructs'
+import type { StackContext } from 'sst/constructs'
 import { Config } from 'sst/constructs'
-import { getEnvironmentVariable } from './support/get-environment-variable'
 
-const createConfigFromEnvironment = (stack: Stack, name: string) => {
-  const config = new Config.Parameter(stack, name, {
-    value: getEnvironmentVariable(name),
-  })
-  return config
+type ConfigKey = 'AUTH_CLIENT_ID' | 'AUTH_DOMAIN' | 'JWT_AUDIENCE'
+type AuthConfig = Record<ConfigKey, string>
+
+const DEVELOPMENT: AuthConfig = {
+  AUTH_CLIENT_ID: 'JaoAht7ggce7f5R8DCBGUyjUJeMQEDtz',
+  AUTH_DOMAIN: 'dev-dt65.eu.auth0.com',
+  JWT_AUDIENCE: 'https://graphql-dev.downtown65.com',
 }
 
-export const ConfigStack = ({ stack }: StackContext) => {
+const PRODUCTION: AuthConfig = {
+  AUTH_CLIENT_ID: 'uPu5NUyP1yaGw2IAC0B1KeCgbX3FaNzz',
+  AUTH_DOMAIN: 'prod-dt65.eu.auth0.com',
+  JWT_AUDIENCE: 'https://graphql-api.downtown65.com/',
+}
+
+export const ConfigStack = ({ app, stack }: StackContext) => {
+  const authConfig = app.stage === 'production' ? PRODUCTION : DEVELOPMENT
+
+  const getStaticConfig = (key: ConfigKey) =>
+    new Config.Parameter(stack, key, {
+      value: authConfig[key],
+    })
+
   return {
-    AUTH_CLIENT_ID: createConfigFromEnvironment(stack, 'AUTH_CLIENT_ID'),
+    AUTH_CLIENT_ID: getStaticConfig('AUTH_CLIENT_ID'),
     AUTH_CLIENT_SECRET: new Config.Secret(stack, 'AUTH_CLIENT_SECRET'),
-    AUTH_DOMAIN: createConfigFromEnvironment(stack, 'AUTH_DOMAIN'),
-    JWT_AUDIENCE: createConfigFromEnvironment(stack, 'JWT_AUDIENCE'),
+    AUTH_DOMAIN: getStaticConfig('AUTH_DOMAIN'),
+    JWT_AUDIENCE: getStaticConfig('JWT_AUDIENCE'),
     REGISTER_SECRET: new Config.Secret(stack, 'REGISTER_SECRET'),
   }
 }
