@@ -37,7 +37,7 @@ const isTestEmail = (stage: string): boolean => {
   return stage !== 'production'
 }
 
-export const handler: DynamoDBStreamHandler = async (
+export const main: DynamoDBStreamHandler = async (
   event: DynamoDBStreamEvent
 ): Promise<void> => {
   const stage = getEnvironmentVariable('SST_STAGE')
