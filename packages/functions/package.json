@@ -7,7 +7,7 @@
     "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ext .ts",
-    "test": "yarn --cwd ../../ sst bind vitest --dir packages/functions run"
+    "test": "sst bind vitest run"
   },
   "dependencies": {
     "auth0": "3.1.2",
