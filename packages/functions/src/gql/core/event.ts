@@ -175,10 +175,11 @@ export const remove = async (id: string): Promise<boolean> => {
   return true
 }
 
-export const getById = async (id: string): Promise<Event | undefined> => {
+export const getById = async (id: string): Promise<Event | null> => {
   const result = await Table.Dt65Event.get(getPrimaryKey(id))
+
   if (!result.Item) {
-    return
+    return null
   }
   return mapDynamoToEvent(result.Item)
 }

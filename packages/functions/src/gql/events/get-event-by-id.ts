@@ -7,7 +7,7 @@ import * as Event from '../core/event'
 
 export const getEventById: AppSyncResolverHandler<
   QueryEventArguments,
-  Dt65Event | undefined
+  Dt65Event | null
 > = async (event) => {
   return Event.getById(event.arguments.eventId)
 }

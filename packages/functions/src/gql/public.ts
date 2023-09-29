@@ -35,6 +35,7 @@ export type Outputs =
   | SignupPayload
   | boolean
   | undefined
+  | null
 
 const PUBLIC_FIELDS = [
   'event',
