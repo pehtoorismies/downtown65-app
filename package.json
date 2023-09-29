@@ -20,7 +20,7 @@
     "generate": "graphql-codegen"
   },
   "devDependencies": {
-    "@aws-cdk/aws-appsync-alpha": "2.19.0-alpha.0",
+    "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",
     "@graphql-codegen/cli": "3.2.2",
     "@graphql-codegen/typescript": "3.0.2",
     "@graphql-codegen/typescript-graphql-request": "4.5.8",
@@ -28,7 +28,7 @@
     "@tsconfig/node18": "18.2.2",
     "@typescript-eslint/eslint-plugin": "6.3.0",
     "@typescript-eslint/parser": "6.3.0",
-    "aws-cdk-lib": "2.91.0",
+    "aws-cdk-lib": "2.95.1",
     "aws-sdk": "2.1466.0",
     "constructs": "10.2.69",
     "eslint": "8.46.0",
@@ -40,7 +40,7 @@
     "lerna": "6.5.1",
     "prettier": "3.0.1",
     "prettier-eslint": "15.0.1",
-    "sst": "2.24.28",
+    "sst": "2.25.6",
     "ts-node": "10.9.1",
     "ts-prune": "0.10.3",
     "typescript": "5.2.2",
