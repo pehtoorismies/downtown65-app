@@ -79,7 +79,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - name: 'lint'
+      - name: 'typecheck'
         run: yarn typecheck
   deploy:
     needs: [ "lint", "typecheck" ]
