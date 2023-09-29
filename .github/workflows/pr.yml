@@ -50,8 +50,10 @@ jobs:
         run: npx lerna bootstrap
       - name: Build
         run: |
-          npx lerna run build --scope @downtown65-app/common
           npx sst build --stage $PR_NAME
+      - name: JustEchoStage
+        run: |
+          cat .sst/stage
       - uses: actions/cache@v3
         id: restore-build
         with:
@@ -129,10 +131,10 @@ jobs:
             ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright Browsers
-        working-directory: ./packages/frontend
+        working-directory: ./packages/web
         run: yarn playwright install --with-deps
       - name: Run Playwright tests
-        working-directory: ./packages/frontend
+        working-directory: ./packages/web
         run: yarn playwright test
         env:
           BASE_URL: https://${{ env.PR_NAME }}.downtown65.events
