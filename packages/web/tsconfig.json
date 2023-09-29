@@ -7,7 +7,7 @@
     "e2e/**/*.ts",
     "sst-env.d.ts"
   ],
-  "extends": "@tsconfig/node16/tsconfig.json",
+  "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "lib": [
       "DOM",
@@ -17,7 +17,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "resolveJsonModule": true,
-    "target": "esnext",
+    "target": "ES2019",
     "allowJs": true,
     "moduleResolution": "node",
     "baseUrl": ".",
