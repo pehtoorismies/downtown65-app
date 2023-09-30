@@ -26,7 +26,6 @@ export default {
       },
       // these are needed for mjml library to work
       nodejs: {
-        format: 'esm',
         esbuild: {
           loader: {
             '.mjml': 'text',
