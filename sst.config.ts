@@ -41,7 +41,6 @@ export default {
       //     '.mjml': 'text',
       //   },
       // },
-      runtime: 'nodejs16.x',
       logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
     })
 
