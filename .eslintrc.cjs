@@ -9,7 +9,7 @@ module.exports = {
     "plugin:unicorn/recommended",
     "prettier"
   ],
-  plugins: ["import", "unicorn", "unused-imports", "prettier"],
+  plugins: ["import", "unicorn", "unused-imports", "prettier", "@typescript-eslint"],
   ignorePatterns: ["**/*/*.gen.ts"],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
