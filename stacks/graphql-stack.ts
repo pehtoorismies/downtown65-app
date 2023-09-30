@@ -24,7 +24,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
   // const { lambdaLayerArn } = use(LambdaLayerStack)
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
-    handler: 'packages/services/src/functions/gql/gql.main',
+    handler: 'packages/functions/src/gql/lambda.handler',
     bind: [
       AUTH_CLIENT_ID,
       AUTH_CLIENT_SECRET,
@@ -37,7 +37,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
     ],
     layers: [
       new lambda.LayerVersion(stack, 'AppLayer', {
-        code: lambda.Code.fromAsset('packages/infra/layers/sharp'),
+        code: lambda.Code.fromAsset('stacks/layers/sharp'),
       }),
     ],
   })
@@ -46,7 +46,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
 
   //  Create the AppSync GraphQL API
   const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {
-    schema: 'packages/services/src/functions/gql/schema.graphql',
+    schema: 'packages/functions/src/gql/schema.graphql',
     cdk: {
       graphqlApi: {
         logConfig: {
