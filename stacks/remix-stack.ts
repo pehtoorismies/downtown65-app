@@ -38,6 +38,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       COOKIE_SECRET: getEnvironmentVariable('COOKIE_SECRET'),
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
       MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
+      APP_MODE: app.mode,
       // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
     },
     customDomain: {
@@ -54,7 +55,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   // Add the site's URL to stack output
   stack.addOutputs({
-    URL: site.url,
+    URL: site.url ?? 'no_site_url',
     CUSTOM_DOMAIN_URL: site.customDomainUrl ?? 'no_custom_domain',
   })
 }

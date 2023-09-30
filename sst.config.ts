@@ -20,6 +20,10 @@ export default {
       app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY)
     }
     app.setDefaultFunctionProps({
+      environment: {
+        APP_MODE: app.mode,
+        APP_STAGE: app.stage,
+      },
       // these are needed for mjml library to work
       nodejs: {
         format: 'esm',
