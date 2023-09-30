@@ -7,9 +7,6 @@
     "paths": {
       "@downtown65-app/graphql/*": [
         "../graphql/src/*"
-      ],
-      "~/*": [
-        "./src/*"
       ]
     }
   }
