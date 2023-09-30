@@ -24,6 +24,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
   // const { lambdaLayerArn } = use(LambdaLayerStack)
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
+    // srcPath: 'packages/functions',
     handler: 'packages/functions/src/gql/lambda.handler',
     bind: [
       AUTH_CLIENT_ID,

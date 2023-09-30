@@ -29,7 +29,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   // Create the Remix site
   const site = new RemixSite(stack, 'Downtown65-remix', {
-    path: 'packages/frontend',
+    path: 'packages/web',
     environment: {
       API_URL: ApiUrl,
       API_KEY: ApiKey,
