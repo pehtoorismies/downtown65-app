@@ -1,5 +1,0 @@
-{
-  "name": "downtown65-app",
-  "region": "eu-north-1",
-  "main": "packages/infra/stacks/index.ts"
-}

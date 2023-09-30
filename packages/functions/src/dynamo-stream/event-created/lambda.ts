@@ -1,4 +1,3 @@
-import * as process from 'node:process'
 import { createEventAddedEmail } from '@downtown65-app/core/email/create-event-added-email'
 import { EmailableEvent } from '@downtown65-app/core/email/emailable-event'
 import { sendEmail } from '@downtown65-app/core/email/send-email'
@@ -30,8 +29,8 @@ const fetchCreateEventSubscribers = async (): Promise<string[]> => {
   }
 }
 
-const isTestEmail = (stage: string): boolean => {
-  if (process.env.IS_LOCAL) {
+const isTestEmail = (stage: string, appMode: string): boolean => {
+  if (appMode === 'dev') {
     return true
   }
   return stage !== 'production'
@@ -41,17 +40,16 @@ export const handler: DynamoDBStreamHandler = async (
   event: DynamoDBStreamEvent
 ): Promise<void> => {
   const stage = getEnvironmentVariable('SST_STAGE')
+  const appMode = getEnvironmentVariable('APP_MODE')
   const domainName = getEnvironmentVariable('DOMAIN_NAME')
 
-  const imageOrigin = process.env.IS_LOCAL
-    ? 'https://downtown65.events'
-    : `https://${domainName}`
+  const imageOrigin =
+    appMode === 'dev' ? 'https://downtown65.events' : `https://${domainName}`
 
-  const hrefOrigin = process.env.IS_LOCAL
-    ? 'http://localhost:3000'
-    : `https://${domainName}`
+  const hrefOrigin =
+    appMode === 'dev' ? 'http://localhost:3000' : `https://${domainName}`
 
-  const recipients = isTestEmail(stage)
+  const recipients = isTestEmail(stage, appMode)
     ? TEST_RECIPIENTS
     : await fetchCreateEventSubscribers()
 
