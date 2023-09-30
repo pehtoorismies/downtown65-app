@@ -1,0 +1,30 @@
+{
+  "name": "@downtown65-app/functions",
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts",
+    "test": "sst bind vitest run"
+  },
+  "dependencies": {
+    "auth0": "3.1.2",
+    "aws-lambda": "1.0.7",
+    "dynamodb-toolbox": "0.7.0",
+    "email-validator": "2.0.4",
+    "handlebars": "4.7.7",
+    "mjml": "4.13.0",
+    "node-fetch": "3.3.0",
+    "remeda": "1.9.1",
+    "sharp": "0.31.3",
+    "superagent-proxy": "3.0.0",
+    "uglify-js": "3.17.4",
+    "ulid": "2.3.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "8.10.119",
+    "@types/auth0": "3.3.3"
+  }
+}
