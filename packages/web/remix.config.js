@@ -9,5 +9,6 @@ module.exports = {
   server: undefined,
   future: {
     v2_routeConvention: true,
+    v2_meta: true,
   },
 }
