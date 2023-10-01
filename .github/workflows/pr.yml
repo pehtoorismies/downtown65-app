@@ -46,11 +46,8 @@ jobs:
         run: |
           npx sst secrets --stage $PR_NAME set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
           npx sst secrets --stage $PR_NAME set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
-      - name: Bootstrap
-        run: npx lerna bootstrap
       - name: Build
         run: |
-          npx lerna run build --scope @downtown65-app/common
           npx sst build --stage $PR_NAME
       - uses: actions/cache@v3
         id: restore-build
@@ -79,7 +76,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
-      - name: 'lint'
+      - name: 'typecheck'
         run: yarn typecheck
   deploy:
     needs: [ "lint", "typecheck" ]
