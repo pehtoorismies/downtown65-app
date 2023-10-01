@@ -1,5 +1,5 @@
 import type { Session } from '@remix-run/node'
-import { createCookieSessionStorage, json, redirect } from '@remix-run/node'
+import { createCookieSessionStorage, redirect } from '@remix-run/node'
 import jwtDecode from 'jwt-decode'
 import { z } from 'zod'
 import { getCookieSecret } from '~/cookie-secret.server'
@@ -41,7 +41,7 @@ const sessionStorage = createCookieSessionStorage({
   },
 })
 
-const getSession = (request: Request) => {
+export const getSession = (request: Request) => {
   const cookie = request.headers.get('Cookie')
   return sessionStorage.getSession(cookie)
 }
@@ -76,7 +76,11 @@ const fetchRenewTokens = async (
   throw new Error(rt.refreshError)
 }
 
-type Values = { user: User; accessToken: string; refreshToken: string }
+type Values = {
+  user: User
+  accessToken: string
+  refreshToken: string
+}
 
 const getValues = (session: Session): Values | undefined => {
   const user = session.get(USER_KEY)
@@ -117,7 +121,12 @@ const renewSession = async (refreshToken: string, session: Session) => {
 const getAuthentication = async (
   request: Request
 ): Promise<
-  { user: User; accessToken: string; headers: Headers } | undefined
+  | {
+      user: User
+      accessToken: string
+      headers: Headers
+    }
+  | undefined
 > => {
   const session = await getSession(request)
   const values = getValues(session)
@@ -158,7 +167,10 @@ export const getAuthenticatedUser = async (
 
 export const loaderAuthenticate = async (
   request: Request
-): Promise<{ user: User; accessToken: string }> => {
+): Promise<{
+  user: User
+  accessToken: string
+}> => {
   const result = await getAuthentication(request)
   if (!result) {
     throw redirect('/login')
@@ -168,7 +180,11 @@ export const loaderAuthenticate = async (
 
 export const actionAuthenticate = async (
   request: Request
-): Promise<{ user: User; accessToken: string; headers: Headers }> => {
+): Promise<{
+  user: User
+  accessToken: string
+  headers: Headers
+}> => {
   const result = await getAuthentication(request)
   if (!result) {
     throw redirect('/login')
@@ -238,14 +254,4 @@ export const logout = async (
   return redirect('/login', {
     headers,
   })
-}
-
-export const publicLogout = async (request: Request, data: unknown) => {
-  const session = await getSession(request)
-  return json(data)
-  // return json(data, {
-  //   headers: {
-  //     'Set-Cookie': await sessionStorage.destroySession(session),
-  //   },
-  // })
 }

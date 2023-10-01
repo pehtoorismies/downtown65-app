@@ -32,12 +32,12 @@ import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 import { logger } from '~/util/logger.server'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - profile',
-  }
+  return [
+    {
+      title: 'Dt65 - profile',
+    },
+  ]
 }
-
-interface ActionData {}
 
 export const action: ActionFunction = async ({ request }) => {
   // TODO: how to sync user and cookie user ?
@@ -62,7 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
 
   headers.append('Set-Cookie', await commitMessageSession(messageSession))
 
-  return json<ActionData>(
+  return json<{}>(
     {},
     {
       headers,

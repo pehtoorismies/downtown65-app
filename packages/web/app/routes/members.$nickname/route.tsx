@@ -9,34 +9,32 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Link, useCatch, useLoaderData } from '@remix-run/react'
+import {
+  Link,
+  isRouteErrorResponse,
+  useLoaderData,
+  useRouteError,
+} from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import format from 'date-fns/format'
 import React from 'react'
 import invariant from 'tiny-invariant'
 import notFoundProfileImage from './not-found.jpg'
 import { ProfileBox } from '~/components/profile-box'
-import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - profiili',
-  }
+  return [
+    {
+      title: 'Dt65 - profiili',
+    },
+  ]
 }
 
-interface LoaderData extends PrivateRoute {
-  name: string
-  nickname: string
-  email: string
-  picture: string
-  createdAt: string
-}
-
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.nickname, 'Expected params.nickname')
   const { user, accessToken } = await loaderAuthenticate(request)
 
@@ -58,7 +56,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 
   const createdAt = format(new Date(response.user.createdAt), 'd.M.yyyy')
 
-  return json<LoaderData>({
+  return json({
     user,
     ...response.user,
     createdAt,
@@ -66,7 +64,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 }
 
 export default function MemberPage() {
-  const data = useLoaderData<LoaderData>()
+  const data = useLoaderData<typeof loader>()
   const createdAt = `käyttäjä luotu: ${data.createdAt}`
   return (
     <>
@@ -109,19 +107,28 @@ export default function MemberPage() {
 }
 
 export const CatchBoundary = () => {
-  const caught = useCatch()
+  const error = useRouteError()
+
+  if (!isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>Uh oh ...</h1>
+        <p>Something went wrong.</p>
+      </div>
+    )
+  }
 
   return (
     <Container py="lg">
       <Title my="sm" align="center" size={40}>
-        {caught.status}
+        {error.status}
       </Title>
       <Image
         radius="md"
         src={notFoundProfileImage}
         alt="Anonymous holding fire"
       />
-      <Text align="center"> {caught.statusText}</Text>
+      <Text align="center"> {error.statusText}</Text>
       <Button
         component={Link}
         to="/members"

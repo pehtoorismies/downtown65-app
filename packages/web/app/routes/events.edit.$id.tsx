@@ -9,8 +9,8 @@ import {
   Text,
 } from '@mantine/core'
 import type {
-  ActionFunction,
-  LoaderFunction,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
@@ -19,7 +19,6 @@ import { IconRocket } from '@tabler/icons-react'
 import { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import type { Context } from '~/contexts/participating-context'
-import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
@@ -27,26 +26,27 @@ import {
   setSuccessMessage,
 } from '~/message.server'
 import { EditOrCreate } from '~/routes-common/events/components/edit-or-create'
-import type { EventState } from '~/routes-common/events/components/event-state'
 import { isValidStateToSave } from '~/routes-common/events/components/event-state'
 import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
 import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - edit event',
-  }
+  return [
+    {
+      title: 'Dt65 - edit event',
+    },
+  ]
 }
 
-interface LoaderData extends PrivateRoute {
-  initState: Omit<EventState, 'date' | 'time'>
-  initDateStart: string
-  initTimeStart?: string
-  eventId: string
-}
+// interface LoaderData extends PrivateRoute {
+//   initState: Omit<EventState, 'date' | 'time'>
+//   initDateStart: string
+//   initTimeStart?: string
+//   eventId: string
+// }
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
   const { user } = await loaderAuthenticate(request)
 
@@ -65,7 +65,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
   const { timeStart, dateStart, race, description, type, ...rest } = event
 
-  return json<LoaderData>({
+  return json({
     eventId: event.id,
     user,
     initState: {
@@ -82,7 +82,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   })
 }
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
 
   const userSession = await actionAuthenticate(request)
@@ -122,6 +122,16 @@ export const action: ActionFunction = async ({ request, params }) => {
     headers,
   })
 }
+// TODO: hack to keep typescript happy
+const getInitKind = (kind: string): 'edit' | 'create' => {
+  if (kind === 'edit') {
+    return 'edit'
+  }
+  if (kind === 'create') {
+    return 'create'
+  }
+  throw new Error('Unsupported initial state')
+}
 
 export default function EditEvent() {
   const {
@@ -130,7 +140,7 @@ export default function EditEvent() {
     initTimeStart,
     initDateStart,
     eventId,
-  } = useLoaderData<LoaderData>()
+  } = useLoaderData<typeof loader>()
   const ddt = new DynamoDatetime({
     time: initTimeStart,
     date: initDateStart,
@@ -138,12 +148,15 @@ export default function EditEvent() {
 
   const [eventState, dispatch] = useReducer(reducer, {
     ...initState,
+    // TODO: smell
+    kind: getInitKind(initState.kind),
     date: ddt.getDateObject(),
     time: ddt.getTimes() ?? {
       hours: undefined,
       minutes: undefined,
     },
   })
+
   const participatingActions: Context = {
     onLeave: () => {
       dispatch({ kind: 'leaveEvent', me })

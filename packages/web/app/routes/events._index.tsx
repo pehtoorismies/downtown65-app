@@ -8,7 +8,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { IconSquarePlus } from '@tabler/icons-react'
@@ -18,22 +18,18 @@ import {
   ParticipatingContext,
   useParticipationActions,
 } from '~/contexts/participating-context'
-import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
-import type { EventLoaderData } from '~/routes-common/events/event-loader-data'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - incoming events',
-  }
+  return [
+    {
+      title: 'Dt65 - incoming events',
+    },
+  ]
 }
 
-interface LoaderData extends PrivateRoute {
-  eventItems: EventLoaderData[]
-}
-
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { accessToken, user } = await loaderAuthenticate(request)
 
   const { events } = await getGqlSdk().GetEvents(
@@ -57,7 +53,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
   })
 
-  return json<LoaderData>({
+  return json({
     eventItems,
     user,
   })
@@ -74,7 +70,7 @@ const EventsBreadcrumb = () => {
 }
 
 export default function GetEvents() {
-  const { eventItems } = useLoaderData<LoaderData>()
+  const { eventItems } = useLoaderData<typeof loader>()
   const participationActions = useParticipationActions()
 
   if (eventItems.length === 0) {

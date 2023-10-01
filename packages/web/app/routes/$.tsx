@@ -7,12 +7,11 @@ import {
   Title,
   createStyles,
 } from '@mantine/core'
-import type { LoaderFunction } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
-import type { PublicRoute } from '~/domain/public-route'
-import { getAuthenticatedUser, publicLogout } from '~/session.server'
+import { getAuthenticatedUser, getSession } from '~/session.server'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -55,9 +54,14 @@ const useStyles = createStyles((theme) => ({
   },
 }))
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getAuthenticatedUser(request)
-  return user ? json<PublicRoute>({ user }) : publicLogout(request, {})
+  if (user) {
+    return json({ user })
+  }
+
+  await getSession(request)
+  return json({})
 }
 
 const NotFound = () => {
