@@ -1,6 +1,9 @@
 # dependencies
 node_modules
 
+# keep sharp
+!stacks/layers/sharp/nodejs/node_modules
+
 # sst
 .sst
 .build
