@@ -91,7 +91,9 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
       - name: Deploy infra
-        run: npx sst deploy --stage $PR_NAME
+        run: |
+          ls -la .sst
+          npx sst deploy --stage $PR_NAME
   unit_test:
     needs: [ "deploy" ]
     runs-on: ubuntu-latest
