@@ -39,7 +39,6 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
       MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
       APP_MODE: app.mode,
-      // AUTH_CLIENT_ID: config.AUTH_CLIENT_ID.value,
     },
     customDomain: {
       domainName,
@@ -55,7 +54,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   // Add the site's URL to stack output
   stack.addOutputs({
-    URL: site.url ?? 'no_site_url',
+    URL: site.url ?? 'localhost',
     CUSTOM_DOMAIN_URL: site.customDomainUrl ?? 'no_custom_domain',
   })
 }
