@@ -7,8 +7,8 @@ module.exports = {
   ],
   plugins: ["unused-imports"],
   rules: {
-    "unicorn/text-encoding-identifier-case": OFF,
     "@typescript-eslint/no-redeclare": OFF,
+    "unicorn/text-encoding-identifier-case": OFF,
     "unicorn/filename-case": [
       "error",
       {
