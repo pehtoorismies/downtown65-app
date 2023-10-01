@@ -5,7 +5,6 @@ module.exports = {
   assetsBuildDirectory: 'public/build',
   serverBuildPath: 'build/index.js',
   publicPath: '/build/',
-  serverBuildTarget: 'node-cjs',
   server: undefined,
   future: {
     v2_routeConvention: true,
