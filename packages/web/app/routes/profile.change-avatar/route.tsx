@@ -14,7 +14,7 @@ import {
 } from '@mantine/core'
 import type { FileWithPath } from '@mantine/dropzone'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
-import type { ActionFunction, LoaderFunction } from '@remix-run/node'
+import type { ActionFunction, LoaderFunctionArgs } from '@remix-run/node'
 import {
   json,
   unstable_parseMultipartFormData as parseMultipartFormData,
@@ -29,7 +29,6 @@ import {
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { createProfileUploadHandler } from './s3-upload.server'
-import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import {
   actionAuthenticate,
@@ -76,7 +75,7 @@ export const action: ActionFunction = async ({ request }) => {
   })
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const pageLogger = logger.child({
     page: { path: 'profile/changeAvatar', function: 'loader' },
   })
@@ -86,7 +85,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   pageLogger.debug({ user }, 'Authenticated user')
 
-  return json<PrivateRoute>({ user })
+  return json({ user })
 }
 
 function humanFileSize(bytes: number, si = true, dp = 1) {
@@ -115,7 +114,7 @@ function humanFileSize(bytes: number, si = true, dp = 1) {
 
 export default function ChangeAvatar() {
   const fetcher = useFetcher<ActionData>()
-  const { user } = useLoaderData()
+  const { user } = useLoaderData<typeof loader>()
   const [state, setState] = useState<State>({
     kind: 'init',
     picture: user.picture,

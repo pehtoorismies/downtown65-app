@@ -7,12 +7,12 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import type { ActionFunction, MetaFunction } from '@remix-run/node'
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { z } from 'zod'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import type { SignupField, SignupPayload } from '~/gql/types.gen'
+import type { SignupPayload } from '~/gql/types.gen'
 import {
   commitMessageSession,
   getMessageSession,
@@ -23,9 +23,11 @@ import { AuthTemplate } from '~/routes-common/auth/auth-template'
 export { loader } from '~/routes-common/auth/loader'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - signup',
-  }
+  return [
+    {
+      title: 'Dt65 - signup',
+    },
+  ]
 }
 
 const SignupForm = z.object({
@@ -36,19 +38,13 @@ const SignupForm = z.object({
   registerSecret: z.string(),
 })
 
-interface ActionData {
-  errors?: Partial<Record<SignupField, string>>
-}
-
-const toActionData = (
-  errors: NonNullable<SignupPayload['errors']>
-): ActionData => {
+const toActionData = (errors: NonNullable<SignupPayload['errors']>) => {
   return {
     errors: Object.fromEntries(errors.map((t) => [t.path, t.message])),
   }
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const signupForm = SignupForm.parse({
     email: formData.get('email'),
@@ -64,7 +60,7 @@ export const action: ActionFunction = async ({ request }) => {
   )
 
   if (signup.errors) {
-    return json<ActionData>(toActionData(signup.errors), { status: 400 })
+    return json(toActionData(signup.errors), { status: 400 })
   }
 
   const session = await getMessageSession(request.headers.get('cookie'))
@@ -78,7 +74,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function Signup() {
-  const actionData = useActionData<ActionData>()
+  const actionData = useActionData<typeof action>()
   const navigation = useNavigation()
 
   return (

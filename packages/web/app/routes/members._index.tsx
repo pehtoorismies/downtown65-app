@@ -7,32 +7,19 @@ import {
   Text,
   Title,
 } from '@mantine/core'
-import type { LoaderFunction, MetaFunction } from '@remix-run/node'
+import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
 import React from 'react'
-import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - jäsenet',
-  }
-}
-
-interface LoaderData extends PrivateRoute {
-  users: {
-    id: string
-    name: string
-    nickname: string
-  }[]
-  userCount: number
-  numPages: number
-  currentPage: number
-  perPage: number
-  usersOnPage: number
-  start: number
+  return [
+    {
+      title: 'Dt65 - jäsenet',
+    },
+  ]
 }
 
 const defaultTo = (defaultValue: number, value: string | null): number => {
@@ -45,7 +32,7 @@ const defaultTo = (defaultValue: number, value: string | null): number => {
   return Number(value)
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { user, accessToken } = await loaderAuthenticate(request)
 
   const url = new URL(request.url)
@@ -70,7 +57,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const numberPages = Math.floor(total / limit) + extra
   const currentPage = Math.floor(start / limit) + 1
 
-  return json<LoaderData>({
+  return json({
     user,
     users,
     userCount: total,
@@ -91,7 +78,7 @@ export default function Users() {
     numPages,
     currentPage,
     perPage,
-  } = useLoaderData<LoaderData>()
+  } = useLoaderData<typeof loader>()
   const navigate = useNavigate()
   const hasPagination = userCount > perPage
 

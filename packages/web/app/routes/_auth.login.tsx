@@ -9,7 +9,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import type { ActionFunction, MetaFunction } from '@remix-run/node'
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
@@ -22,18 +22,20 @@ import { validateEmail } from '~/util/validation.server'
 export { loader } from '~/routes-common/auth/loader'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - login',
-  }
+  return [
+    {
+      title: 'Dt65 - login',
+    },
+  ]
 }
 
-export interface ActionData {
-  emailError?: string
-  passwordError?: string
-  generalError?: string
-}
+// export interface ActionData {
+//   emailError?: string
+//   passwordError?: string
+//   generalError?: string
+// }
 
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const pageLogger = logger.child({
     page: { path: 'login', function: 'action' },
   })
@@ -46,15 +48,15 @@ export const action: ActionFunction = async ({ request }) => {
   pageLogger.info({ email }, 'Login action')
 
   if (!validateEmail(email)) {
-    return json<ActionData>(
-      { emailError: 'Väärän muotoinen sähköpostiosoite' },
+    return json(
+      { error: 'Väärän muotoinen sähköpostiosoite', field: 'email' },
       { status: 400 }
     )
   }
 
   if (typeof password !== 'string') {
-    return json<ActionData>(
-      { passwordError: 'Salasana puuttuu' },
+    return json(
+      { error: 'Salasana puuttuu', field: 'password' },
       { status: 400 }
     )
   }
@@ -73,8 +75,8 @@ export const action: ActionFunction = async ({ request }) => {
         },
         'Login error'
       )
-      return json<ActionData>(
-        { generalError: 'Email or password is invalid' },
+      return json(
+        { error: 'Email or password is invalid', field: 'general' },
         { status: 400 }
       )
     }
@@ -103,13 +105,13 @@ export const action: ActionFunction = async ({ request }) => {
       },
       'Unable login user'
     )
-    return json<ActionData>({ generalError: 'Server error' }, { status: 500 })
+    return json({ error: 'Server error', field: 'general' }, { status: 500 })
   }
 }
 
 export default function Login() {
   const navigation = useNavigation()
-  const actionData = useActionData<ActionData>()
+  const actionData = useActionData<typeof action>()
 
   return (
     <AuthTemplate title="Kirjaudu">
@@ -122,14 +124,14 @@ export default function Login() {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        {actionData?.generalError && (
+        {actionData?.field === 'general' && (
           <Alert
             icon={<IconAlertCircle size={16} />}
             title="Virhe kirjautumisessa"
             color="red"
             mb="sm"
           >
-            {actionData.generalError}
+            {actionData?.error}
           </Alert>
         )}
 
@@ -141,7 +143,7 @@ export default function Login() {
             autoComplete="email"
             label="Sähköposti"
             placeholder="me@downtown65.com"
-            aria-invalid={actionData?.emailError ? true : undefined}
+            aria-invalid={actionData?.field === 'email' ? true : undefined}
             aria-describedby="email-error"
             required
           />
@@ -150,7 +152,7 @@ export default function Login() {
             name="password"
             label="Salasana"
             placeholder="Salasanasi"
-            aria-invalid={actionData?.passwordError ? true : undefined}
+            aria-invalid={actionData?.field === 'password' ? true : undefined}
             required
             mt="md"
             aria-describedby="password-error"

@@ -17,17 +17,18 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core'
 import type {
-  ActionFunction,
-  LoaderFunction,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import {
   Form,
   Link,
-  useCatch,
+  isRouteErrorResponse,
   useLoaderData,
   useNavigation,
+  useRouteError,
 } from '@remix-run/react'
 import {
   IconArrowNarrowLeft,
@@ -44,39 +45,41 @@ import {
   ParticipatingContext,
   useParticipationActions,
 } from '~/contexts/participating-context'
-import type { PublicRoute } from '~/domain/public-route'
 import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import type { EventLoaderData } from '~/routes-common/events/event-loader-data'
 import {
   actionAuthenticate,
   getAuthenticatedUser,
-  publicLogout,
+  getSession,
 } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   if (!data) {
-    return {
-      title: 'Not found',
-    }
+    return [
+      {
+        title: 'Not found',
+      },
+    ]
   }
 
   const { eventItem, origin } = data
   const typeData = mapToData(eventItem.type)
-  return {
-    title: eventItem.title,
-    'og:type': 'website',
-    'og:url': `${origin}${location.pathname}`,
-    'og:title': `${eventItem.title}`,
-    'og:description': `${eventItem.dateStart} - ${eventItem.subtitle}`,
-    'og:image': `${origin}${typeData.imageUrl}`,
-    'og:image:type': 'image/jpg',
-  }
+  return [
+    {
+      title: eventItem.title,
+      'og:type': 'website',
+      'og:url': `${origin}${location.pathname}`,
+      'og:title': `${eventItem.title}`,
+      'og:description': `${eventItem.dateStart} - ${eventItem.subtitle}`,
+      'og:image': `${origin}${typeData.imageUrl}`,
+      'og:image:type': 'image/jpg',
+    },
+  ]
 }
 
 const getOriginForMeta = (): string => {
@@ -86,12 +89,12 @@ const getOriginForMeta = (): string => {
   return `https://${Config.DOMAIN_NAME}`
 }
 
-interface LoaderData extends PublicRoute {
-  eventItem: EventLoaderData
-  origin: string // for meta
-}
+// interface LoaderData extends PublicRoute {
+//   eventItem: EventLoaderData
+//   origin: string // for meta
+// }
 
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
   const user = await getAuthenticatedUser(request)
 
@@ -125,7 +128,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   }
 
   if (user) {
-    return json<LoaderData>({
+    return json({
       ...data,
       user,
       eventItem: {
@@ -135,15 +138,17 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     })
   }
 
-  return publicLogout(request, {
+  await getSession(request)
+  return json({
     ...data,
+    user: null,
     eventItem: {
       ...data.eventItem,
     },
   })
 }
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action = async ({ request, params }: ActionFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
   const { headers, user, accessToken } = await actionAuthenticate(request)
   const body = await request.formData()
@@ -200,7 +205,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 }
 
 export default function GetEvent() {
-  const { eventItem, user } = useLoaderData<LoaderData>()
+  const { eventItem, user } = useLoaderData<typeof loader>()
   const navigation = useNavigation()
 
   const participationActions = useParticipationActions()
@@ -330,16 +335,26 @@ export default function GetEvent() {
 }
 
 export const CatchBoundary = () => {
-  const caught = useCatch()
+  const error = useRouteError()
+
+  if (!isRouteErrorResponse(error)) {
+    return (
+      <div>
+        <h1>Uh oh ...</h1>
+        <p>Something went wrong.</p>
+      </div>
+    )
+  }
+
   const { imageUrl } = mapToData(EventType.Orienteering)
 
   return (
     <Container py="lg">
       <Title my="sm" align="center" size={40}>
-        {caught.status}
+        {error.status}
       </Title>
       <Image radius="md" src={imageUrl} alt="Random event image" />
-      <Text align="center"> {caught.statusText}</Text>
+      <Text align="center"> {error.statusText}</Text>
       <Button
         component={Link}
         to="/"

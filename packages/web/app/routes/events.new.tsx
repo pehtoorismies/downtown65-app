@@ -1,14 +1,13 @@
 import { Divider, Text } from '@mantine/core'
 import type {
-  ActionFunction,
-  LoaderFunction,
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { useReducer } from 'react'
 import type { Context } from '~/contexts/participating-context'
-import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
@@ -21,20 +20,22 @@ import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - new event',
-  }
+  return [
+    {
+      title: 'Dt65 - new event',
+    },
+  ]
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { user } = await loaderAuthenticate(request)
 
-  return json<PrivateRoute>({
+  return json({
     user,
   })
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const { headers, user, accessToken } = await actionAuthenticate(request)
 
   const body = await request.formData()
@@ -82,7 +83,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function NewEvent() {
-  const { user: me } = useLoaderData<PrivateRoute>()
+  const { user: me } = useLoaderData<typeof loader>()
   const [eventState, dispatch] = useReducer(reducer, {
     activeStep: ActiveStep.STEP_EVENT_TYPE,
     date: new Date(),

@@ -8,7 +8,7 @@ import {
   Text,
   TextInput,
 } from '@mantine/core'
-import type { ActionFunction, MetaFunction } from '@remix-run/node'
+import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons-react'
@@ -24,24 +24,23 @@ import { validateEmail } from '~/util/validation.server'
 export { loader } from '~/routes-common/auth/loader'
 
 export const meta: MetaFunction = () => {
-  return {
-    title: 'Dt65 - forgot password',
-  }
+  return [
+    {
+      title: 'Dt65 - forgot password',
+    },
+  ]
 }
 
 interface ActionData {
   error: string
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const email = formData.get('email')
 
   if (!validateEmail(email)) {
-    return json<ActionData>(
-      { error: 'Väärän muotoinen sähköpostiosoite' },
-      { status: 400 }
-    )
+    return json({ error: 'Väärän muotoinen sähköpostiosoite' }, { status: 400 })
   }
 
   await getGqlSdk().ForgotPassword({ email }, getPublicAuthHeaders())
@@ -54,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export default function ForgotPassword() {
-  const actionData = useActionData<ActionData>()
+  const actionData = useActionData<typeof action>()
   const navigation = useNavigation()
 
   return (

@@ -3,11 +3,10 @@ import { Notifications, notifications } from '@mantine/notifications'
 import { StylesPlaceholder } from '@mantine/remix'
 import type {
   LinksFunction,
-  LoaderFunction,
+  LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import type { RouteMatch } from '@remix-run/react'
 import {
   Links,
   LiveReload,
@@ -25,11 +24,6 @@ import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
 import { theme } from '~/theme'
 
-type LoaderData = {
-  stage: string
-  toastMessage: ToastMessage | undefined
-}
-
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 36
 
 export const getStage = (): string => {
@@ -43,17 +37,17 @@ export const getStage = (): string => {
   return value
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const stage = getStage()
 
   const session = await getMessageSession(request.headers.get('cookie'))
   const toastMessage = session.get('toastMessage') as ToastMessage
 
   if (!toastMessage) {
-    return json<LoaderData>({ toastMessage: undefined, stage })
+    return json({ toastMessage: null, stage })
   }
 
-  return json<LoaderData>(
+  return json(
     { toastMessage, stage },
     {
       headers: {
@@ -65,14 +59,16 @@ export const loader: LoaderFunction = async ({ request }) => {
   )
 }
 
-export const meta: MetaFunction = () => ({
-  charset: 'utf-8',
-  title: 'Downtown65 Events',
-  description: 'Events calendar for Downtown 65 Endurance ry',
-  viewport: 'width=device-width,initial-scale=1',
-  'msapplication-TileColor': '#da532c',
-  'theme-color': '#ffffff',
-})
+export const meta: MetaFunction = () => [
+  {
+    charset: 'utf-8',
+    title: 'Downtown65 Events',
+    description: 'Events calendar for Downtown 65 Endurance ry',
+    viewport: 'width=device-width,initial-scale=1',
+    'msapplication-TileColor': '#da532c',
+    'theme-color': '#ffffff',
+  },
+]
 
 export const links: LinksFunction = () => {
   return [
@@ -107,18 +103,19 @@ export const links: LinksFunction = () => {
 
 createEmotionCache({ key: 'mantine' })
 
-const findUser = (matches: RouteMatch[]): User | undefined => {
-  return matches
-    .map((match) => match.data)
-    .filter(Boolean)
-    .map(({ user }) => user)
-    .find(Boolean)
+interface UserData {
+  user?: User
 }
 
 export default function App() {
-  const { stage, toastMessage } = useLoaderData<LoaderData>()
+  const { stage, toastMessage } = useLoaderData<typeof loader>()
   const matches = useMatches()
-  const user = findUser(matches)
+
+  const user = matches
+    .map((matches) => matches.data as UserData)
+    .filter(Boolean)
+    .map(({ user }: UserData) => user)
+    .find(Boolean)
 
   useEffect(() => {
     if (!toastMessage) {
