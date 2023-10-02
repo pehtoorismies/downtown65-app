@@ -45,8 +45,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
         color={getHighlightColor('blue', 'dtPink.4', hour, state.time.hours)}
         key={hour}
         radius="xs"
-        size="xs"
-        compact
+        size="compact-xs"
         onClick={() => {
           dispatch({
             kind: 'time',
@@ -73,8 +72,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
         disabled={state.time.hours === undefined}
         key={minute}
         radius="xs"
-        size="xs"
-        compact
+        size="compact-xs"
         onClick={() => {
           dispatch({
             kind: 'time',
@@ -103,19 +101,19 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
 
       <Grid gutter="xs">
         <Grid.Col span={2}>
-          <Stack spacing="xs">{getHoursCol(HOURS[0])}</Stack>
+          <Stack gap="xs">{getHoursCol(HOURS[0])}</Stack>
         </Grid.Col>
         <Grid.Col span={2}>
-          <Stack spacing="xs">{getHoursCol(HOURS[1])}</Stack>
+          <Stack gap="xs">{getHoursCol(HOURS[1])}</Stack>
         </Grid.Col>
         <Grid.Col span={2}>
-          <Stack spacing="xs">{getHoursCol(HOURS[2])}</Stack>
+          <Stack gap="xs">{getHoursCol(HOURS[2])}</Stack>
         </Grid.Col>
         <Grid.Col span={3}>
-          <Stack spacing="xs">{getMinutesCol(MINUTES[0])}</Stack>
+          <Stack gap="xs">{getMinutesCol(MINUTES[0])}</Stack>
         </Grid.Col>
         <Grid.Col span={3}>
-          <Stack spacing="xs">{getMinutesCol(MINUTES[1])}</Stack>
+          <Stack gap="xs">{getMinutesCol(MINUTES[1])}</Stack>
         </Grid.Col>
       </Grid>
       <Center>
@@ -123,7 +121,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
           data-testid="clear-time"
           mt="md"
           variant="outline"
-          compact
+          size="compact-sm"
           onClick={() =>
             dispatch({
               kind: 'time',
@@ -137,7 +135,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
           Tyhjennä aika
         </Button>
       </Center>
-      <Text align="center" fz="xl" fw={700} mt="md" data-testid="time-display">
+      <Text ta="center" fz="xl" fw={700} mt="md" data-testid="time-display">
         {getTime(state)}
       </Text>
     </Container>

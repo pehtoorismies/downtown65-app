@@ -18,7 +18,7 @@ export const Layout = ({
     <>
       {stage !== 'production' && (
         <Box
-          sx={{
+          style={{
             position: 'fixed',
             fontSize: 8,
             padding: 2,

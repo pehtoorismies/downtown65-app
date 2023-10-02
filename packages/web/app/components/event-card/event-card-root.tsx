@@ -9,10 +9,10 @@ import {
   Group,
   Text,
   ThemeIcon,
-  createStyles,
 } from '@mantine/core'
 import { IconMedal, IconUsers } from '@tabler/icons-react'
 import type { PropsWithChildren } from 'react'
+import classes from './event-card-root.module.css'
 import { Gradient } from '~/components/colors'
 import {
   GotoLoginButton,
@@ -21,58 +21,6 @@ import {
 import type { User } from '~/domain/user'
 import type { EventType } from '~/gql/types.gen'
 import { mapToData } from '~/util/event-type'
-
-const useStyles = createStyles((theme) => ({
-  card: {
-    position: 'relative',
-    backgroundColor: theme.colors.white,
-  },
-
-  grid: {
-    display: 'grid',
-    gridTemplateColumns: '100px auto 100px',
-    gridTemplateRows: '30px 80px 30px',
-    gap: '15px 15px',
-    gridTemplateAreas: `
-"topLeft . topRight"
-"main main main"
-"bottomLeft . bottomRight"
-`,
-  },
-  gridTitle: {
-    gridArea: 'main',
-    alignSelf: 'center',
-  },
-  gridTitleText: {
-    textShadow: 'black 2px 2px 10px',
-    fontWeight: 700,
-    letterSpacing: '4px',
-    background:
-      'linear-gradient(0deg, rgba(134, 142, 150,0.1) 0%, rgba(134, 142, 150,0.3) 25%, rgba(134, 142, 150,0.3) 75%, rgba(134, 142, 150,0.1) 100%)',
-  },
-  gridMeIn: {
-    gridArea: 'bottomLeft',
-    justifySelf: 'start',
-    alignSelf: 'end',
-    background: 'linear-gradient(to top, rgba(0,0,0,0.2), rgba(0,0,0,0.5))',
-  },
-  gridCount: {
-    gridArea: 'topRight',
-    pointerEvents: 'none',
-    justifySelf: 'end',
-  },
-  gridRace: {
-    gridArea: 'topLeft',
-    background: 'linear-gradient(to top, rgba(0,0,0,0.2), rgba(0,0,0,0.5))',
-  },
-  gridCreator: {
-    gridArea: 'bottomRight',
-    opacity: 0.8,
-    justifySelf: 'end',
-    alignSelf: 'end',
-    background: 'linear-gradient(to top, rgba(0,0,0,0.2), rgba(0,0,0,0.5))',
-  },
-}))
 
 interface ParticipantProps {
   participants: User[]
@@ -109,7 +57,7 @@ export const EventCardRoot = ({
   title,
   type,
 }: PropsWithChildren<EventCardRootProps>) => {
-  const { classes, cx } = useStyles()
+  // const { classes, cx } = useStyles()
   const meAttending =
     me !== undefined && participants.map(({ id }) => id).includes(me.id)
 
@@ -118,16 +66,19 @@ export const EventCardRoot = ({
 
   const time = timeStart ? `klo ${timeStart}` : ''
 
+  // TODO: was className={cx(classes.card)}
+  // btw use import cx from 'clsx';
   return (
-    <Card withBorder radius="md" className={cx(classes.card)} shadow={shadow}>
+    <Card withBorder radius="md" className={classes.card} shadow={shadow}>
       <Card.Section>
         <BackgroundImage src={imageUrl}>
           <Box className={classes.grid}>
             <Box className={classes.gridTitle}>
               <Text
-                align="center"
-                color="#fff"
-                size={23}
+                ta="center"
+                c="#fff"
+                // TODO: was size={23}
+                size="23"
                 className={classes.gridTitleText}
                 data-testid="event-title"
               >
@@ -139,7 +90,9 @@ export const EventCardRoot = ({
               py="xs"
               px={4}
               className={classes.gridCreator}
-              styles={{ inner: { textTransform: 'none' } }}
+              // TODO: was styles={{ inner: { textTransform: 'none' } }}
+              // styles API
+              // styles={{ inner: { textTransform: 'none' } }}
               size="md"
               radius="xs"
               variant="outline"
@@ -171,7 +124,9 @@ export const EventCardRoot = ({
                 py="xs"
                 px={4}
                 className={classes.gridRace}
-                styles={{ inner: { textTransform: 'none' } }}
+                // TODO: was styles={{ inner: { textTransform: 'none' } }}
+                // styles API
+                // styles={{ inner: { textTransform: 'none' } }}
                 size="md"
                 radius="xs"
                 variant="outline"
@@ -185,23 +140,18 @@ export const EventCardRoot = ({
       </Card.Section>
       <Grid align="center" my={2} gutter="xs">
         <Grid.Col span={7}>
-          <Text weight={700} mt={2} data-testid="event-subtitle">
+          <Text fw={700} mt={2} data-testid="event-subtitle">
             {subtitle}
           </Text>
-          <Text size="sm" weight={500} data-testid="event-date">
+          <Text size="sm" fw={500} data-testid="event-date">
             {dateStart} {time}
           </Text>
-          <Text
-            size="sm"
-            color="dimmed"
-            weight={400}
-            data-testid="event-location"
-          >
+          <Text size="sm" c="dimmed" fw={400} data-testid="event-location">
             {location}
           </Text>
         </Grid.Col>
         <Grid.Col span={5}>
-          <Group position="right">
+          <Group align="right">
             {!me && <GotoLoginButton />}
             {me && (
               <ToggleJoinButton isParticipating={meAttending} eventId={id} />

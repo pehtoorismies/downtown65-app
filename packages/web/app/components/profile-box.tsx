@@ -26,7 +26,7 @@ export const ProfileBox: FC<Properties> = ({
         fw={700}
         mt="md"
         data-testid="profile-nick"
-        sx={{ fontFamily: 'Roboto, sans-serif' }}
+        style={{ fontFamily: 'Roboto, sans-serif' }}
       >
         {nickname}
       </Text>

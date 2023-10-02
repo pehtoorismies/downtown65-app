@@ -20,7 +20,7 @@ export const EventCardExtended = (props: EventCardExtendedProps) => {
           <div dangerouslySetInnerHTML={{ __html: props.description }} />
         </TypographyStylesProvider>
       ) : (
-        <Text align="center" p="sm" color="dimmed" weight={400}>
+        <Text ta="center" p="sm" c="dimmed" fw={400}>
           ei tarkempaa tapahtuman kuvausta
         </Text>
       )}

@@ -155,7 +155,7 @@ export default function ChangeAvatar() {
             Käytä tyyppejä: gif, jpg, png.
           </Alert>
         )}
-        <Title align="center">Vaihda profiilikuva</Title>
+        <Title ta="center">Vaihda profiilikuva</Title>
         <Dropzone
           mt="sm"
           loading={fetcher.state === 'submitting'}
@@ -176,8 +176,8 @@ export default function ChangeAvatar() {
           accept={IMAGE_MIME_TYPE}
         >
           <Group
-            position="center"
-            spacing="xl"
+            justify="center"
+            gap="xl"
             style={{ minHeight: 220, pointerEvents: 'none' }}
           >
             <Dropzone.Accept>
@@ -223,7 +223,7 @@ export default function ChangeAvatar() {
         {state.kind === 'newImageSet' && (
           <Stack align="center" m="xl">
             <Button
-              leftIcon={<IconUpload size={14} />}
+              leftSection={<IconUpload size={14} />}
               onClick={uploadImage}
               disabled={fetcher.state === 'submitting'}
             >
@@ -231,7 +231,7 @@ export default function ChangeAvatar() {
             </Button>
             <Button
               color="dtPink.3"
-              leftIcon={<IconX size={14} />}
+              leftSection={<IconX size={14} />}
               onClick={() => {
                 setState({ kind: 'init', picture: user.picture })
               }}

@@ -6,7 +6,7 @@ import type { ReducerProps } from './reducer'
 
 export const StepDate = ({ state, dispatch }: ReducerProps) => {
   return (
-    <Group position="center">
+    <Group justify="center">
       <DatePicker
         minDate={dayjs(new Date()).toDate()}
         value={state.date}

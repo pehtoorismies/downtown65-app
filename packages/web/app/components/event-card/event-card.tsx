@@ -12,8 +12,8 @@ export const EventCard = (props: EventCardRootProps) => {
         to={`/events/${props.id}`}
         fullWidth
         mt="xs"
-        compact
-        rightIcon={<IconArrowNarrowRight size={18} />}
+        size="compact-sm"
+        rightSection={<IconArrowNarrowRight size={18} />}
         variant="subtle"
       >
         Näytä lisää

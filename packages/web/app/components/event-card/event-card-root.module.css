@@ -1,0 +1,51 @@
+.card {
+    position: relative;
+    /** TODO: color? **/
+    backgroundColor: var(--mantine-color-white);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 100px auto 100px;
+    grid-template-rows: 30px 80px 30px;
+    gap: 15px 15px;
+    gridTemplateAreas: "topLeft . topRight" "main main main" "bottomLeft . bottomRight";
+}
+
+.gridTitle {
+    gridArea: main;
+    alignSelf: center;
+}
+
+.gridTitleText {
+    text-shadow: black 2px 2px 10px;
+    fontWeight: 700;
+    letterSpacing: 4px;
+    background: linear-gradient(0deg, rgba(134, 142, 150, 0.1) 0%, rgba(134, 142, 150, 0.3) 25%, rgba(134, 142, 150, 0.3) 75%, rgba(134, 142, 150, 0.1) 100%);
+}
+
+.gridMeIn {
+    grid-area: bottomLeft;
+    justify-self: start;
+    align-self: end;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+}
+
+.gridCount {
+    grid-area: topRight;
+    pointerEvents: none;
+    justifySelf: end;
+}
+
+.gridRace {
+    gridArea: topLeft;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+}
+
+.gridCreator {
+    gridArea: bottomRight;
+    opacity: 0.8;
+    justifySelf: end;
+    alignSelf: end;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+}

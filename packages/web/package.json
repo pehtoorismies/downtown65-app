@@ -2,6 +2,7 @@
   "name": "@downtown65-app/web",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
@@ -13,20 +14,19 @@
     "e2e": "playwright test"
   },
   "dependencies": {
-    "@emotion/react": "11.10.5",
-    "@emotion/server": "11.10.0",
-    "@mantine/core": "6.0.4",
-    "@mantine/dates": "6.0.4",
-    "@mantine/dropzone": "6.0.4",
-    "@mantine/ds": "6.0.4",
-    "@mantine/hooks": "6.0.4",
-    "@mantine/notifications": "6.0.4",
-    "@mantine/remix": "6.0.4",
+    "@mantine/core": "7.0.2",
+    "@mantine/dates": "7.0.2",
+    "@mantine/dropzone": "7.0.2",
+    "@mantine/ds": "7.0.2",
+    "@mantine/hooks": "7.0.2",
+    "@mantine/notifications": "7.0.2",
     "@mantine/rte": "5.10.5",
+    "@remix-run/css-bundle": "2.0.1",
     "@remix-run/node": "2.0.1",
     "@remix-run/react": "2.0.1",
     "@remix-run/serve": "2.0.1",
     "@tabler/icons-react": "2.1.2",
+    "clsx": "2.0.0",
     "dayjs": "1.11.7",
     "graphql-client": "2.0.1",
     "jwt-decode": "3.1.2",
@@ -44,7 +44,10 @@
     "@types/react": "18.0.27",
     "@types/react-dom": "18.0.10",
     "eslint-plugin-cypress": "2.12.1",
-    "eslint-plugin-unused-imports": "2.0.0"
+    "eslint-plugin-unused-imports": "2.0.0",
+    "postcss": "8.4.30",
+    "postcss-preset-mantine": "1.7.0",
+    "postcss-simple-vars": "7.0.1"
   },
   "engines": {
     "node": ">=16"

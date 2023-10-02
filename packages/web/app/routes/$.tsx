@@ -5,54 +5,54 @@ import {
   SimpleGrid,
   Text,
   Title,
-  createStyles,
 } from '@mantine/core'
 import type { LoaderFunctionArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
+import classes from '../routes-styles/$.module.css'
 import { getAuthenticatedUser, getSession } from '~/session.server'
-
-const useStyles = createStyles((theme) => ({
-  root: {
-    paddingTop: 20,
-    paddingBottom: 120,
-    paddingRight: 30,
-    paddingLeft: 30,
-  },
-
-  title: {
-    fontWeight: 900,
-    fontSize: 34,
-    marginBottom: theme.spacing.md,
-    fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-
-    [theme.fn.smallerThan('sm')]: {
-      fontSize: 32,
-    },
-  },
-
-  control: {
-    [theme.fn.smallerThan('sm')]: {
-      width: '100%',
-    },
-  },
-
-  mobileImage: {
-    [theme.fn.largerThan('sm')]: {
-      display: 'none',
-    },
-    maxWidth: 300,
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-
-  desktopImage: {
-    [theme.fn.smallerThan('sm')]: {
-      display: 'none',
-    },
-  },
-}))
+//
+// const useStyles = createStyles((theme) => ({
+//   // root: {
+//   //   paddingTop: 20,
+//   //   paddingBottom: 120,
+//   //   paddingRight: 30,
+//   //   paddingLeft: 30,
+//   // },
+//
+//   title: {
+//     fontWeight: 900,
+//     fontSize: 34,
+//     marginBottom: theme.spacing.md,
+//     fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+//
+//     [theme.fn.smallerThan('sm')]: {
+//       fontSize: 32,
+//     },
+//   },
+//
+//   control: {
+//     [theme.fn.smallerThan('sm')]: {
+//       width: '100%',
+//     },
+//   },
+//
+//   mobileImage: {
+//     [theme.fn.largerThan('sm')]: {
+//       display: 'none',
+//     },
+//     maxWidth: 300,
+//     marginLeft: 'auto',
+//     marginRight: 'auto',
+//   },
+//
+//   desktopImage: {
+//     [theme.fn.smallerThan('sm')]: {
+//       display: 'none',
+//     },
+//   },
+// }))
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getAuthenticatedUser(request)
@@ -65,23 +65,45 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 }
 
 const NotFound = () => {
-  const { classes } = useStyles()
-
   return (
-    <Container className={classes.root}>
+    <Container
+      styles={{
+        root: {
+          paddingTop: 20,
+          paddingBottom: 120,
+          paddingRight: 30,
+          paddingLeft: 30,
+        },
+      }}
+    >
       <SimpleGrid
         spacing={30}
         cols={2}
-        breakpoints={[{ maxWidth: 'sm', cols: 1, spacing: 40 }]}
+        // TODO: fix
+        // breakpoints={[{ maxWidth: 'sm', cols: 1, spacing: 40 }]}
       >
         <Image
           src="/404.jpg"
           className={classes.mobileImage}
-          caption="Your support contact"
+          // TODO: add caption
+          // caption="Your support contact"
         />
         <div>
-          <Title className={classes.title}>PUMMI</Title>
-          <Text color="dimmed" size="lg">
+          <Title
+            fw={900}
+            // TODO: below all
+            fs="34px"
+            // styles={{
+            //   marginBottom: theme.spacing.md,
+            //   fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+            //
+            //   // [theme.fn.smallerThan('sm')]: {
+            //   // fontSize: 32,
+            // }}
+          >
+            PUMMI
+          </Title>
+          <Text c="dimmed" size="lg">
             Sivua ei löytynyt. Tarkista oletko kirjoittanut osoitteen oikein.
             Sivu voi myös olla siirretty. Tai sitten joku muu on vialla. Contact
             support (kuvassa)!
@@ -93,7 +115,7 @@ const NotFound = () => {
             size="md"
             mt="xl"
             className={classes.control}
-            leftIcon={<IconArrowNarrowLeft size={18} />}
+            leftSection={<IconArrowNarrowLeft size={18} />}
             data-testid="navigate-home"
           >
             Etusivulle
@@ -101,8 +123,9 @@ const NotFound = () => {
         </div>
         <Image
           src="/404.jpg"
-          className={classes.desktopImage}
-          caption="Your support contact"
+          // className={classes.desktopImage}
+          // TODO: add caption
+          // caption="Your support contact"
         />
       </SimpleGrid>
     </Container>

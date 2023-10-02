@@ -120,7 +120,7 @@ export const CatchBoundary = () => {
 
   return (
     <Container py="lg">
-      <Title my="sm" align="center" size={40}>
+      <Title my="sm" ta="center" size={40}>
         {error.status}
       </Title>
       <Image
@@ -128,14 +128,14 @@ export const CatchBoundary = () => {
         src={notFoundProfileImage}
         alt="Anonymous holding fire"
       />
-      <Text align="center"> {error.statusText}</Text>
+      <Text ta="center"> {error.statusText}</Text>
       <Button
         component={Link}
         to="/members"
         variant="outline"
         size="md"
         mt="xl"
-        leftIcon={<IconArrowNarrowLeft size={18} />}
+        leftSection={<IconArrowNarrowLeft size={18} />}
         data-testid="to-members-button"
       >
         Jäsensivulle

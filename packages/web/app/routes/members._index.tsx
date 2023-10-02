@@ -114,7 +114,8 @@ export default function Users() {
             withControls={false}
             total={numPages}
             value={currentPage}
-            position="left"
+            // TODO: fix below
+            // position="left"
             my="md"
             onChange={(page) => {
               navigate(`?page=${page}&per_page=${perPage}`)
@@ -135,7 +136,8 @@ export default function Users() {
             withControls={false}
             total={numPages}
             value={currentPage}
-            position="left"
+            // TODO: fix below
+            // position="left"
             my="md"
             onChange={(page) => {
               navigate(`?page=${page}&per_page=${perPage}`)

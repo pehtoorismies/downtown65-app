@@ -10,8 +10,9 @@ interface Props {
 
 export const Participants = ({ me, participants }: Props) => {
   if (participants.length === 0) {
+    // TODO: position="center"
     return (
-      <Group position="center" p="md">
+      <Group align="center" p="md">
         <ThemeIcon color="gray.4 " size="lg">
           <IconUserOff />
         </ThemeIcon>
@@ -21,7 +22,7 @@ export const Participants = ({ me, participants }: Props) => {
   }
 
   return (
-    <Group position="left" spacing={2}>
+    <Group align="left" gap={2}>
       {participants.map((p) => {
         const gradient =
           me?.id === p.id
@@ -34,9 +35,10 @@ export const Participants = ({ me, participants }: Props) => {
             m={2}
             radius="md"
             key={p.id}
-            styles={{ inner: { textTransform: 'none' } }}
+            // TODO: what? Styles API
+            // styles={{ inner: { textTransform: 'none' } }}
             variant="gradient"
-            sx={{ paddingLeft: 0 }}
+            style={{ paddingLeft: 0 }}
             gradient={gradient}
             leftSection={
               <Avatar alt="Avatar for badge" size={24} mr={5} src={p.picture} />
