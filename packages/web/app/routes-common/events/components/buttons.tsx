@@ -114,12 +114,13 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
             <Button
               data-testid="prev-button"
               mt="xs"
-              leftIcon={<IconArrowLeft size={18} />}
-              styles={() => ({
-                leftIcon: {
-                  marginRight: 15,
-                },
-              })}
+              leftSection={<IconArrowLeft size={18} />}
+              // TODO: fix below
+              // styles={() => ({
+              //   leftIcon: {
+              //     marginRight: 15,
+              //   },
+              // })}
               onClick={onPreviousStep}
             >
               {prevTitle}
@@ -128,16 +129,17 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
         </Grid.Col>
         <Grid.Col span={6}>
           {isNextVisible && (
-            <Group position="right">
+            <Group justify="right">
               <Button
                 data-testid="next-button"
                 mt="xs"
-                rightIcon={<NextIcon size={18} />}
-                styles={() => ({
-                  leftIcon: {
-                    marginRight: 15,
-                  },
-                })}
+                rightSection={<NextIcon size={18} />}
+                // TODO: fix below
+                // styles={() => ({
+                //   leftIcon: {
+                //     marginRight: 15,
+                //   },
+                // })}
                 color={isReviewStep ? 'dtPink.3' : 'blue'}
                 onClick={onNextStep}
               >

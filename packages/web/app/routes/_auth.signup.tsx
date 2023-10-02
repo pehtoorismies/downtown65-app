@@ -79,7 +79,7 @@ export default function Signup() {
 
   return (
     <AuthTemplate title="Rekisteröidy">
-      <Text size="sm" align="center" mt={5}>
+      <Text size="sm" ta="center" mt={5}>
         Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.
       </Text>
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
@@ -92,7 +92,7 @@ export default function Signup() {
             error={!!actionData?.errors?.email}
           />
           {actionData?.errors?.email && (
-            <Text color="red" size="sm" weight={500}>
+            <Text c="red" size="sm" fw={500}>
               {actionData.errors.email}
             </Text>
           )}
@@ -105,7 +105,7 @@ export default function Signup() {
             error={!!actionData?.errors?.password}
           />
           {actionData?.errors?.password && (
-            <Text color="red" size="sm" weight={500}>
+            <Text c="red" size="sm" fw={500}>
               {actionData.errors.password}
             </Text>
           )}
@@ -118,7 +118,7 @@ export default function Signup() {
             error={!!actionData?.errors?.name}
           />
           {actionData?.errors?.name && (
-            <Text color="red" size="sm" weight={500}>
+            <Text c="red" size="sm" fw={500}>
               {actionData.errors.name}
             </Text>
           )}
@@ -131,7 +131,7 @@ export default function Signup() {
             error={!!actionData?.errors?.nickname}
           />
           {actionData?.errors?.nickname && (
-            <Text color="red" size="sm" weight={500}>
+            <Text c="red" size="sm" fw={500}>
               {actionData.errors.nickname}
             </Text>
           )}
@@ -144,12 +144,12 @@ export default function Signup() {
             error={!!actionData?.errors?.registerSecret}
           />
           {actionData?.errors?.registerSecret && (
-            <Text color="red" size="sm" weight={500}>
+            <Text c="red" size="sm" fw={500}>
               {actionData.errors.registerSecret}
             </Text>
           )}
 
-          <Group position="right" mt="md">
+          <Group justify="flex-end" mt="md">
             <Anchor
               component={Link}
               to="/login"

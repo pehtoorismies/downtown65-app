@@ -4,6 +4,7 @@ import type { ReducerProps } from './reducer'
 /**
  * This component is available only client side
  */
+// TODO; update editor
 export const StepDescriptionClient = ({ state, dispatch }: ReducerProps) => {
   return (
     <RichTextEditor

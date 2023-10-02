@@ -253,7 +253,8 @@ export default function GetEvent() {
       >
         <LoadingOverlay
           visible={navigation.state === 'submitting'}
-          transitionDuration={200}
+          // TODO: below
+          //transitionDuration={200}
         />
         <TypographyStylesProvider
           my="sm"
@@ -275,10 +276,10 @@ export default function GetEvent() {
           <Text mt="sm">
             Voit peruuttaa poiston sulkemalla dialogin tai klikkaamalla Peruuta.
           </Text>
-          <Group position="apart" mt="lg">
+          <Group justify="space-between" mt="lg">
             <Button
               onClick={onCloseModal}
-              leftIcon={<IconCircleX size={18} />}
+              leftSection={<IconCircleX size={18} />}
               data-testid="modal-close"
             >
               Peruuta
@@ -289,7 +290,7 @@ export default function GetEvent() {
               type="submit"
               color="red"
               disabled={formValue !== 'poista'}
-              rightIcon={<IconCircleOff size={18} />}
+              rightSection={<IconCircleOff size={18} />}
               data-testid="confirm-delete"
             >
               Poista
@@ -306,14 +307,14 @@ export default function GetEvent() {
         </ParticipatingContext.Provider>
         {user && (
           <>
-            <Text align="center" mt="xl" weight={600} color="dimmed">
+            <Text ta="center" mt="xl" fw={600} c="dimmed">
               Modification zone
             </Text>
-            <Group position="center" my="xl" spacing="xl">
+            <Group justify="center" my="xl" gap="xl">
               <Button
                 component={Link}
                 to={`/events/edit/${eventItem.id}`}
-                rightIcon={<IconPencil size={18} />}
+                rightSection={<IconPencil size={18} />}
                 data-testid="modify-event-btn"
               >
                 Muokkaa
@@ -321,7 +322,7 @@ export default function GetEvent() {
               <Button
                 color="grape"
                 onClick={() => setOpened(true)}
-                rightIcon={<IconCircleOff size={18} />}
+                rightSection={<IconCircleOff size={18} />}
                 data-testid="delete-event-btn"
               >
                 Poista tapahtuma
@@ -350,18 +351,18 @@ export const CatchBoundary = () => {
 
   return (
     <Container py="lg">
-      <Title my="sm" align="center" size={40}>
+      <Title my="sm" ta="center" size={40}>
         {error.status}
       </Title>
       <Image radius="md" src={imageUrl} alt="Random event image" />
-      <Text align="center"> {error.statusText}</Text>
+      <Text ta="center"> {error.statusText}</Text>
       <Button
         component={Link}
         to="/"
         variant="outline"
         size="md"
         mt="xl"
-        leftIcon={<IconArrowNarrowLeft size={18} />}
+        leftSection={<IconArrowNarrowLeft size={18} />}
         data-testid="to-frontpage-button"
       >
         Etusivulle

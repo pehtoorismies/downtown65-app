@@ -170,8 +170,7 @@ export default function Profile() {
         <Center mt="sm">
           <Form action="/profile/change-avatar">
             <Button
-              compact
-              size="xs"
+              size="compact-xs"
               variant="outline"
               type="submit"
               data-testid="change-avatar-btn"
@@ -183,7 +182,7 @@ export default function Profile() {
       </Container>
       <Container size={BOX_SIZE}>
         <Divider my="sm" label="Sähköpostiasetukset" labelPosition="center" />
-        <Group position="center">
+        <Group justify="center">
           <div style={{ position: 'relative' }}>
             {fetcher.state === 'submitting' && <LoadingOverlay visible />}
             <Switch
@@ -213,12 +212,12 @@ export default function Profile() {
       </Container>
       <Container size={BOX_SIZE}>
         <Divider my="sm" label="Kirjaudu ulos" labelPosition="center" />
-        <Group position="center">
+        <Group justify="center">
           <SimpleGrid cols={1} ml="lg">
             <Form action="/logout" method="post">
               <Button
                 type="submit"
-                leftIcon={<IconLogout size={18} />}
+                leftSection={<IconLogout size={18} />}
                 data-testid="profile-logout"
               >
                 Kirjaudu ulos

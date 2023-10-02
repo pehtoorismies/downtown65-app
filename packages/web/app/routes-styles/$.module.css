@@ -1,0 +1,14 @@
+.mobileImage {
+    /*[theme.fn.largerThan('sm')]: {*/
+    /*  display: 'none',*/
+    /*},*/
+    max-width: rem(300px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.control {
+    @media (max-width: $mantine-breakpoint-sm) {
+        width: 100%;
+    }
+}

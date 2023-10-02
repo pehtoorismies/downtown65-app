@@ -1,0 +1,61 @@
+.link {
+    /** TODO: was 3 now 3px **/
+    padding: 3px var(--mantine-spacing-sm);
+    text-decoration: none;
+    color: var(--mantine-color-black);
+    font-weight: 500;
+    font-size: var(--mantine-font-size-sm);
+
+    @media (max-width: $mantine-breakpoint-sm) {
+        /** TODO: was 42 **/
+        height: rem(42px);
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    /**
+    TODO: add below
+
+        ...theme.fn.hover({
+    backgroundColor:
+    theme.colorScheme === 'dark'
+    ? theme.colors.dark[6]
+: theme.colors.gray[0],
+}),
+},
+     */
+
+}
+
+/** TODO: fill in below */
+.linkActive {
+    color: red;
+}
+/*.linkActive {*/
+/*'&, &:hover': {*/
+/*    backgroundColor: theme.fn.variant({*/
+/*    variant: 'light',*/
+/*    color: theme.primaryColor,*/
+/*}).background,*/
+/*color: theme.fn.variant({ variant: 'light', color: theme.primaryColor })*/
+/*.color,*/
+/*},*/
+/*},*/
+
+
+
+.user {
+    color: var(--mantine-color-black);
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+    border-radius: var(--mantine-radius-sm);
+    transition: background-color 100ms ease;
+}
+
+.user:hover {
+    backgroundColor: var(--mantine-color-blue-1);
+}
+
+.userActive {
+    backgroundColor: var(--mantine-color-blue-1);
+}

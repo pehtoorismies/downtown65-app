@@ -115,7 +115,7 @@ export default function Login() {
 
   return (
     <AuthTemplate title="Kirjaudu">
-      <Text color="dimmed" size="sm" align="center" mt={5}>
+      <Text c="dimmed" size="sm" ta="center" mt={5}>
         Rekisteröitymiseen tarvitset seuran jäsenyyden ja
         liittymistunnuksen.&nbsp;
         <Anchor component={Link} to="/signup" data-testid="to-signup">
@@ -164,7 +164,7 @@ export default function Login() {
             label="Muista minut tällä laitteella. Kirjautuminen voimassa 365 päivää."
           />
 
-          <Group position="right" mt="md">
+          <Group justify="flex-end" mt="md">
             <Anchor
               component={Link}
               to="/forgot-password"

@@ -78,7 +78,7 @@ export default function GetEvents() {
       <>
         <EventsBreadcrumb />
         <Container data-testid="events">
-          <Title order={1} align="center">
+          <Title order={1} ta="center">
             Ei tulevia tapahtumia
           </Title>
           <Center>
@@ -87,12 +87,13 @@ export default function GetEvents() {
               to="/events/new"
               size="lg"
               mt="xs"
-              rightIcon={<IconSquarePlus size={30} />}
-              styles={() => ({
-                leftIcon: {
-                  marginRight: 15,
-                },
-              })}
+              rightSection={<IconSquarePlus size={30} />}
+              // TODO: fix below
+              // styles={{
+              //   leftIcon: {
+              //     marginRight: 15,
+              //   },
+              // }}
             >
               Luo uusi tapahtuma
             </Button>
@@ -108,12 +109,12 @@ export default function GetEvents() {
       <Container data-testid="events">
         <ParticipatingContext.Provider value={participationActions}>
           <SimpleGrid
-            cols={2}
-            breakpoints={[
-              { maxWidth: 980, cols: 2, spacing: 'md' },
-              { maxWidth: 755, cols: 2, spacing: 'sm' },
-              { maxWidth: 600, cols: 1, spacing: 'sm' },
-            ]}
+          // TODO: fix below
+          // breakpoints={[
+          //   { maxWidth: 980, cols: 2, spacing: 'md' },
+          //   { maxWidth: 755, cols: 2, spacing: 'sm' },
+          //   { maxWidth: 600, cols: 1, spacing: 'sm' },
+          // ]}
           >
             {eventItems.map((m) => {
               return <EventCard key={m.id} {...m} shadow="xs" />

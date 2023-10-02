@@ -40,7 +40,13 @@ import type { User } from '~/domain/user'
 
 const iconSize = 20
 
-const TITLES: Record<StepNumber, { title: string; isSkippable: boolean }> = {
+const TITLES: Record<
+  StepNumber,
+  {
+    title: string
+    isSkippable: boolean
+  }
+> = {
   [ActiveStep.STEP_EVENT_TYPE]: {
     title: 'Laji',
     isSkippable: false,
@@ -116,13 +122,13 @@ export const EditOrCreate: FC<Props> = ({
         closeButtonProps={{ 'aria-label': 'Close' }}
       >
         <Group
-          position="apart"
+          justify="space-between"
           mt={50}
           data-testid="confirmation-modal-content"
         >
           <Button
             onClick={() => setOpened(false)}
-            leftIcon={<IconCircleX size={18} />}
+            leftSection={<IconCircleX size={18} />}
             data-testid="modal-close"
           >
             Sulje
@@ -133,7 +139,7 @@ export const EditOrCreate: FC<Props> = ({
             value="delete"
             type="submit"
             color="red"
-            rightIcon={<IconCircleOff size={18} />}
+            rightSection={<IconCircleOff size={18} />}
             data-testid="modal-cancel-event-creation"
           >
             Keskeytä
@@ -186,11 +192,11 @@ export const EditOrCreate: FC<Props> = ({
         </Stepper>
         <Grid gutter="xs" my="sm" align="center">
           <Grid.Col span={3}>
-            <Group position="left">
+            <Group justify="flex-end">
               <Button
                 variant="outline"
                 color="orange"
-                compact
+                size="compact-sm"
                 onClick={() => setOpened(true)}
                 data-testid="cancel-event-creation-button"
               >
@@ -199,16 +205,16 @@ export const EditOrCreate: FC<Props> = ({
             </Group>
           </Grid.Col>
           <Grid.Col span={6}>
-            <Title align="center" order={1} size="h3">
+            <Title ta="center" order={1} size="h3">
               {TITLES[state.activeStep].title}
             </Title>
           </Grid.Col>
           <Grid.Col span={3}>
-            <Group position="right">
+            <Group justify="flex-end">
               <Button
                 data-testid="skip-step-button"
                 variant="outline"
-                compact
+                size="compact-sm"
                 disabled={!TITLES[state.activeStep].isSkippable}
                 onClick={() => {
                   dispatch({ kind: 'nextStep' })

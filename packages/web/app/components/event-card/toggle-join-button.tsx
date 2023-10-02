@@ -15,7 +15,8 @@ export const GotoLoginButton = () => (
   <Button
     component={Link}
     to="/login"
-    leftIcon={<IconLogin size={18} />}
+    leftSection={<IconLogin size={18} />}
+    // TODO: classNames?
     styles={() => ({
       root: {
         ...commonProperties,
@@ -41,12 +42,12 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
   if (isParticipating) {
     return (
       <Button
-        sx={{ width: 140 }}
+        style={{ width: 140 }}
         onClick={() => {
           actions.onLeave(eventId ?? 'no-event-id')
         }}
         loading={loading}
-        leftIcon={<IconHandOff size={18} />}
+        leftSection={<IconHandOff size={18} />}
         variant="gradient"
         gradient={Gradient.dtPink}
         styles={() => ({
@@ -67,12 +68,12 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
 
   return (
     <Button
-      sx={{ width: 140 }}
+      style={{ width: 140 }}
       onClick={() => {
         actions.onParticipate(eventId ?? 'no-event-id')
       }}
       loading={loading}
-      leftIcon={<IconHandStop size={18} />}
+      leftSection={<IconHandStop size={18} />}
       styles={() => ({
         root: {
           ...commonProperties,

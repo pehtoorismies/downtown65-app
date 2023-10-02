@@ -58,7 +58,7 @@ export default function ForgotPassword() {
 
   return (
     <AuthTemplate title="Salasana unohtunut">
-      <Text color="dimmed" size="sm" align="center">
+      <Text c="dimmed" size="sm" ta="center">
         Syötä sähköpostiosoitteesi saadaksesi sähköpostiisi ohjeet salasanan
         resetoimiseksi.
       </Text>
@@ -73,11 +73,11 @@ export default function ForgotPassword() {
             required
           />
           {actionData?.error && (
-            <Text size="sm" ml="xs" color="red">
+            <Text size="sm" ml="xs" c="red">
               {actionData.error}
             </Text>
           )}
-          <Group position="apart" mt="lg">
+          <Group justify="space-between" mt="lg">
             <Anchor
               component={Link}
               to="/login"

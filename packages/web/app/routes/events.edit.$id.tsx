@@ -200,12 +200,13 @@ export default function EditEvent() {
             onClick={() => dispatch({ kind: 'toPreview' })}
             disabled={!isValidStateToSave(eventState)}
             mt="xs"
-            rightIcon={<IconRocket size={18} />}
-            styles={() => ({
-              leftIcon: {
-                marginRight: 15,
-              },
-            })}
+            rightSection={<IconRocket size={18} />}
+            // TODO: fix below
+            // styles={() => ({
+            //   leftIcon: {
+            //     marginRight: 15,
+            //   },
+            // })}
           >
             Näytä esikatselu
           </Button>
