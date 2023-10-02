@@ -2,7 +2,6 @@
   "name": "@downtown65-app/web",
   "version": "0.0.1",
   "private": true,
-  "type": "module",
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
@@ -29,6 +28,7 @@
     "clsx": "2.0.0",
     "dayjs": "1.11.7",
     "graphql-client": "2.0.1",
+    "isbot": "latest",
     "jwt-decode": "3.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
