@@ -24,6 +24,7 @@ export default {
         APP_MODE: app.mode,
         APP_STAGE: app.stage,
       },
+      runtime: 'nodejs18.x',
       // these are needed for mjml library to work
       nodejs: {
         esbuild: {
