@@ -12,7 +12,7 @@ import {
 } from '@mantine/core'
 import type {
   ActionFunction,
-  LoaderFunction,
+  LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
@@ -21,7 +21,6 @@ import { IconLogout } from '@tabler/icons-react'
 import type { ChangeEventHandler } from 'react'
 import React, { useState } from 'react'
 import { ProfileBox } from '~/components/profile-box'
-import type { PrivateRoute } from '~/domain/private-route'
 import { getGqlSdk } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
@@ -70,16 +69,16 @@ export const action: ActionFunction = async ({ request }) => {
   )
 }
 
-interface LoaderData extends PrivateRoute {
-  name: string
-  email: string
-  preferences: {
-    subscribeWeeklyEmail: boolean
-    subscribeEventCreationEmail: boolean
-  }
-}
+// interface LoaderData extends PrivateRoute {
+//   name: string
+//   email: string
+//   preferences: {
+//     subscribeWeeklyEmail: boolean
+//     subscribeEventCreationEmail: boolean
+//   }
+// }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const pageLogger = logger.child({
     page: { path: 'profile', function: 'loader' },
   })
@@ -96,7 +95,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
   )
   // TODO: can user / loaded data be not in sync: yes
-  return json<LoaderData>({
+  return json({
     user: {
       nickname: me.nickname,
       id: me.id,
@@ -130,7 +129,7 @@ const BOX_SIZE = 'xs'
 export default function Profile() {
   const fetcher = useFetcher()
 
-  const { name, user, preferences, email } = useLoaderData<LoaderData>()
+  const { name, user, preferences, email } = useLoaderData<typeof loader>()
 
   const [emailSettings, setEmailSettings] = useState<UserPreferences>({
     weekly: preferences.subscribeWeeklyEmail,
@@ -155,7 +154,7 @@ export default function Profile() {
 
   return (
     <>
-      <Container fluid mt={75}>
+      <Container fluid mt="xs">
         <Breadcrumbs mb="xs">
           <Text data-testid="breadcrumbs-current">Oma profiili</Text>
         </Breadcrumbs>

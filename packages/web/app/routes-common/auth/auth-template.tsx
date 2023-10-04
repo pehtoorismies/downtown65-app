@@ -7,7 +7,7 @@ interface Props {
 
 export const AuthTemplate = ({ title, children }: PropsWithChildren<Props>) => {
   return (
-    <Container size={420} py="xl">
+    <Container size={420} py="sm">
       <Title
         ta="center"
         fw={900}
