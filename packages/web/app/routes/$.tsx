@@ -3,6 +3,7 @@ import {
   Container,
   Image,
   SimpleGrid,
+  Stack,
   Text,
   Title,
 } from '@mantine/core'
@@ -38,20 +39,7 @@ import { getAuthenticatedUser, getSession } from '~/session.server'
 //     },
 //   },
 //
-//   mobileImage: {
-//     [theme.fn.largerThan('sm')]: {
-//       display: 'none',
-//     },
-//     maxWidth: 300,
-//     marginLeft: 'auto',
-//     marginRight: 'auto',
-//   },
-//
-//   desktopImage: {
-//     [theme.fn.smallerThan('sm')]: {
-//       display: 'none',
-//     },
-//   },
+
 // }))
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -66,41 +54,23 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 const NotFound = () => {
   return (
-    <Container
-      styles={{
-        root: {
-          paddingTop: 20,
-          paddingBottom: 120,
-          paddingRight: 30,
-          paddingLeft: 30,
-        },
-      }}
-    >
-      <SimpleGrid
-        spacing={30}
-        cols={2}
-        // TODO: fix
-        // breakpoints={[{ maxWidth: 'sm', cols: 1, spacing: 40 }]}
-      >
-        <Image
-          src="/404.jpg"
-          className={classes.mobileImage}
-          // TODO: add caption
-          // caption="Your support contact"
-        />
+    <Container p="md">
+      <SimpleGrid spacing={30} cols={{ base: 1, sm: 2 }}>
+        <Stack align="center" gap="xs" hiddenFrom="sm">
+          <Image
+            src="/404.jpg"
+            style={{
+              maxWidth: 300,
+              margin: 'auto',
+            }}
+          />
+          <Text c="gray.7" size="sm" component="figcaption">
+            Your support contact
+          </Text>
+        </Stack>
+
         <div>
-          <Title
-            fw={900}
-            // TODO: below all
-            fs="34px"
-            // styles={{
-            //   marginBottom: theme.spacing.md,
-            //   fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-            //
-            //   // [theme.fn.smallerThan('sm')]: {
-            //   // fontSize: 32,
-            // }}
-          >
+          <Title fw={900} className={classes.title}>
             PUMMI
           </Title>
           <Text c="dimmed" size="lg">
@@ -121,12 +91,12 @@ const NotFound = () => {
             Etusivulle
           </Button>
         </div>
-        <Image
-          src="/404.jpg"
-          // className={classes.desktopImage}
-          // TODO: add caption
-          // caption="Your support contact"
-        />
+        <Stack align="center" gap="xs" visibleFrom="sm">
+          <Image src="/404.jpg" />
+          <Text c="gray.7" size="sm" component="figcaption">
+            Your support contact
+          </Text>
+        </Stack>
       </SimpleGrid>
     </Container>
   )
