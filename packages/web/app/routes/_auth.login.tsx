@@ -29,12 +29,6 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-// export interface ActionData {
-//   emailError?: string
-//   passwordError?: string
-//   generalError?: string
-// }
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   const pageLogger = logger.child({
     page: { path: 'login', function: 'action' },
@@ -54,7 +48,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
   }
 
-  if (typeof password !== 'string') {
+  if (typeof password !== 'string' || password.length === 0) {
     return json(
       { error: 'Salasana puuttuu', field: 'password' },
       { status: 400 }
@@ -143,19 +137,19 @@ export default function Login() {
             autoComplete="email"
             label="Sähköposti"
             placeholder="me@downtown65.com"
-            aria-invalid={actionData?.field === 'email' ? true : undefined}
-            aria-describedby="email-error"
             required
+            error={actionData?.field === 'email' ? actionData.error : undefined}
           />
           <PasswordInput
             id="password"
             name="password"
             label="Salasana"
             placeholder="Salasanasi"
-            aria-invalid={actionData?.field === 'password' ? true : undefined}
             required
             mt="md"
-            aria-describedby="password-error"
+            error={
+              actionData?.field === 'password' ? actionData.error : undefined
+            }
           />
           <Checkbox
             name="remember"
