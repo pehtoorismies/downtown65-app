@@ -2,14 +2,7 @@
 export default {
   ignoredRouteFiles: ['**/.*'],
   postcss: true,
-  serverDependenciesToBundle: [
-    /^date-fns.*/,
-    /^dayjs.*/,
-    /^@mantine\/dropzone.*/,
-    'react-dropzone',
-    '@mantine/core/styles.css',
-    '@mantine/tiptap/styles.css',
-  ],
+  serverDependenciesToBundle: [/^date-fns.*/, /^dayjs.*/],
   // serverModuleFormat: 'esm',
   // serverModuleFormat: "cjs",
   // appDirectory: "app",

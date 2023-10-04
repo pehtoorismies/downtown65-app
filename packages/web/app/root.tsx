@@ -2,8 +2,15 @@ import '@mantine/core/styles.css'
 import '@mantine/tiptap/styles.css'
 import {
   AppShell,
+  Avatar,
+  Burger,
+  Button,
   ColorSchemeScript,
+  Group,
   MantineProvider,
+  Menu,
+  Text,
+  UnstyledButton,
   createTheme,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
@@ -16,18 +23,20 @@ import type {
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
+  NavLink,
   Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
   useMatches,
 } from '@remix-run/react'
+import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react'
 import { useEffect } from 'react'
-import { HeaderLoggedIn } from '~/components/header-logged-in'
-import { HeaderLoggedOut } from '~/components/header-logged-out'
+import classes from './routes-styles/root.module.css'
 import type { User } from '~/domain/user'
 import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
@@ -149,6 +158,19 @@ export const links: LinksFunction = () => {
   ]
 }
 
+const navLinks = [
+  { id: 10, title: 'Tapahtumat', to: '/events' },
+  {
+    id: 30,
+    title: 'Luo uusi',
+    to: '/events/new',
+    testId: 'nav-create-new-event',
+  },
+  { id: 40, title: 'Jäsenet', to: '/members' },
+]
+
+const SIDE_COL_WIDTH = 130
+
 interface UserData {
   user?: User
 }
@@ -203,12 +225,144 @@ export default function App() {
               breakpoint: 'sm',
               collapsed: { desktop: true, mobile: !opened },
             }}
-            padding="md"
+            padding="xs"
           >
             <AppShell.Header>
-              {!user && <HeaderLoggedOut />}
-              {user && <HeaderLoggedIn user={user} />}
+              {user && (
+                <Group h="100%" px="md">
+                  <Burger
+                    opened={opened}
+                    onClick={toggle}
+                    hiddenFrom="sm"
+                    size="sm"
+                  />
+                  <Group gap={0} style={{ flex: 1 }} justify="space-between">
+                    <Group style={{ width: SIDE_COL_WIDTH }}>
+                      <Text
+                        style={{
+                          userSelect: 'none',
+                        }}
+                      >
+                        Dt65 Events
+                      </Text>
+                    </Group>
+                    <Group
+                      gap={5}
+                      visibleFrom="sm"
+                      justify="center"
+                      style={{
+                        flex: 1,
+                      }}
+                    >
+                      {navLinks.map(({ id, to, title, testId }) => (
+                        <NavLink
+                          key={id}
+                          // className={({ isActive, isPending }) =>
+                          //   isPending ? 'pending' : isActive ? 'active' : ''
+                          // }
+                          className={classes.control}
+                          to={to}
+                          // label={title}
+                          // active
+                          // end
+                          // to={to}
+                          // className={({ isActive }) => {
+                          //   return cx(classes.link, {
+                          //     [classes.linkActive]: isActive,
+                          //   })
+                          // }}
+                          data-testid={testId}
+                        >
+                          {title}
+                        </NavLink>
+                      ))}
+                    </Group>
+                    <Menu
+                      width={160}
+                      position="bottom-end"
+                      transitionProps={{ transition: 'pop-top-right' }}
+                    >
+                      <Menu.Target>
+                        <Group
+                          justify="flex-end"
+                          style={{
+                            width: SIDE_COL_WIDTH,
+                          }}
+                        >
+                          <Button
+                            variant="transparent"
+                            color="black"
+                            leftSection={
+                              <Avatar
+                                src={user.picture}
+                                alt={user.nickname}
+                                radius="xl"
+                                size={20}
+                              />
+                            }
+                            rightSection={
+                              <IconChevronDown size={12} stroke={1.5} />
+                            }
+                          >
+                            {user.nickname}
+                          </Button>
+                        </Group>
+                      </Menu.Target>
+                      <Menu.Dropdown>
+                        <Menu.Item
+                          component={Link}
+                          to="/profile"
+                          leftSection={<IconUser size={14} stroke={1.5} />}
+                        >
+                          Profiili
+                        </Menu.Item>
+                        <Menu.Item
+                          onClick={() => {
+                            // fetcher.submit(
+                            //   {},
+                            //   { action: '/logout', method: 'post' }
+                            // )
+                          }}
+                          leftSection={<IconLogout size={14} stroke={1.5} />}
+                        >
+                          Logout
+                        </Menu.Item>
+                      </Menu.Dropdown>
+                    </Menu>
+                  </Group>
+                </Group>
+              )}
+              {!user && (
+                <Group h="100%" px="md">
+                  <Group justify="space-between" style={{ flex: 1 }}>
+                    <Text style={{ userSelect: 'none' }}>Dt65 Events</Text>
+                    <Group ml="xl" gap={10} visibleFrom="sm">
+                      <Button
+                        component={Link}
+                        to="/login"
+                        variant="default"
+                        data-testid="button-to-login"
+                      >
+                        Kirjaudu
+                      </Button>
+                      <Button
+                        component={Link}
+                        to="/signup"
+                        data-testid="button-to-signup"
+                      >
+                        Rekisteröidy
+                      </Button>
+                    </Group>
+                  </Group>
+                </Group>
+              )}
             </AppShell.Header>
+            <AppShell.Navbar py="md" px={4}>
+              <UnstyledButton>Home</UnstyledButton>
+              <UnstyledButton>Blog</UnstyledButton>
+              <UnstyledButton>Contacts</UnstyledButton>
+              <UnstyledButton>Support</UnstyledButton>
+            </AppShell.Navbar>
             <AppShell.Main>
               <Notifications
                 position="top-center"
@@ -218,14 +372,6 @@ export default function App() {
               <Outlet />
             </AppShell.Main>
           </AppShell>
-          {/*<Layout user={user} stage={stage}>*/}
-          {/*  <Notifications*/}
-          {/*    position="top-center"*/}
-          {/*    zIndex={3000}*/}
-          {/*    containerWidth={300}*/}
-          {/*  />*/}
-          {/*  <Outlet />*/}
-          {/*</Layout>*/}
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
