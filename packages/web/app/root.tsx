@@ -10,6 +10,7 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import { Notifications, notifications } from '@mantine/notifications'
 // import { StylesPlaceholder } from '@mantine/remix'
+import { cssBundleHref } from '@remix-run/css-bundle'
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -118,6 +119,7 @@ export const meta: MetaFunction = () => [
 
 export const links: LinksFunction = () => {
   return [
+    ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
     {
       rel: 'apple-touch-icon',
       sizes: '180x180',
@@ -185,16 +187,16 @@ export default function App() {
   const [opened, { toggle }] = useDisclosure()
 
   return (
-    <MantineProvider theme={theme} defaultColorScheme="light">
-      <html lang="en">
-        <head>
-          <meta charSet="utf-8" />
-          <meta name="viewport" content="width=device-width,initial-scale=1" />
-          <Meta />
-          <Links />
-          <ColorSchemeScript />
-        </head>
-        <body>
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <Meta />
+        <Links />
+        <ColorSchemeScript />
+      </head>
+      <body>
+        <MantineProvider theme={theme} defaultColorScheme="light">
           <AppShell
             header={{ height: { base: 60, md: 70, lg: 80 } }}
             navbar={{
@@ -224,8 +226,8 @@ export default function App() {
           <ScrollRestoration />
           <Scripts />
           <LiveReload />
-        </body>
-      </html>
-    </MantineProvider>
+        </MantineProvider>
+      </body>
+    </html>
   )
 }
