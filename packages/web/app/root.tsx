@@ -35,6 +35,7 @@ import {
   useMatches,
 } from '@remix-run/react'
 import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react'
+import cx from 'clsx'
 import { useEffect } from 'react'
 import classes from './routes-styles/root.module.css'
 import type { User } from '~/domain/user'
@@ -257,10 +258,12 @@ export default function App() {
                       {navLinks.map(({ id, to, title, testId }) => (
                         <NavLink
                           key={id}
-                          // className={({ isActive, isPending }) =>
-                          //   isPending ? 'pending' : isActive ? 'active' : ''
-                          // }
-                          className={classes.control}
+                          className={({ isActive }) => {
+                            return cx(
+                              classes.control,
+                              isActive && classes.active
+                            )
+                          }}
                           to={to}
                           // label={title}
                           // active
@@ -272,6 +275,7 @@ export default function App() {
                           //   })
                           // }}
                           data-testid={testId}
+                          end
                         >
                           {title}
                         </NavLink>
