@@ -83,8 +83,8 @@ export default function Users() {
   const hasPagination = userCount > perPage
 
   const rows = users.map((u) => (
-    <tr key={u.id}>
-      <td>
+    <Table.Tr key={u.id}>
+      <Table.Td>
         <Anchor
           component={Link}
           to={`/members/${u.nickname}`}
@@ -92,9 +92,9 @@ export default function Users() {
         >
           {u.nickname}
         </Anchor>
-      </td>
-      <td data-testid="member-name">{u.name}</td>
-    </tr>
+      </Table.Td>
+      <Table.Td data-testid="member-name">{u.name}</Table.Td>
+    </Table.Tr>
   ))
 
   return (
@@ -122,14 +122,22 @@ export default function Users() {
             }}
           />
         )}
-        <Table striped withColumnBorders>
-          <thead>
-            <tr>
-              <th>Nick</th>
-              <th>Nimi</th>
-            </tr>
-          </thead>
-          <tbody>{rows}</tbody>
+        <Table
+          striped
+          withRowBorders
+          highlightOnHover
+          withTableBorder
+          withColumnBorders
+          horizontalSpacing="sm"
+          verticalSpacing="sm"
+        >
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>Nick</Table.Th>
+              <Table.Th>Nimi</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
         </Table>
         {hasPagination && (
           <Pagination
