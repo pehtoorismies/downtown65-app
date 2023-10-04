@@ -1,6 +1,5 @@
 import '@mantine/core/styles.css'
 import '@mantine/tiptap/styles.css'
-
 import {
   AppShell,
   ColorSchemeScript,
@@ -9,7 +8,6 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Notifications, notifications } from '@mantine/notifications'
-// import { StylesPlaceholder } from '@mantine/remix'
 import { cssBundleHref } from '@remix-run/css-bundle'
 import type {
   LinksFunction,
@@ -28,6 +26,8 @@ import {
   useMatches,
 } from '@remix-run/react'
 import { useEffect } from 'react'
+import { HeaderLoggedIn } from '~/components/header-logged-in'
+import { HeaderLoggedOut } from '~/components/header-logged-out'
 import type { User } from '~/domain/user'
 import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
@@ -52,19 +52,19 @@ const theme = createTheme({
     md: '1px 1px 3px rgba(0, 0, 0, .25)',
     xl: '5px 5px 3px rgba(0, 0, 0, .25)',
   },
-  components: {
-    Container: {
-      defaultProps: {
-        sizes: {
-          xs: 540,
-          sm: 720,
-          md: 960,
-          lg: 1140,
-          xl: 1320,
-        },
-      },
-    },
-  },
+  // components: {
+  //   Container: {
+  //     defaultProps: {
+  //       sizes: {
+  //         xs: 540,
+  //         sm: 720,
+  //         md: 960,
+  //         lg: 1140,
+  //         xl: 1320,
+  //       },
+  //     },
+  //   },
+  // },
   headings: {
     fontFamily: 'Roboto, sans-serif',
     sizes: {
@@ -156,12 +156,7 @@ interface UserData {
 export default function App() {
   const { stage, toastMessage } = useLoaderData<typeof loader>()
   const matches = useMatches()
-
-  const user = matches
-    .map((matches) => matches.data as UserData)
-    .filter(Boolean)
-    .map(({ user }: UserData) => user)
-    .find(Boolean)
+  const [opened, { toggle }] = useDisclosure()
 
   useEffect(() => {
     if (!toastMessage) {
@@ -184,7 +179,11 @@ export default function App() {
     }
   }, [toastMessage])
 
-  const [opened, { toggle }] = useDisclosure()
+  const user = matches
+    .map((matches) => matches.data as UserData)
+    .filter(Boolean)
+    .map(({ user }: UserData) => user)
+    .find(Boolean)
 
   return (
     <html lang="en">
@@ -200,12 +199,16 @@ export default function App() {
           <AppShell
             header={{ height: { base: 60, md: 70, lg: 80 } }}
             navbar={{
-              width: { base: 200, md: 300, lg: 400 },
+              width: 300,
               breakpoint: 'sm',
-              collapsed: { mobile: !opened },
+              collapsed: { desktop: true, mobile: !opened },
             }}
             padding="md"
           >
+            <AppShell.Header>
+              {!user && <HeaderLoggedOut />}
+              {user && <HeaderLoggedIn user={user} />}
+            </AppShell.Header>
             <AppShell.Main>
               <Notifications
                 position="top-center"
