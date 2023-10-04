@@ -1,3 +1,5 @@
+/** TODO: fix ligth - dark schema */
+
 .control {
     display: flex;
     justify-content: center;
@@ -7,10 +9,29 @@
     text-decoration: none;
     color: var(--mantine-color-black);
     font-size: var(--mantine-font-size-sm);
-    width: 120px;
-
 
     @mixin hover {
         background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
     }
+}
+
+.active {
+    background-color: var(--mantine-color-blue-light);
+    color: var(--mantine-color-blue-6);
+    @mixin hover {
+        background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+    }
+    /*
+
+
+    backgroundColor: theme.fn.variant({
+        variant: 'light',
+        color: theme.primaryColor,
+      }).background,
+      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor })
+        .color,
+    },
+     */
+
+
 }
