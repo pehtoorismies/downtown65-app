@@ -1,21 +1,3 @@
-import {
-  Avatar,
-  Box,
-  Burger,
-  Button,
-  Divider,
-  Drawer,
-  Group,
-  Menu,
-  Text,
-  UnstyledButton,
-} from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import { Form, Link, NavLink, useFetcher } from '@remix-run/react'
-import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react'
-import cx from 'clsx'
-import { useState } from 'react'
-import classes from './header.module.css'
 import type { User } from '~/domain/user'
 
 // const useStyles = createStyles((theme) => ({
@@ -99,125 +81,130 @@ const navLinks = [
 ]
 
 export const HeaderLoggedIn = ({ user }: Props) => {
-  const fetcher = useFetcher()
-  const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
-    useDisclosure(false)
-  const [userMenuOpened, setUserMenuOpened] = useState(false)
-  // const { classes, cx } = useStyles()
-
-  return (
-    <Box>
-      {/*<Header height={60} px="md" fixed>*/}
-      <Group justify="space-between" style={{ height: '100%' }}>
-        <Group>
-          <Burger
-            opened={drawerOpened}
-            onClick={toggleDrawer}
-            visibleFrom="sm"
-          />
-          <Text style={{ userSelect: 'none' }}>Dt65 Events</Text>
-        </Group>
-        <Group className={classes.hiddenMobile}>
-          {navLinks.map(({ id, to, title, testId }) => (
-            <NavLink
-              key={id}
-              end
-              to={to}
-              className={({ isActive }) => {
-                return cx(classes.link, {
-                  [classes.linkActive]: isActive,
-                })
-              }}
-              data-testid={testId}
-            >
-              {title}
-            </NavLink>
-          ))}
-        </Group>
-
-        <Menu
-          width={160}
-          position="bottom-end"
-          transitionProps={{ transition: 'pop-top-right' }}
-          onClose={() => setUserMenuOpened(false)}
-          onOpen={() => setUserMenuOpened(true)}
-        >
-          <Menu.Target>
-            <UnstyledButton
-              className={cx(classes.user, {
-                [classes.userActive]: userMenuOpened,
-              })}
-            >
-              <Group gap={7}>
-                <Avatar
-                  src={user.picture}
-                  alt={user.nickname}
-                  radius="xl"
-                  size={20}
-                />
-                <Text fw={500} size="sm" style={{ lineHeight: 1 }} mr={3}>
-                  {user.nickname}
-                </Text>
-                <IconChevronDown size={12} stroke={1.5} />
-              </Group>
-            </UnstyledButton>
-          </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Item
-              component={Link}
-              to="/profile"
-              rightSection={<IconUser size={14} stroke={1.5} />}
-            >
-              Profiili
-            </Menu.Item>
-            <Menu.Item
-              onClick={() => {
-                fetcher.submit({}, { action: '/logout', method: 'post' })
-              }}
-              rightSection={<IconLogout size={14} stroke={1.5} />}
-            >
-              Logout
-            </Menu.Item>
-          </Menu.Dropdown>
-        </Menu>
-      </Group>
-      {/*</Header>*/}
-
-      <Drawer
-        opened={drawerOpened}
-        onClose={closeDrawer}
-        size="100%"
-        padding="md"
-        title="Navigaatio"
-        hiddenFrom="sm"
-        zIndex={1_000_000}
-      >
-        <Divider my="sm" color="gray.1" />
-        {navLinks.map(({ id, to, title, testId }) => (
-          <Link
-            key={id}
-            to={to}
-            onClick={closeDrawer}
-            className={cx(classes.link, {
-              [classes.linkActive]: false,
-            })}
-            data-testid={testId}
-          >
-            {title}
-          </Link>
-        ))}
-        <Group grow pb="xl" px="md">
-          <Form action="/logout" method="post">
-            <Button
-              type="submit"
-              leftSection={<IconLogout size={18} />}
-              fullWidth
-            >
-              Kirjaudu ulos
-            </Button>
-          </Form>
-        </Group>
-      </Drawer>
-    </Box>
-  )
+  return 'moi'
 }
+
+//
+// export const HeaderLoggedIn = ({ user }: Props) => {
+//   const fetcher = useFetcher()
+//   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
+//     useDisclosure(false)
+//   const [userMenuOpened, setUserMenuOpened] = useState(false)
+//   // const { classes, cx } = useStyles()
+//
+//   return (
+//     <Box>
+//       {/*<Header height={60} px="md" fixed>*/}
+//       <Group justify="space-between" style={{ height: '100%' }}>
+//         <Group>
+//           <Burger
+//             opened={drawerOpened}
+//             onClick={toggleDrawer}
+//             visibleFrom="sm"
+//           />
+//           <Text style={{ userSelect: 'none' }}>Dt65 Events</Text>
+//         </Group>
+//         <Group className={classes.hiddenMobile}>
+//           {navLinks.map(({ id, to, title, testId }) => (
+//             <NavLink
+//               key={id}
+//               end
+//               to={to}
+//               className={({ isActive }) => {
+//                 return cx(classes.link, {
+//                   [classes.linkActive]: isActive,
+//                 })
+//               }}
+//               data-testid={testId}
+//             >
+//               {title}
+//             </NavLink>
+//           ))}
+//         </Group>
+//
+//         <Menu
+//           width={160}
+//           position="bottom-end"
+//           transitionProps={{ transition: 'pop-top-right' }}
+//           onClose={() => setUserMenuOpened(false)}
+//           onOpen={() => setUserMenuOpened(true)}
+//         >
+//           <Menu.Target>
+//             <UnstyledButton
+//               className={cx(classes.user, {
+//                 [classes.userActive]: userMenuOpened,
+//               })}
+//             >
+//               <Group gap={7}>
+//                 <Avatar
+//                   src={user.picture}
+//                   alt={user.nickname}
+//                   radius="xl"
+//                   size={20}
+//                 />
+//                 <Text fw={500} size="sm" style={{ lineHeight: 1 }} mr={3}>
+//                   {user.nickname}
+//                 </Text>
+//                 <IconChevronDown size={12} stroke={1.5} />
+//               </Group>
+//             </UnstyledButton>
+//           </Menu.Target>
+//           <Menu.Dropdown>
+//             <Menu.Item
+//               component={Link}
+//               to="/profile"
+//               rightSection={<IconUser size={14} stroke={1.5} />}
+//             >
+//               Profiili
+//             </Menu.Item>
+//             <Menu.Item
+//               onClick={() => {
+//                 fetcher.submit({}, { action: '/logout', method: 'post' })
+//               }}
+//               rightSection={<IconLogout size={14} stroke={1.5} />}
+//             >
+//               Logout
+//             </Menu.Item>
+//           </Menu.Dropdown>
+//         </Menu>
+//       </Group>
+//       {/*</Header>*/}
+//
+//       <Drawer
+//         opened={drawerOpened}
+//         onClose={closeDrawer}
+//         size="100%"
+//         padding="md"
+//         title="Navigaatio"
+//         hiddenFrom="sm"
+//         zIndex={1_000_000}
+//       >
+//         <Divider my="sm" color="gray.1" />
+//         {navLinks.map(({ id, to, title, testId }) => (
+//           <Link
+//             key={id}
+//             to={to}
+//             onClick={closeDrawer}
+//             className={cx(classes.link, {
+//               [classes.linkActive]: false,
+//             })}
+//             data-testid={testId}
+//           >
+//             {title}
+//           </Link>
+//         ))}
+//         <Group grow pb="xl" px="md">
+//           <Form action="/logout" method="post">
+//             <Button
+//               type="submit"
+//               leftSection={<IconLogout size={18} />}
+//               fullWidth
+//             >
+//               Kirjaudu ulos
+//             </Button>
+//           </Form>
+//         </Group>
+//       </Drawer>
+//     </Box>
+//   )
+// }
