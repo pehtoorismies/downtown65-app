@@ -10,13 +10,12 @@ interface Props {
 
 export const Participants = ({ me, participants }: Props) => {
   if (participants.length === 0) {
-    // TODO: position="center"
     return (
-      <Group align="center" p="md">
+      <Group justify="center" p="md">
         <ThemeIcon color="gray.4 " size="lg">
           <IconUserOff />
         </ThemeIcon>
-        <Text color="dimmed">Tapahtumassa ei osallistujia</Text>
+        <Text c="dimmed">Tapahtumassa ei osallistujia</Text>
       </Group>
     )
   }
@@ -35,8 +34,7 @@ export const Participants = ({ me, participants }: Props) => {
             m={2}
             radius="md"
             key={p.id}
-            // TODO: what? Styles API
-            // styles={{ inner: { textTransform: 'none' } }}
+            styles={{ label: { textTransform: 'none' } }}
             variant="gradient"
             style={{ paddingLeft: 0 }}
             gradient={gradient}
