@@ -66,22 +66,13 @@ export const EventCardRoot = ({
 
   const time = timeStart ? `klo ${timeStart}` : ''
 
-  // TODO: was className={cx(classes.card)}
-  // btw use import cx from 'clsx';
   return (
     <Card withBorder radius="md" className={classes.card} shadow={shadow}>
       <Card.Section>
         <BackgroundImage src={imageUrl}>
           <Box className={classes.grid}>
             <Box className={classes.gridTitle}>
-              <Text
-                ta="center"
-                c="#fff"
-                // TODO: was size={23}
-                size="23"
-                className={classes.gridTitleText}
-                data-testid="event-title"
-              >
+              <Text className={classes.gridTitleText} data-testid="event-title">
                 {title}
               </Text>
             </Box>
@@ -90,9 +81,7 @@ export const EventCardRoot = ({
               py="xs"
               px={4}
               className={classes.gridCreator}
-              // TODO: was styles={{ inner: { textTransform: 'none' } }}
-              // styles API
-              // styles={{ inner: { textTransform: 'none' } }}
+              styles={{ label: { textTransform: 'none' } }}
               size="md"
               radius="xs"
               variant="outline"
@@ -124,9 +113,6 @@ export const EventCardRoot = ({
                 py="xs"
                 px={4}
                 className={classes.gridRace}
-                // TODO: was styles={{ inner: { textTransform: 'none' } }}
-                // styles API
-                // styles={{ inner: { textTransform: 'none' } }}
                 size="md"
                 radius="xs"
                 variant="outline"
@@ -151,7 +137,7 @@ export const EventCardRoot = ({
           </Text>
         </Grid.Col>
         <Grid.Col span={5}>
-          <Group align="right">
+          <Group justify="end">
             {!me && <GotoLoginButton />}
             {me && (
               <ToggleJoinButton isParticipating={meAttending} eventId={id} />
