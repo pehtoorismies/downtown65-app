@@ -103,12 +103,9 @@ export default function GetEvents() {
       <Container data-testid="events">
         <ParticipatingContext.Provider value={participationActions}>
           <SimpleGrid
-          // TODO: fix below
-          // breakpoints={[
-          //   { maxWidth: 980, cols: 2, spacing: 'md' },
-          //   { maxWidth: 755, cols: 2, spacing: 'sm' },
-          //   { maxWidth: 600, cols: 1, spacing: 'sm' },
-          // ]}
+            cols={{ base: 1, sm: 2 }}
+            spacing={{ base: 10, sm: 'md', md: 'xl' }}
+            verticalSpacing={{ base: 'md', sm: 'xl' }}
           >
             {eventItems.map((m) => {
               return <EventCard key={m.id} {...m} shadow="xs" />
