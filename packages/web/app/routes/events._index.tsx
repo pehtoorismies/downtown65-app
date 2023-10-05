@@ -61,7 +61,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 const EventsBreadcrumb = () => {
   return (
-    <Container fluid py={12} mt="lg">
+    <Container fluid>
       <Breadcrumbs mb="xs">
         <Text data-testid="breadcrumbs-current">Tapahtumat</Text>
       </Breadcrumbs>
@@ -88,12 +88,6 @@ export default function GetEvents() {
               size="lg"
               mt="xs"
               rightSection={<IconSquarePlus size={30} />}
-              // TODO: fix below
-              // styles={{
-              //   leftIcon: {
-              //     marginRight: 15,
-              //   },
-              // }}
             >
               Luo uusi tapahtuma
             </Button>
