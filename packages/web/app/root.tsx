@@ -230,14 +230,19 @@ export default function App() {
           >
             <AppShell.Header>
               {user && (
-                <Group h="100%" px="md">
+                <Group h="100%" px="md" wrap="nowrap">
                   <Burger
                     opened={opened}
                     onClick={toggle}
                     hiddenFrom="sm"
                     size="sm"
                   />
-                  <Group gap={0} style={{ flex: 1 }} justify="space-between">
+                  <Group
+                    gap={0}
+                    style={{ flex: 1 }}
+                    justify="space-between"
+                    wrap="nowrap"
+                  >
                     <Group style={{ width: SIDE_COL_WIDTH }}>
                       <Text
                         style={{
