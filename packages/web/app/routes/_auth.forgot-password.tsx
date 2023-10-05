@@ -31,10 +31,6 @@ export const meta: MetaFunction = () => {
   ]
 }
 
-interface ActionData {
-  error: string
-}
-
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
   const email = formData.get('email')
@@ -71,12 +67,8 @@ export default function ForgotPassword() {
             label="Sähköpostiosoitteesi"
             placeholder="me@downtown65.com"
             required
+            error={actionData?.error ?? undefined}
           />
-          {actionData?.error && (
-            <Text size="sm" ml="xs" c="red">
-              {actionData.error}
-            </Text>
-          )}
           <Group justify="space-between" mt="lg">
             <Anchor
               component={Link}
