@@ -270,15 +270,6 @@ export default function App() {
                             )
                           }}
                           to={to}
-                          // label={title}
-                          // active
-                          // end
-                          // to={to}
-                          // className={({ isActive }) => {
-                          //   return cx(classes.link, {
-                          //     [classes.linkActive]: isActive,
-                          //   })
-                          // }}
                           data-testid={testId}
                           end
                         >
