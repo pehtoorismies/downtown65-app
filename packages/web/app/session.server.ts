@@ -10,6 +10,7 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { logger } from '~/util/logger.server'
 
 const REFRESH_TOKEN_KEY = 'refreshToken'
 const USER_KEY = 'user'
@@ -73,6 +74,7 @@ const fetchRenewTokens = async (
     }
   }
 
+  logger.error({ refreshError: rt.refreshError }, 'Error refreshing token')
   throw new Error(rt.refreshError)
 }
 
