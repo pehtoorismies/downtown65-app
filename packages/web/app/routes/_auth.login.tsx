@@ -172,7 +172,7 @@ export default function Login() {
             fullWidth
             mt="xl"
             type="submit"
-            loading={navigation.state === 'submitting'}
+            loading={navigation.state !== 'idle'}
             data-testid="submit-login"
           >
             Kirjaudu
