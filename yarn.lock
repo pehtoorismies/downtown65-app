@@ -3646,6 +3646,13 @@
     "@mantine/store" "7.1.2"
     react-transition-group "4.4.5"
 
+"@mantine/nprogress@7.1.2":
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/@mantine/nprogress/-/nprogress-7.1.2.tgz#803e6e3dd7c8c53ee886e137fac694fd0fc02a57"
+  integrity sha512-8FoYtCHACO37Hv9AeUpEzuGGvdt6kkX5RgLOhQq4wVXGMRe6t0Mx22wnbQwvUNByJIxrUcWQSeQjhp9cKsupNg==
+  dependencies:
+    "@mantine/store" "7.1.2"
+
 "@mantine/store@7.1.2":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@mantine/store/-/store-7.1.2.tgz#bbdf9b7e9f1f97978100868c1a705e4bc0ac7e74"

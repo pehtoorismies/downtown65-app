@@ -20,6 +20,7 @@
     "@mantine/ds": "7.1.2",
     "@mantine/hooks": "7.1.2",
     "@mantine/notifications": "7.1.2",
+    "@mantine/nprogress": "7.1.2",
     "@mantine/tiptap": "7.1.2",
     "@remix-run/css-bundle": "2.0.1",
     "@remix-run/node": "2.0.1",

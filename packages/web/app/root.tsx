@@ -2,6 +2,7 @@ import '@mantine/core/styles.css'
 import '@mantine/dates/styles.css'
 import '@mantine/notifications/styles.css'
 import '@mantine/tiptap/styles.css'
+import '@mantine/nprogress/styles.css'
 
 import {
   AppShell,
@@ -16,6 +17,7 @@ import {
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Notifications, notifications } from '@mantine/notifications'
+import { NavigationProgress, nprogress } from '@mantine/nprogress'
 import { cssBundleHref } from '@remix-run/css-bundle'
 import type {
   LinksFunction,
@@ -35,6 +37,7 @@ import {
   useFetcher,
   useLoaderData,
   useMatches,
+  useNavigation,
 } from '@remix-run/react'
 import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react'
 import cx from 'clsx'
@@ -142,7 +145,8 @@ export default function App() {
   // TODO: Add stage to root
   const { stage, toastMessage } = useLoaderData<typeof loader>()
   const matches = useMatches()
-  const [opened, { toggle }] = useDisclosure()
+  const navigation = useNavigation()
+  const [navigationOpened, { toggle, close }] = useDisclosure()
   const fetcher = useFetcher()
 
   useEffect(() => {
@@ -166,6 +170,14 @@ export default function App() {
     }
   }, [toastMessage])
 
+  useEffect(() => {
+    if (navigation.state === 'loading') {
+      nprogress.start()
+    } else {
+      nprogress.complete()
+    }
+  }, [navigation.state])
+
   const user = matches
     .map((matches) => matches.data as UserData)
     .filter(Boolean)
@@ -183,6 +195,7 @@ export default function App() {
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="light">
+          <NavigationProgress stepInterval={250} size={2} />
           <Notifications
             position="top-center"
             zIndex={3000}
@@ -193,7 +206,7 @@ export default function App() {
             navbar={{
               width: 300,
               breakpoint: 'sm',
-              collapsed: { desktop: true, mobile: !opened },
+              collapsed: { desktop: true, mobile: !navigationOpened },
             }}
             padding="xs"
           >
@@ -201,7 +214,7 @@ export default function App() {
               {user && (
                 <Group h="100%" px="md" wrap="nowrap">
                   <Burger
-                    opened={opened}
+                    opened={navigationOpened}
                     onClick={toggle}
                     hiddenFrom="sm"
                     size="sm"
@@ -326,15 +339,19 @@ export default function App() {
                 </Group>
               )}
             </AppShell.Header>
-            <AppShell.Navbar py="md" px={4}>
+            <AppShell.Navbar py="md" p="sm">
               {navLinks.map(({ id, to, title, testId }) => {
                 return (
                   <NavLink
                     key={id}
                     className={({ isActive }) => {
-                      return cx(classes.control, isActive && classes.active)
+                      return cx(
+                        classes.controlMobile,
+                        isActive && classes.active
+                      )
                     }}
                     to={to}
+                    onClick={close}
                     data-testid={testId}
                     end
                   >
