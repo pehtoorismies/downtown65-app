@@ -11,7 +11,7 @@
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx|app/gql/types.gen.ts|remix.env.d.ts'",
-    "e2e": "playwright test"
+    "e2e": "playwright test "
   },
   "dependencies": {
     "@mantine/core": "7.1.2",
@@ -44,7 +44,7 @@
   "devDependencies": {
     "@graphql-codegen/typescript-graphql-request": "4.5.8",
     "@ngneat/falso": "6.4.0",
-    "@playwright/test": "1.30.0",
+    "@playwright/test": "1.38.1",
     "@remix-run/dev": "2.0.1",
     "@remix-run/eslint-config": "2.0.1",
     "@serverless-stack/static-site-env": "1.18.4",
