@@ -1,5 +1,5 @@
-import format from 'date-fns/format'
-import fi from 'date-fns/locale/fi'
+import { format } from 'date-fns'
+import { fi } from 'date-fns/locale'
 import type { EventState } from './event-state'
 import { EventCardExtended } from '~/components/event-card/event-card-extended'
 import type { User } from '~/domain/user'
