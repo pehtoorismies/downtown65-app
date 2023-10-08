@@ -1,15 +1,14 @@
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
+import dotenv from 'dotenv'
 
-// eslint-disable-next-line unicorn/prefer-module
-require('dotenv').config()
+dotenv.config()
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-  // eslint-disable-next-line unicorn/prefer-module
-  globalSetup: require.resolve('./e2e/global-setup'),
+  globalSetup: './e2e/global-setup',
   testDir: './e2e',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
