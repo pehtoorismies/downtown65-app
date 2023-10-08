@@ -1,6 +1,8 @@
 import '@mantine/core/styles.css'
-import '@mantine/tiptap/styles.css'
 import '@mantine/dates/styles.css'
+import '@mantine/notifications/styles.css'
+import '@mantine/tiptap/styles.css'
+
 import {
   AppShell,
   Avatar,
@@ -31,6 +33,7 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useFetcher,
   useLoaderData,
   useMatches,
 } from '@remix-run/react'
@@ -137,9 +140,11 @@ interface UserData {
 }
 
 export default function App() {
+  // TODO: Add stage to root
   const { stage, toastMessage } = useLoaderData<typeof loader>()
   const matches = useMatches()
   const [opened, { toggle }] = useDisclosure()
+  const fetcher = useFetcher()
 
   useEffect(() => {
     if (!toastMessage) {
@@ -179,6 +184,11 @@ export default function App() {
       </head>
       <body>
         <MantineProvider theme={theme} defaultColorScheme="light">
+          <Notifications
+            position="top-center"
+            zIndex={3000}
+            containerWidth={300}
+          />
           <AppShell
             header={{ height: { base: 60, md: 70, lg: 80 } }}
             navbar={{
@@ -278,10 +288,10 @@ export default function App() {
                         </Menu.Item>
                         <Menu.Item
                           onClick={() => {
-                            // fetcher.submit(
-                            //   {},
-                            //   { action: '/logout', method: 'post' }
-                            // )
+                            fetcher.submit(
+                              {},
+                              { action: '/logout', method: 'post' }
+                            )
                           }}
                           leftSection={<IconLogout size={14} stroke={1.5} />}
                         >
@@ -318,17 +328,13 @@ export default function App() {
               )}
             </AppShell.Header>
             <AppShell.Navbar py="md" px={4}>
+              {/* TODO: Mobile menu*/}
               <UnstyledButton>Home</UnstyledButton>
               <UnstyledButton>Blog</UnstyledButton>
               <UnstyledButton>Contacts</UnstyledButton>
               <UnstyledButton>Support</UnstyledButton>
             </AppShell.Navbar>
             <AppShell.Main>
-              <Notifications
-                position="top-center"
-                zIndex={3000}
-                containerWidth={300}
-              />
               <Outlet />
             </AppShell.Main>
           </AppShell>
