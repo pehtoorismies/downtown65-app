@@ -72,12 +72,31 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [
     {
       title: eventItem.title,
-      'og:type': 'website',
-      'og:url': `${origin}${location.pathname}`,
-      'og:title': `${eventItem.title}`,
-      'og:description': `${eventItem.dateStart} - ${eventItem.subtitle}`,
-      'og:image': `${origin}${typeData.imageUrl}`,
-      'og:image:type': 'image/jpg',
+    },
+    {
+      property: 'og:type',
+      content: 'website',
+    },
+
+    {
+      property: 'og:url',
+      content: `${origin}${location.pathname}`,
+    },
+    {
+      property: 'og:title',
+      content: `${eventItem.title}`,
+    },
+    {
+      property: 'og:description',
+      content: `${eventItem.dateStart} - ${eventItem.subtitle}`,
+    },
+    {
+      property: 'og:image',
+      content: `${origin}${typeData.imageUrl}`,
+    },
+    {
+      property: 'og:image:type',
+      content: 'image/jpg',
     },
   ]
 }
