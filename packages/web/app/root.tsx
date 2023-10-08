@@ -202,6 +202,7 @@ export default function App() {
             zIndex={3000}
             containerWidth={300}
           />
+
           <AppShell
             header={{ height: { base: 60, md: 70, lg: 80 } }}
             navbar={{
@@ -212,6 +213,9 @@ export default function App() {
             padding="xs"
           >
             <AppShell.Header>
+              {stage !== 'production' && (
+                <Text className={classes.stage}>{stage}</Text>
+              )}
               {user && (
                 <Group h="100%" px="md" wrap="nowrap">
                   <Burger
@@ -249,6 +253,7 @@ export default function App() {
                           className={({ isActive }) => {
                             return cx(
                               classes.control,
+                              classes.controlDesktop,
                               isActive && classes.active
                             )
                           }}
@@ -347,6 +352,7 @@ export default function App() {
                     key={id}
                     className={({ isActive }) => {
                       return cx(
+                        classes.control,
                         classes.controlMobile,
                         isActive && classes.active
                       )
