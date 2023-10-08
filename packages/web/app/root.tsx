@@ -13,7 +13,6 @@ import {
   MantineProvider,
   Menu,
   Text,
-  UnstyledButton,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Notifications, notifications } from '@mantine/notifications'
@@ -328,11 +327,21 @@ export default function App() {
               )}
             </AppShell.Header>
             <AppShell.Navbar py="md" px={4}>
-              {/* TODO: Mobile menu*/}
-              <UnstyledButton>Home</UnstyledButton>
-              <UnstyledButton>Blog</UnstyledButton>
-              <UnstyledButton>Contacts</UnstyledButton>
-              <UnstyledButton>Support</UnstyledButton>
+              {navLinks.map(({ id, to, title, testId }) => {
+                return (
+                  <NavLink
+                    key={id}
+                    className={({ isActive }) => {
+                      return cx(classes.control, isActive && classes.active)
+                    }}
+                    to={to}
+                    data-testid={testId}
+                    end
+                  >
+                    {title}
+                  </NavLink>
+                )
+              })}
             </AppShell.Navbar>
             <AppShell.Main>
               <Outlet />
