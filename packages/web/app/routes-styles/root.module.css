@@ -1,7 +1,6 @@
 /** TODO: fix ligth - dark schema */
 
 .control {
-    display: flex;
     justify-content: center;
     padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
     border-radius: var(--mantine-radius-md);
@@ -36,18 +35,25 @@
 
 }
 
+.controlDesktop {
+    display: flex;
+}
 
 .controlMobile {
     display: block;
-    justify-content: center;
-    padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
-    border-radius: var(--mantine-radius-md);
-    font-weight: 500;
-    text-decoration: none;
-    color: var(--mantine-color-black);
-    font-size: var(--mantine-font-size-sm);
-
-    @mixin hover {
-        background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
-    }
 }
+
+.stage {
+    background-color: var(--mantine-color-cyan-3);
+    position: fixed;
+    font-size: rem(12);
+    padding: 2px;
+    bottom: 0;
+    right: 0;
+    text-align: center;
+    zIndex: 19999;
+    userSelect: none;
+    width: 150px;
+    opacity: 0.8;
+}
+
