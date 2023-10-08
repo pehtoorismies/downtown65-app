@@ -26,6 +26,7 @@ import type {
 } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import {
+  Form,
   Link,
   Links,
   LiveReload,
@@ -157,11 +158,11 @@ export default function App() {
 
     switch (type) {
       case 'success': {
-        notifications.show({ message, color: 'green', autoClose: 2500 })
+        notifications.show({ message, color: 'green', autoClose: 1500 })
         break
       }
       case 'error': {
-        notifications.show({ message, color: 'red', autoClose: 2500 })
+        notifications.show({ message, color: 'red', autoClose: 1500 })
         break
       }
       default: {
@@ -197,7 +198,7 @@ export default function App() {
         <MantineProvider theme={theme} defaultColorScheme="light">
           <NavigationProgress stepInterval={250} size={2} />
           <Notifications
-            position="top-center"
+            position="top-right"
             zIndex={3000}
             containerWidth={300}
           />
@@ -359,6 +360,18 @@ export default function App() {
                   </NavLink>
                 )
               })}
+              <Group justify="center" grow pb="xl" px="md">
+                <Form action="/logout" method="post">
+                  <Button
+                    type="submit"
+                    onClick={close}
+                    leftSection={<IconLogout size={18} />}
+                    fullWidth
+                  >
+                    Kirjaudu ulos
+                  </Button>
+                </Form>
+              </Group>
             </AppShell.Navbar>
             <AppShell.Main>
               <Outlet />
