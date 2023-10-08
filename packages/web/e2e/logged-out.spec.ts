@@ -8,7 +8,7 @@ import {
   randUser,
 } from '@ngneat/falso'
 import { expect, test } from '@playwright/test'
-import format from 'date-fns/format'
+import { format } from 'date-fns'
 import { EventPage } from './page-objects/event-page'
 import { LoginPage } from './page-objects/login-page'
 import { NewEventPage } from './page-objects/new-event-page'

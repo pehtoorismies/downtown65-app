@@ -335,7 +335,7 @@ export default function GetEvent() {
   )
 }
 
-export const CatchBoundary = () => {
+export const ErrorBoundary = () => {
   const error = useRouteError()
 
   if (!isRouteErrorResponse(error)) {
