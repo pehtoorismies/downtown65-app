@@ -50,7 +50,7 @@ export class NewEventPage extends EventPage {
     await this.page.getByTestId(`button-${eventType}`).click()
   }
 
-  async eventTypeSelected(eventType: EventType) {
+  eventTypeSelected(eventType: EventType) {
     expect(this.page.getByTestId(`button-${eventType}-selected`)).toBeDefined()
   }
 
