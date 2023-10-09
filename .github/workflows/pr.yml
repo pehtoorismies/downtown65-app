@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  PR_NAME: pr-${{ github.event.pull_request.id }}
+  STAGE_TO_USE: pr-${{ github.event.pull_request.id }}
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_DEFAULT_REGION: eu-north-1
@@ -24,8 +24,8 @@ jobs:
     steps:
       - name: Print stage
         run: |
-          echo Stage is $PR_NAME
-          echo to remove: sst remove --stage $PR_NAME
+          echo Stage is $STAGE_TO_USE
+          echo to remove: sst remove --stage $STAGE_TO_USE
   #  - name: restore lerna
   #    uses: actions/cache@v3
   #    with:
@@ -44,11 +44,14 @@ jobs:
         run: yarn install --immutable --immutable-cache
       - name: Set default common sst secrets
         run: |
-          npx sst secrets --stage $PR_NAME set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
-          npx sst secrets --stage $PR_NAME set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+          npx sst secrets --stage $STAGE_TO_USE set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
+          npx sst secrets --stage $STAGE_TO_USE set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+      - name: Write stage to .sst/stage
+        run: |
+          echo $STAGE_TO_USE > .sst/stage
       - name: Build
         run: |
-          npx sst build --stage $PR_NAME
+          npx sst build
       - uses: actions/cache@v3
         id: restore-build
         with:
@@ -92,8 +95,7 @@ jobs:
           key: ${{ github.sha }}
       - name: Deploy infra
         run: |
-          ls -la .sst
-          npx sst deploy --stage $PR_NAME
+          npx sst deploy
   unit_test:
     needs: [ "deploy" ]
     runs-on: ubuntu-latest
@@ -105,7 +107,8 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
       - name: Unit test
-        run: npx sst bind --stage $PR_NAME -- vitest run
+        run: |
+          yarn test
   playwright:
     needs: [ "deploy" ]
     timeout-minutes: 60
@@ -128,13 +131,13 @@ jobs:
             ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright Browsers
-        working-directory: ./packages/frontend
+        working-directory: ./packages/web
         run: yarn playwright install --with-deps
       - name: Run Playwright tests
-        working-directory: ./packages/frontend
+        working-directory: ./packages/web
         run: yarn playwright test
         env:
-          BASE_URL: https://${{ env.PR_NAME }}.downtown65.events
+          BASE_URL: https://${{ env.STAGE_TO_USE }}.downtown65.events
           USER_EMAIL: ${{ vars.TEST_USER_EMAIL }}
           USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
           USER_NICK: ${{ vars.TEST_USER_NICK }}
