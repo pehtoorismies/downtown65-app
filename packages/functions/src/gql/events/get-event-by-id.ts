@@ -8,6 +8,6 @@ import * as Event from '../core/event'
 export const getEventById: AppSyncResolverHandler<
   QueryEventArguments,
   Dt65Event | null
-> = async (event) => {
+> = (event) => {
   return Event.getById(event.arguments.eventId)
 }
