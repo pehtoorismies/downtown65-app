@@ -1,5 +1,5 @@
 import { redirect } from '@remix-run/node'
 
-export const loader = async () => {
+export const loader = () => {
   return redirect('/events')
 }
