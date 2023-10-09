@@ -157,8 +157,13 @@ export class NewEventPage extends EventPage {
 
     await this.page.getByTestId('next-button').click()
     await this.page.getByTestId('step-preview').click()
-    await this.page.getByTestId('next-button').click()
-    await this.page.waitForNavigation()
+    await this.page.getByRole('button', { name: 'Luo tapahtuma' }).click()
+
+    await expect(
+      this.page.getByRole('button', { name: 'Poista tapahtuma' })
+    ).toBeVisible()
+
+    await expect(this.page.getByRole('link', { name: 'Muokkaa' })).toBeVisible()
 
     const eventUrl = this.page.url()
 

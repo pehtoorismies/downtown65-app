@@ -61,9 +61,7 @@ test.describe('Logged out users', () => {
       email,
       password: 'somepassword',
     })
-    const error = await page
-      .getByRole('alert')
-      .getByText('Virhe kirjautumisessa')
+    const error = page.getByRole('alert').getByText('Virhe kirjautumisessa')
     await expect(error).toBeVisible()
   })
 
