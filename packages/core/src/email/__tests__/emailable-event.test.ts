@@ -51,7 +51,7 @@ const dynamoRecord2 = {
 }
 
 describe('EmailableEvent parse', () => {
-  it('when no time given', async () => {
+  it('when no time given', () => {
     const {
       date,
       description,
@@ -70,7 +70,7 @@ describe('EmailableEvent parse', () => {
     expect(title).toBe('Some title')
   })
 
-  it('when no description given', async () => {
+  it('when no description given', () => {
     const {
       date,
       description,
