@@ -12,13 +12,13 @@ test.describe('Members page', () => {
   test('should navigate to member profile', async ({ page }) => {
     await page.goto('/members')
     await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
-    const memberNick = await page.getByTestId('member-nick').first()
-    const memberName = await page.getByTestId('member-name').first()
+    const memberNick = page.getByTestId('member-nick').first()
+    const memberName = page.getByTestId('member-name').first()
     const nickname = await memberNick.textContent()
     const name = await memberName.textContent()
 
-    await expect(nickname).toBeDefined()
-    await expect(name).toBeDefined()
+    expect(nickname).toBeDefined()
+    expect(name).toBeDefined()
 
     invariant(nickname, 'Fail')
     invariant(name, 'Fail')
@@ -45,7 +45,8 @@ test.describe('Members page', () => {
     await expect(page.getByTestId('breadcrumbs-current')).toHaveText('Jäsenet')
     const memberNick = await page.getByTestId('member-nick').first()
     const nickname = await memberNick.textContent()
-    await expect(nickname).toBeDefined()
+
+    expect(nickname).toBeDefined()
     invariant(nickname, 'Fail')
     await memberNick.click()
 
