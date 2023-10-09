@@ -369,6 +369,7 @@ export default function App() {
               <Group justify="center" grow pb="xl" px="md">
                 <Form action="/logout" method="post">
                   <Button
+                    my="md"
                     type="submit"
                     onClick={close}
                     leftSection={<IconLogout size={18} />}
