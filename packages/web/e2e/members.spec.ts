@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant'
 test.describe('Members page', () => {
   test('should navigate to members', async ({ page }) => {
     await page.goto('/events')
-    await page.getByRole('link', { name: 'Jäsenet' }).click()
+    await page.locator('header').getByRole('link', { name: 'Jäsenet' }).click()
     await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
     await expect(page.getByText(/^Jäseniä yhteensä: \d+$/)).toBeVisible()
   })
