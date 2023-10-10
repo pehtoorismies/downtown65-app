@@ -90,7 +90,8 @@ const fetchRenewTokens = async (
   }
 
   logger.error({ refreshError: rt.refreshError }, 'Error refreshing token')
-  throw new Error(rt.refreshError)
+  // TODO: fix
+  throw new Error(rt.refreshError ?? undefined)
 }
 
 type Values = {

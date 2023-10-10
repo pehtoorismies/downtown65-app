@@ -1,5 +1,5 @@
 import type {
-  LoginPayload,
+  LoginResponse,
   MutationLoginArgs,
 } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
@@ -19,7 +19,7 @@ const auth0 = getClient()
 
 export const login: AppSyncResolverHandler<
   MutationLoginArgs,
-  LoginPayload
+  LoginResponse
 > = async (event) => {
   try {
     const auth0Response = await auth0.passwordGrant({
@@ -37,12 +37,11 @@ export const login: AppSyncResolverHandler<
     const tokens = Auth0Response.parse(auth0Response)
 
     return {
-      tokens: {
-        accessToken: tokens.access_token,
-        idToken: tokens.id_token,
-        expiresIn: tokens.expires_in,
-        refreshToken: tokens.refresh_token,
-      },
+      __typename: 'Tokens',
+      accessToken: tokens.access_token,
+      idToken: tokens.id_token,
+      expiresIn: tokens.expires_in,
+      refreshToken: tokens.refresh_token,
     }
   } catch (error: unknown) {
     console.error(JSON.stringify(error))
@@ -52,11 +51,10 @@ export const login: AppSyncResolverHandler<
     const errorMessage = ErrorMessage.parse(message)
 
     return {
-      loginError: {
-        message: errorMessage.error_description,
-        path: 'input/email',
-        code: errorMessage.error,
-      },
+      __typename: 'LoginError',
+      message: errorMessage.error_description,
+      path: 'input/email',
+      code: errorMessage.error,
     }
   }
 }

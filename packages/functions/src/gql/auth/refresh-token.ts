@@ -29,7 +29,9 @@ export const refreshToken: AppSyncResolverHandler<
     const tokens = RefreshResponse.parse(response)
 
     return {
+      __typename: 'RefreshPayload',
       tokens: {
+        __typename: 'RefreshTokensPayload',
         accessToken: tokens.access_token,
         idToken: tokens.id_token,
         expiresIn: tokens.expires_in,
@@ -42,6 +44,7 @@ export const refreshToken: AppSyncResolverHandler<
     const errorMessage = ErrorMessage.parse(message)
 
     return {
+      __typename: 'RefreshPayload',
       refreshError: errorMessage.error_description,
     }
   }

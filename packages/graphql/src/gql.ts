@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as types from './graphql'
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 
 /**
  * Map of all GraphQL operations in the project.
@@ -15,7 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
   '\n  mutation ForgotPassword($email: String!) {\n    forgotPassword(email: $email)\n  }\n':
     types.ForgotPasswordDocument,
-  '\n  mutation Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      tokens {\n        accessToken\n        idToken\n        refreshToken\n      }\n      loginError {\n        message\n        path\n        code\n      }\n    }\n  }\n':
+  '\n  mutation Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    path\n    code\n  }\n':
     types.LoginDocument,
   '\n  mutation Signup(\n    $name: String!\n    $email: String!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      user {\n        id\n      }\n      errors {\n        path\n        message\n      }\n    }\n  }\n':
     types.SignupDocument,
@@ -63,8 +63,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      tokens {\n        accessToken\n        idToken\n        refreshToken\n      }\n      loginError {\n        message\n        path\n        code\n      }\n    }\n  }\n'
-): (typeof documents)['\n  mutation Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      tokens {\n        accessToken\n        idToken\n        refreshToken\n      }\n      loginError {\n        message\n        path\n        code\n      }\n    }\n  }\n']
+  source: '\n  mutation Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    path\n    code\n  }\n'
+): (typeof documents)['\n  mutation Login($email: String!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    path\n    code\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

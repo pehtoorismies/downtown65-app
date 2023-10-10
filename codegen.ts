@@ -6,6 +6,26 @@ const config: CodegenConfig = {
   generates: {
     './packages/graphql/src/': {
       preset: 'client',
+      presetConfig: {
+        fragmentMasking: false,
+      },
+      config: {
+        // dedupeFragments: false,
+        useTypeImports: true,
+        nonOptionalTypename: true,
+        defaultScalarType: 'unknown',
+        // avoidOptionals: true,
+        // avoidOptionals: {
+        //   field: true,
+        //   inputValue: false,
+        //   object: true,
+        //   defaultValue: true,
+        // },
+        // maybeValue: 'T | null | undefined',
+        scalars: {
+          AWSDate: 'string',
+        },
+      },
     },
   },
   hooks: { afterOneFileWrite: ['prettier --write'] },
