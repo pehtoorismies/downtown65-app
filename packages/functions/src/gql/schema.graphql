@@ -109,12 +109,7 @@ input CreateEventInput {
     type: EventType!
 }
 
-type AuthPayload @aws_api_key {
-    accessToken: String!
-    expiresIn: Int!
-    idToken: String!
-    refreshToken: String!
-}
+
 
 type Preferences {
     subscribeEventCreationEmail: Boolean!
@@ -142,16 +137,20 @@ interface Error {
     code: String!
 }
 
+type Tokens @aws_api_key {
+    accessToken: String!
+    expiresIn: Int!
+    idToken: String!
+    refreshToken: String!
+}
+
 type LoginError implements Error @aws_api_key {
     message: String!
     path: String!
     code: String!
 }
 
-type LoginPayload @aws_api_key {
-    tokens: AuthPayload
-    loginError: LoginError
-}
+union LoginResponse = Tokens | LoginError
 
 type RefreshTokensPayload @aws_api_key {
     accessToken: String!
@@ -236,7 +235,7 @@ type Mutation {
     login(
         email: String!
         password: String!
-    ): LoginPayload! @aws_api_key
+    ): LoginResponse! @aws_api_key
 
     signup(input: SignupInput!): SignupPayload! @aws_api_key
 

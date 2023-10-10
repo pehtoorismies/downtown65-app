@@ -1,3 +1,4 @@
+import { assertUnreachable } from '@downtown65-app/core/assert-unreachable'
 import { graphql } from '@downtown65-app/graphql/gql'
 import { LoginDocument } from '@downtown65-app/graphql/graphql'
 import {
@@ -15,9 +16,10 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
+import * as R from 'remeda'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import { AuthTemplate } from '~/routes-common/auth/auth-template'
-import { Tokens, createUserSession } from '~/session.server'
+import { createUserSession } from '~/session.server'
 import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
 
@@ -26,17 +28,20 @@ export { loader } from '~/routes-common/auth/loader'
 const GglIgnored = graphql(`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
-      tokens {
-        accessToken
-        idToken
-        refreshToken
-      }
-      loginError {
-        message
-        path
-        code
-      }
+      __typename
+      ...TokensFragment
+      ...ErrorFragment
     }
+  }
+  fragment TokensFragment on Tokens {
+    accessToken
+    idToken
+    refreshToken
+  }
+  fragment ErrorFragment on LoginError {
+    message
+    path
+    code
   }
 `)
 
@@ -74,53 +79,62 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     )
   }
 
-  try {
-    const { login } = await gqlClient.request(
-      LoginDocument,
-      { email, password },
-      PUBLIC_AUTH_HEADERS
-    )
+  const { login } = await gqlClient.request(
+    LoginDocument,
+    { email, password },
+    PUBLIC_AUTH_HEADERS
+  )
 
-    if (login.loginError && login.loginError.code === 'invalid_grant') {
-      pageLogger.info(
+  switch (login.__typename) {
+    case 'Tokens': {
+      const tokens = R.omit(login, ['__typename'])
+
+      pageLogger.debug(
         {
-          error: login.loginError,
           email,
         },
-        'Login error'
+        'Successful login'
       )
-      return json(
-        { error: 'Email or password is invalid', field: 'general' },
-        { status: 400 }
-      )
+
+      return createUserSession({
+        request,
+        tokens,
+        redirectTo: '/events',
+        rememberMe: remember === 'remember',
+      })
     }
-
-    // TODO: use discrimination
-    const tokens = Tokens.parse(login.tokens)
-
-    pageLogger.debug(
-      {
-        email,
-      },
-      'Successful login'
-    )
-
-    return createUserSession({
-      request,
-      tokens,
-      redirectTo: '/events',
-      rememberMe: remember === 'remember',
-    })
-  } catch (error) {
-    pageLogger.error(
-      {
-        error,
-        email,
-      },
-      'Unable login user'
-    )
-    return json({ error: 'Server error', field: 'general' }, { status: 500 })
+    case 'LoginError': {
+      const error = R.omit(login, ['__typename'])
+      if (error.code === 'invalid_grant') {
+        pageLogger.info(
+          {
+            error,
+            email,
+          },
+          'Login error'
+        )
+        return json(
+          { error: 'Email or password is invalid', field: 'general' },
+          { status: 400 }
+        )
+      } else {
+        pageLogger.error(
+          {
+            error,
+            email,
+          },
+          'Unable login user'
+        )
+        return json(
+          { error: 'Server error', field: 'general' },
+          { status: 500 }
+        )
+      }
+    }
   }
+  // make sure switch case is exhaustive
+  const { __typename } = login
+  assertUnreachable(__typename)
 }
 
 export default function Login() {

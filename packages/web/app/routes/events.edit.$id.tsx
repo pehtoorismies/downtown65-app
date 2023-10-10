@@ -24,7 +24,7 @@ import { IconRocket } from '@tabler/icons-react'
 import { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import type { Context } from '~/contexts/participating-context'
-import { getPublicAuthHeaders, gqlClient } from '~/gql/get-gql-client.server'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -68,7 +68,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     {
       eventId: params.id,
     },
-    getPublicAuthHeaders()
+    PUBLIC_AUTH_HEADERS
   )
 
   if (!event) {

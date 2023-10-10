@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -27,15 +27,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean }
   Int: { input: number; output: number }
   Float: { input: number; output: number }
-  AWSDate: { input: any; output: any }
-}
-
-export type AuthPayload = {
-  __typename?: 'AuthPayload'
-  accessToken: Scalars['String']['output']
-  expiresIn: Scalars['Int']['output']
-  idToken: Scalars['String']['output']
-  refreshToken: Scalars['String']['output']
+  AWSDate: { input: string; output: string }
 }
 
 export type CreateEventInput = {
@@ -52,7 +44,7 @@ export type CreateEventInput = {
 }
 
 export type Creator = User & {
-  __typename?: 'Creator'
+  __typename: 'Creator'
   id: Scalars['ID']['output']
   nickname: Scalars['String']['output']
   picture: Scalars['String']['output']
@@ -77,7 +69,7 @@ export type Error = {
 }
 
 export type Event = {
-  __typename?: 'Event'
+  __typename: 'Event'
   createdBy: Creator
   dateStart: Scalars['AWSDate']['output']
   description?: Maybe<Scalars['String']['output']>
@@ -92,7 +84,7 @@ export type Event = {
 }
 
 export type EventParticipant = User & {
-  __typename?: 'EventParticipant'
+  __typename: 'EventParticipant'
   id: Scalars['ID']['output']
   joinedAt: Scalars['String']['output']
   nickname: Scalars['String']['output']
@@ -117,28 +109,24 @@ export enum EventType {
 }
 
 export type FieldError = {
-  __typename?: 'FieldError'
+  __typename: 'FieldError'
   message: Scalars['String']['output']
   path: SignupField
 }
 
 export type IdPayload = {
-  __typename?: 'IDPayload'
+  __typename: 'IDPayload'
   id: Scalars['ID']['output']
 }
 
 export type LoginError = Error & {
-  __typename?: 'LoginError'
+  __typename: 'LoginError'
   code: Scalars['String']['output']
   message: Scalars['String']['output']
   path: Scalars['String']['output']
 }
 
-export type LoginPayload = {
-  __typename?: 'LoginPayload'
-  loginError?: Maybe<LoginError>
-  tokens?: Maybe<AuthPayload>
-}
+export type LoginResponse = LoginError | Tokens
 
 export type MeInput = {
   id: Scalars['ID']['input']
@@ -148,7 +136,7 @@ export type MeInput = {
 
 export type MeUser = DetailedUser &
   User & {
-    __typename?: 'MeUser'
+    __typename: 'MeUser'
     email: Scalars['String']['output']
     id: Scalars['ID']['output']
     name: Scalars['String']['output']
@@ -158,12 +146,12 @@ export type MeUser = DetailedUser &
   }
 
 export type Mutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   createEvent: IdPayload
   deleteEvent?: Maybe<IdPayload>
   forgotPassword: Scalars['Boolean']['output']
   leaveEvent?: Maybe<Scalars['Boolean']['output']>
-  login: LoginPayload
+  login: LoginResponse
   participateEvent?: Maybe<Scalars['Boolean']['output']>
   refreshToken: RefreshPayload
   signup: SignupPayload
@@ -221,7 +209,7 @@ export type MutationUpdateMeArgs = {
 
 export type OtherUser = DetailedUser &
   User & {
-    __typename?: 'OtherUser'
+    __typename: 'OtherUser'
     createdAt: Scalars['String']['output']
     email: Scalars['String']['output']
     id: Scalars['ID']['output']
@@ -231,7 +219,7 @@ export type OtherUser = DetailedUser &
   }
 
 export type Preferences = {
-  __typename?: 'Preferences'
+  __typename: 'Preferences'
   subscribeEventCreationEmail: Scalars['Boolean']['output']
   subscribeWeeklyEmail: Scalars['Boolean']['output']
 }
@@ -242,7 +230,7 @@ export type PreferencesInput = {
 }
 
 export type Query = {
-  __typename?: 'Query'
+  __typename: 'Query'
   event?: Maybe<Event>
   events: Array<Event>
   eventsByUser: Array<Event>
@@ -269,13 +257,13 @@ export type QueryUsersArgs = {
 }
 
 export type RefreshPayload = {
-  __typename?: 'RefreshPayload'
+  __typename: 'RefreshPayload'
   refreshError?: Maybe<Scalars['String']['output']>
   tokens?: Maybe<RefreshTokensPayload>
 }
 
 export type RefreshTokensPayload = {
-  __typename?: 'RefreshTokensPayload'
+  __typename: 'RefreshTokensPayload'
   accessToken: Scalars['String']['output']
   expiresIn: Scalars['Int']['output']
   idToken: Scalars['String']['output']
@@ -298,7 +286,7 @@ export type SignupInput = {
 }
 
 export type SignupPayload = {
-  __typename?: 'SignupPayload'
+  __typename: 'SignupPayload'
   errors?: Maybe<Array<FieldError>>
   user?: Maybe<User>
 }
@@ -306,6 +294,14 @@ export type SignupPayload = {
 export type TimeInput = {
   hours: Scalars['Int']['input']
   minutes: Scalars['Int']['input']
+}
+
+export type Tokens = {
+  __typename: 'Tokens'
+  accessToken: Scalars['String']['output']
+  expiresIn: Scalars['Int']['output']
+  idToken: Scalars['String']['output']
+  refreshToken: Scalars['String']['output']
 }
 
 export type UpdateEventInput = {
@@ -334,7 +330,7 @@ export type UserError = {
 }
 
 export type UsersResponse = {
-  __typename?: 'UsersResponse'
+  __typename: 'UsersResponse'
   length: Scalars['Int']['output']
   limit: Scalars['Int']['output']
   start: Scalars['Int']['output']
@@ -347,7 +343,7 @@ export type ForgotPasswordMutationVariables = Exact<{
 }>
 
 export type ForgotPasswordMutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   forgotPassword: boolean
 }
 
@@ -357,22 +353,29 @@ export type LoginMutationVariables = Exact<{
 }>
 
 export type LoginMutation = {
-  __typename?: 'Mutation'
-  login: {
-    __typename?: 'LoginPayload'
-    tokens?: {
-      __typename?: 'AuthPayload'
-      accessToken: string
-      idToken: string
-      refreshToken: string
-    } | null
-    loginError?: {
-      __typename?: 'LoginError'
-      message: string
-      path: string
-      code: string
-    } | null
-  }
+  __typename: 'Mutation'
+  login:
+    | { __typename: 'LoginError'; message: string; path: string; code: string }
+    | {
+        __typename: 'Tokens'
+        accessToken: string
+        idToken: string
+        refreshToken: string
+      }
+}
+
+export type TokensFragmentFragment = {
+  __typename: 'Tokens'
+  accessToken: string
+  idToken: string
+  refreshToken: string
+}
+
+export type ErrorFragmentFragment = {
+  __typename: 'LoginError'
+  message: string
+  path: string
+  code: string
 }
 
 export type SignupMutationVariables = Exact<{
@@ -384,17 +387,17 @@ export type SignupMutationVariables = Exact<{
 }>
 
 export type SignupMutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   signup: {
-    __typename?: 'SignupPayload'
+    __typename: 'SignupPayload'
     user?:
-      | { __typename?: 'Creator'; id: string }
-      | { __typename?: 'EventParticipant'; id: string }
-      | { __typename?: 'MeUser'; id: string }
-      | { __typename?: 'OtherUser'; id: string }
+      | { __typename: 'Creator'; id: string }
+      | { __typename: 'EventParticipant'; id: string }
+      | { __typename: 'MeUser'; id: string }
+      | { __typename: 'OtherUser'; id: string }
       | null
     errors?: Array<{
-      __typename?: 'FieldError'
+      __typename: 'FieldError'
       path: SignupField
       message: string
     }> | null
@@ -406,11 +409,11 @@ export type GetEventQueryVariables = Exact<{
 }>
 
 export type GetEventQuery = {
-  __typename?: 'Query'
+  __typename: 'Query'
   event?: {
-    __typename?: 'Event'
+    __typename: 'Event'
     id: string
-    dateStart: any
+    dateStart: string
     description?: string | null
     location: string
     race: boolean
@@ -419,13 +422,13 @@ export type GetEventQuery = {
     timeStart?: string | null
     type: EventType
     createdBy: {
-      __typename?: 'Creator'
+      __typename: 'Creator'
       id: string
       nickname: string
       picture: string
     }
     participants: Array<{
-      __typename?: 'EventParticipant'
+      __typename: 'EventParticipant'
       id: string
       joinedAt: string
       nickname: string
@@ -440,7 +443,7 @@ export type ParticipateEventMutationVariables = Exact<{
 }>
 
 export type ParticipateEventMutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   participateEvent?: boolean | null
 }
 
@@ -449,7 +452,7 @@ export type LeaveEventMutationVariables = Exact<{
 }>
 
 export type LeaveEventMutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   leaveEvent?: boolean | null
 }
 
@@ -458,18 +461,18 @@ export type DeleteEventMutationVariables = Exact<{
 }>
 
 export type DeleteEventMutation = {
-  __typename?: 'Mutation'
-  deleteEvent?: { __typename?: 'IDPayload'; id: string } | null
+  __typename: 'Mutation'
+  deleteEvent?: { __typename: 'IDPayload'; id: string } | null
 }
 
 export type GetEventsQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetEventsQuery = {
-  __typename?: 'Query'
+  __typename: 'Query'
   events: Array<{
-    __typename?: 'Event'
+    __typename: 'Event'
     id: string
-    dateStart: any
+    dateStart: string
     description?: string | null
     location: string
     race: boolean
@@ -478,13 +481,13 @@ export type GetEventsQuery = {
     timeStart?: string | null
     type: EventType
     createdBy: {
-      __typename?: 'Creator'
+      __typename: 'Creator'
       id: string
       nickname: string
       picture: string
     }
     participants: Array<{
-      __typename?: 'EventParticipant'
+      __typename: 'EventParticipant'
       id: string
       joinedAt: string
       nickname: string
@@ -499,8 +502,8 @@ export type UpdateEventMutationVariables = Exact<{
 }>
 
 export type UpdateEventMutation = {
-  __typename?: 'Mutation'
-  updateEvent: { __typename?: 'Event'; id: string }
+  __typename: 'Mutation'
+  updateEvent: { __typename: 'Event'; id: string }
 }
 
 export type CreateEventMutationVariables = Exact<{
@@ -508,8 +511,8 @@ export type CreateEventMutationVariables = Exact<{
 }>
 
 export type CreateEventMutation = {
-  __typename?: 'Mutation'
-  createEvent: { __typename?: 'IDPayload'; id: string }
+  __typename: 'Mutation'
+  createEvent: { __typename: 'IDPayload'; id: string }
 }
 
 export type GetUserByNickQueryVariables = Exact<{
@@ -517,9 +520,9 @@ export type GetUserByNickQueryVariables = Exact<{
 }>
 
 export type GetUserByNickQuery = {
-  __typename?: 'Query'
+  __typename: 'Query'
   user?: {
-    __typename?: 'OtherUser'
+    __typename: 'OtherUser'
     id: string
     name: string
     nickname: string
@@ -535,15 +538,15 @@ export type GetUsersQueryVariables = Exact<{
 }>
 
 export type GetUsersQuery = {
-  __typename?: 'Query'
+  __typename: 'Query'
   users: {
-    __typename?: 'UsersResponse'
+    __typename: 'UsersResponse'
     length: number
     limit: number
     start: number
     total: number
     users: Array<{
-      __typename?: 'OtherUser'
+      __typename: 'OtherUser'
       id: string
       name: string
       nickname: string
@@ -554,16 +557,16 @@ export type GetUsersQuery = {
 export type GetProfileQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetProfileQuery = {
-  __typename?: 'Query'
+  __typename: 'Query'
   me: {
-    __typename?: 'MeUser'
+    __typename: 'MeUser'
     id: string
     email: string
     name: string
     nickname: string
     picture: string
     preferences: {
-      __typename?: 'Preferences'
+      __typename: 'Preferences'
       subscribeEventCreationEmail: boolean
       subscribeWeeklyEmail: boolean
     }
@@ -576,14 +579,14 @@ export type UpdateMeMutationVariables = Exact<{
 }>
 
 export type UpdateMeMutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   updateMe: {
-    __typename?: 'MeUser'
+    __typename: 'MeUser'
     id: string
     nickname: string
     name: string
     preferences: {
-      __typename?: 'Preferences'
+      __typename: 'Preferences'
       subscribeWeeklyEmail: boolean
       subscribeEventCreationEmail: boolean
     }
@@ -595,7 +598,7 @@ export type UpdateAvatarMutationVariables = Exact<{
 }>
 
 export type UpdateAvatarMutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   updateAvatar: boolean
 }
 
@@ -604,18 +607,60 @@ export type RefreshTokenMutationVariables = Exact<{
 }>
 
 export type RefreshTokenMutation = {
-  __typename?: 'Mutation'
+  __typename: 'Mutation'
   refreshToken: {
-    __typename?: 'RefreshPayload'
+    __typename: 'RefreshPayload'
     refreshError?: string | null
     tokens?: {
-      __typename?: 'RefreshTokensPayload'
+      __typename: 'RefreshTokensPayload'
       idToken: string
       accessToken: string
     } | null
   }
 }
 
+export const TokensFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TokensFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Tokens' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'accessToken' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'idToken' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'refreshToken' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TokensFragmentFragment, unknown>
+export const ErrorFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'LoginError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'path' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ErrorFragmentFragment, unknown>
 export const ForgotPasswordDocument = {
   kind: 'Document',
   definitions: [
@@ -728,45 +773,50 @@ export const LoginDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
                 {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'tokens' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accessToken' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'idToken' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'refreshToken' },
-                      },
-                    ],
-                  },
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'TokensFragment' },
                 },
                 {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'loginError' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'message' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'path' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                    ],
-                  },
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'ErrorFragment' },
                 },
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'TokensFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Tokens' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'accessToken' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'idToken' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'refreshToken' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'ErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'LoginError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'path' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'code' } },
         ],
       },
     },
