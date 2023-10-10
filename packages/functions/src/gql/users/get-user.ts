@@ -1,7 +1,4 @@
-import type {
-  OtherUser,
-  QueryUserArgs,
-} from '@downtown65-app/graphql/appsync.gen'
+import type { OtherUser, QueryUserArgs } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
 import { getAuth0Management } from '~/gql/support/auth0'

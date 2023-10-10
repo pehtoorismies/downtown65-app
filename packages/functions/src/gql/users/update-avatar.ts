@@ -1,7 +1,7 @@
 import { PassThrough } from 'node:stream'
 import { logger } from '@downtown65-app/core/logger/logger'
 import { s3Key } from '@downtown65-app/core/s3-key'
-import type { MutationUpdateAvatarArgs } from '@downtown65-app/graphql/appsync.gen'
+import type { MutationUpdateAvatarArgs } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import AWS from 'aws-sdk'

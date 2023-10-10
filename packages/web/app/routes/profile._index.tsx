@@ -1,3 +1,8 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import {
+  GetProfileDocument,
+  UpdateMeDocument,
+} from '@downtown65-app/graphql/graphql'
 import {
   Breadcrumbs,
   Button,
@@ -21,7 +26,7 @@ import { IconLogout } from '@tabler/icons-react'
 import type { ChangeEventHandler } from 'react'
 import React, { useState } from 'react'
 import { ProfileBox } from '~/components/profile-box'
-import { getGqlSdk } from '~/gql/get-gql-client.server'
+import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -29,6 +34,43 @@ import {
 } from '~/message.server'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 import { logger } from '~/util/logger.server'
+
+const GqlIgnored = graphql(`
+  query GetProfile {
+    me {
+      id
+      email
+      name
+      nickname
+      picture
+      preferences {
+        subscribeEventCreationEmail
+        subscribeWeeklyEmail
+      }
+    }
+  }
+  mutation UpdateMe(
+    $subscribeWeeklyEmail: Boolean!
+    $subscribeEventCreationEmail: Boolean!
+  ) {
+    updateMe(
+      input: {
+        preferences: {
+          subscribeWeeklyEmail: $subscribeWeeklyEmail
+          subscribeEventCreationEmail: $subscribeEventCreationEmail
+        }
+      }
+    ) {
+      id
+      nickname
+      name
+      preferences {
+        subscribeWeeklyEmail
+        subscribeEventCreationEmail
+      }
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -47,7 +89,8 @@ export const action: ActionFunction = async ({ request }) => {
   const eventCreated = formData.get('eventCreated') === 'on'
   const weekly = formData.get('weekly') === 'on'
 
-  await getGqlSdk().UpdateMe(
+  await gqlClient.request(
+    UpdateMeDocument,
     {
       subscribeEventCreationEmail: eventCreated,
       subscribeWeeklyEmail: weekly,
@@ -69,15 +112,6 @@ export const action: ActionFunction = async ({ request }) => {
   )
 }
 
-// interface LoaderData extends PrivateRoute {
-//   name: string
-//   email: string
-//   preferences: {
-//     subscribeWeeklyEmail: boolean
-//     subscribeEventCreationEmail: boolean
-//   }
-// }
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const pageLogger = logger.child({
     page: { path: 'profile', function: 'loader' },
@@ -88,7 +122,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { accessToken, user } = await loaderAuthenticate(request)
   pageLogger.debug({ user }, 'Authenticated user')
 
-  const { me } = await getGqlSdk().GetProfile(
+  const { me } = await gqlClient.request(
+    GetProfileDocument,
     {},
     {
       Authorization: `Bearer ${accessToken}`,

@@ -1,7 +1,7 @@
 import type {
   QueryUsersArgs,
   UsersResponse,
-} from '@downtown65-app/graphql/appsync.gen'
+} from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
 import { getAuth0Management } from '~/gql/support/auth0'

@@ -1,9 +1,9 @@
-import { SignupField } from '@downtown65-app/graphql/appsync.gen'
+import { SignupField } from '@downtown65-app/graphql/graphql'
 import type {
   FieldError,
   MutationSignupArgs,
   SignupPayload,
-} from '@downtown65-app/graphql/appsync.gen'
+} from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'
 import { Config } from 'sst/node/config'

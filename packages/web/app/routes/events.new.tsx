@@ -1,3 +1,5 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { CreateEventDocument } from '@downtown65-app/graphql/graphql'
 import { Divider, Text } from '@mantine/core'
 import type {
   ActionFunctionArgs,
@@ -8,7 +10,7 @@ import { json, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { useReducer } from 'react'
 import type { Context } from '~/contexts/participating-context'
-import { getGqlSdk } from '~/gql/get-gql-client.server'
+import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -18,6 +20,14 @@ import { EditOrCreate } from '~/routes-common/events/components/edit-or-create'
 import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
 import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
+
+const GqlIgnored = graphql(`
+  mutation CreateEvent($input: CreateEventInput!) {
+    createEvent(input: $input) {
+      id
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -52,7 +62,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     participants,
   } = getEventForm(body)
 
-  const { createEvent } = await getGqlSdk().CreateEvent(
+  const { createEvent } = await gqlClient.request(
+    CreateEventDocument,
     {
       input: {
         createdBy: user,

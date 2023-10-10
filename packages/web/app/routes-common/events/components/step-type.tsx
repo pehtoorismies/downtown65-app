@@ -1,7 +1,7 @@
+import { EventType } from '@downtown65-app/graphql/graphql'
 import { Button, SimpleGrid } from '@mantine/core'
 import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
-import { EventType } from '~/gql/types.gen'
 import { mapToData } from '~/util/event-type'
 
 export const StepType = ({ state, dispatch }: ReducerProps) => {

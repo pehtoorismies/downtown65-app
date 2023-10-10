@@ -8,6 +8,7 @@ module.exports = {
   plugins: ["unused-imports"],
   rules: {
     "@typescript-eslint/no-redeclare": OFF,
+    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "[iI]gnored" }],
     "unicorn/prefer-module": OFF,
     "unicorn/text-encoding-identifier-case": OFF,
     "unicorn/filename-case": [

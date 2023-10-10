@@ -1,3 +1,5 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { UpdateAvatarDocument } from '@downtown65-app/graphql/graphql'
 import {
   Alert,
   Anchor,
@@ -29,7 +31,7 @@ import {
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { createProfileUploadHandler } from './s3-upload.server'
-import { getGqlSdk } from '~/gql/get-gql-client.server'
+import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   actionAuthenticate,
   loaderAuthenticate,
@@ -51,6 +53,12 @@ type ActionData = {
   imgDesc?: string
 }
 
+const GqlIgnored = graphql(`
+  mutation UpdateAvatar($uploadedFilename: String!) {
+    updateAvatar(uploadedFilename: $uploadedFilename)
+  }
+`)
+
 export const action: ActionFunction = async ({ request }) => {
   const { accessToken, user } = await actionAuthenticate(request)
 
@@ -61,7 +69,8 @@ export const action: ActionFunction = async ({ request }) => {
   const formData = await parseMultipartFormData(request, s3UploadHandler)
   const file = formData.get('file') as string
 
-  await getGqlSdk().UpdateAvatar(
+  await gqlClient.request(
+    UpdateAvatarDocument,
     { uploadedFilename: file },
     {
       Authorization: `Bearer ${accessToken}`,

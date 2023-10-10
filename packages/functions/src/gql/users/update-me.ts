@@ -1,7 +1,7 @@
 import type {
   MeUser,
   MutationUpdateMeArgs,
-} from '@downtown65-app/graphql/appsync.gen'
+} from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { Auth0UserResponse, toUser } from '../support/auth0-user'

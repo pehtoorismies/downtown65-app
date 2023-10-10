@@ -1,4 +1,4 @@
-import type { MeUser } from '@downtown65-app/graphql/appsync.gen'
+import type { MeUser } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { getAuth0Management } from '~/gql/support/auth0'

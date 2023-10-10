@@ -1,3 +1,5 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { LoginDocument } from '@downtown65-app/graphql/graphql'
 import {
   Alert,
   Anchor,
@@ -13,13 +15,30 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import { AuthTemplate } from '~/routes-common/auth/auth-template'
 import { Tokens, createUserSession } from '~/session.server'
 import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
 
 export { loader } from '~/routes-common/auth/loader'
+
+const GglIgnored = graphql(`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      tokens {
+        accessToken
+        idToken
+        refreshToken
+      }
+      loginError {
+        message
+        path
+        code
+      }
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -56,9 +75,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   try {
-    const { login } = await getGqlSdk().Login(
+    const { login } = await gqlClient.request(
+      LoginDocument,
       { email, password },
-      getPublicAuthHeaders()
+      PUBLIC_AUTH_HEADERS
     )
 
     if (login.loginError && login.loginError.code === 'invalid_grant') {

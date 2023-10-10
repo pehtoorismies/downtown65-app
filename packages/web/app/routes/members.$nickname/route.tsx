@@ -1,3 +1,5 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { GetUserByNickDocument } from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
   Breadcrumbs,
@@ -23,8 +25,21 @@ import React from 'react'
 import invariant from 'tiny-invariant'
 import notFoundProfileImage from './not-found.jpg'
 import { ProfileBox } from '~/components/profile-box'
-import { getGqlSdk } from '~/gql/get-gql-client.server'
+import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
+
+const GqlIgnored = graphql(`
+  query GetUserByNick($nickname: String!) {
+    user(nickname: $nickname) {
+      id
+      name
+      nickname
+      email
+      picture
+      createdAt
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -38,7 +53,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.nickname, 'Expected params.nickname')
   const { user, accessToken } = await loaderAuthenticate(request)
 
-  const response = await getGqlSdk().GetUserByNick(
+  const response = await gqlClient.request(
+    GetUserByNickDocument,
     {
       nickname: params.nickname,
     },

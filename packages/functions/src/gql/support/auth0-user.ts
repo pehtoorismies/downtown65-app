@@ -1,4 +1,4 @@
-import type { MeUser, OtherUser } from '@downtown65-app/graphql/appsync.gen'
+import type { MeUser, OtherUser } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
 
 const ROLES = ['USER', 'ADMIN'] as const

@@ -1,7 +1,7 @@
+import type { EventType } from '@downtown65-app/graphql/graphql'
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { EventPage } from './event-page'
-import type { EventType } from '~/gql/types.gen'
 
 export class NewEventPage extends EventPage {
   constructor(page: Page) {

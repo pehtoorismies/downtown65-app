@@ -1,4 +1,4 @@
-import type { EventType } from '@downtown65-app/graphql/appsync.gen'
+import type { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
 import { DynamoDatetime } from '../dynamo-datetime'
 
