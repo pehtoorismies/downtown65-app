@@ -1,0 +1,16 @@
+overwrite: true
+schema:
+  - 'packages/functions/src/gql/schema.graphql'
+documents:
+  - 'packages/web/app/**/*.graphql'
+
+generates:
+  packages/graphql/src/appsync.gen.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-graphql-request
+    config:
+      #      enumsAsConst: true
+      inputMaybeValue: T | undefined
+      maybeValue: T |  undefined
