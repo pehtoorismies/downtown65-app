@@ -1,3 +1,4 @@
+import { EventType } from '@downtown65-app/graphql/graphql'
 import {
   randCity,
   randNumber,
@@ -7,7 +8,6 @@ import {
 import { test as base, expect } from '@playwright/test'
 import { NewEventPage } from './page-objects/new-event-page'
 import { testUser } from './test-user'
-import { EventType } from '~/gql/types.gen'
 
 const test = base.extend<{ newEventPage: NewEventPage }>({
   newEventPage: async ({ page }, use) => {

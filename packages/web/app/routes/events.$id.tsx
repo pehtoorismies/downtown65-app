@@ -1,5 +1,12 @@
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
-import { EventType } from '@downtown65-app/graphql/appsync.gen'
+import { graphql } from '@downtown65-app/graphql/gql'
+import {
+  DeleteEventDocument,
+  EventType,
+  GetEventDocument,
+  LeaveEventDocument,
+  ParticipateEventDocument,
+} from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
   Breadcrumbs,
@@ -45,7 +52,7 @@ import {
   ParticipatingContext,
   useParticipationActions,
 } from '~/contexts/participating-context'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -57,6 +64,44 @@ import {
   getSession,
 } from '~/session.server'
 import { mapToData } from '~/util/event-type'
+
+const GqlIgnored = graphql(`
+  query GetEvent($eventId: ID!) {
+    event(eventId: $eventId) {
+      id
+      createdBy {
+        id
+        nickname
+        picture
+      }
+      dateStart
+      description
+      location
+      participants {
+        id
+        joinedAt
+        nickname
+        picture
+      }
+      race
+      subtitle
+      title
+      timeStart
+      type
+    }
+  }
+  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {
+    participateEvent(eventId: $eventId, me: $me)
+  }
+  mutation LeaveEvent($eventId: ID!) {
+    leaveEvent(eventId: $eventId)
+  }
+  mutation DeleteEvent($eventId: ID!) {
+    deleteEvent(eventId: $eventId) {
+      id
+    }
+  }
+`)
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   if (!data) {
@@ -108,20 +153,16 @@ const getOriginForMeta = (): string => {
   return `https://${Config.DOMAIN_NAME}`
 }
 
-// interface LoaderData extends PublicRoute {
-//   eventItem: EventLoaderData
-//   origin: string // for meta
-// }
-
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
   const user = await getAuthenticatedUser(request)
 
-  const { event } = await getGqlSdk().GetEvent(
+  const { event } = await gqlClient.request(
+    GetEventDocument,
     {
       eventId: params.id,
     },
-    getPublicAuthHeaders()
+    PUBLIC_AUTH_HEADERS
   )
 
   if (!event) {
@@ -133,7 +174,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const ddt = new DynamoDatetime({
     date: event.dateStart,
-    time: event.timeStart,
+    time: event.timeStart ?? undefined,
   })
 
   const data = {
@@ -176,7 +217,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   switch (action) {
     case 'delete': {
       // TODO: add error handling
-      await getGqlSdk().DeleteEvent(
+      await gqlClient.request(
+        DeleteEventDocument,
         {
           eventId: params.id,
         },
@@ -194,7 +236,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       })
     }
     case 'participate': {
-      await getGqlSdk().ParticipateEvent(
+      await gqlClient.request(
+        ParticipateEventDocument,
         {
           eventId: params.id,
           me: user,
@@ -206,7 +249,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       return json({}, { headers })
     }
     case 'leave': {
-      await getGqlSdk().LeaveEvent(
+      await gqlClient.request(
+        LeaveEventDocument,
         {
           eventId: params.id,
         },
@@ -322,7 +366,11 @@ export default function GetEvent() {
       </Container>
       <Container>
         <ParticipatingContext.Provider value={participationActions}>
-          <EventCardExtended {...eventItem} />
+          <EventCardExtended
+            {...eventItem}
+            // TODO: fix
+            timeStart={eventItem.timeStart ?? undefined}
+          />
         </ParticipatingContext.Provider>
         {user && (
           <>

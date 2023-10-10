@@ -1,7 +1,7 @@
+import type { EventType } from '@downtown65-app/graphql/graphql'
 import type { Dispatch } from 'react'
 import type { EventState } from './event-state'
 import type { User } from '~/domain/user'
-import type { EventType } from '~/gql/types.gen'
 
 export const ActiveStep = {
   STEP_EVENT_TYPE: 0,

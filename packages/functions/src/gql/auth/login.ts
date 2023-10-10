@@ -1,7 +1,7 @@
 import type {
   LoginPayload,
   MutationLoginArgs,
-} from '@downtown65-app/graphql/appsync.gen'
+} from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { Config } from 'sst/node/config'
 import { z } from 'zod'

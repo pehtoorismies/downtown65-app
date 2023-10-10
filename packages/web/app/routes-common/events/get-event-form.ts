@@ -1,5 +1,5 @@
+import { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
-import { EventType } from '~/gql/types.gen'
 
 const isEventType = (eventType: unknown): eventType is EventType => {
   if (typeof eventType !== 'string') {

@@ -10,7 +10,7 @@ import type {
   QueryEventArgs as QueryEventArguments,
   RefreshPayload,
   SignupPayload,
-} from '@downtown65-app/graphql/appsync.gen'
+} from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import { forgotPassword } from './auth/forgot-password'
 import { login } from './auth/login'

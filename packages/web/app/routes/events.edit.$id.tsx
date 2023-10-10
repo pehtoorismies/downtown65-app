@@ -1,4 +1,9 @@
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { graphql } from '@downtown65-app/graphql/gql'
+import {
+  GetEventDocument,
+  UpdateEventDocument,
+} from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
   Breadcrumbs,
@@ -19,7 +24,7 @@ import { IconRocket } from '@tabler/icons-react'
 import { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import type { Context } from '~/contexts/participating-context'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
+import { getPublicAuthHeaders, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -30,6 +35,14 @@ import { isValidStateToSave } from '~/routes-common/events/components/event-stat
 import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
 import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
+
+const GqlIgnored = graphql(`
+  mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {
+    updateEvent(eventId: $eventId, input: $input) {
+      id
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -50,7 +63,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
   const { user } = await loaderAuthenticate(request)
 
-  const { event } = await getGqlSdk().GetEvent(
+  const { event } = await gqlClient.request(
+    GetEventDocument,
     {
       eventId: params.id,
     },
@@ -94,7 +108,8 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   const { description, location, isRace, subtitle, title, type, time, date } =
     getEventForm(body)
 
-  await getGqlSdk().UpdateEvent(
+  await gqlClient.request(
+    UpdateEventDocument,
     {
       eventId,
       input: {
@@ -142,7 +157,8 @@ export default function EditEvent() {
     eventId,
   } = useLoaderData<typeof loader>()
   const ddt = new DynamoDatetime({
-    time: initTimeStart,
+    // TODO: fix
+    time: initTimeStart ?? undefined,
     date: initDateStart,
   })
 

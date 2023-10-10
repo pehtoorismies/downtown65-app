@@ -1,3 +1,5 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { ForgotPasswordDocument } from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
   Box,
@@ -12,7 +14,7 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons-react'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -22,6 +24,12 @@ import { AuthTemplate } from '~/routes-common/auth/auth-template'
 import { validateEmail } from '~/util/validation.server'
 
 export { loader } from '~/routes-common/auth/loader'
+
+const GglIgnored = graphql(`
+  mutation ForgotPassword($email: String!) {
+    forgotPassword(email: $email)
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -39,7 +47,11 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ error: 'Väärän muotoinen sähköpostiosoite' }, { status: 400 })
   }
 
-  await getGqlSdk().ForgotPassword({ email }, getPublicAuthHeaders())
+  await gqlClient.request(
+    ForgotPasswordDocument,
+    { email },
+    PUBLIC_AUTH_HEADERS
+  )
 
   const session = await getMessageSession(request.headers.get('cookie'))
   setSuccessMessage(session, `Ohjeet lähetetty osoitteeseen: ${email}`)

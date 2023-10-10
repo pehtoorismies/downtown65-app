@@ -1,4 +1,4 @@
-import type { MutationForgotPasswordArgs } from '@downtown65-app/graphql/appsync.gen'
+import type { MutationForgotPasswordArgs } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { getClient } from '~/gql/support/auth0'
 

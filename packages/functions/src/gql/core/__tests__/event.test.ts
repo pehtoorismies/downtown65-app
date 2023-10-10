@@ -1,4 +1,4 @@
-import { EventType } from '@downtown65-app/graphql/appsync.gen'
+import { EventType } from '@downtown65-app/graphql/graphql'
 import { describe, expect, it } from 'vitest'
 import * as Event from '../event'
 

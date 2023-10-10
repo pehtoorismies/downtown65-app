@@ -1,3 +1,4 @@
+import type { EventType } from '@downtown65-app/graphql/graphql'
 import type { MantineShadow } from '@mantine/core'
 import {
   BackgroundImage,
@@ -19,7 +20,6 @@ import {
   ToggleJoinButton,
 } from '~/components/event-card/toggle-join-button'
 import type { User } from '~/domain/user'
-import type { EventType } from '~/gql/types.gen'
 import { mapToData } from '~/util/event-type'
 
 interface ParticipantProps {

@@ -1,4 +1,4 @@
-import { EventType } from '@downtown65-app/graphql/appsync.gen'
+import { EventType } from '@downtown65-app/graphql/graphql'
 import { isValid } from 'date-fns'
 import { z } from 'zod'
 

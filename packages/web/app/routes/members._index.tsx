@@ -1,3 +1,5 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { GetUsersDocument } from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
   Breadcrumbs,
@@ -11,8 +13,24 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
 import React from 'react'
-import { getGqlSdk } from '~/gql/get-gql-client.server'
+import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
+
+const GqlIgnored = graphql(`
+  query GetUsers($perPage: Int!, $page: Int!) {
+    users(page: $page, perPage: $perPage) {
+      users {
+        id
+        name
+        nickname
+      }
+      length
+      limit
+      start
+      total
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -39,7 +57,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const page = defaultTo(1, url.searchParams.get('page'))
   const perPage = defaultTo(50, url.searchParams.get('per_page'))
 
-  const response = await getGqlSdk().GetUsers(
+  const response = await gqlClient.request(
+    GetUsersDocument,
     {
       page: page - 1,
       perPage,

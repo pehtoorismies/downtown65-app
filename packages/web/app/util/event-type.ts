@@ -1,4 +1,4 @@
-import { EventType } from '~/gql/types.gen'
+import { EventType } from '@downtown65-app/graphql/graphql'
 
 const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
   [EventType.Cycling]: {

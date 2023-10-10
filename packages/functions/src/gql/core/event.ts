@@ -4,7 +4,7 @@ import type {
   Event,
   IdPayload,
   UpdateEventInput,
-} from '@downtown65-app/graphql/appsync.gen'
+} from '@downtown65-app/graphql/graphql'
 import { format } from 'date-fns'
 import formatISO from 'date-fns/formatISO'
 import startOfToday from 'date-fns/startOfToday'

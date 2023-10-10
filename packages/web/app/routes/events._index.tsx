@@ -1,4 +1,6 @@
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { graphql } from '@downtown65-app/graphql/gql'
+import { GetEventsDocument } from '@downtown65-app/graphql/graphql'
 import {
   Breadcrumbs,
   Button,
@@ -19,8 +21,35 @@ import {
   ParticipatingContext,
   useParticipationActions,
 } from '~/contexts/participating-context'
-import { getGqlSdk } from '~/gql/get-gql-client.server'
+import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
+
+const GqlIgnored = graphql(`
+  query GetEvents {
+    events {
+      id
+      createdBy {
+        id
+        nickname
+        picture
+      }
+      dateStart
+      description
+      location
+      participants {
+        id
+        joinedAt
+        nickname
+        picture
+      }
+      race
+      subtitle
+      title
+      timeStart
+      type
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -33,7 +62,8 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { accessToken, user } = await loaderAuthenticate(request)
 
-  const { events } = await getGqlSdk().GetEvents(
+  const { events } = await gqlClient.request(
+    GetEventsDocument,
     {},
     {
       Authorization: `Bearer ${accessToken}`,
@@ -42,7 +72,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const eventItems = events.map((event) => {
     const ddt = new DynamoDatetime({
       date: event.dateStart,
-      time: event.timeStart,
+      // TODO: fix
+      time: event.timeStart ?? undefined,
     })
 
     return {
@@ -113,7 +144,15 @@ export default function GetEvents() {
           verticalSpacing={{ base: 'sm', md: 'xl' }}
         >
           {eventItems.map((m) => {
-            return <EventCard key={m.id} {...m} shadow="xs" />
+            return (
+              <EventCard
+                key={m.id}
+                {...m}
+                // TODO: fix
+                timeStart={m.timeStart ?? undefined}
+                shadow="xs"
+              />
+            )
           })}
         </SimpleGrid>
       </ParticipatingContext.Provider>

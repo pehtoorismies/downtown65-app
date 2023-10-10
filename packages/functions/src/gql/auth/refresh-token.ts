@@ -1,7 +1,7 @@
 import type {
   MutationRefreshTokenArgs,
   RefreshPayload,
-} from '@downtown65-app/graphql/appsync.gen'
+} from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
 import { ErrorMessage, ErrorResponse } from '~/gql/auth/support/error'

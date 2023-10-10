@@ -1,10 +1,12 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { RefreshTokenDocument } from '@downtown65-app/graphql/graphql'
 import type { Session } from '@remix-run/node'
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
 import jwtDecode from 'jwt-decode'
 import { z } from 'zod'
 import { getCookieSecret } from '~/cookie-secret.server'
 import { User } from '~/domain/user'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -54,17 +56,30 @@ interface CreateUserSession {
   rememberMe: boolean
 }
 
+const GglDocumentIgnored = graphql(`
+  mutation RefreshToken($refreshToken: String!) {
+    refreshToken(refreshToken: $refreshToken) {
+      tokens {
+        idToken
+        accessToken
+      }
+      refreshError
+    }
+  }
+`)
+
 const fetchRenewTokens = async (
   refreshToken: string
 ): Promise<{
   accessToken: string
   idToken: string
 }> => {
-  const { refreshToken: rt } = await getGqlSdk().RefreshToken(
+  const { refreshToken: rt } = await gqlClient.request(
+    RefreshTokenDocument,
     {
       refreshToken,
     },
-    getPublicAuthHeaders()
+    PUBLIC_AUTH_HEADERS
   )
 
   if (rt.tokens) {

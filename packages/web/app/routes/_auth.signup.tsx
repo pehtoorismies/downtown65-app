@@ -1,3 +1,6 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import type { SignupPayload } from '@downtown65-app/graphql/graphql'
+import { SignupDocument } from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
   Button,
@@ -11,8 +14,7 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { z } from 'zod'
-import { getGqlSdk, getPublicAuthHeaders } from '~/gql/get-gql-client.server'
-import type { SignupPayload } from '~/gql/types.gen'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -21,6 +23,34 @@ import {
 import { AuthTemplate } from '~/routes-common/auth/auth-template'
 
 export { loader } from '~/routes-common/auth/loader'
+
+const GglIgnored = graphql(`
+  mutation Signup(
+    $name: String!
+    $email: String!
+    $password: String!
+    $nickname: String!
+    $registerSecret: String!
+  ) {
+    signup(
+      input: {
+        name: $name
+        email: $email
+        password: $password
+        nickname: $nickname
+        registerSecret: $registerSecret
+      }
+    ) {
+      user {
+        id
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`)
 
 export const meta: MetaFunction = () => {
   return [
@@ -54,9 +84,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     name: formData.get('name'),
   })
 
-  const { signup } = await getGqlSdk().Signup(
+  const { signup } = await gqlClient.request(
+    SignupDocument,
     signupForm,
-    getPublicAuthHeaders()
+    PUBLIC_AUTH_HEADERS
   )
 
   if (signup.errors) {
