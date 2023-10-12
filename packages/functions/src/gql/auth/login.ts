@@ -1,3 +1,4 @@
+import { logger } from '@downtown65-app/core/logger/logger'
 import type {
   LoginResponse,
   MutationLoginArgs,
@@ -44,8 +45,7 @@ export const login: AppSyncResolverHandler<
       refreshToken: tokens.refresh_token,
     }
   } catch (error: unknown) {
-    // TODO: use logger
-    console.error(JSON.stringify(error))
+    logger.error(error, 'Unexpected login error')
     const errorResponse = ErrorResponse.parse(error)
 
     const message = JSON.parse(errorResponse.message)
