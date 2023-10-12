@@ -77,9 +77,9 @@ test.describe('Create event', () => {
     await newEventPage.eventTypeClick(initType)
     await expect(newEventPage.nextBtn()).toBeHidden()
     await newEventPage.prevBtnClick()
-    await newEventPage.eventTypeSelected(initType)
+    newEventPage.eventTypeSelected(initType)
     await newEventPage.eventTypeClick(selectedType)
-    await newEventPage.eventTypeSelected(selectedType)
+    newEventPage.eventTypeSelected(selectedType)
     await newEventPage.nextBtnClick()
 
     // 2. step basic info
@@ -131,6 +131,7 @@ test.describe('Create event', () => {
     await newEventPage.headerVisible('Vapaa kuvaus')
     await expect(newEventPage.skipStepBtn()).toBeEnabled()
     // TODO: add some text description
+
     await newEventPage.nextBtnClick()
 
     // step preview
