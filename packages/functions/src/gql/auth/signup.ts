@@ -1,3 +1,4 @@
+import { logger } from '@downtown65-app/core/logger/logger'
 import { SignupField } from '@downtown65-app/graphql/graphql'
 import type {
   MutationSignupArgs,
@@ -92,28 +93,31 @@ export const signup: AppSyncResolverHandler<
   const management = await getAuth0Management()
 
   const errors = []
-  const existingUsers = await management.getUsers({
+  const query = `email:"${input.email}" OR nickname:"${input.nickname}"`
+  const matchingUsers = await management.getUsers({
     fields: 'email,nickname',
     search_engine: 'v3',
-    q: `email:"${input.email}" OR nickname:"${input.nickname}"`,
+    q: query,
   })
 
-  if (existingUsers.length > 0) {
-    if (existingUsers[0].email === input.email) {
+  if (matchingUsers.length > 0) {
+    if (matchingUsers[0].email === input.email) {
       errors.push({
         message: 'Email already exists',
         path: SignupField.Email,
       })
     }
-    if (existingUsers[0].nickname === input.nickname) {
+    if (matchingUsers[0].nickname === input.nickname) {
       errors.push({
         message: 'Nickname already exists',
         path: SignupField.Nickname,
       })
     }
     if (errors.length === 0) {
-      // TODO: use logger
-      console.error('Illegal state. Query results:', existingUsers)
+      logger.error(
+        matchingUsers,
+        `No matching users found. Illegal state in signup. With query: ${query}`
+      )
       throw new Error(
         'Illegal state. Auth0 query returned matching users but they are not found.'
       )
@@ -146,12 +150,11 @@ export const signup: AppSyncResolverHandler<
     })
 
     // validate format
-    // TODO: is this needed?
-    Auth0UserResponse.parse(returnObject)
+    const user = Auth0UserResponse.parse(returnObject)
 
     return {
       __typename: 'SignupSuccess',
-      message: 'Created',
+      message: `Created user ${user.email}`,
     }
   } catch (error: unknown) {
     console.error(JSON.stringify(error))
