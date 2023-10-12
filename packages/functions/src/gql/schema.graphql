@@ -199,7 +199,7 @@ type SignupSuccess @aws_api_key {
     message: String!
 }
 
-union SignupResult = SignupSuccess | SignupError
+union SignupResponse = SignupSuccess | SignupError
 
 input UpdateMeInput {
     preferences: PreferencesInput!
@@ -239,7 +239,7 @@ type Mutation {
         password: String!
     ): LoginResponse! @aws_api_key
 
-    signup(input: SignupInput!): SignupResult! @aws_api_key
+    signup(input: SignupInput!): SignupResponse! @aws_api_key
 
     forgotPassword(
         email: String!

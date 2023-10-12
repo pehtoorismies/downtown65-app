@@ -148,7 +148,7 @@ export type Mutation = {
   login: LoginResponse
   participateEvent?: Maybe<Scalars['Boolean']['output']>
   refreshToken: RefreshResponse
-  signup: SignupResult
+  signup: SignupResponse
   updateAvatar: Scalars['Boolean']['output']
   updateEvent: Event
   updateMe: MeUser
@@ -291,7 +291,7 @@ export type SignupInput = {
   registerSecret: Scalars['String']['input']
 }
 
-export type SignupResult = SignupError | SignupSuccess
+export type SignupResponse = SignupError | SignupSuccess
 
 export type SignupSuccess = {
   __typename: 'SignupSuccess'

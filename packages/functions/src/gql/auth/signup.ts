@@ -3,7 +3,7 @@ import type {
   MutationSignupArgs,
   SignupFieldError,
   SignupInput,
-  SignupResult,
+  SignupResponse,
 } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'
@@ -75,7 +75,7 @@ const validateFields = (input: SignupInput): SignupFieldError[] => {
 
 export const signup: AppSyncResolverHandler<
   MutationSignupArgs,
-  SignupResult
+  SignupResponse
 > = async (event) => {
   const { input } = event.arguments
 
