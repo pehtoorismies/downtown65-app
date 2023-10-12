@@ -15,7 +15,7 @@ export const StepDescriptionClient = ({ state, dispatch }: ReducerProps) => {
     content: state.description,
     autofocus: true,
     editable: true,
-    onUpdate: ({ editor, transaction }) => {
+    onUpdate: ({ editor }) => {
       const description = editor.getHTML()
       dispatch({
         kind: 'description',
