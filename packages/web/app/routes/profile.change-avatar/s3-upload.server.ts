@@ -1,13 +1,17 @@
 import crypto from 'node:crypto'
 import Stream, { PassThrough } from 'node:stream'
-import { s3Key } from '@downtown65-app/core/s3-key'
 import type { UploadHandler } from '@remix-run/node'
 import AWS from 'aws-sdk'
+import sharp from 'sharp'
 import invariant from 'tiny-invariant'
 import { Config } from '~/config/config'
 import { logger } from '~/util/logger.server'
 
 const pageLogger = logger.child({ function: 'UploadHandler' })
+
+const IMAGE_EXTENSION_REG_EXP = /.+\.(?<ext>gif|jpe?g|webp|jpeg|png|avif|svg)$/
+const AUTH0 = /^auth0\|[\dA-Za-z]+$/
+const AVATAR_WIDTH = 200
 
 const uploadStream = ({
   Key,
@@ -35,21 +39,34 @@ export const createProfileUploadHandler = ({
     invariant(data, 'Expected data')
     invariant(filename, 'Expected filename')
     const suffix = crypto.randomBytes(20).toString('hex')
-    const avatarKey = s3Key.createAvatarUploadKey(filename, userId, suffix)
+
+    const matches = filename.match(IMAGE_EXTENSION_REG_EXP)
+    if (!matches || !matches.groups?.ext) {
+      throw new Error(`Illegal file name or extension '${filename}'`)
+    }
+    if (!AUTH0.test(userId)) {
+      throw new Error(`uploaderAuth0UserId is incorrect: '${userId}'`)
+    }
+
+    const s3CompliantUserIdDirectory = userId.replace('auth0|', 'auth0_')
+    const avatarFilename = `avatar-${suffix}.webp`
+    const key = `avatars/${s3CompliantUserIdDirectory}/${avatarFilename}`
+
+    const resizeStream = sharp().resize(AVATAR_WIDTH).webp()
 
     const s3Stream = uploadStream({
-      Key: avatarKey.key,
+      Key: key,
       ContentType: contentType,
     })
 
-    Stream.Readable.from(data).pipe(s3Stream.writeStream)
+    Stream.Readable.from(data).pipe(resizeStream).pipe(s3Stream.writeStream)
 
-    pageLogger.debug({ avatarKey }, 'Start uploadingavatar')
+    pageLogger.debug({ avatarKey: key }, 'Start uploading avatar')
 
     await s3Stream.promise
 
-    pageLogger.debug({ avatarKey }, 'Successfully uploaded avatar')
+    pageLogger.debug({ avatarKey: key }, 'Successfully uploaded avatar')
 
-    return avatarKey.filename
+    return key
   }
 }
