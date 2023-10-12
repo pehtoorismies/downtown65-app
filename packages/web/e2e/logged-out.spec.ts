@@ -1,5 +1,5 @@
 import { getEnvironmentVariable } from '@downtown65-app/core/get-environment-variable'
-import { EventType } from '@downtown65-app/graphql/appsync.gen'
+import { EventType } from '@downtown65-app/graphql/graphql'
 import {
   randCity,
   randNumber,

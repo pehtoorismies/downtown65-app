@@ -23,6 +23,7 @@ type Auth0UserResponse = z.infer<typeof Auth0UserResponse>
 
 export const toUser = (auth0User: Auth0UserResponse): MeUser => {
   return {
+    __typename: 'MeUser',
     id: auth0User.user_id,
     email: auth0User.email,
     name: auth0User.name,
@@ -30,7 +31,10 @@ export const toUser = (auth0User: Auth0UserResponse): MeUser => {
     picture: auth0User.picture,
     // updatedAt: auth0User.updated_at,
     // createdAt: auth0User.created_at,
-    preferences: auth0User.user_metadata,
+    preferences: {
+      __typename: 'Preferences',
+      ...auth0User.user_metadata,
+    },
   }
 }
 
@@ -47,6 +51,7 @@ type Auth0QueryUsersResponse = z.infer<typeof Auth0QueryUsersResponse>
 
 export const mapToOtherUser = (user: Auth0QueryUsersResponse): OtherUser => {
   return {
+    __typename: 'OtherUser',
     id: user.user_id,
     email: user.email,
     name: user.name,

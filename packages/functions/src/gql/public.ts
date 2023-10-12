@@ -1,15 +1,13 @@
 import type {
-  AuthPayload,
   Event as Dt65Event,
-  IdPayload,
-  LoginPayload,
+  LoginResponse,
   MutationForgotPasswordArgs,
   MutationLoginArgs,
   MutationRefreshTokenArgs,
   MutationSignupArgs,
   QueryEventArgs as QueryEventArguments,
-  RefreshPayload,
-  SignupPayload,
+  RefreshResponse,
+  SignupResult,
 } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import { forgotPassword } from './auth/forgot-password'
@@ -27,12 +25,10 @@ export type Inputs =
   | QueryEventArguments
 
 export type Outputs =
-  | AuthPayload
   | Dt65Event
-  | IdPayload
-  | LoginPayload
-  | RefreshPayload
-  | SignupPayload
+  | LoginResponse
+  | RefreshResponse
+  | SignupResult
   | boolean
   | undefined
   | null
