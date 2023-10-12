@@ -1,7 +1,5 @@
-import type {
-  MutationRefreshTokenArgs,
-  RefreshPayload,
-} from '@downtown65-app/graphql/graphql'
+import { RefreshResponse } from '@downtown65-app/graphql/graphql'
+import type { MutationRefreshTokenArgs } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
 import { ErrorMessage, ErrorResponse } from '~/gql/auth/support/error'
@@ -17,7 +15,7 @@ const auth0 = getClient()
 
 export const refreshToken: AppSyncResolverHandler<
   MutationRefreshTokenArgs,
-  RefreshPayload
+  RefreshResponse
 > = async (event) => {
   try {
     const { refreshToken } = event.arguments
@@ -29,13 +27,10 @@ export const refreshToken: AppSyncResolverHandler<
     const tokens = RefreshResponse.parse(response)
 
     return {
-      __typename: 'RefreshPayload',
-      tokens: {
-        __typename: 'RefreshTokensPayload',
-        accessToken: tokens.access_token,
-        idToken: tokens.id_token,
-        expiresIn: tokens.expires_in,
-      },
+      __typename: 'RefreshTokens',
+      accessToken: tokens.access_token,
+      idToken: tokens.id_token,
+      expiresIn: tokens.expires_in,
     }
   } catch (error: unknown) {
     console.error(JSON.stringify(error))
@@ -44,8 +39,8 @@ export const refreshToken: AppSyncResolverHandler<
     const errorMessage = ErrorMessage.parse(message)
 
     return {
-      __typename: 'RefreshPayload',
-      refreshError: errorMessage.error_description,
+      __typename: 'RefreshError',
+      message: errorMessage.error_description,
     }
   }
 }

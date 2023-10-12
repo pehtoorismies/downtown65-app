@@ -47,6 +47,11 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
   const parsed = result.data
   return {
     ...parsed,
+    __typename: 'Event',
+    createdBy: {
+      __typename: 'Creator',
+      ...parsed.createdBy,
+    },
     participants: Object.entries(parsed.participants)
       // eslint-disable-next-line no-unused-vars
       .map(([_, value]) => {
@@ -62,7 +67,11 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
           return 1
         }
         return 0
-      }),
+      })
+      .map((event) => ({
+        ...event,
+        __typename: 'EventParticipant',
+      })),
   }
 }
 
@@ -85,7 +94,7 @@ export const create = async (
 
   const ddt = new DynamoDatetime({
     dates: dateStart,
-    times: timeStart,
+    times: timeStart ?? undefined,
   })
 
   const gsi1sk = ddt.getIsoDatetime()
@@ -128,6 +137,7 @@ export const create = async (
   )
 
   return {
+    __typename: 'IDPayload',
     id: eventId,
   }
 }
@@ -140,7 +150,7 @@ export const update = async (
 
   const ddt = new DynamoDatetime({
     dates: dateStart,
-    times: timeStart,
+    times: timeStart ?? undefined,
   })
 
   const gsi1sk = ddt.getIsoDatetime()
@@ -148,6 +158,7 @@ export const update = async (
   const update: Dt65EventUpdateSchema = {
     ...getPrimaryKey(eventId),
     ...rest,
+    description: rest.description ?? undefined,
     dateStart: ddt.getDate(),
     timeStart: ddt.getTime(),
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,

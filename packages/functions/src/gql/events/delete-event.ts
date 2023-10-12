@@ -12,6 +12,7 @@ export const deleteEvent: AppSyncResolverHandler<
   await Event.remove(event.arguments.eventId)
 
   return {
+    __typename: 'IDPayload',
     id: event.arguments.eventId,
   }
 }

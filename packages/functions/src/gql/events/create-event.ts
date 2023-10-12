@@ -17,6 +17,7 @@ export const createEvent: AppSyncResolverHandler<
   })
 
   return {
+    __typename: 'IDPayload',
     id,
   }
 }

@@ -32,5 +32,6 @@ export const getUsers: AppSyncResolverHandler<
   return {
     ...response,
     users,
+    __typename: 'UsersResponse',
   }
 }
