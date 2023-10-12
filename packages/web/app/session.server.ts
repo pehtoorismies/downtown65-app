@@ -4,8 +4,8 @@ import { RefreshTokenDocument } from '@downtown65-app/graphql/graphql'
 import type { Session } from '@remix-run/node'
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
 import jwtDecode from 'jwt-decode'
+import { Config } from 'sst/node/config'
 import { z } from 'zod'
-import { getCookieSecret } from '~/cookie-secret.server'
 import { User } from '~/domain/user'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
@@ -40,7 +40,7 @@ const sessionStorage = createCookieSessionStorage({
     httpOnly: true,
     path: '/',
     sameSite: 'lax',
-    secrets: [getCookieSecret()],
+    secrets: [Config.COOKIE_SECRET],
     secure: process.env.NODE_ENV === 'production',
   },
 })

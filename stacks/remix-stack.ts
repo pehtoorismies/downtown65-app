@@ -2,10 +2,10 @@ import * as acm from 'aws-cdk-lib/aws-certificatemanager'
 import * as route53 from 'aws-cdk-lib/aws-route53'
 import type { StackContext } from 'sst/constructs'
 import { RemixSite, use } from 'sst/constructs'
+import { ConfigStack } from './config-stack'
 import { GraphqlStack } from './graphql-stack'
 import { MediaBucketStack } from './media-bucket-stack'
 import { getDomain } from './support/get-domain'
-import { getEnvironmentVariable } from './support/get-environment-variable'
 
 export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
@@ -20,6 +20,8 @@ export const RemixStack = ({ stack, app }: StackContext) => {
 
   const domainName = getDomain(stage)
 
+  const { COOKIE_SECRET } = use(ConfigStack)
+
   const certificate = new acm.DnsValidatedCertificate(stack, 'Certificate', {
     domainName: `downtown65.events`,
     hostedZone,
@@ -30,12 +32,12 @@ export const RemixStack = ({ stack, app }: StackContext) => {
   // Create the Remix site
   const site = new RemixSite(stack, 'Downtown65-remix', {
     path: 'packages/web',
+    bind: [COOKIE_SECRET],
     environment: {
       API_URL: ApiUrl,
       API_KEY: ApiKey,
       SST_STAGE: stage,
       DOMAIN_NAME: domainName,
-      COOKIE_SECRET: getEnvironmentVariable('COOKIE_SECRET'),
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
       MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
       APP_MODE: app.mode,

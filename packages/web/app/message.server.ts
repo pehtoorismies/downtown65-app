@@ -1,6 +1,6 @@
 import type { Session } from '@remix-run/node'
 import { createCookieSessionStorage } from '@remix-run/node'
-import { getCookieSecret } from '~/cookie-secret.server'
+import { Config } from 'sst/node/config'
 
 export type ToastMessage = { message: string; type: 'success' | 'error' }
 
@@ -11,7 +11,7 @@ const { commitSession, getSession } = createCookieSessionStorage({
     httpOnly: true,
     sameSite: 'lax',
     // expires: new Date(Date.now() + ONE_YEAR),
-    secrets: [getCookieSecret()],
+    secrets: [Config.COOKIE_SECRET],
     secure: true,
   },
 })
