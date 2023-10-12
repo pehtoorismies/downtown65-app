@@ -1,6 +1,6 @@
 import * as appsync from '@aws-cdk/aws-appsync-alpha'
 import * as cdk from 'aws-cdk-lib'
-import * as lambda from 'aws-cdk-lib/aws-lambda'
+// import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
 import { AppSyncApi, Function, use } from 'sst/constructs'
 import type { StackContext } from 'sst/constructs'
@@ -36,11 +36,11 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       MEDIA_BUCKET_DOMAIN,
       MEDIA_BUCKET_NAME,
     ],
-    layers: [
-      new lambda.LayerVersion(stack, 'AppLayer', {
-        code: lambda.Code.fromAsset('stacks/layers/sharp'),
-      }),
-    ],
+    // layers: [
+    //   new lambda.LayerVersion(stack, 'AppLayer', {
+    //     code: lambda.Code.fromAsset('stacks/layers/sharp'),
+    //   }),
+    // ],
   })
 
   gqlFunction.attachPermissions([mediaBucket])
