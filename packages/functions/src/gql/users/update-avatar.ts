@@ -5,8 +5,6 @@ import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { Config } from 'sst/node/config'
 import { getAuth0Management } from '~/gql/support/auth0'
 
-const MEDIA_BUCKET_DOMAIN = Config.MEDIA_BUCKET_DOMAIN
-
 export const updateAvatar: AppSyncResolverHandler<
   MutationUpdateAvatarArgs,
   boolean
@@ -19,7 +17,7 @@ export const updateAvatar: AppSyncResolverHandler<
   const auth0serId = identity.sub
   const { uploadedFilename } = event.arguments
 
-  const picture = `https://${MEDIA_BUCKET_DOMAIN}/${uploadedFilename}`
+  const picture = `https://${Config.MEDIA_BUCKET_DOMAIN}/${uploadedFilename}`
 
   const management = await getAuth0Management()
 
