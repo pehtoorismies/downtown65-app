@@ -7,7 +7,7 @@ import type {
   MutationSignupArgs,
   QueryEventArgs as QueryEventArguments,
   RefreshResponse,
-  SignupResult,
+  SignupResponse,
 } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import { forgotPassword } from './auth/forgot-password'
@@ -28,7 +28,7 @@ export type Outputs =
   | Dt65Event
   | LoginResponse
   | RefreshResponse
-  | SignupResult
+  | SignupResponse
   | boolean
   | undefined
   | null
