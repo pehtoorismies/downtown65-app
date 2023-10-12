@@ -1,3 +1,4 @@
+import { assertUnreachable } from '@downtown65-app/core/assert-unreachable'
 import { graphql } from '@downtown65-app/graphql/gql'
 import { RefreshTokenDocument } from '@downtown65-app/graphql/graphql'
 import type { Session } from '@remix-run/node'
@@ -59,12 +60,17 @@ interface CreateUserSession {
 const GglDocumentIgnored = graphql(`
   mutation RefreshToken($refreshToken: String!) {
     refreshToken(refreshToken: $refreshToken) {
-      tokens {
-        idToken
-        accessToken
-      }
-      refreshError
+      __typename
+      ...RefreshTokensFragment
+      ...RefreshErrorFragment
     }
+  }
+  fragment RefreshTokensFragment on RefreshTokens {
+    accessToken
+    idToken
+  }
+  fragment RefreshErrorFragment on RefreshError {
+    message
   }
 `)
 
@@ -74,7 +80,7 @@ const fetchRenewTokens = async (
   accessToken: string
   idToken: string
 }> => {
-  const { refreshToken: rt } = await gqlClient.request(
+  const { refreshToken: result } = await gqlClient.request(
     RefreshTokenDocument,
     {
       refreshToken,
@@ -82,16 +88,20 @@ const fetchRenewTokens = async (
     PUBLIC_AUTH_HEADERS
   )
 
-  if (rt.tokens) {
-    return {
-      accessToken: rt.tokens.accessToken,
-      idToken: rt.tokens.idToken,
+  switch (result.__typename) {
+    case 'RefreshTokens': {
+      return result
+    }
+    case 'RefreshError': {
+      logger.error({ result }, 'Error refreshing token')
+      // TODO: perhaps a softer approach?
+      throw new Error(result.message)
     }
   }
 
-  logger.error({ refreshError: rt.refreshError }, 'Error refreshing token')
-  // TODO: fix
-  throw new Error(rt.refreshError ?? undefined)
+  // make sure switch case is exhaustive
+  const { __typename } = result
+  assertUnreachable(__typename)
 }
 
 type Values = {

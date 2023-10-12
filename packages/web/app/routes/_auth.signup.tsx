@@ -1,5 +1,6 @@
+import { assertUnreachable } from '@downtown65-app/core/assert-unreachable'
 import { graphql } from '@downtown65-app/graphql/gql'
-import type { SignupPayload } from '@downtown65-app/graphql/graphql'
+import type { SignupFieldError } from '@downtown65-app/graphql/graphql'
 import { SignupDocument } from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
@@ -41,13 +42,18 @@ const GglIgnored = graphql(`
         registerSecret: $registerSecret
       }
     ) {
-      user {
-        id
-      }
-      errors {
-        path
-        message
-      }
+      __typename
+      ...SignupSuccessFragment
+      ...SignupErrorFragment
+    }
+  }
+  fragment SignupSuccessFragment on SignupSuccess {
+    message
+  }
+  fragment SignupErrorFragment on SignupError {
+    errors {
+      message
+      path
     }
   }
 `)
@@ -68,7 +74,7 @@ const SignupForm = z.object({
   registerSecret: z.string(),
 })
 
-const toActionData = (errors: NonNullable<SignupPayload['errors']>) => {
+const toActionData = (errors: NonNullable<SignupFieldError[]>) => {
   return {
     errors: Object.fromEntries(errors.map((t) => [t.path, t.message])),
   }
@@ -90,18 +96,25 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     PUBLIC_AUTH_HEADERS
   )
 
-  if (signup.errors) {
-    return json(toActionData(signup.errors), { status: 400 })
+  switch (signup.__typename) {
+    case 'SignupSuccess': {
+      const session = await getMessageSession(request.headers.get('cookie'))
+      setSuccessMessage(
+        session,
+        `Vahvistus lähetetty osoitteeseen: ${signupForm.email}`
+      )
+      return redirect('/login', {
+        headers: { 'Set-Cookie': await commitMessageSession(session) },
+      })
+    }
+    case 'SignupError': {
+      return json(toActionData(signup.errors), { status: 400 })
+    }
   }
 
-  const session = await getMessageSession(request.headers.get('cookie'))
-  setSuccessMessage(
-    session,
-    `Vahvistus lähetetty osoitteeseen: ${signupForm.email}`
-  )
-  return redirect('/login', {
-    headers: { 'Set-Cookie': await commitMessageSession(session) },
-  })
+  // make sure switch case is exhaustive
+  const { __typename } = signup
+  assertUnreachable(__typename)
 }
 
 export default function Signup() {
