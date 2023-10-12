@@ -1,9 +1,12 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
-    "noUnusedParameters": true,
+    "lib": [
+      "esnext"
+    ],
     "module": "esnext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noUnusedParameters": true
   },
   "exclude": [
     "packages"
