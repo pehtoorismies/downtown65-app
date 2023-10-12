@@ -2,6 +2,7 @@
   "name": "@downtown65-app/functions",
   "version": "0.0.0",
   "type": "module",
+  "private": true,
   "license": "MIT",
   "scripts": {
     "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
@@ -17,13 +18,12 @@
     "handlebars": "4.7.7",
     "mjml": "4.13.0",
     "node-fetch": "3.3.0",
-    "sharp": "0.31.3",
     "superagent-proxy": "3.0.0",
     "uglify-js": "3.17.4",
     "ulid": "2.3.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "8.10.119",
-    "@types/auth0": "3.3.3"
+    "@types/auth0": "3.3.3",
+    "@types/aws-lambda": "8.10.119"
   }
 }
