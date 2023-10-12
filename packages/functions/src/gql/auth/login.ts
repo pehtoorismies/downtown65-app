@@ -44,6 +44,7 @@ export const login: AppSyncResolverHandler<
       refreshToken: tokens.refresh_token,
     }
   } catch (error: unknown) {
+    // TODO: use logger
     console.error(JSON.stringify(error))
     const errorResponse = ErrorResponse.parse(error)
 

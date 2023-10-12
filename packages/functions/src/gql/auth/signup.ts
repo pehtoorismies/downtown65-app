@@ -1,13 +1,14 @@
 import { SignupField } from '@downtown65-app/graphql/graphql'
 import type {
-  FieldError,
   MutationSignupArgs,
-  SignupPayload,
+  SignupFieldError,
+  SignupInput,
+  SignupResult,
 } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'
 import { Config } from 'sst/node/config'
-import { Auth0UserResponse, toUser } from '../support/auth0-user'
+import { Auth0UserResponse } from '../support/auth0-user'
 import { ErrorResponse } from '~/gql/auth/support/error'
 import { getAuth0Management } from '~/gql/support/auth0'
 
@@ -15,13 +16,8 @@ const hasWhiteSpace = (s: string) => {
   return /\s/.test(s)
 }
 
-export const signup: AppSyncResolverHandler<
-  MutationSignupArgs,
-  SignupPayload
-> = async (event) => {
-  const { input } = event.arguments
-
-  const errors: FieldError[] = []
+const validateWhiteSpace = (input: SignupInput): SignupFieldError[] => {
+  const errors = []
 
   if (hasWhiteSpace(input.email)) {
     errors.push({
@@ -43,9 +39,14 @@ export const signup: AppSyncResolverHandler<
     })
   }
 
-  if (errors.length > 0) {
-    return { errors }
-  }
+  return errors.map((error) => ({
+    __typename: 'SignupFieldError',
+    ...error,
+  }))
+}
+
+const validateFields = (input: SignupInput): SignupFieldError[] => {
+  const errors = []
 
   if (input.registerSecret !== Config.REGISTER_SECRET) {
     errors.push({
@@ -66,12 +67,31 @@ export const signup: AppSyncResolverHandler<
     })
   }
 
-  if (errors.length > 0) {
-    return { errors }
+  return errors.map((error) => ({
+    __typename: 'SignupFieldError',
+    ...error,
+  }))
+}
+
+export const signup: AppSyncResolverHandler<
+  MutationSignupArgs,
+  SignupResult
+> = async (event) => {
+  const { input } = event.arguments
+
+  const whiteSpaceErrors = validateWhiteSpace(input)
+  if (whiteSpaceErrors.length > 0) {
+    return { errors: whiteSpaceErrors, __typename: 'SignupError' }
+  }
+
+  const fieldErrors = validateFields(input)
+  if (fieldErrors.length > 0) {
+    return { errors: fieldErrors, __typename: 'SignupError' }
   }
 
   const management = await getAuth0Management()
 
+  const errors = []
   const existingUsers = await management.getUsers({
     fields: 'email,nickname',
     search_engine: 'v3',
@@ -92,12 +112,20 @@ export const signup: AppSyncResolverHandler<
       })
     }
     if (errors.length === 0) {
+      // TODO: use logger
       console.error('Illegal state. Query results:', existingUsers)
       throw new Error(
         'Illegal state. Auth0 query returned matching users but they are not found.'
       )
     }
-    return { errors }
+
+    return {
+      __typename: 'SignupError',
+      errors: errors.map((error) => ({
+        __typename: 'SignupFieldError',
+        ...error,
+      })),
+    }
   }
 
   try {
@@ -117,16 +145,23 @@ export const signup: AppSyncResolverHandler<
       app_metadata: { role: 'USER' },
     })
 
-    const auth0User = Auth0UserResponse.parse(returnObject)
+    // validate format
+    // TODO: is this needed?
+    Auth0UserResponse.parse(returnObject)
 
-    return { user: toUser(auth0User) }
+    return {
+      __typename: 'SignupSuccess',
+      message: 'Created',
+    }
   } catch (error: unknown) {
     console.error(JSON.stringify(error))
     const errorResponse = ErrorResponse.parse(error)
 
     return {
+      __typename: 'SignupError',
       errors: [
         {
+          __typename: 'SignupFieldError',
           message: errorResponse.message,
           path: SignupField.Email,
         },

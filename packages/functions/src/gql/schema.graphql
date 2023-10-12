@@ -58,7 +58,6 @@ type Event @aws_api_key @aws_oidc {
     type: EventType!
 }
 
-
 type MeUser implements User & DetailedUser @aws_api_key @aws_oidc {
     email: String!
     id: ID!
@@ -76,7 +75,6 @@ type OtherUser implements User & DetailedUser {
     nickname: String!
     createdAt: String!
 }
-
 
 input MeInput {
     id: ID!
@@ -108,8 +106,6 @@ input CreateEventInput {
     timeStart: TimeInput
     type: EventType!
 }
-
-
 
 type Preferences {
     subscribeEventCreationEmail: Boolean!
@@ -152,16 +148,17 @@ type LoginError implements Error @aws_api_key {
 
 union LoginResponse = Tokens | LoginError
 
-type RefreshTokensPayload @aws_api_key {
+type RefreshTokens @aws_api_key {
     accessToken: String!
     expiresIn: Int!
     idToken: String!
 }
 
-type RefreshPayload @aws_api_key {
-    tokens: RefreshTokensPayload
-    refreshError: String
+type RefreshError @aws_api_key {
+    message: String!
 }
+
+union RefreshResponse = RefreshTokens | RefreshError
 
 input PreferencesInput {
     subscribeEventCreationEmail: Boolean!
@@ -189,15 +186,20 @@ enum SignupField {
     email
 }
 
-type FieldError @aws_api_key{
+type SignupFieldError @aws_api_key{
     message: String!
     path: SignupField!
 }
 
-type SignupPayload @aws_api_key {
-    user: User
-    errors: [FieldError!]
+type SignupError @aws_api_key {
+    errors: [SignupFieldError!]!
 }
+
+type SignupSuccess @aws_api_key {
+    message: String!
+}
+
+union SignupResult = SignupSuccess | SignupError
 
 input UpdateMeInput {
     preferences: PreferencesInput!
@@ -237,7 +239,7 @@ type Mutation {
         password: String!
     ): LoginResponse! @aws_api_key
 
-    signup(input: SignupInput!): SignupPayload! @aws_api_key
+    signup(input: SignupInput!): SignupResult! @aws_api_key
 
     forgotPassword(
         email: String!
@@ -246,5 +248,5 @@ type Mutation {
 
     refreshToken(
         refreshToken: String!
-    ): RefreshPayload! @aws_api_key
+    ): RefreshResponse! @aws_api_key
 }

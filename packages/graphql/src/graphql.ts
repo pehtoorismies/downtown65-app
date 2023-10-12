@@ -108,12 +108,6 @@ export enum EventType {
   Ultras = 'ULTRAS',
 }
 
-export type FieldError = {
-  __typename: 'FieldError'
-  message: Scalars['String']['output']
-  path: SignupField
-}
-
 export type IdPayload = {
   __typename: 'IDPayload'
   id: Scalars['ID']['output']
@@ -153,8 +147,8 @@ export type Mutation = {
   leaveEvent?: Maybe<Scalars['Boolean']['output']>
   login: LoginResponse
   participateEvent?: Maybe<Scalars['Boolean']['output']>
-  refreshToken: RefreshPayload
-  signup: SignupPayload
+  refreshToken: RefreshResponse
+  signup: SignupResult
   updateAvatar: Scalars['Boolean']['output']
   updateEvent: Event
   updateMe: MeUser
@@ -256,17 +250,23 @@ export type QueryUsersArgs = {
   perPage: Scalars['Int']['input']
 }
 
-export type RefreshPayload = {
-  __typename: 'RefreshPayload'
-  refreshError?: Maybe<Scalars['String']['output']>
-  tokens?: Maybe<RefreshTokensPayload>
+export type RefreshError = {
+  __typename: 'RefreshError'
+  message: Scalars['String']['output']
 }
 
-export type RefreshTokensPayload = {
-  __typename: 'RefreshTokensPayload'
+export type RefreshResponse = RefreshError | RefreshTokens
+
+export type RefreshTokens = {
+  __typename: 'RefreshTokens'
   accessToken: Scalars['String']['output']
   expiresIn: Scalars['Int']['output']
   idToken: Scalars['String']['output']
+}
+
+export type SignupError = {
+  __typename: 'SignupError'
+  errors: Array<SignupFieldError>
 }
 
 export enum SignupField {
@@ -277,6 +277,12 @@ export enum SignupField {
   RegisterSecret = 'registerSecret',
 }
 
+export type SignupFieldError = {
+  __typename: 'SignupFieldError'
+  message: Scalars['String']['output']
+  path: SignupField
+}
+
 export type SignupInput = {
   email: Scalars['String']['input']
   name: Scalars['String']['input']
@@ -285,10 +291,11 @@ export type SignupInput = {
   registerSecret: Scalars['String']['input']
 }
 
-export type SignupPayload = {
-  __typename: 'SignupPayload'
-  errors?: Maybe<Array<FieldError>>
-  user?: Maybe<User>
+export type SignupResult = SignupError | SignupSuccess
+
+export type SignupSuccess = {
+  __typename: 'SignupSuccess'
+  message: Scalars['String']['output']
 }
 
 export type TimeInput = {
@@ -388,20 +395,30 @@ export type SignupMutationVariables = Exact<{
 
 export type SignupMutation = {
   __typename: 'Mutation'
-  signup: {
-    __typename: 'SignupPayload'
-    user?:
-      | { __typename: 'Creator'; id: string }
-      | { __typename: 'EventParticipant'; id: string }
-      | { __typename: 'MeUser'; id: string }
-      | { __typename: 'OtherUser'; id: string }
-      | null
-    errors?: Array<{
-      __typename: 'FieldError'
-      path: SignupField
-      message: string
-    }> | null
-  }
+  signup:
+    | {
+        __typename: 'SignupError'
+        errors: Array<{
+          __typename: 'SignupFieldError'
+          message: string
+          path: SignupField
+        }>
+      }
+    | { __typename: 'SignupSuccess'; message: string }
+}
+
+export type SignupSuccessFragmentFragment = {
+  __typename: 'SignupSuccess'
+  message: string
+}
+
+export type SignupErrorFragmentFragment = {
+  __typename: 'SignupError'
+  errors: Array<{
+    __typename: 'SignupFieldError'
+    message: string
+    path: SignupField
+  }>
 }
 
 export type GetEventQueryVariables = Exact<{
@@ -608,15 +625,20 @@ export type RefreshTokenMutationVariables = Exact<{
 
 export type RefreshTokenMutation = {
   __typename: 'Mutation'
-  refreshToken: {
-    __typename: 'RefreshPayload'
-    refreshError?: string | null
-    tokens?: {
-      __typename: 'RefreshTokensPayload'
-      idToken: string
-      accessToken: string
-    } | null
-  }
+  refreshToken:
+    | { __typename: 'RefreshError'; message: string }
+    | { __typename: 'RefreshTokens'; accessToken: string; idToken: string }
+}
+
+export type RefreshTokensFragmentFragment = {
+  __typename: 'RefreshTokens'
+  accessToken: string
+  idToken: string
+}
+
+export type RefreshErrorFragmentFragment = {
+  __typename: 'RefreshError'
+  message: string
 }
 
 export const TokensFragmentFragmentDoc = {
@@ -661,6 +683,93 @@ export const ErrorFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<ErrorFragmentFragment, unknown>
+export const SignupSuccessFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'SignupSuccessFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'SignupSuccess' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SignupSuccessFragmentFragment, unknown>
+export const SignupErrorFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'SignupErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'SignupError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'errors' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'path' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SignupErrorFragmentFragment, unknown>
+export const RefreshTokensFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'RefreshTokensFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'RefreshTokens' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'accessToken' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'idToken' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RefreshTokensFragmentFragment, unknown>
+export const RefreshErrorFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'RefreshErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'RefreshError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<RefreshErrorFragmentFragment, unknown>
 export const ForgotPasswordDocument = {
   kind: 'Document',
   definitions: [
@@ -958,30 +1067,53 @@ export const SignupDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
                 {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'user' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                    ],
-                  },
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'SignupSuccessFragment' },
                 },
                 {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'errors' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'path' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'message' },
-                      },
-                    ],
-                  },
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'SignupErrorFragment' },
                 },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'SignupSuccessFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'SignupSuccess' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'SignupErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'SignupError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'errors' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'path' } },
               ],
             },
           },
@@ -1836,30 +1968,47 @@ export const RefreshTokenDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
+                { kind: 'Field', name: { kind: 'Name', value: '__typename' } },
                 {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'tokens' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'idToken' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'accessToken' },
-                      },
-                    ],
-                  },
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'RefreshTokensFragment' },
                 },
                 {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'refreshError' },
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'RefreshErrorFragment' },
                 },
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'RefreshTokensFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'RefreshTokens' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'accessToken' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'idToken' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'RefreshErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'RefreshError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
         ],
       },
     },
