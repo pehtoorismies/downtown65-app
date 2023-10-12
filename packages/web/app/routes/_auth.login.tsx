@@ -125,10 +125,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           },
           'Unable login user'
         )
-        return json(
-          { error: 'Server error', field: 'general' },
-          { status: 500 }
-        )
+        return json({ error: error.message, field: 'general' }, { status: 500 })
       }
     }
   }
