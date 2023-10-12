@@ -32,5 +32,7 @@ export const ConfigStack = ({ app, stack }: StackContext) => {
     JWT_AUDIENCE: getStaticConfig('JWT_AUDIENCE'),
     // secret string required when user fills the form to register to downtown65.events
     REGISTER_SECRET: new Config.Secret(stack, 'REGISTER_SECRET'),
+    // secret setting cookies in frontend
+    COOKIE_SECRET: new Config.Secret(stack, 'COOKIE_SECRET'),
   }
 }
