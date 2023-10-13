@@ -1,4 +1,5 @@
 import * as acm from 'aws-cdk-lib/aws-certificatemanager'
+import * as lambda from 'aws-cdk-lib/aws-lambda'
 import * as route53 from 'aws-cdk-lib/aws-route53'
 import type { StackContext } from 'sst/constructs'
 import { RemixSite, use } from 'sst/constructs'
@@ -11,6 +12,15 @@ export const RemixStack = ({ stack, app }: StackContext) => {
   const { ApiUrl, ApiKey } = use(GraphqlStack)
   const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN, mediaBucket } =
     use(MediaBucketStack)
+
+  const sharpLayer = new lambda.LayerVersion(
+    stack,
+    `${app.stage}-SharpLayer'`,
+    {
+      code: lambda.Code.fromAsset('stacks/layers/sharp'),
+      compatibleArchitectures: [lambda.Architecture.ARM_64],
+    }
+  )
 
   const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
     domainName: 'downtown65.events',
@@ -40,7 +50,6 @@ export const RemixStack = ({ stack, app }: StackContext) => {
       DOMAIN_NAME: domainName,
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
       MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
-      APP_MODE: app.mode,
     },
     customDomain: {
       domainName,
@@ -50,13 +59,24 @@ export const RemixStack = ({ stack, app }: StackContext) => {
         certificate,
       },
     },
+    nodejs: {
+      esbuild: {
+        external: ['sharp'],
+      },
+    },
   })
 
+  const serverHandler = site.cdk?.function as lambda.Function
+
+  if (serverHandler) {
+    serverHandler.addLayers(sharpLayer)
+  }
   site.attachPermissions([mediaBucket])
 
   // Add the site's URL to stack output
   stack.addOutputs({
     URL: site.url ?? 'localhost',
     CUSTOM_DOMAIN_URL: site.customDomainUrl ?? 'no_custom_domain',
+    FUNC_ARN: site.cdk?.function?.functionArn ?? 'no_func_arn',
   })
 }

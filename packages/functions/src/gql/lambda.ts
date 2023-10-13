@@ -16,6 +16,7 @@ export const handler: AppSyncResolverHandler<Inputs, Outputs> = (
   callback
 ) => {
   withRequest(event, context)
+
   const { fieldName } = event.info
   if (isPrivateField(fieldName)) {
     return privateResolver(fieldName)(event, context, callback)

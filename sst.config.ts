@@ -5,6 +5,7 @@ import { CronStack } from './stacks/cron-stack'
 import { DynamoStack } from './stacks/dynamo-stack'
 import { DynamoStreamStack } from './stacks/dynamo-stream-stack'
 import { GraphqlStack } from './stacks/graphql-stack'
+import { LayerStack } from './stacks/layer-stack'
 import { MediaBucketStack } from './stacks/media-bucket-stack'
 import { RemixStack } from './stacks/remix-stack'
 
@@ -19,12 +20,14 @@ export default {
     if (app.stage !== 'production') {
       app.setDefaultRemovalPolicy(RemovalPolicy.DESTROY)
     }
+
     app.setDefaultFunctionProps({
       environment: {
         APP_MODE: app.mode,
         APP_STAGE: app.stage,
       },
       runtime: 'nodejs18.x',
+      // architecture: 'arm_64',
       // these are needed for mjml library to work
       nodejs: {
         esbuild: {
@@ -34,19 +37,13 @@ export default {
           external: ['uglify-js'],
         },
       },
-      // bundle: {
-      //   nodeModules: ['uglify-js'],
-      //   externalModules: ['sharp'],
-      //   format: 'esm',
-      //   loader: {
-      //     '.mjml': 'text',
-      //   },
-      // },
+
       logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
     })
 
     app
       .stack(ConfigStack)
+      .stack(LayerStack)
       .stack(MediaBucketStack)
       .stack(DynamoStack)
       .stack(DynamoStreamStack)

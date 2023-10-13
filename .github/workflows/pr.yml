@@ -40,17 +40,9 @@ jobs:
         with:
           node-version: 18
           cache: 'yarn'
-      #      - name: Change architecture
-      #        run: |
-      #          touch .npmrc
-      #          echo "arch=x64" > .npmrc
-      #          echo "platform=linux" >> .npmrc
       - name: Install
         run: |
           yarn install --immutable --immutable-cache
-          rm -rf node_modules/sharp
-          cd packages/web
-          SHARP_IGNORE_GLOBAL_LIBVIPS=1 npm_config_arch=x64 npm_config_platform=linux yarn add sharp
       - name: Set default common sst secrets
         run: |
           npx sst secrets --stage $STAGE_TO_USE set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
