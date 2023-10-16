@@ -55,9 +55,9 @@ export const getStage = (): string => {
   if (process.env.NODE_ENV === 'development') {
     return 'local-development'
   }
-  const value = process.env['SST_STAGE']
+  const value = process.env['APP_STAGE']
   if (!value) {
-    throw new Error(`Environment value 'process.env.SST_STAGE' is not set`)
+    throw new Error(`Environment value 'process.env.APP_STAGE' is not set`)
   }
   return value
 }

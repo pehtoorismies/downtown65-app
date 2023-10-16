@@ -26,7 +26,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     domainName: 'downtown65.events',
   })
 
-  const stage = app.stage
+  const { stage, mode } = app
 
   const domainName = getDomain(stage)
 
@@ -46,10 +46,11 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     environment: {
       API_URL: ApiUrl,
       API_KEY: ApiKey,
-      SST_STAGE: stage,
       DOMAIN_NAME: domainName,
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
       MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
+      APP_MODE: mode,
+      APP_STAGE: stage,
     },
     customDomain: {
       domainName,

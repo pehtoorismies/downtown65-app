@@ -39,7 +39,7 @@ const isTestEmail = (stage: string, appMode: string): boolean => {
 export const handler: DynamoDBStreamHandler = async (
   event: DynamoDBStreamEvent
 ): Promise<void> => {
-  const stage = getEnvironmentVariable('SST_STAGE')
+  const stage = getEnvironmentVariable('APP_STAGE')
   const appMode = getEnvironmentVariable('APP_MODE')
   const domainName = getEnvironmentVariable('DOMAIN_NAME')
 

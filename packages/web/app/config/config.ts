@@ -3,7 +3,7 @@ import { getEnvironmentVariable } from '@downtown65-app/core/get-environment-var
 export const Config = {
   API_URL: getEnvironmentVariable('API_URL'),
   API_KEY: getEnvironmentVariable('API_KEY'),
-  SST_STAGE: getEnvironmentVariable('SST_STAGE'),
+  APP_STAGE: getEnvironmentVariable('APP_STAGE'),
   DOMAIN_NAME: getEnvironmentVariable('DOMAIN_NAME'),
   STORAGE_BUCKET: getEnvironmentVariable('STORAGE_BUCKET'),
   // MEDIA_DOMAIN: getEnvironmentVariable('MEDIA_DOMAIN'),
