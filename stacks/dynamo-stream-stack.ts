@@ -15,7 +15,6 @@ export const DynamoStreamStack = ({ app, stack }: StackContext) => {
     permissions: ['ses:SendEmail', 'ses:SendRawEmail'],
     environment: {
       DOMAIN_NAME: getDomain(app.stage),
-      SST_STAGE: app.stage,
     },
   })
 
