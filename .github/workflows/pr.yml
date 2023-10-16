@@ -47,6 +47,7 @@ jobs:
         run: |
           npx sst secrets --stage $STAGE_TO_USE set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
           npx sst secrets --stage $STAGE_TO_USE set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+          npx sst secrets --stage $STAGE_TO_USE set COOKIE_SECRET ${{ secrets.COOKIE_SECRET }}
       - name: Write stage to .sst/stage
         run: |
           echo $STAGE_TO_USE > .sst/stage
