@@ -1,38 +1,24 @@
-/** TODO: fix ligth - dark schema */
-
 .control {
     justify-content: center;
     padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
-    border-radius: var(--mantine-radius-md);
     font-weight: 500;
     text-decoration: none;
-    color: var(--mantine-color-black);
+    border-bottom: 2px solid rgba(1, 1, 1, 0);
+    color: light-dark(var(--mantine-color-black), var(--mantine-gray-0));
     font-size: var(--mantine-font-size-sm);
 
     @mixin hover {
-        background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+        border-bottom: light-dark(2px solid var(--mantine-color-blue-3), 2px solid var(--mantine-color-blue-8));
     }
 }
 
 .active {
-    background-color: var(--mantine-color-blue-light);
-    color: var(--mantine-color-blue-6);
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-blue-6));
+    font-weight: 600;
+    border-bottom: 2px solid light-dark(var(--mantine-color-blue-6), var(--mantine-color-blue-8));
     @mixin hover {
-        background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+        border-bottom: 2px solid light-dark(var(--mantine-color-blue-3), var(--mantine-color-blue-7));
     }
-    /*
-
-
-    backgroundColor: theme.fn.variant({
-        variant: 'light',
-        color: theme.primaryColor,
-      }).background,
-      color: theme.fn.variant({ variant: 'light', color: theme.primaryColor })
-        .color,
-    },
-     */
-
-
 }
 
 .controlDesktop {
