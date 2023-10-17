@@ -26,7 +26,7 @@ jobs:
       - name: Install
         run: |
           yarn install --immutable --immutable-cache --check-cache
-          npx lerna run build
+          npx sst types
       - name: Remove common sst secrets
         run: |
           npx sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET
