@@ -27,17 +27,6 @@ export default {
         APP_STAGE: app.stage,
       },
       runtime: 'nodejs18.x',
-      // architecture: 'arm_64',
-      // these are needed for mjml library to work
-      nodejs: {
-        esbuild: {
-          loader: {
-            '.mjml': 'text',
-          },
-          // external: ['uglify-js'],
-        },
-      },
-
       logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
     })
 
