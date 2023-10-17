@@ -16,6 +16,17 @@ export const DynamoStreamStack = ({ app, stack }: StackContext) => {
     environment: {
       DOMAIN_NAME: getDomain(app.stage),
     },
+    nodejs: {
+      // needed for mjml library to work
+      // https://github.com/mjmlio/mjml/issues/2132
+      install: ['uglify-js'],
+      // needed for mjml library to work
+      esbuild: {
+        loader: {
+          '.mjml': 'text',
+        },
+      },
+    },
   })
 
   dynamo.table.addConsumers(stack, {
