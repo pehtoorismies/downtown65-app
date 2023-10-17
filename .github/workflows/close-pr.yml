@@ -31,6 +31,7 @@ jobs:
         run: |
           npx sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
           npx sst secrets --stage $PR_NAME remove REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+          npx sst secrets --stage $PR_NAME remove COOKIE_SECRET ${{ secrets.COOKIE_SECRET }}
       - name: Remove infra
         run: |
           npx sst remove --stage $PR_NAME
