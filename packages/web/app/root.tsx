@@ -278,8 +278,8 @@ export default function App() {
                           }}
                         >
                           <Button
-                            variant="transparent"
-                            color="black"
+                            variant="subtle"
+                            // color="black"
                             leftSection={
                               <Avatar
                                 src={user.picture}
