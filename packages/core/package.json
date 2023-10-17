@@ -12,12 +12,11 @@
   "dependencies": {
     "email-validator": "2.0.4",
     "handlebars": "4.7.7",
-    "mjml": "4.13.0",
+    "mjml": "4.14.1",
     "node-fetch": "3.3.0",
-    "superagent-proxy": "3.0.0",
-    "uglify-js": "3.17.4"
+    "superagent-proxy": "3.0.0"
   },
   "devDependencies": {
-    "@types/mjml": "4.7.1"
+    "@types/mjml": "4.7.2"
   }
 }
