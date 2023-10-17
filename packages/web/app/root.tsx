@@ -299,6 +299,7 @@ export default function App() {
                       <Menu.Dropdown>
                         <Menu.Item
                           component={Link}
+                          onClick={close}
                           to="/profile"
                           leftSection={<IconUser size={14} stroke={1.5} />}
                         >
@@ -306,6 +307,7 @@ export default function App() {
                         </Menu.Item>
                         <Menu.Item
                           onClick={() => {
+                            close()
                             fetcher.submit(
                               {},
                               { action: '/logout', method: 'post' }
