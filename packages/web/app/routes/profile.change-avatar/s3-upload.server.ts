@@ -32,7 +32,7 @@ export const createProfileUploadHandler = ({
 }: {
   userId: string
 }): UploadHandler => {
-  return async ({ name, contentType, filename, data }) => {
+  return async ({ name, filename, data }) => {
     if (name !== 'file') {
       throw new Error(`Incorrect formData field '${name}. Should be 'file'`)
     }
@@ -56,7 +56,7 @@ export const createProfileUploadHandler = ({
 
     const s3Stream = uploadStream({
       Key: key,
-      ContentType: contentType,
+      ContentType: 'image/webp',
     })
 
     Stream.Readable.from(data).pipe(resizeStream).pipe(s3Stream.writeStream)
