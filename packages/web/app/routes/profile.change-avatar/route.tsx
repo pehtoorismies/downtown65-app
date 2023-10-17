@@ -140,7 +140,7 @@ export default function ChangeAvatar() {
 
   return (
     <>
-      <Container fluid mt={75}>
+      <Container fluid mt="xs">
         <Breadcrumbs mb="xs">
           <Anchor
             data-testid="breadcrumbs-parent"
