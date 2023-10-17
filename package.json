@@ -9,7 +9,7 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
-    "production:build": "lerna run build --scope @downtown65-app/common && sst build --stage production",
+    "production:build": "sst build --stage production",
     "production:deploy": "sst deploy --stage production",
     "typecheck": "lerna run typecheck --no-sort",
     "test": "lerna run test",
