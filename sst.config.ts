@@ -34,7 +34,7 @@ export default {
           loader: {
             '.mjml': 'text',
           },
-          external: ['uglify-js'],
+          // external: ['uglify-js'],
         },
       },
 
