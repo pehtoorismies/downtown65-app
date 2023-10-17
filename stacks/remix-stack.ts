@@ -67,12 +67,13 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     },
   })
 
+  site.attachPermissions([mediaBucket])
+
   const serverHandler = site.cdk?.function as lambda.Function
 
   if (serverHandler) {
     serverHandler.addLayers(sharpLayer)
   }
-  site.attachPermissions([mediaBucket])
 
   // Add the site's URL to stack output
   stack.addOutputs({
