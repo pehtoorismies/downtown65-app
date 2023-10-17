@@ -11,7 +11,6 @@ import {
   Divider,
   Group,
   LoadingOverlay,
-  SimpleGrid,
   Switch,
   Text,
 } from '@mantine/core'
@@ -247,17 +246,15 @@ export default function Profile() {
       <Container size={BOX_SIZE}>
         <Divider my="sm" label="Kirjaudu ulos" labelPosition="center" />
         <Group justify="center">
-          <SimpleGrid cols={1} ml="lg">
-            <Form action="/logout" method="post">
-              <Button
-                type="submit"
-                leftSection={<IconLogout size={18} />}
-                data-testid="profile-logout"
-              >
-                Kirjaudu ulos
-              </Button>
-            </Form>
-          </SimpleGrid>
+          <Form action="/logout" method="post">
+            <Button
+              type="submit"
+              leftSection={<IconLogout size={18} />}
+              data-testid="profile-logout"
+            >
+              Kirjaudu ulos
+            </Button>
+          </Form>
         </Group>
       </Container>
     </>
