@@ -51,7 +51,7 @@
         </mj-section>
         <mj-section background-color="#e7e7e7">
             <mj-column>
-                <mj-image width="72px" src="https://storage.googleapis.com/downtown65/logos/f_logo_RGB-Blue_72.png"
+                <mj-image width="72px" src="{{facebookLogoUrl}}"
                           href="https://www.facebook.com/downtown65endurance"></mj-image>
                 <mj-text align="center" line-height="1px" padding="0px 14px 10px 14px" font-size="14px"
                          font-family="Helvetica Neue" color="#07c">
