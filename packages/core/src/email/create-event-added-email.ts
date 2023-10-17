@@ -12,6 +12,7 @@ interface EmailParams {
   preferencesUrl: string
   subtitle: string
   title: string
+  facebookLogoUrl: string
 }
 
 export const createEventAddedEmail = (emailParams: EmailParams): EmailBody => {

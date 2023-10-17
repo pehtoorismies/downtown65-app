@@ -62,6 +62,7 @@ export const handler: DynamoDBStreamHandler = async (
     eventImageUrl: `${imageOrigin}${params.eventImagePath}`,
     eventUrl: `${hrefOrigin}/events/${params.eventId}`,
     preferencesUrl: `${hrefOrigin}/profile`,
+    facebookLogoUrl: `${imageOrigin}/logos/fb-logo.png`,
   })
 
   // SES limits recipients to 50
