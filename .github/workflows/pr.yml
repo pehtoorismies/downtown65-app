@@ -51,9 +51,9 @@ jobs:
       - name: Write stage to .sst/stage
         run: |
           echo $STAGE_TO_USE > .sst/stage
-      - name: Build
+      - name: Build types
         run: |
-          npx sst build
+          npx sst types
       - uses: actions/cache@v3
         id: restore-build
         with:
