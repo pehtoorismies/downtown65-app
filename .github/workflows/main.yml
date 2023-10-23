@@ -25,18 +25,15 @@ jobs:
       AWS_REGION: eu-north-1
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Print
-        env:
-          EVENT_CONTEXT: ${{ toJSON(github.event) }}
-        run: |
-          echo $EVENT_CONTEXT
       - uses: actions/checkout@v3
       - name: Install
         run: yarn install --immutable --immutable-cache --check-cache
-      - name: Build types
+      - name: Write stage (production) to .sst/stage
         run: |
-          npx sst types
+          echo production > .sst/stage
+      - name: Build
+        run: |
+          npx sst build
       - name: Deploy infra
         run: |
-          yarn production:deploy
+          npx sst deploy
