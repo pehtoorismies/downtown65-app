@@ -37,11 +37,6 @@ jobs:
       - name: Build types
         run: |
           npx sst types
-      #      Can't reveal github secrets and don't want to change is => users will logout
-      #      A way to would be to create it with npx sst secrets set COOKIE_SECRET <secret>
-      - name: Set default common sst secrets
-        run: |
-          npx sst secrets --stage production set COOKIE_SECRET ${{ secrets.COOKIE_SECRET }}
       - name: Deploy infra
         run: |
           yarn production:deploy
