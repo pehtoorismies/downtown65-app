@@ -9,7 +9,6 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
-    "production:build": "sst build --stage production",
     "production:deploy": "sst deploy --stage production",
     "typecheck": "lerna run typecheck --no-sort",
     "test": "lerna run test",
