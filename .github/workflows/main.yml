@@ -28,12 +28,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install
         run: yarn install --immutable --immutable-cache --check-cache
-      - name: Write stage (production) to .sst/stage
-        run: |
-          echo production > .sst/stage
       - name: Build
         run: |
-          npx sst build
+          npx sst build --stage production
       - name: Deploy infra
         run: |
-          npx sst deploy
+          npx sst deploy --stage production
