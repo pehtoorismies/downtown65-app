@@ -36,8 +36,8 @@
     "ts-node": "10.9.1",
     "ts-prune": "^0.10.3",
     "typescript": "5.2.2",
-    "vite-tsconfig-paths": "4.0.7",
-    "vitest": "0.29.7"
+    "vite-tsconfig-paths": "4.2.1",
+    "vitest": "0.34.6"
   },
   "workspaces": [
     "packages/*"
