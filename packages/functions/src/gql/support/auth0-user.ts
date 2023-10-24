@@ -1,4 +1,5 @@
 import type { MeUser, OtherUser } from '@downtown65-app/graphql/graphql'
+import type { GetUsers200ResponseOneOfInner } from 'auth0'
 import { z } from 'zod'
 
 const ROLES = ['USER', 'ADMIN'] as const
@@ -42,18 +43,13 @@ export const toUser = (auth0User: Auth0UserResponse): MeUser => {
   }
 }
 
-export const Auth0QueryUsersResponse = z.object({
-  user_id: z.string(),
-  name: z.string(),
-  email: z.string(),
-  nickname: z.string(),
-  picture: z.string(),
-  created_at: z.string(),
-})
+export const mapToOtherUser = (
+  user: GetUsers200ResponseOneOfInner
+): OtherUser => {
+  if (typeof user.created_at !== 'string') {
+    throw new TypeError('Missing created_at property')
+  }
 
-type Auth0QueryUsersResponse = z.infer<typeof Auth0QueryUsersResponse>
-
-export const mapToOtherUser = (user: Auth0QueryUsersResponse): OtherUser => {
   return {
     __typename: 'OtherUser',
     id: user.user_id,

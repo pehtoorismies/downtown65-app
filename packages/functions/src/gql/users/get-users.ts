@@ -3,15 +3,11 @@ import type {
   UsersResponse,
 } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import { z } from 'zod'
 import { getAuth0Management } from '~/gql/support/auth0'
 import {
-  Auth0QueryUsersResponse,
   QUERY_USER_RETURNED_FIELDS,
   mapToOtherUser,
 } from '~/gql/support/auth0-user'
-
-const Auth0Users = z.array(Auth0QueryUsersResponse)
 
 export const getUsers: AppSyncResolverHandler<
   QueryUsersArgs,
@@ -27,8 +23,8 @@ export const getUsers: AppSyncResolverHandler<
     sort: 'created_at:1',
   })
 
-  const auth0Users = Auth0Users.parse(data.users)
-  const users = auth0Users.map((u) => mapToOtherUser(u))
+  // const auth0Users = Auth0Users.parse(data.users)
+  const users = data.users.map((u) => mapToOtherUser(u))
 
   return {
     ...data,
