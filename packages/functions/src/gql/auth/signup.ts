@@ -9,7 +9,7 @@ import type {
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'
 import { Config } from 'sst/node/config'
-import { Auth0UserResponse } from '../support/auth0-user'
+import { parseAuth0UserResponse } from '../support/auth0-user'
 import { ErrorResponse } from '~/gql/auth/support/error'
 import { getAuth0Management } from '~/gql/support/auth0'
 
@@ -94,7 +94,7 @@ export const signup: AppSyncResolverHandler<
 
   const errors = []
   const query = `email:"${input.email}" OR nickname:"${input.nickname}"`
-  const matchingUsers = await management.getUsers({
+  const { data: matchingUsers } = await management.users.getAll({
     fields: 'email,nickname',
     search_engine: 'v3',
     q: query,
@@ -133,7 +133,7 @@ export const signup: AppSyncResolverHandler<
   }
 
   try {
-    const returnObject = await management.createUser({
+    const { data } = await management.users.create({
       connection: 'Username-Password-Authentication',
       email: input.email,
       password: input.password,
@@ -141,7 +141,7 @@ export const signup: AppSyncResolverHandler<
       nickname: input.nickname,
       verify_email: true,
       email_verified: false,
-      // switch user_metadata and app_metadata
+      // TODO: switch user_metadata and app_metadata
       user_metadata: {
         subscribeWeeklyEmail: true,
         subscribeEventCreationEmail: true,
@@ -150,7 +150,7 @@ export const signup: AppSyncResolverHandler<
     })
 
     // validate format
-    const user = Auth0UserResponse.parse(returnObject)
+    const user = parseAuth0UserResponse(data)
 
     return {
       __typename: 'SignupSuccess',

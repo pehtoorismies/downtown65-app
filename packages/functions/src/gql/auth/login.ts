@@ -3,18 +3,31 @@ import type {
   LoginResponse,
   MutationLoginArgs,
 } from '@downtown65-app/graphql/graphql'
+import type { TokenSet } from 'auth0'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { Config } from 'sst/node/config'
 import { z } from 'zod'
 import { ErrorMessage, ErrorResponse } from '~/gql/auth/support/error'
 import { getClient } from '~/gql/support/auth0'
 
-const Auth0Response = z.object({
-  access_token: z.string(),
-  id_token: z.string(),
-  expires_in: z.number(),
-  refresh_token: z.string(),
-})
+const parseResponse = (tokenSet: TokenSet) => {
+  return z
+    .object({
+      access_token: z.string(),
+      id_token: z.string(),
+      expires_in: z.number(),
+      refresh_token: z.string(),
+    })
+    .transform((tokens) => {
+      return {
+        accessToken: tokens.access_token,
+        idToken: tokens.id_token,
+        expiresIn: tokens.expires_in,
+        refreshToken: tokens.refresh_token,
+      }
+    })
+    .parse(tokenSet)
+}
 
 const auth0 = getClient()
 
@@ -23,7 +36,7 @@ export const login: AppSyncResolverHandler<
   LoginResponse
 > = async (event) => {
   try {
-    const auth0Response = await auth0.passwordGrant({
+    const { data } = await auth0.oauth.passwordGrant({
       username: event.arguments.email,
       password: event.arguments.password,
       // Scope explanation:
@@ -35,14 +48,9 @@ export const login: AppSyncResolverHandler<
         'read:events write:events read:me write:me read:users openid profile email offline_access',
       audience: Config.JWT_AUDIENCE,
     })
-    const tokens = Auth0Response.parse(auth0Response)
-
     return {
       __typename: 'Tokens',
-      accessToken: tokens.access_token,
-      idToken: tokens.id_token,
-      expiresIn: tokens.expires_in,
-      refreshToken: tokens.refresh_token,
+      ...parseResponse(data),
     }
   } catch (error: unknown) {
     logger.error(error, 'Unexpected login error')

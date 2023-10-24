@@ -10,12 +10,12 @@ export const getClient = () => {
 }
 
 export const getAuth0Management = async () => {
-  const client = await getClient().clientCredentialsGrant({
+  const client = await getClient().oauth.clientCredentialsGrant({
     audience: `https://${Config.AUTH_DOMAIN}/api/v2/`,
-    scope: 'read:users update:users',
   })
+
   const management = new ManagementClient({
-    token: client.access_token,
+    token: client.data.access_token,
     domain: Config.AUTH_DOMAIN,
   })
   return management

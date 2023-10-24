@@ -19,18 +19,19 @@ export const getUsers: AppSyncResolverHandler<
 > = async (event) => {
   const { page, perPage } = event.arguments
   const management = await getAuth0Management()
-  const response = await management.getUsers({
+  const { data } = await management.users.getAll({
     page: page,
     per_page: perPage,
     include_totals: true,
     fields: QUERY_USER_RETURNED_FIELDS,
     sort: 'created_at:1',
   })
-  const auth0Users = Auth0Users.parse(response.users)
+
+  const auth0Users = Auth0Users.parse(data.users)
   const users = auth0Users.map((u) => mapToOtherUser(u))
 
   return {
-    ...response,
+    ...data,
     users,
     __typename: 'UsersResponse',
   }

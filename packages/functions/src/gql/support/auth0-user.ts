@@ -3,15 +3,15 @@ import { z } from 'zod'
 
 const ROLES = ['USER', 'ADMIN'] as const
 
-export const Auth0UserResponse = z.object({
+const Auth0UserResponse = z.object({
   user_id: z.string(),
   email: z.string(),
   email_verified: z.boolean(),
   name: z.string(),
   nickname: z.string(),
   picture: z.string(),
-  // updated_at: z.string(),
-  // created_at: z.string(),
+  updated_at: z.string(),
+  created_at: z.string(),
   user_metadata: z.object({
     subscribeWeeklyEmail: z.boolean(),
     subscribeEventCreationEmail: z.boolean(),
@@ -20,6 +20,10 @@ export const Auth0UserResponse = z.object({
 })
 
 type Auth0UserResponse = z.infer<typeof Auth0UserResponse>
+
+export const parseAuth0UserResponse = (user: GetUsers200ResponseOneOfInner) => {
+  return Auth0UserResponse.parse(user)
+}
 
 export const toUser = (auth0User: Auth0UserResponse): MeUser => {
   return {

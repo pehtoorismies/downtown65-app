@@ -9,7 +9,7 @@ export const forgotPassword: AppSyncResolverHandler<
   boolean
 > = async (event) => {
   try {
-    await auth0.requestChangePasswordEmail({
+    await auth0.database.changePassword({
       email: event.arguments.email,
       connection: 'Username-Password-Authentication',
     })
