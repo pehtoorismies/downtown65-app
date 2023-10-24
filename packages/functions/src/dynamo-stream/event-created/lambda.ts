@@ -16,13 +16,13 @@ const TEST_RECIPIENTS = [
 const fetchCreateEventSubscribers = async (): Promise<string[]> => {
   const management = await getAuth0Management()
   try {
-    const users = await management.getUsers({
+    const users = await management.users.getAll({
       fields: 'email,name',
       search_engine: 'v3',
       q: `user_metadata.subscribeEventCreationEmail:true`,
     })
 
-    return users.map(({ email }) => email).filter(Boolean) as string[]
+    return users.data.map(({ email }) => email).filter(Boolean) as string[]
   } catch (error) {
     console.error(error)
     return []

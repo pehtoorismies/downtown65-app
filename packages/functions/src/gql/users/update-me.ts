@@ -4,7 +4,7 @@ import type {
 } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import { Auth0UserResponse, toUser } from '../support/auth0-user'
+import { parseAuth0UserResponse, toUser } from '../support/auth0-user'
 import { getAuth0Management } from '~/gql/support/auth0'
 
 export const updateMe: AppSyncResolverHandler<
@@ -14,7 +14,7 @@ export const updateMe: AppSyncResolverHandler<
   const identity = event.identity as AppSyncIdentityOIDC
 
   const management = await getAuth0Management()
-  const response = await management.updateUser(
+  const { data } = await management.users.update(
     { id: identity.sub },
     {
       user_metadata: {
@@ -25,6 +25,6 @@ export const updateMe: AppSyncResolverHandler<
       },
     }
   )
-  const auth0User = Auth0UserResponse.parse(response)
+  const auth0User = parseAuth0UserResponse(data)
   return toUser(auth0User)
 }
