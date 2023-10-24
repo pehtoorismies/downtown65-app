@@ -50,5 +50,9 @@
     "pino-pretty": "10.0.0",
     "remeda": "1.9.1",
     "zod": "3.21.4"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.22.1"
   }
 }
