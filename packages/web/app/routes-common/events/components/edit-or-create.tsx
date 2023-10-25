@@ -27,7 +27,7 @@ import { Buttons } from './buttons'
 import type { EventState } from './event-state'
 import { isValidStateToSave } from './event-state'
 import type { EventAction, StepNumber } from './reducer'
-import { ActiveStep } from './reducer'
+import { ActiveStep, isStepNumber } from './reducer'
 import { StepDate } from './step-date'
 import { StepDescriptionClient } from './step-description.client'
 import { StepPreview } from './step-preview'
@@ -151,7 +151,10 @@ export const EditOrCreate: FC<Props> = ({
           color={state.kind === 'edit' ? 'dtPink.4' : 'blue'}
           size="xs"
           active={state.activeStep}
-          onStepClick={(stepIndex: StepNumber) => {
+          onStepClick={(stepIndex: number) => {
+            if (!isStepNumber(stepIndex)) {
+              throw new Error('Not in step range')
+            }
             dispatch({ kind: 'step', step: stepIndex })
           }}
         >
