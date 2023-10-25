@@ -14,6 +14,10 @@ export const ActiveStep = {
 
 export type StepNumber = (typeof ActiveStep)[keyof typeof ActiveStep]
 
+export const isStepNumber = (step: number): step is StepNumber => {
+  return Object.values(ActiveStep).includes(step as StepNumber)
+}
+
 type TitleAction = {
   kind: 'title'
   title: string
