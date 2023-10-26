@@ -127,12 +127,6 @@ input UpdateEventInput {
     type: EventType!
 }
 
-interface Error {
-    message: String!
-    path: String!
-    code: String!
-}
-
 type Tokens @aws_api_key {
     accessToken: String!
     expiresIn: Int!
@@ -140,10 +134,10 @@ type Tokens @aws_api_key {
     refreshToken: String!
 }
 
-type LoginError implements Error @aws_api_key {
+type LoginError @aws_api_key {
     message: String!
-    path: String!
-    code: String!
+    error: String!
+    statusCode: Int!
 }
 
 union LoginResponse = Tokens | LoginError

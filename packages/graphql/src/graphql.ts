@@ -13,7 +13,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 }
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never }
 export type Incremental<T> =
   | T
@@ -62,12 +62,6 @@ export type DetailedUser = {
   picture: Scalars['String']['output']
 }
 
-export type Error = {
-  code: Scalars['String']['output']
-  message: Scalars['String']['output']
-  path: Scalars['String']['output']
-}
-
 export type Event = {
   __typename: 'Event'
   createdBy: Creator
@@ -113,11 +107,11 @@ export type IdPayload = {
   id: Scalars['ID']['output']
 }
 
-export type LoginError = Error & {
+export type LoginError = {
   __typename: 'LoginError'
-  code: Scalars['String']['output']
+  error: Scalars['String']['output']
   message: Scalars['String']['output']
-  path: Scalars['String']['output']
+  statusCode: Scalars['Int']['output']
 }
 
 export type LoginResponse = LoginError | Tokens
@@ -362,7 +356,12 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = {
   __typename: 'Mutation'
   login:
-    | { __typename: 'LoginError'; message: string; path: string; code: string }
+    | {
+        __typename: 'LoginError'
+        message: string
+        statusCode: number
+        error: string
+      }
     | {
         __typename: 'Tokens'
         accessToken: string
@@ -381,8 +380,8 @@ export type TokensFragmentFragment = {
 export type ErrorFragmentFragment = {
   __typename: 'LoginError'
   message: string
-  path: string
-  code: string
+  statusCode: number
+  error: string
 }
 
 export type SignupMutationVariables = Exact<{
@@ -676,8 +675,8 @@ export const ErrorFragmentFragmentDoc = {
         kind: 'SelectionSet',
         selections: [
           { kind: 'Field', name: { kind: 'Name', value: 'message' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'path' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'statusCode' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'error' } },
         ],
       },
     },
@@ -924,8 +923,8 @@ export const LoginDocument = {
         kind: 'SelectionSet',
         selections: [
           { kind: 'Field', name: { kind: 'Name', value: 'message' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'path' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'code' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'statusCode' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'error' } },
         ],
       },
     },

@@ -4,10 +4,10 @@ import type {
   MutationLoginArgs,
 } from '@downtown65-app/graphql/graphql'
 import type { TokenSet } from 'auth0'
+import { AuthApiError } from 'auth0'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { Config } from 'sst/node/config'
 import { z } from 'zod'
-import { ErrorMessage, ErrorResponse } from '~/gql/auth/support/error'
 import { getClient } from '~/gql/support/auth0'
 
 const parseResponse = (tokenSet: TokenSet) => {
@@ -29,14 +29,14 @@ const parseResponse = (tokenSet: TokenSet) => {
     .parse(tokenSet)
 }
 
-const auth0 = getClient()
+const auth0ManagementClient = getClient()
 
 export const login: AppSyncResolverHandler<
   MutationLoginArgs,
   LoginResponse
 > = async (event) => {
   try {
-    const { data } = await auth0.oauth.passwordGrant({
+    const { data } = await auth0ManagementClient.oauth.passwordGrant({
       username: event.arguments.email,
       password: event.arguments.password,
       // Scope explanation:
@@ -53,17 +53,26 @@ export const login: AppSyncResolverHandler<
       ...parseResponse(data),
     }
   } catch (error: unknown) {
-    logger.error(error, 'Unexpected login error')
-    const errorResponse = ErrorResponse.parse(error)
+    if (error instanceof AuthApiError) {
+      if (error.error !== 'invalid_grant') {
+        logger.info(error, 'Login error')
+      }
 
-    const message = JSON.parse(errorResponse.message)
-    const errorMessage = ErrorMessage.parse(message)
+      return {
+        __typename: 'LoginError',
+        error: error.error,
+        statusCode: error.statusCode,
+        message: error.message,
+      }
+    }
+
+    logger.error(error, 'Unexpected login error')
 
     return {
       __typename: 'LoginError',
-      message: errorMessage.error_description,
-      path: 'input/email',
-      code: errorMessage.error,
+      message: 'Unexpected error. Contact admin.',
+      error: 'unexpected_error',
+      statusCode: 500,
     }
   }
 }
