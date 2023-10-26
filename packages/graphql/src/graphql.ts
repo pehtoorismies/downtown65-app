@@ -108,6 +108,12 @@ export enum EventType {
   Ultras = 'ULTRAS',
 }
 
+export type FieldError = {
+  __typename: 'FieldError'
+  message: Scalars['String']['output']
+  path: SignupField
+}
+
 export type IdPayload = {
   __typename: 'IDPayload'
   id: Scalars['ID']['output']
@@ -266,9 +272,11 @@ export type RefreshTokens = {
   idToken: Scalars['String']['output']
 }
 
-export type SignupError = {
+export type SignupError = AuthError & {
   __typename: 'SignupError'
-  errors: Array<SignupFieldError>
+  error: Scalars['String']['output']
+  message: Scalars['String']['output']
+  statusCode: Scalars['Int']['output']
 }
 
 export enum SignupField {
@@ -281,8 +289,7 @@ export enum SignupField {
 
 export type SignupFieldError = {
   __typename: 'SignupFieldError'
-  message: Scalars['String']['output']
-  path: SignupField
+  errors: Array<FieldError>
 }
 
 export type SignupInput = {
@@ -293,7 +300,7 @@ export type SignupInput = {
   registerSecret: Scalars['String']['input']
 }
 
-export type SignupResponse = SignupError | SignupSuccess
+export type SignupResponse = SignupError | SignupFieldError | SignupSuccess
 
 export type SignupSuccess = {
   __typename: 'SignupSuccess'
@@ -405,8 +412,14 @@ export type SignupMutation = {
   signup:
     | {
         __typename: 'SignupError'
+        message: string
+        statusCode: number
+        error: string
+      }
+    | {
+        __typename: 'SignupFieldError'
         errors: Array<{
-          __typename: 'SignupFieldError'
+          __typename: 'FieldError'
           message: string
           path: SignupField
         }>
@@ -419,13 +432,20 @@ export type SignupSuccessFragmentFragment = {
   message: string
 }
 
-export type SignupErrorFragmentFragment = {
-  __typename: 'SignupError'
+export type SignupFieldErrorFragmentFragment = {
+  __typename: 'SignupFieldError'
   errors: Array<{
-    __typename: 'SignupFieldError'
+    __typename: 'FieldError'
     message: string
     path: SignupField
   }>
+}
+
+export type SignupErrorFragmentFragment = {
+  __typename: 'SignupError'
+  message: string
+  statusCode: number
+  error: string
 }
 
 export type GetEventQueryVariables = Exact<{
@@ -716,15 +736,15 @@ export const SignupSuccessFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<SignupSuccessFragmentFragment, unknown>
-export const SignupErrorFragmentFragmentDoc = {
+export const SignupFieldErrorFragmentFragmentDoc = {
   kind: 'Document',
   definitions: [
     {
       kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'SignupErrorFragment' },
+      name: { kind: 'Name', value: 'SignupFieldErrorFragment' },
       typeCondition: {
         kind: 'NamedType',
-        name: { kind: 'Name', value: 'SignupError' },
+        name: { kind: 'Name', value: 'SignupFieldError' },
       },
       selectionSet: {
         kind: 'SelectionSet',
@@ -740,6 +760,27 @@ export const SignupErrorFragmentFragmentDoc = {
               ],
             },
           },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SignupFieldErrorFragmentFragment, unknown>
+export const SignupErrorFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'SignupErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'SignupError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'statusCode' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'error' } },
         ],
       },
     },
@@ -1090,6 +1131,10 @@ export const SignupDocument = {
                 },
                 {
                   kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'SignupFieldErrorFragment' },
+                },
+                {
+                  kind: 'FragmentSpread',
                   name: { kind: 'Name', value: 'SignupErrorFragment' },
                 },
               ],
@@ -1114,10 +1159,10 @@ export const SignupDocument = {
     },
     {
       kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'SignupErrorFragment' },
+      name: { kind: 'Name', value: 'SignupFieldErrorFragment' },
       typeCondition: {
         kind: 'NamedType',
-        name: { kind: 'Name', value: 'SignupError' },
+        name: { kind: 'Name', value: 'SignupFieldError' },
       },
       selectionSet: {
         kind: 'SelectionSet',
@@ -1133,6 +1178,22 @@ export const SignupDocument = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'SignupErrorFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'SignupError' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'statusCode' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'error' } },
         ],
       },
     },

@@ -188,20 +188,26 @@ enum SignupField {
     email
 }
 
-type SignupFieldError @aws_api_key{
+type FieldError @aws_api_key {
     message: String!
     path: SignupField!
 }
 
-type SignupError @aws_api_key {
-    errors: [SignupFieldError!]!
+type SignupFieldError @aws_api_key {
+    errors: [FieldError!]!
+}
+
+type SignupError implements AuthError @aws_api_key {
+    message: String!
+    error: String!
+    statusCode: Int!
 }
 
 type SignupSuccess @aws_api_key {
     message: String!
 }
 
-union SignupResponse = SignupSuccess | SignupError
+union SignupResponse = SignupSuccess | SignupFieldError | SignupError
 
 input UpdateMeInput {
     preferences: PreferencesInput!
