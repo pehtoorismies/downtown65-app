@@ -40,8 +40,8 @@ const GglIgnored = graphql(`
   }
   fragment ErrorFragment on LoginError {
     message
-    path
-    code
+    statusCode
+    error
   }
 `)
 
@@ -105,28 +105,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     }
     case 'LoginError': {
       const error = R.omit(login, ['__typename'])
-      if (error.code === 'invalid_grant') {
-        pageLogger.info(
-          {
-            error,
-            email,
-          },
-          'Login error'
-        )
-        return json(
-          { error: 'Email or password is invalid', field: 'general' },
-          { status: 400 }
-        )
-      } else {
-        pageLogger.error(
-          {
-            error,
-            email,
-          },
-          'Unable login user'
-        )
-        return json({ error: error.message, field: 'general' }, { status: 500 })
-      }
+      return json(
+        { error: error.message, field: 'general' },
+        { status: error.statusCode }
+      )
     }
   }
   // make sure switch case is exhaustive
