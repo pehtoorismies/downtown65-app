@@ -127,6 +127,12 @@ input UpdateEventInput {
     type: EventType!
 }
 
+interface AuthError {
+    message: String!
+    error: String!
+    statusCode: Int!
+}
+
 type Tokens @aws_api_key {
     accessToken: String!
     expiresIn: Int!
@@ -134,7 +140,7 @@ type Tokens @aws_api_key {
     refreshToken: String!
 }
 
-type LoginError @aws_api_key {
+type LoginError implements AuthError @aws_api_key {
     message: String!
     error: String!
     statusCode: Int!
@@ -148,8 +154,10 @@ type RefreshTokens @aws_api_key {
     idToken: String!
 }
 
-type RefreshError @aws_api_key {
+type RefreshError implements AuthError @aws_api_key {
     message: String!
+    error: String!
+    statusCode: Int!
 }
 
 union RefreshResponse = RefreshTokens | RefreshError

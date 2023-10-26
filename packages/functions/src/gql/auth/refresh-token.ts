@@ -1,11 +1,12 @@
+import { logger } from '@downtown65-app/core/logger/logger'
 import type {
   MutationRefreshTokenArgs,
   RefreshResponse,
 } from '@downtown65-app/graphql/graphql'
 import type { TokenSet } from 'auth0'
+import { AuthApiError } from 'auth0'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { z } from 'zod'
-import { ErrorMessage, ErrorResponse } from '~/gql/auth/support/error'
 import { getClient } from '~/gql/support/auth0'
 
 const parseResponse = (tokenSet: TokenSet) => {
@@ -43,14 +44,24 @@ export const refreshToken: AppSyncResolverHandler<
       ...parseResponse(data),
     }
   } catch (error: unknown) {
-    console.error(JSON.stringify(error))
-    const errorResponse = ErrorResponse.parse(error)
-    const message = JSON.parse(errorResponse.message)
-    const errorMessage = ErrorMessage.parse(message)
+    if (error instanceof AuthApiError) {
+      logger.debug(error, 'Refresh Error')
+
+      return {
+        __typename: 'RefreshError',
+        message: error.message,
+        statusCode: error.statusCode,
+        error: error.error,
+      }
+    }
+
+    logger.error(error, 'Unexpected refresh token error')
 
     return {
       __typename: 'RefreshError',
-      message: errorMessage.error_description,
+      message: 'Unexpected error. Contact admin.',
+      statusCode: 500,
+      error: 'unexpected_error',
     }
   }
 }

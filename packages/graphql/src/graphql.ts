@@ -30,6 +30,12 @@ export type Scalars = {
   AWSDate: { input: string; output: string }
 }
 
+export type AuthError = {
+  error: Scalars['String']['output']
+  message: Scalars['String']['output']
+  statusCode: Scalars['Int']['output']
+}
+
 export type CreateEventInput = {
   createdBy: MeInput
   dateStart: DateInput
@@ -107,7 +113,7 @@ export type IdPayload = {
   id: Scalars['ID']['output']
 }
 
-export type LoginError = {
+export type LoginError = AuthError & {
   __typename: 'LoginError'
   error: Scalars['String']['output']
   message: Scalars['String']['output']
@@ -244,9 +250,11 @@ export type QueryUsersArgs = {
   perPage: Scalars['Int']['input']
 }
 
-export type RefreshError = {
+export type RefreshError = AuthError & {
   __typename: 'RefreshError'
+  error: Scalars['String']['output']
   message: Scalars['String']['output']
+  statusCode: Scalars['Int']['output']
 }
 
 export type RefreshResponse = RefreshError | RefreshTokens
@@ -625,7 +633,12 @@ export type RefreshTokenMutationVariables = Exact<{
 export type RefreshTokenMutation = {
   __typename: 'Mutation'
   refreshToken:
-    | { __typename: 'RefreshError'; message: string }
+    | {
+        __typename: 'RefreshError'
+        error: string
+        message: string
+        statusCode: number
+      }
     | { __typename: 'RefreshTokens'; accessToken: string; idToken: string }
 }
 
@@ -637,7 +650,9 @@ export type RefreshTokensFragmentFragment = {
 
 export type RefreshErrorFragmentFragment = {
   __typename: 'RefreshError'
+  error: string
   message: string
+  statusCode: number
 }
 
 export const TokensFragmentFragmentDoc = {
@@ -763,7 +778,9 @@ export const RefreshErrorFragmentFragmentDoc = {
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'error' } },
           { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'statusCode' } },
         ],
       },
     },
@@ -2007,7 +2024,9 @@ export const RefreshTokenDocument = {
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'error' } },
           { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'statusCode' } },
         ],
       },
     },
