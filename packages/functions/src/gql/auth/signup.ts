@@ -9,7 +9,6 @@ import type {
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'
 import { Config } from 'sst/node/config'
-import { parseAuth0UserResponse } from '../support/auth0-user'
 import { ErrorResponse } from '~/gql/auth/support/error'
 import { getAuth0Management } from '~/gql/support/auth0'
 
@@ -94,6 +93,7 @@ export const signup: AppSyncResolverHandler<
 
   const errors = []
   const query = `email:"${input.email}" OR nickname:"${input.nickname}"`
+  // TODO: add try catch
   const { data: matchingUsers } = await auth0managementClient.users.getAll({
     fields: 'email,nickname',
     search_engine: 'v3',
@@ -149,12 +149,9 @@ export const signup: AppSyncResolverHandler<
       app_metadata: { role: 'USER' },
     })
 
-    // validate format
-    const user = parseAuth0UserResponse(data)
-
     return {
       __typename: 'SignupSuccess',
-      message: `Created user ${user.email}`,
+      message: `Created user ${data.email}`,
     }
   } catch (error: unknown) {
     console.error(JSON.stringify(error))
