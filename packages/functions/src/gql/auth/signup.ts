@@ -90,11 +90,11 @@ export const signup: AppSyncResolverHandler<
     return { errors: fieldErrors, __typename: 'SignupError' }
   }
 
-  const management = await getAuth0Management()
+  const auth0managementClient = await getAuth0Management()
 
   const errors = []
   const query = `email:"${input.email}" OR nickname:"${input.nickname}"`
-  const { data: matchingUsers } = await management.users.getAll({
+  const { data: matchingUsers } = await auth0managementClient.users.getAll({
     fields: 'email,nickname',
     search_engine: 'v3',
     q: query,
@@ -133,7 +133,7 @@ export const signup: AppSyncResolverHandler<
   }
 
   try {
-    const { data } = await management.users.create({
+    const { data } = await auth0managementClient.users.create({
       connection: 'Username-Password-Authentication',
       email: input.email,
       password: input.password,
