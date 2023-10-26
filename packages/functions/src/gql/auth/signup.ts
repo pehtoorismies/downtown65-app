@@ -1,22 +1,22 @@
 import { logger } from '@downtown65-app/core/logger/logger'
 import { SignupField } from '@downtown65-app/graphql/graphql'
 import type {
+  FieldError,
   MutationSignupArgs,
-  SignupFieldError,
   SignupInput,
   SignupResponse,
 } from '@downtown65-app/graphql/graphql'
+import { AuthApiError } from 'auth0'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'
 import { Config } from 'sst/node/config'
-import { ErrorResponse } from '~/gql/auth/support/error'
 import { getAuth0Management } from '~/gql/support/auth0'
 
 const hasWhiteSpace = (s: string) => {
   return /\s/.test(s)
 }
 
-const validateWhiteSpace = (input: SignupInput): SignupFieldError[] => {
+const validateWhiteSpace = (input: SignupInput): FieldError[] => {
   const errors = []
 
   if (hasWhiteSpace(input.email)) {
@@ -40,12 +40,12 @@ const validateWhiteSpace = (input: SignupInput): SignupFieldError[] => {
   }
 
   return errors.map((error) => ({
-    __typename: 'SignupFieldError',
+    __typename: 'FieldError',
     ...error,
   }))
 }
 
-const validateFields = (input: SignupInput): SignupFieldError[] => {
+const validateFields = (input: SignupInput): FieldError[] => {
   const errors = []
 
   if (input.registerSecret !== Config.REGISTER_SECRET) {
@@ -68,7 +68,7 @@ const validateFields = (input: SignupInput): SignupFieldError[] => {
   }
 
   return errors.map((error) => ({
-    __typename: 'SignupFieldError',
+    __typename: 'FieldError',
     ...error,
   }))
 }
@@ -81,12 +81,12 @@ export const signup: AppSyncResolverHandler<
 
   const whiteSpaceErrors = validateWhiteSpace(input)
   if (whiteSpaceErrors.length > 0) {
-    return { errors: whiteSpaceErrors, __typename: 'SignupError' }
+    return { errors: whiteSpaceErrors, __typename: 'SignupFieldError' }
   }
 
   const fieldErrors = validateFields(input)
   if (fieldErrors.length > 0) {
-    return { errors: fieldErrors, __typename: 'SignupError' }
+    return { errors: fieldErrors, __typename: 'SignupFieldError' }
   }
 
   const auth0managementClient = await getAuth0Management()
@@ -124,9 +124,9 @@ export const signup: AppSyncResolverHandler<
     }
 
     return {
-      __typename: 'SignupError',
+      __typename: 'SignupFieldError',
       errors: errors.map((error) => ({
-        __typename: 'SignupFieldError',
+        __typename: 'FieldError',
         ...error,
       })),
     }
@@ -154,18 +154,21 @@ export const signup: AppSyncResolverHandler<
       message: `Created user ${data.email}`,
     }
   } catch (error: unknown) {
-    console.error(JSON.stringify(error))
-    const errorResponse = ErrorResponse.parse(error)
+    logger.error(error, 'Unexpected signup error')
+    if (error instanceof AuthApiError) {
+      return {
+        __typename: 'SignupError',
+        statusCode: error.statusCode,
+        error: error.error,
+        message: error.message,
+      }
+    }
 
     return {
       __typename: 'SignupError',
-      errors: [
-        {
-          __typename: 'SignupFieldError',
-          message: errorResponse.message,
-          path: SignupField.Email,
-        },
-      ],
+      statusCode: 500,
+      error: 'unexpected_error',
+      message: 'Unexpected error. Contact admin.',
     }
   }
 }

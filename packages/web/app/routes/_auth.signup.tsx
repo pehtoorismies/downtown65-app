@@ -1,8 +1,8 @@
 import { assertUnreachable } from '@downtown65-app/core/assert-unreachable'
 import { graphql } from '@downtown65-app/graphql/gql'
-import type { SignupFieldError } from '@downtown65-app/graphql/graphql'
 import { SignupDocument } from '@downtown65-app/graphql/graphql'
 import {
+  Alert,
   Anchor,
   Button,
   Group,
@@ -14,6 +14,7 @@ import {
 import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
+import { IconExclamationCircle } from '@tabler/icons-react'
 import { z } from 'zod'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
@@ -44,17 +45,23 @@ const GglIgnored = graphql(`
     ) {
       __typename
       ...SignupSuccessFragment
+      ...SignupFieldErrorFragment
       ...SignupErrorFragment
     }
   }
   fragment SignupSuccessFragment on SignupSuccess {
     message
   }
-  fragment SignupErrorFragment on SignupError {
+  fragment SignupFieldErrorFragment on SignupFieldError {
     errors {
       message
       path
     }
+  }
+  fragment SignupErrorFragment on SignupError {
+    message
+    statusCode
+    error
   }
 `)
 
@@ -73,12 +80,6 @@ const SignupForm = z.object({
   password: z.string(),
   registerSecret: z.string(),
 })
-
-const toActionData = (errors: NonNullable<SignupFieldError[]>) => {
-  return {
-    errors: Object.fromEntries(errors.map((t) => [t.path, t.message])),
-  }
-}
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData()
@@ -107,8 +108,28 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         headers: { 'Set-Cookie': await commitMessageSession(session) },
       })
     }
+    case 'SignupFieldError': {
+      return json(
+        {
+          serverError: null,
+          fieldErrors: Object.fromEntries(
+            signup.errors.map((t) => [t.path, t.message])
+          ),
+        },
+        { status: 400 }
+      )
+    }
     case 'SignupError': {
-      return json(toActionData(signup.errors), { status: 400 })
+      return json(
+        {
+          serverError: {
+            message: signup.message,
+            error: signup.error,
+          },
+          fieldErrors: null,
+        },
+        { status: signup.statusCode }
+      )
     }
   }
 
@@ -126,73 +147,61 @@ export default function Signup() {
       <Text size="sm" ta="center" mt={5}>
         Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.
       </Text>
+      {actionData?.serverError && (
+        <Alert
+          my="sm"
+          variant="light"
+          color="red"
+          title="Server error"
+          icon={<IconExclamationCircle />}
+        >
+          {actionData.serverError.message}
+        </Alert>
+      )}
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <Form method="post">
           <TextInput
             name="email"
+            type="email"
+            autoComplete="email"
             label="Sähköposti"
             placeholder="me@downtown65.com"
             required
-            error={!!actionData?.errors?.email}
+            error={actionData?.fieldErrors?.email}
           />
-          {actionData?.errors?.email && (
-            <Text c="red" size="sm" fw={500}>
-              {actionData.errors.email}
-            </Text>
-          )}
+
           <PasswordInput
             name="password"
             label="Salasana"
             placeholder="Salasanasi"
             required
             mt="md"
-            error={!!actionData?.errors?.password}
+            error={actionData?.fieldErrors?.password}
           />
-          {actionData?.errors?.password && (
-            <Text c="red" size="sm" fw={500}>
-              {actionData.errors.password}
-            </Text>
-          )}
           <TextInput
             name="name"
             label="Nimi"
             placeholder="Etunimi Sukunimi"
             required
             mt="md"
-            error={!!actionData?.errors?.name}
+            error={actionData?.fieldErrors?.name}
           />
-          {actionData?.errors?.name && (
-            <Text c="red" size="sm" fw={500}>
-              {actionData.errors.name}
-            </Text>
-          )}
           <TextInput
             name="nickname"
             label="Lempinimi / nickname"
             placeholder="setämies72"
             required
             mt="md"
-            error={!!actionData?.errors?.nickname}
+            error={actionData?.fieldErrors?.nickname}
           />
-          {actionData?.errors?.nickname && (
-            <Text c="red" size="sm" fw={500}>
-              {actionData.errors.nickname}
-            </Text>
-          )}
           <PasswordInput
             name="registerSecret"
             label="Rekisteröintitunnus (kysy seuralta)"
             placeholder="supersecret"
             required
             mt="md"
-            error={!!actionData?.errors?.registerSecret}
+            error={actionData?.fieldErrors?.registerSecret}
           />
-          {actionData?.errors?.registerSecret && (
-            <Text c="red" size="sm" fw={500}>
-              {actionData.errors.registerSecret}
-            </Text>
-          )}
-
           <Group justify="flex-end" mt="md">
             <Anchor
               component={Link}
