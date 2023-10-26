@@ -13,7 +13,6 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
-import { logger } from '~/util/logger.server'
 
 const REFRESH_TOKEN_KEY = 'refreshToken'
 const USER_KEY = 'user'
@@ -70,39 +69,11 @@ const GglDocumentIgnored = graphql(`
     idToken
   }
   fragment RefreshErrorFragment on RefreshError {
+    error
     message
+    statusCode
   }
 `)
-
-const fetchRenewTokens = async (
-  refreshToken: string
-): Promise<{
-  accessToken: string
-  idToken: string
-}> => {
-  const { refreshToken: result } = await gqlClient.request(
-    RefreshTokenDocument,
-    {
-      refreshToken,
-    },
-    PUBLIC_AUTH_HEADERS
-  )
-
-  switch (result.__typename) {
-    case 'RefreshTokens': {
-      return result
-    }
-    case 'RefreshError': {
-      logger.error({ result }, 'Error refreshing token')
-      // TODO: perhaps a softer approach?
-      throw new Error(result.message)
-    }
-  }
-
-  // make sure switch case is exhaustive
-  const { __typename } = result
-  assertUnreachable(__typename)
-}
 
 type Values = {
   user: User
@@ -136,14 +107,33 @@ const getUserFromJwt = (idTokenJWT: string): User => {
 }
 
 const renewSession = async (refreshToken: string, session: Session) => {
-  const renewResponse = await fetchRenewTokens(refreshToken)
-  const user = getUserFromJwt(renewResponse.idToken)
-  session.set(REFRESH_TOKEN_KEY, refreshToken)
-  session.set(USER_KEY, JSON.stringify(user))
-  session.set(ACCESS_TOKEN_KEY, renewResponse.accessToken)
-  const headers = new Headers()
-  headers.append('Set-Cookie', await sessionStorage.commitSession(session))
-  return { headers, user, accessToken: renewResponse.accessToken }
+  const { refreshToken: result } = await gqlClient.request(
+    RefreshTokenDocument,
+    {
+      refreshToken,
+    },
+    PUBLIC_AUTH_HEADERS
+  )
+
+  switch (result.__typename) {
+    case 'RefreshTokens': {
+      const user = getUserFromJwt(result.idToken)
+      session.set(REFRESH_TOKEN_KEY, refreshToken)
+      session.set(USER_KEY, JSON.stringify(user))
+      session.set(ACCESS_TOKEN_KEY, result.accessToken)
+      const headers = new Headers()
+      headers.append('Set-Cookie', await sessionStorage.commitSession(session))
+      return { headers, user, accessToken: result.accessToken }
+    }
+    case 'RefreshError': {
+      // TODO: test
+      throw redirect('/login')
+    }
+  }
+
+  // make sure switch case is exhaustive
+  const { __typename } = result
+  assertUnreachable(__typename)
 }
 
 const getAuthentication = async (

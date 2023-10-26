@@ -35,7 +35,7 @@ const documents = {
     types.GetProfileDocument,
   '\n  mutation UpdateAvatar($uploadedFilename: String!) {\n    updateAvatar(uploadedFilename: $uploadedFilename)\n  }\n':
     types.UpdateAvatarDocument,
-  '\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    message\n  }\n':
+  '\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n':
     types.RefreshTokenDocument,
 }
 
@@ -123,8 +123,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    message\n  }\n'
-): (typeof documents)['\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    message\n  }\n']
+  source: '\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n'
+): (typeof documents)['\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n']
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {}
