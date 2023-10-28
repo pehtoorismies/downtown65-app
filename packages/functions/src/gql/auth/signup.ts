@@ -31,10 +31,10 @@ const validateWhiteSpace = (input: SignupInput): FieldError[] => {
       path: SignupField.Nickname,
     })
   }
-  if (input.name.trim().length !== input.name.length) {
+
+  if (input.name.split(' ').some((x) => x.length === 0)) {
     errors.push({
-      message:
-        'White space characters. Please remove empty spaces after or before.',
+      message: 'White space characters. Please remove empty spaces.',
       path: SignupField.Name,
     })
   }
