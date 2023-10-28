@@ -2,7 +2,6 @@ import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type {
   CreateEventInput,
   Event,
-  IdPayload,
   UpdateEventInput,
 } from '@downtown65-app/graphql/graphql'
 import { format } from 'date-fns'
@@ -77,7 +76,7 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
 
 export const create = async (
   creatableEvent: CreateEventInput
-): Promise<IdPayload> => {
+): Promise<string> => {
   const {
     createdBy,
     dateStart,
@@ -136,10 +135,7 @@ export const create = async (
     { returnValues: 'none' }
   )
 
-  return {
-    __typename: 'IDPayload',
-    id: eventId,
-  }
+  return eventId
 }
 
 export const update = async (
