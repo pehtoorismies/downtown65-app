@@ -188,7 +188,8 @@ export default function Signup() {
           />
           <TextInput
             name="nickname"
-            label="Lempinimi / nickname"
+            description="Tunnus/nickname, näkyy ilmoittautumisissa"
+            label="Nickname"
             placeholder="setämies72"
             required
             mt="md"
@@ -196,7 +197,8 @@ export default function Signup() {
           />
           <PasswordInput
             name="registerSecret"
-            label="Rekisteröintitunnus (kysy seuralta)"
+            label="Rekisteröintitunnus"
+            description="Saat tämän seuralta."
             placeholder="supersecret"
             required
             mt="md"
@@ -217,6 +219,7 @@ export default function Signup() {
             mt="xl"
             type="submit"
             loading={navigation.state === 'submitting'}
+            data-testid="submit-signup"
           >
             Rekisteröidy
           </Button>
