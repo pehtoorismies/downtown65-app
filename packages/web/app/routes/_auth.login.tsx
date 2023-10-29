@@ -53,6 +53,12 @@ export const meta: MetaFunction = () => {
   ]
 }
 
+const emptyErrors = {
+  errorGeneral: null,
+  errorEmail: null,
+  errorPassword: null,
+}
+
 export const action = async ({ request }: ActionFunctionArgs) => {
   const pageLogger = logger.child({
     page: { path: 'login', function: 'action' },
@@ -67,14 +73,17 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!validateEmail(email)) {
     return json(
-      { error: 'Väärän muotoinen sähköpostiosoite', field: 'email' },
+      {
+        ...emptyErrors,
+        errorEmail: 'Väärän muotoinen sähköpostiosoite',
+      },
       { status: 400 }
     )
   }
 
   if (typeof password !== 'string' || password.length === 0) {
     return json(
-      { error: 'Salasana puuttuu', field: 'password' },
+      { ...emptyErrors, errorPassword: 'Salasana puuttuu' },
       { status: 400 }
     )
   }
@@ -106,7 +115,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     case 'LoginError': {
       const error = R.omit(login, ['__typename'])
       return json(
-        { error: error.message, field: 'general' },
+        {
+          ...emptyErrors,
+          errorGeneral: error.message,
+        },
         { status: error.statusCode }
       )
     }
@@ -131,14 +143,14 @@ export default function Login() {
       </Text>
 
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        {actionData?.field === 'general' && (
+        {actionData?.errorGeneral && (
           <Alert
             icon={<IconAlertCircle size={16} />}
             title="Virhe kirjautumisessa"
             color="red"
             mb="sm"
           >
-            {actionData?.error}
+            {actionData?.errorGeneral}
           </Alert>
         )}
 
@@ -151,7 +163,7 @@ export default function Login() {
             label="Sähköposti"
             placeholder="me@downtown65.com"
             required
-            error={actionData?.field === 'email' ? actionData.error : undefined}
+            error={actionData?.errorEmail}
           />
           <PasswordInput
             id="password"
@@ -160,9 +172,7 @@ export default function Login() {
             placeholder="Salasanasi"
             required
             mt="md"
-            error={
-              actionData?.field === 'password' ? actionData.error : undefined
-            }
+            error={actionData?.errorPassword}
           />
           <Checkbox
             name="remember"
