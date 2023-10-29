@@ -2,6 +2,7 @@ import { createEventAddedEmail } from '@downtown65-app/core/email/create-event-a
 import { EmailableEvent } from '@downtown65-app/core/email/emailable-event'
 import { sendEmail } from '@downtown65-app/core/email/send-email'
 import { getEnvironmentVariable } from '@downtown65-app/core/get-environment-variable'
+import { logger } from '@downtown65-app/core/logger/logger'
 import type { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import { chunk } from 'remeda'
 import { getAuth0Management } from '~/gql/support/auth0'
@@ -24,7 +25,7 @@ const fetchCreateEventSubscribers = async (): Promise<string[]> => {
 
     return users.data.map(({ email }) => email).filter(Boolean) as string[]
   } catch (error) {
-    console.error(error)
+    logger.error(error, 'Error when fetching users subscribed to eventCreated')
     return []
   }
 }
@@ -54,6 +55,12 @@ export const handler: DynamoDBStreamHandler = async (
     : await fetchCreateEventSubscribers()
 
   const createdRecord = event.Records[0]
+
+  if (!createdRecord) {
+    logger.error(event, 'Stream error, event not found (event.Records[0])')
+    return
+  }
+
   const params = EmailableEvent.parse(createdRecord)
 
   const body = createEventAddedEmail({
@@ -81,9 +88,5 @@ export const handler: DynamoDBStreamHandler = async (
       recipients: ['hello@downtown65.com'],
       bccRecipients,
     })
-  }
-
-  if (!createdRecord) {
-    console.error('Stream error, event not found')
   }
 }
