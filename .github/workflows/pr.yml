@@ -140,9 +140,10 @@ jobs:
         run: yarn playwright test
         env:
           BASE_URL: https://${{ env.STAGE_TO_USE }}.downtown65.events
-          USER_EMAIL: ${{ vars.TEST_USER_EMAIL }}
-          USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
-          USER_NICK: ${{ vars.TEST_USER_NICK }}
+          TEST_USER_EMAIL: ${{ vars.TEST_USER_EMAIL }}
+          TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+          TEST_USER_NICK: ${{ vars.TEST_USER_NICK }}
+          REGISTER_SECRET: ${{ secrets.REGISTER_SECRET }}
   #      - uses: actions/upload-artifact@v3
   #        if: always()
   #        with:
