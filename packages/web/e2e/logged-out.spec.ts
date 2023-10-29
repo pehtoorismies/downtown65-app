@@ -1,4 +1,3 @@
-import { getEnvironmentVariable } from '@downtown65-app/core/get-environment-variable'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import {
   randCity,
@@ -12,6 +11,7 @@ import { format } from 'date-fns'
 import { EventPage } from './page-objects/event-page'
 import { LoginPage } from './page-objects/login-page'
 import { NewEventPage } from './page-objects/new-event-page'
+import { testUser } from './test-user'
 
 test.describe('Logged out users', () => {
   test('should be able to navigate', async ({ page, context }) => {
@@ -100,13 +100,11 @@ test.describe('Logged out users', () => {
       type: eventTypes[randNumber({ min: 0, max: eventTypes.length - 1 })],
     }
 
-    const userName = getEnvironmentVariable('USER_NICK')
-
     const newEventPage = new NewEventPage(page)
     await newEventPage.goto()
     const eventId = await newEventPage.createEvent(eventBasicInfo)
 
-    await page.getByRole('button', { name: userName }).click()
+    await page.getByRole('button', { name: testUser.nick }).click()
     await page.getByRole('menuitem', { name: 'Logout' }).click()
     await expect(page.locator('h1')).toContainText('Kirjaudu')
 
