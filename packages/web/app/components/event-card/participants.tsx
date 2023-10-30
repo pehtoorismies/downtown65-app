@@ -5,7 +5,7 @@ import type { User } from '~/domain/user'
 
 interface Props {
   participants: User[]
-  me?: User
+  me: User | null
 }
 
 export const Participants = ({ me, participants }: Props) => {
