@@ -13,10 +13,12 @@ import {
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { IconSquarePlus } from '@tabler/icons-react'
+import { IconArrowNarrowRight, IconSquarePlus } from '@tabler/icons-react'
 import type { ReactNode } from 'react'
 import React from 'react'
-import { EventCard } from '~/components/event-card/event-card'
+import { EventHeader } from '~/components/event-card/event-header'
+import { EventInfo } from '~/components/event-card/event-info'
+import { Voucher } from '~/components/voucher/voucher'
 import {
   ParticipatingContext,
   useParticipationActions,
@@ -111,7 +113,7 @@ const Root = ({ children }: { children: ReactNode }) => (
 )
 
 export default function GetEvents() {
-  const { eventItems } = useLoaderData<typeof loader>()
+  const { eventItems, user } = useLoaderData<typeof loader>()
   const participationActions = useParticipationActions()
 
   if (eventItems.length === 0) {
@@ -145,13 +147,23 @@ export default function GetEvents() {
         >
           {eventItems.map((m) => {
             return (
-              <EventCard
-                key={m.id}
-                {...m}
-                // TODO: fix
-                timeStart={m.timeStart ?? undefined}
-                shadow="xs"
-              />
+              <Voucher key={m.id}>
+                <EventHeader {...m} user={user} />
+                <Voucher.Content>
+                  <EventInfo {...m} user={user} />
+                  <Button
+                    component={Link}
+                    to={`/events/${m.id}`}
+                    fullWidth
+                    mt="xs"
+                    size="compact-sm"
+                    rightSection={<IconArrowNarrowRight size={18} />}
+                    variant="subtle"
+                  >
+                    Näytä lisää
+                  </Button>
+                </Voucher.Content>
+              </Voucher>
             )
           })}
         </SimpleGrid>
