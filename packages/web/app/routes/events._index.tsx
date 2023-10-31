@@ -155,7 +155,7 @@ export default function GetEvents() {
                     component={Link}
                     to={`/events/${m.id}`}
                     fullWidth
-                    mt="xs"
+                    my="xs"
                     size="compact-sm"
                     rightSection={<IconArrowNarrowRight size={18} />}
                     variant="subtle"
