@@ -4,27 +4,11 @@ import { IconHandOff, IconHandStop, IconLogin } from '@tabler/icons-react'
 import { Gradient } from '~/components/colors'
 import { useParticipatingContext } from '~/contexts/participating-context'
 
-const commonProperties = {
-  border: 0,
-  height: 38,
-  paddingLeft: 20,
-  paddingRight: 20,
-}
-
 export const GotoLoginButton = () => (
   <Button
     component={Link}
     to="/login"
     leftSection={<IconLogin size={18} />}
-    // TODO: classNames?
-    styles={() => ({
-      root: {
-        ...commonProperties,
-      },
-      leftIcon: {
-        marginRight: 15,
-      },
-    })}
     data-testid="event-goto-login"
   >
     Kirjaudu
@@ -50,15 +34,6 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
         leftSection={<IconHandOff size={18} />}
         variant="gradient"
         gradient={Gradient.dtPink}
-        styles={() => ({
-          root: {
-            ...commonProperties,
-          },
-
-          leftIcon: {
-            marginRight: 15,
-          },
-        })}
         data-testid="leave"
       >
         Poistu
@@ -74,14 +49,6 @@ export const ToggleJoinButton = ({ isParticipating, eventId }: Properties) => {
       }}
       loading={loading}
       leftSection={<IconHandStop size={18} />}
-      styles={() => ({
-        root: {
-          ...commonProperties,
-        },
-        leftIcon: {
-          marginRight: 15,
-        },
-      })}
       data-testid="participate"
     >
       Osallistu
