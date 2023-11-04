@@ -127,12 +127,14 @@ export const links: LinksFunction = () => {
 
 const navLinks = [
   { id: 10, title: 'Tapahtumat', to: '/events' },
+
   {
     id: 30,
     title: 'Luo uusi',
     to: '/events/new',
     testId: 'nav-create-new-event',
   },
+  { id: 35, title: 'Haasteet', to: '/challenges' },
   { id: 40, title: 'Jäsenet', to: '/members' },
 ]
 
