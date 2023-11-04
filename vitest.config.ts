@@ -6,7 +6,7 @@ import { configDefaults, defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     testTimeout: 90_000,
-    exclude: [...configDefaults.exclude, './packages/frontend/e2e/**/*.ts'],
+    exclude: [...configDefaults.exclude],
   },
   logLevel: 'info',
   esbuild: {

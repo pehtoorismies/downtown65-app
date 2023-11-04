@@ -11,7 +11,8 @@
     "lint": "eslint . --ext .ts,.tsx",
     "typecheck": "tsc --noEmit",
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx|app/gql/types.gen.ts|remix.env.d.ts'",
-    "e2e": "sst bind playwright test "
+    "e2e": "sst bind playwright test",
+    "test": "vitest run"
   },
   "dependencies": {
     "@mantine/core": "7.1.5",

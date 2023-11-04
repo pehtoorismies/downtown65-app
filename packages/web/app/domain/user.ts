@@ -14,3 +14,10 @@ export const User = z
   })
 
 export type User = z.infer<typeof User>
+
+export type ChallengeParticipant = {
+  id: string
+  nickname: string
+  picture: string
+  doneDatesCount: number
+}
