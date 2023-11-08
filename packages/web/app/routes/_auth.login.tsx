@@ -25,7 +25,7 @@ import { validateEmail } from '~/util/validation.server'
 
 export { loader } from '~/routes-common/auth/loader'
 
-const GglIgnored = graphql(`
+const _GglIgnored = graphql(`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       __typename

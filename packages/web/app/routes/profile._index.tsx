@@ -34,7 +34,7 @@ import {
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 import { logger } from '~/util/logger.server'
 
-const GqlIgnored = graphql(`
+const _GqlIgnored = graphql(`
   query GetProfile {
     me {
       id

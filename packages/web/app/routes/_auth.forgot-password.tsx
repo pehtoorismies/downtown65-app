@@ -25,7 +25,7 @@ import { validateEmail } from '~/util/validation.server'
 
 export { loader } from '~/routes-common/auth/loader'
 
-const GglIgnored = graphql(`
+const _GglIgnored = graphql(`
   mutation ForgotPassword($email: String!) {
     forgotPassword(email: $email)
   }

@@ -16,7 +16,7 @@ import React from 'react'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 
-const GqlIgnored = graphql(`
+const _GqlIgnored = graphql(`
   query GetUsers($perPage: Int!, $page: Int!) {
     users(page: $page, perPage: $perPage) {
       users {

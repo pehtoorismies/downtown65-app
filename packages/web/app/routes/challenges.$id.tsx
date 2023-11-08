@@ -115,7 +115,7 @@ export const meta: MetaFunction = () => {
 }
 
 export default function GetChallenge() {
-  const { user, challenge, doneDates, runningTime, daysLeft, today } =
+  const { user, challenge, doneDates, runningTime, daysLeft } =
     useLoaderData<typeof loader>()
 
   const dayFi = daysLeft === 1 ? 'päivä' : 'päivää'
@@ -123,8 +123,8 @@ export default function GetChallenge() {
   const dayInfo = `${daysLeft} ${dayFi} jäljellä`
 
   const participationActions: Context = {
-    onParticipate: (eventId: string) => {},
-    onLeave: (eventId: string) => {},
+    onParticipate: () => {},
+    onLeave: () => {},
     state: 'idle',
     loadingEventId: undefined,
   }

@@ -53,7 +53,7 @@ type ActionData = {
   imgDesc?: string
 }
 
-const GqlIgnored = graphql(`
+const _GqlIgnored = graphql(`
   mutation UpdateAvatar($uploadedFilename: String!) {
     updateAvatar(uploadedFilename: $uploadedFilename)
   }

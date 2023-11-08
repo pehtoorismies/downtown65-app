@@ -69,7 +69,7 @@ import {
 } from '~/session.server'
 import { mapToData } from '~/util/event-type'
 
-const GqlIgnored = graphql(`
+const _GqlIgnored = graphql(`
   query GetEvent($eventId: ID!) {
     event(eventId: $eventId) {
       id

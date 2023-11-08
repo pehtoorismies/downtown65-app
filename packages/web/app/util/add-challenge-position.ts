@@ -4,13 +4,7 @@ interface Count {
   doneDatesCount: number
 }
 
-interface Position {
-  position: number
-}
-
-export const addChallengePosition = <T extends Count, S extends T & Position>(
-  xs: T[]
-) => {
+export const addChallengePosition = <T extends Count>(xs: T[]) => {
   let position = xs.length + 1
 
   const r = R.pipe(

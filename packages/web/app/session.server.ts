@@ -56,7 +56,7 @@ interface CreateUserSession {
   rememberMe: boolean
 }
 
-const GglDocumentIgnored = graphql(`
+const _GglIgnored = graphql(`
   mutation RefreshToken($refreshToken: String!) {
     refreshToken(refreshToken: $refreshToken) {
       __typename

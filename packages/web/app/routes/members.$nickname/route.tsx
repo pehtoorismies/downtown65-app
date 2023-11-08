@@ -28,7 +28,7 @@ import { ProfileBox } from '~/components/profile-box'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 
-const GqlIgnored = graphql(`
+const _GqlIgnored = graphql(`
   query GetUserByNick($nickname: String!) {
     user(nickname: $nickname) {
       id

@@ -7,7 +7,7 @@ module.exports = {
   ],
   rules: {
     "@typescript-eslint/no-redeclare": OFF,
-    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "[iI]gnored" }],
+    "@typescript-eslint/no-unused-vars": ["error", { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }],
     "unicorn/prefer-module": OFF,
     "unicorn/text-encoding-identifier-case": OFF,
     "unicorn/filename-case": [
