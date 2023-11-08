@@ -1,34 +1,24 @@
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { isValid } from 'date-fns'
 import { z } from 'zod'
+import {
+  Auth0IDString,
+  Auth0UserSchema,
+  HyphenDate,
+  UlidSchema,
+  UrlString,
+  getKeySchema,
+} from '~/gql/core/dynamo-schemas/common'
 
 // EVENT#<ulid>
 const KeyPattern = /^EVENT#(?<id>[\dA-HJKMNP-TV-Z]{26})$/
 // 2020-01-01T00:00:00
 const DateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z?/
-// 2020-01-01
-const DatePattern = /^\d{4}-\d{2}-\d{2}$/
 // 13:00
 const TimePattern = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/
 // DATE#2023-03-22T14:55:00#01GW4MMH
 const GSI1SKPattern =
   /^DATE#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}#[\dA-HJKMNP-TV-Z]{8}$/
-
-const Auth0IDString = z.string().startsWith('auth0|')
-const UrlString = z.string().startsWith('https://')
-
-const Auth0UserSchema = z.object({
-  nickname: z.string(),
-  picture: UrlString,
-  id: Auth0IDString,
-})
-
-const EventKeySchema = z.string().refine(
-  (value) => KeyPattern.test(value),
-  (value) => ({
-    message: `${value} is not in correct for PK. Use: EVENT#<ulid>`,
-  })
-)
 
 export const ParticipatingUserSchema = z.object({
   joinedAt: z.string().refine(
@@ -47,8 +37,6 @@ export const ParticipatingUserSchema = z.object({
 export type ParticipatingUserSchema = z.infer<typeof ParticipatingUserSchema>
 
 const ParticipantsSchema = z.record(Auth0IDString, ParticipatingUserSchema)
-
-const IDSchema = z.string().ulid()
 
 const createGSI1SKVerifier = ({
   PK,
@@ -113,14 +101,7 @@ const gsi1skRefine = (value: {
 }
 
 const Dt65EventUpdateableFields = z.object({
-  dateStart: z.string().refine(
-    (value) => {
-      return isValid(new Date(value)) && DatePattern.test(value)
-    },
-    (value) => ({
-      message: `${value} is not in correct format. Use: 2020-01-01`,
-    })
-  ),
+  dateStart: HyphenDate,
   description: z.string().trim().optional(),
   location: z.string().trim(),
   race: z.boolean(),
@@ -138,13 +119,15 @@ const Dt65EventUpdateableFields = z.object({
   type: z.nativeEnum(EventType),
 })
 
+const EventKeySchema = getKeySchema('EVENT')
+
 export const Dt65EventCreateSchema = Dt65EventUpdateableFields.extend({
   PK: EventKeySchema,
   SK: EventKeySchema,
   GSI1PK: z.literal('EVENT#FUTURE'),
   GSI1SK: GS1SKSchema,
   createdBy: Auth0UserSchema,
-  id: IDSchema, // TODO: fix this is eventId in Dynamo
+  id: UlidSchema, // TODO: fix this is eventId in Dynamo
   participants: ParticipantsSchema,
 })
   .refine(
@@ -158,7 +141,7 @@ export const Dt65EventCreateSchema = Dt65EventUpdateableFields.extend({
 
 export const Dt65EventGetSchema = Dt65EventUpdateableFields.extend({
   createdBy: Auth0UserSchema,
-  id: IDSchema, // TODO: fix this is eventId in Dynamo
+  id: UlidSchema, // TODO: fix this is eventId in Dynamo
   participants: ParticipantsSchema,
 })
 
