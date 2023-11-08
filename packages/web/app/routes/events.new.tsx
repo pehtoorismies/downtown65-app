@@ -21,7 +21,7 @@ import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
 import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 
-const GqlIgnored = graphql(`
+const _GqlIgnored = graphql(`
   mutation CreateEvent($input: CreateEventInput!) {
     createEvent(input: $input) {
       id

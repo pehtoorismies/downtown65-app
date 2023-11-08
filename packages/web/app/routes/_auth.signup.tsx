@@ -26,7 +26,7 @@ import { AuthTemplate } from '~/routes-common/auth/auth-template'
 
 export { loader } from '~/routes-common/auth/loader'
 
-const GglIgnored = graphql(`
+const _GglIgnored = graphql(`
   mutation Signup(
     $name: String!
     $email: String!

@@ -26,7 +26,7 @@ import {
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 
-const GqlIgnored = graphql(`
+const _GqlIgnored = graphql(`
   query GetEvents {
     events {
       id
