@@ -1,3 +1,4 @@
+import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type {
   CreateEventInput,
@@ -14,9 +15,7 @@ import {
   Dt65EventUpdateSchema,
   ParticipatingUserSchema,
 } from './dynamo-schemas/dt65-event-schema'
-import { getTable } from './dynamo-table'
-
-const Table = getTable()
+import { Dt65EventEntity } from './dynamo-table'
 
 const getExpression = (d: Date) => {
   const lt = format(
@@ -117,7 +116,7 @@ export const create = async (
     })
   }
 
-  await Table.Dt65Event.put(
+  await Dt65EventEntity.put(
     Dt65EventCreateSchema.parse({
       // add keys
       ...getPrimaryKey(eventId),
@@ -136,7 +135,7 @@ export const create = async (
       title: getDefaultIfEmpty(title),
       type,
     }),
-    { returnValues: 'none' }
+    { returnValues: 'NONE' }
   )
 
   return eventId
@@ -165,10 +164,10 @@ export const update = async (
     type,
   }
 
-  const result = await Table.Dt65Event.update(
+  const result = await Dt65EventEntity.update(
     Dt65EventUpdateSchema.parse(update),
     {
-      returnValues: 'all_new',
+      returnValues: 'ALL_NEW',
     }
   )
 
@@ -176,7 +175,7 @@ export const update = async (
 }
 
 export const remove = async (id: string): Promise<boolean> => {
-  const results = await Table.Dt65Event.delete(getPrimaryKey(id), {
+  const results = await Dt65EventEntity.delete(getPrimaryKey(id), {
     returnValues: 'ALL_OLD',
   })
 
@@ -187,7 +186,7 @@ export const remove = async (id: string): Promise<boolean> => {
 }
 
 export const getById = async (id: string): Promise<Event | null> => {
-  const result = await Table.Dt65Event.get(getPrimaryKey(id))
+  const result = await Dt65EventEntity.get(getPrimaryKey(id))
 
   if (!result.Item) {
     return null
@@ -198,45 +197,47 @@ export const getById = async (id: string): Promise<Event | null> => {
 export const getFutureEvents = async () => {
   const query = getExpression(startOfToday())
 
-  const results = await Table.Dt65Event.query(`EVENT#FUTURE`, {
+  const results = await Dt65EventEntity.query(`EVENT#FUTURE`, {
     index: 'GSI1',
     gt: query,
   })
 
-  return results.Items.map((dynamoEvent: unknown) =>
-    mapDynamoToEvent(dynamoEvent)
+  return (
+    results.Items?.map((dynamoEvent: unknown) =>
+      mapDynamoToEvent(dynamoEvent)
+    ) ?? []
   )
+}
+
+function isError(error: unknown): error is Error {
+  return (error as Error).name !== undefined
 }
 
 export const participate = async (
   eventId: string,
   user: { nickname: string; id: string; picture: string }
 ) => {
-  const documentClient = Table.DocumentClient
-  if (!documentClient) {
-    throw new Error('No Dynamo Document client')
-  }
   const participatingUser: ParticipatingUserSchema = {
     joinedAt: formatISO(new Date()).slice(0, 19),
     ...user,
   }
 
+  const command = new UpdateCommand({
+    Key: getPrimaryKey(eventId),
+    TableName: Dt65EventEntity.table?.name,
+    UpdateExpression: 'SET #participants.#userId = :user',
+    ConditionExpression: 'attribute_not_exists(#participants.#userId)',
+    ExpressionAttributeNames: {
+      '#participants': 'participants',
+      '#userId': user.id,
+    },
+    ExpressionAttributeValues: {
+      ':user': ParticipatingUserSchema.parse(participatingUser),
+    },
+  })
+
   try {
-    await documentClient
-      .update({
-        TableName: Table.name,
-        Key: getPrimaryKey(eventId),
-        UpdateExpression: 'SET #participants.#userId = :user',
-        ConditionExpression: 'attribute_not_exists(#participants.#userId)',
-        ExpressionAttributeNames: {
-          '#participants': 'participants',
-          '#userId': user.id,
-        },
-        ExpressionAttributeValues: {
-          ':user': ParticipatingUserSchema.parse(participatingUser),
-        },
-      })
-      .promise()
+    await Dt65EventEntity.DocumentClient.send(command)
   } catch (error) {
     if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
       console.error(error)
@@ -244,28 +245,20 @@ export const participate = async (
   }
 }
 
-function isError(error: unknown): error is Error {
-  return (error as Error).name !== undefined
-}
-
 export const leave = async (eventId: string, userId: string) => {
-  const documentClient = Table.DocumentClient
-  if (!documentClient) {
-    throw new Error('No Dynamo Document client')
-  }
+  const command = new UpdateCommand({
+    Key: getPrimaryKey(eventId),
+    TableName: Dt65EventEntity.table?.name,
+    UpdateExpression: 'REMOVE #participants.#userId',
+    ConditionExpression: 'attribute_exists(#participants.#userId)',
+    ExpressionAttributeNames: {
+      '#participants': 'participants',
+      '#userId': userId,
+    },
+  })
+
   try {
-    await documentClient
-      .update({
-        TableName: Table.name,
-        Key: getPrimaryKey(eventId),
-        UpdateExpression: 'REMOVE #participants.#userId',
-        ConditionExpression: 'attribute_exists(#participants.#userId)',
-        ExpressionAttributeNames: {
-          '#participants': 'participants',
-          '#userId': userId,
-        },
-      })
-      .promise()
+    await Dt65EventEntity.DocumentClient.send(command)
   } catch (error) {
     if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
       console.error(error)
