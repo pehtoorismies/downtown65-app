@@ -39,7 +39,7 @@ export const Dt65EventEntity = new Entity({
     createdBy: { type: 'map', required: true },
     dateStart: { type: 'string', required: true },
     description: { type: 'string', required: false },
-    id: { type: 'string', map: 'eventId' }, // map 'id' to table attribute 'eventId'
+    id: { type: 'string', map: 'eventId', required: true }, // map 'id' to table attribute 'eventId'
     participants: { type: 'map', required: true },
     race: { type: 'boolean', default: false },
     location: { type: 'string', required: true },
@@ -47,6 +47,24 @@ export const Dt65EventEntity = new Entity({
     timeStart: { type: 'string', required: false },
     title: { type: 'string', required: true },
     type: { type: 'string', required: true },
+  },
+  table: DtTable,
+} as const)
+
+export const ChallengeEntity = new Entity({
+  name: 'Challenge',
+  attributes: {
+    PK: { partitionKey: true, hidden: true },
+    SK: { hidden: true, sortKey: true },
+    GSI1PK: { hidden: true },
+    GSI1SK: { hidden: true },
+    createdBy: { type: 'map', required: true },
+    dateStart: { type: 'string', required: true },
+    dateEnd: { type: 'string', required: true },
+    description: { type: 'string', required: false },
+    id: { type: 'string', map: 'eventId', required: true }, // map 'id' to table attribute 'eventId'
+    subtitle: { type: 'string', required: true },
+    title: { type: 'string', required: true },
   },
   table: DtTable,
 } as const)
