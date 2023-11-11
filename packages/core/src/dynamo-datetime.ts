@@ -5,28 +5,43 @@ import isValid from 'date-fns/isValid'
 import fi from 'date-fns/locale/fi'
 import parse from 'date-fns/parse'
 
-interface Times {
+type ISODate = string
+type ISOTime = string
+
+interface TimeComponents {
   hours: number
   minutes: number
 }
 
-interface Dates {
+interface DateComponents {
   year: number
   month: number
   day: number
 }
 
-interface Input {
-  times?: Times
-  dates?: Dates
-  time?: string
-  date?: string
+type ComponentInput = {
+  dateComponents: DateComponents
+  timeComponents?: TimeComponents
+  kind: 'component'
 }
 
-const throwDateError = (date: string): never => {
+type ISOInput = {
+  isoDate: ISODate
+  isoTime?: ISOTime
+  kind: 'iso'
+}
+
+type DateInput = {
+  date: Date
+  kind: 'date'
+}
+
+type Input = ComponentInput | ISOInput | DateInput
+
+const throwDateError = (date: ISODate): never => {
   throw new Error(`Date is incorrect. Use YYYY-MM-DD. Received ${date}`)
 }
-const throwTimeError = (time: string): never => {
+const throwTimeError = (time: ISOTime): never => {
   throw new Error(
     `Time is incorrect. Use hours 0 - 23 and minutes 0 - 59. Received ${time}`
   )
@@ -35,7 +50,7 @@ const throwTimeError = (time: string): never => {
 const dateRegexp = /^\d{4}-\d{2}-\d{2}$/
 const timeRegexp = /^(\d{2}):(\d{2})$/
 
-const parseDate = (d: string): Dates => {
+const parseISODate = (d: string): DateComponents => {
   if (!dateRegexp.test(d)) {
     return throwDateError(d)
   }
@@ -52,7 +67,9 @@ const parseDate = (d: string): Dates => {
   }
 }
 
-const parseTimes = (times?: Times): Times | undefined => {
+const parseTimeComponents = (
+  times?: TimeComponents
+): TimeComponents | undefined => {
   if (times === undefined) {
     return
   }
@@ -65,7 +82,7 @@ const parseTimes = (times?: Times): Times | undefined => {
   return times
 }
 
-const parseTime = (t: string | undefined): Times | undefined => {
+const parseISOTime = (t: string | undefined): TimeComponents | undefined => {
   if (!t) {
     return
   }
@@ -75,13 +92,13 @@ const parseTime = (t: string | undefined): Times | undefined => {
     return throwTimeError(t)
   }
 
-  return parseTimes({
+  return parseTimeComponents({
     hours: Number(matches[1]),
     minutes: Number(matches[2]),
   })
 }
 
-const parseDates = (dates: Dates): Dates => {
+const parseDateComponents = (dates: DateComponents): DateComponents => {
   const { year, month, day } = dates
   const parsed = parse(`${year}-${month}-${day}`, 'yyyy-MM-dd', new Date())
   if (!isValid(parsed)) {
@@ -94,52 +111,75 @@ const parseDates = (dates: Dates): Dates => {
   return dates
 }
 
-export class DynamoDatetime {
-  times: Times | undefined
-  dates: Dates
+const parseDate = (date: Date) => {
+  if (!isValid(date)) {
+    throw new Error('Date is not valid')
+  }
+  return {
+    year: date.getFullYear(),
+    month: date.getMonth() + 1,
+    day: date.getDate(),
+  }
+}
 
-  public constructor({ date, time, times, dates }: Input) {
-    if (date) {
-      this.dates = parseDate(date)
-      this.times = parseTime(time)
-    } else if (dates) {
-      this.dates = parseDates(dates)
-      this.times = parseTimes(times)
-    } else {
-      throw new Error('Illegal input')
+const padStartWith0 = (n: number) => String(n).padStart(2, '0')
+
+export class DynamoDatetime {
+  timeComponents: TimeComponents | undefined
+  dateComponents: DateComponents
+
+  private constructor(input: Input) {
+    switch (input.kind) {
+      case 'component': {
+        this.dateComponents = parseDateComponents(input.dateComponents)
+        this.timeComponents = parseTimeComponents(input.timeComponents)
+        break
+      }
+      case 'iso': {
+        this.dateComponents = parseISODate(input.isoDate)
+        this.timeComponents = parseISOTime(input.isoTime)
+        break
+      }
+      case 'date': {
+        this.dateComponents = parseDate(input.date)
+      }
     }
   }
 
   getTime(): string | undefined {
-    if (this.times === undefined) {
+    if (this.timeComponents === undefined) {
       return
     }
-    const { year, month, day } = this.dates
-    const { minutes, hours } = this.times
 
-    return formatISO(new Date(year, month, day, hours, minutes), {
-      representation: 'time',
-    }).slice(0, 5)
+    return `${padStartWith0(this.timeComponents.hours)}:${padStartWith0(
+      this.timeComponents.minutes
+    )}`
   }
 
-  getDate(): string {
-    const { year, month, day } = this.dates
+  getISODate(): string {
+    const { year, month, day } = this.dateComponents
     return format(new Date(year, month - 1, day), 'yyyy-MM-dd')
   }
 
-  getDates(): Dates {
-    return this.dates
+  getDateComponents(): DateComponents {
+    return this.dateComponents
   }
 
-  getTimes(): Times | undefined {
-    return this.times
+  getTimeComponents(): TimeComponents | undefined {
+    return this.timeComponents
   }
 
   getIsoDatetime(): string {
-    const { day, year, month } = this.dates
+    const { day, year, month } = this.dateComponents
 
-    const d = this.times
-      ? new Date(year, month - 1, day, this.times.hours, this.times.minutes)
+    const d = this.timeComponents
+      ? new Date(
+          year,
+          month - 1,
+          day,
+          this.timeComponents.hours,
+          this.timeComponents.minutes
+        )
       : new Date(year, month - 1, day)
 
     return formatISO(d).slice(0, 19)
@@ -147,17 +187,46 @@ export class DynamoDatetime {
 
   getFormattedDate(): string {
     return format(
-      new Date(this.dates.year, this.dates.month - 1, this.dates.day),
+      new Date(
+        this.dateComponents.year,
+        this.dateComponents.month - 1,
+        this.dateComponents.day
+      ),
       `d.M.yyyy (EEEEEE)`,
       { locale: fi }
     )
   }
 
   getDateObject(): Date {
-    const { day, year, month } = this.dates
+    const { day, year, month } = this.dateComponents
 
-    return this.times
-      ? new Date(year, month - 1, day, this.times.hours, this.times.minutes)
+    return this.timeComponents
+      ? new Date(
+          year,
+          month - 1,
+          day,
+          this.timeComponents.hours,
+          this.timeComponents.minutes
+        )
       : new Date(year, month - 1, day)
+  }
+
+  static fromISO(isoDate: ISODate, isoTime?: ISOTime) {
+    return new DynamoDatetime({ isoDate, isoTime, kind: 'iso' })
+  }
+
+  static fromComponents(
+    dateComponents: DateComponents,
+    timeComponents?: TimeComponents
+  ) {
+    return new DynamoDatetime({
+      dateComponents,
+      timeComponents,
+      kind: 'component',
+    })
+  }
+
+  static fromDate(date: Date) {
+    return new DynamoDatetime({ date, kind: 'date' })
   }
 }

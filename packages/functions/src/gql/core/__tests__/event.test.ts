@@ -1,5 +1,5 @@
 import { EventType } from '@downtown65-app/graphql/graphql'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, test } from 'vitest'
 import * as Event from '../event'
 
 const userId = 'auth0|123'
@@ -36,7 +36,7 @@ const creatableEvent = {
 }
 
 describe('Events', () => {
-  it('should create and delete event ', async () => {
+  test('should create and delete event ', async () => {
     const id = await Event.create(creatableEvent)
     const event = await Event.getById(id)
     expect(event).toBeDefined()
@@ -89,7 +89,7 @@ describe('Events', () => {
     expect(titleUpdateEvent?.subtitle).toBe('Some other subtitle')
   })
 
-  it('remove should throw error if event is not found', async () => {
+  test('remove should throw error if event is not found', async () => {
     await expect(Event.remove('non existing')).rejects.toThrow(
       /^Event not found$/
     )

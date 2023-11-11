@@ -176,10 +176,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     })
   }
 
-  const ddt = new DynamoDatetime({
-    date: event.dateStart,
-    time: event.timeStart ?? undefined,
-  })
+  const ddt = DynamoDatetime.fromISO(
+    event.dateStart,
+    event.timeStart ?? undefined
+  )
 
   const data = {
     eventItem: {
