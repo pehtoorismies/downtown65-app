@@ -105,7 +105,7 @@ export const EmailableEvent = z
         },
       },
     }) => {
-      const ddt = new DynamoDatetime({ date: dateStart, time: timeStart })
+      const ddt = DynamoDatetime.fromISO(dateStart, timeStart)
 
       return {
         date: ddt.getFormattedDate(),

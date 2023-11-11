@@ -156,18 +156,14 @@ export default function EditEvent() {
     initDateStart,
     eventId,
   } = useLoaderData<typeof loader>()
-  const ddt = new DynamoDatetime({
-    // TODO: fix
-    time: initTimeStart ?? undefined,
-    date: initDateStart,
-  })
+  const ddt = DynamoDatetime.fromISO(initDateStart, initTimeStart ?? undefined)
 
   const [eventState, dispatch] = useReducer(reducer, {
     ...initState,
     // TODO: smell
     kind: getInitKind(initState.kind),
     date: ddt.getDateObject(),
-    time: ddt.getTimes() ?? {
+    time: ddt.getTimeComponents() ?? {
       hours: undefined,
       minutes: undefined,
     },

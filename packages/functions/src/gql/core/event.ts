@@ -94,10 +94,7 @@ export const create = async (
   } = creatableEvent
   const eventId = ulid()
 
-  const ddt = new DynamoDatetime({
-    dates: dateStart,
-    times: timeStart ?? undefined,
-  })
+  const ddt = DynamoDatetime.fromComponents(dateStart, timeStart ?? undefined)
 
   const gsi1sk = ddt.getIsoDatetime()
   const now = formatISO(new Date()).slice(0, 19)
@@ -124,7 +121,7 @@ export const create = async (
       GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
       // add props
       createdBy,
-      dateStart: ddt.getDate(),
+      dateStart: ddt.getISODate(),
       description,
       id: eventId,
       location: getDefaultIfEmpty(location),
@@ -147,10 +144,7 @@ export const update = async (
 ): Promise<Event> => {
   const { dateStart, timeStart, type, ...rest } = updateEventInput
 
-  const ddt = new DynamoDatetime({
-    dates: dateStart,
-    times: timeStart ?? undefined,
-  })
+  const ddt = DynamoDatetime.fromComponents(dateStart, timeStart ?? undefined)
 
   const gsi1sk = ddt.getIsoDatetime()
 
@@ -158,7 +152,7 @@ export const update = async (
     ...getPrimaryKey(eventId),
     ...rest,
     description: rest.description ?? undefined,
-    dateStart: ddt.getDate(),
+    dateStart: ddt.getISODate(),
     timeStart: ddt.getTime(),
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     type,
