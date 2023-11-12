@@ -1,13 +1,13 @@
 import { graphql } from '@downtown65-app/graphql/gql'
 import { CreateEventDocument } from '@downtown65-app/graphql/graphql'
-import { Divider, Text } from '@mantine/core'
+import { Button, Center, Stack, Text } from '@mantine/core'
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { useReducer } from 'react'
 import type { Context } from '~/contexts/participating-context'
 import { gqlClient } from '~/gql/get-gql-client.server'
@@ -129,10 +129,19 @@ export default function NewEvent() {
         dispatch={dispatch}
         participatingActions={participatingActions}
       />
-      <Divider mt="md" m="sm" />
-      <Text ta="center" fz="md" fw={400} mt="xs" c="blue">
-        Olet luomassa uutta tapahtumaa
-      </Text>
+      <Center>
+        <Stack>
+          <Text ta="center">Tai</Text>
+          <Button
+            color="yellow"
+            component={Link}
+            to="/challenges/new"
+            data-testid="button-to-create-challenge"
+          >
+            Luo uusi haaste
+          </Button>
+        </Stack>
+      </Center>
     </>
   )
 }
