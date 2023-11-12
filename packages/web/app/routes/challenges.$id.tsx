@@ -14,7 +14,7 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { IconCheck, IconCircle } from '@tabler/icons-react'
-import { differenceInCalendarDays, format, formatISO, parseISO } from 'date-fns'
+import { differenceInCalendarDays, formatISO, parseISO } from 'date-fns'
 import React from 'react'
 import { LeaderboardRow } from '~/components/challenge/leaderboard-row'
 import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
@@ -25,6 +25,7 @@ import type { ChallengeParticipant } from '~/domain/user'
 import { loaderAuthenticate } from '~/session.server'
 import { addChallengePosition } from '~/util/add-challenge-position'
 import { getChallengeDates } from '~/util/challenge-date'
+import { formatRunningTime } from '~/util/challenge-status'
 import { logger } from '~/util/logger.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -78,10 +79,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const start = parseISO(challenge.startDate)
   const end = parseISO(challenge.endDate)
 
-  const runningTime = `${format(start, 'd.M.yyyy')} - ${format(
-    end,
-    'd.M.yyyy'
-  )}`
+  const runningTime = formatRunningTime(start, end)
 
   const dates = getChallengeDates({
     startISODate: challenge.startDate,
