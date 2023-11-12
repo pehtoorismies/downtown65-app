@@ -1,5 +1,6 @@
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type { CreateChallengeInput } from '@downtown65-app/graphql/graphql'
+import { format } from 'date-fns'
 import { ulid } from 'ulid'
 import { ChallengeCreateSchema } from '~/gql/core/dynamo-schemas/challenge-schema'
 import { Auth0UserSchema } from '~/gql/core/dynamo-schemas/common'
@@ -19,15 +20,10 @@ export const create = async (
     creatable
   const id = ulid()
 
-  const start = new DynamoDatetime({
-    dates: dateStart,
-  })
+  const start = DynamoDatetime.fromComponents(dateStart)
+  const end = DynamoDatetime.fromComponents(dateEnd)
 
-  const end = new DynamoDatetime({
-    dates: dateEnd,
-  })
-
-  const gsi1sk = end.getDate()
+  const gsi1sk = end.getISODate()
 
   await ChallengeEntity.put(
     ChallengeCreateSchema.parse({
@@ -37,8 +33,8 @@ export const create = async (
       GSI1SK: `DATE#${gsi1sk}#${id.slice(0, 8)}`,
       // add props
       createdBy,
-      dateStart: start.getDate(),
-      dateEnd: end.getDate(),
+      dateStart: start.getISODate(),
+      dateEnd: end.getISODate(),
       description,
       id,
       subtitle,
@@ -65,13 +61,45 @@ export const getById = async (id: string) => {
   }
 }
 
-export const remove = async (id: string): Promise<boolean> => {
+export const remove = async (id: string) => {
   await ChallengeEntity.delete(getPrimaryKey(id), {
     returnValues: 'ALL_OLD',
   })
-
-  // if (!results.Attributes) {
-  //   logger.warn('Challange not found', getPrimaryKey(id))
-  // }
   return true
+}
+
+export const removeMany = async (ids: string[]) => {
+  if (ids.length > 25) {
+    throw new Error('Can only remove max 25 items in one batch operation')
+  }
+
+  await ChallengeEntity.table?.batchWrite(
+    ids.map((id) => {
+      return ChallengeEntity.deleteBatch(getPrimaryKey(id))
+    })
+  )
+}
+
+export const getUpcoming = async () => {
+  const now = new Date()
+  const today = format(
+    new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+    'yyyy-MM-dd'
+  )
+
+  const results = await ChallengeEntity.query(`CHALLENGE#FUTURE`, {
+    index: 'GSI1',
+    gt: `DATE#${today}`,
+  })
+
+  if (!results.Items) {
+    return []
+  }
+
+  return results.Items.map((data) => {
+    return {
+      ...data,
+      createdBy: Auth0UserSchema.parse(data.createdBy),
+    }
+  })
 }

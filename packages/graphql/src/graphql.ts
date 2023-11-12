@@ -36,6 +36,15 @@ export type AuthError = {
   statusCode: Scalars['Int']['output']
 }
 
+export type CreateChallengeInput = {
+  createdBy: MeInput
+  dateEnd: DateInput
+  dateStart: DateInput
+  description?: InputMaybe<Scalars['String']['input']>
+  subtitle: Scalars['String']['input']
+  title: Scalars['String']['input']
+}
+
 export type CreateEventInput = {
   createdBy: MeInput
   dateStart: DateInput
@@ -147,6 +156,7 @@ export type MeUser = DetailedUser &
 
 export type Mutation = {
   __typename: 'Mutation'
+  createChallenge: IdPayload
   createEvent: IdPayload
   deleteEvent?: Maybe<IdPayload>
   forgotPassword: Scalars['Boolean']['output']
@@ -158,6 +168,10 @@ export type Mutation = {
   updateAvatar: Scalars['Boolean']['output']
   updateEvent: Event
   updateMe: MeUser
+}
+
+export type MutationCreateChallengeArgs = {
+  input: CreateChallengeInput
 }
 
 export type MutationCreateEventArgs = {

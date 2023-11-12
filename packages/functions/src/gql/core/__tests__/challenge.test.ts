@@ -1,23 +1,54 @@
+import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type { CreateChallengeInput } from '@downtown65-app/graphql/graphql'
-import { describe, expect, it } from 'vitest'
+import {
+  randFutureDate,
+  randIceHockeyTeam,
+  randNumber,
+  randPastDate,
+  randSports,
+  randUser,
+} from '@ngneat/falso'
+import { endOfMonth, startOfMonth } from 'date-fns'
+import { times } from 'remeda'
+import { describe, expect, test } from 'vitest'
 import * as Challenge from '../challenge'
 
-const userId = 'auth0|123'
+const USER_ID = 'auth0|123'
+const NEXT_YEAR = new Date().getFullYear() + 1
+const PICTURE_URL =
+  'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png'
+
+const createRandomChallenge = (date: Date) => {
+  const start = startOfMonth(date)
+  const end = endOfMonth(date)
+
+  const user = randUser()
+  return {
+    createdBy: {
+      nickname: user.username,
+      picture: user.img,
+      id: `auth0|${randNumber({ min: 100_000, max: 999_999 })}`,
+    },
+    dateStart: DynamoDatetime.fromDate(start).getDateComponents(),
+    dateEnd: DynamoDatetime.fromDate(end).getDateComponents(),
+    subtitle: randIceHockeyTeam(),
+    title: randSports(),
+  }
+}
 
 const creatableChallenge: CreateChallengeInput = {
   createdBy: {
     nickname: 'some_nick',
-    picture:
-      'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png',
-    id: userId,
+    picture: PICTURE_URL,
+    id: USER_ID,
   },
   dateStart: {
-    year: 2025,
+    year: NEXT_YEAR,
     month: 12,
     day: 1,
   },
   dateEnd: {
-    year: 2025,
+    year: NEXT_YEAR,
     month: 12,
     day: 31,
   },
@@ -30,7 +61,34 @@ function expectToBeDefined<T>(value?: T): asserts value is NonNullable<T> {
 }
 
 describe('Events', () => {
-  it('should create and delete event ', async () => {
+  test('should list challenges', async () => {
+    const futureDates = times(4, () => {
+      return randFutureDate()
+    })
+    const pastDates = times(3, () => {
+      return randPastDate({ years: 2 })
+    })
+
+    const dates = [...futureDates, ...pastDates]
+
+    const ids = []
+
+    for (const date of dates) {
+      const id = await Challenge.create(createRandomChallenge(date))
+      ids.push(id)
+    }
+
+    const upcomingChallenges = await Challenge.getUpcoming()
+    expect(upcomingChallenges.length).toBe(4)
+
+    await Challenge.removeMany([...ids])
+
+    const noUpcoming = await Challenge.getUpcoming()
+
+    expect(noUpcoming.length).toBe(0)
+  })
+
+  test('should create and delete event ', async () => {
     const id = await Challenge.create(creatableChallenge)
     expect(id).toBeDefined()
 
@@ -40,13 +98,19 @@ describe('Events', () => {
     expect(challenge.id).toBe(id)
     expect(challenge.title).toBe('Title')
     expect(challenge.subtitle).toBe('Some subtitle')
-    expect(challenge.dateStart).toBe('2025-12-01')
-    expect(challenge.dateEnd).toBe('2025-12-31')
+    expect(challenge.dateStart).toBe(`${NEXT_YEAR}-12-01`)
+    expect(challenge.dateEnd).toBe(`${NEXT_YEAR}-12-31`)
     expect(challenge.createdBy.nickname).toBe('some_nick')
-    expect(challenge.createdBy.id).toBe(userId)
-    expect(challenge.createdBy.picture).toBe(
-      'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png'
-    )
+    expect(challenge.createdBy.id).toBe(USER_ID)
+    expect(challenge.createdBy.picture).toBe(PICTURE_URL)
+
+    // const result = await Challenge.createExecution(id, {})
+
+    await Challenge.remove(id)
+
+    expect(await Challenge.getById(id)).toBeNull()
+
+    // await Event.participate(id, user)
 
     //   await Event.leave(id, userId)
     //   // should allow leaving when already left

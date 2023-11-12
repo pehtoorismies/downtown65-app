@@ -107,6 +107,15 @@ input CreateEventInput {
     type: EventType!
 }
 
+input CreateChallengeInput {
+    createdBy: MeInput!
+    dateStart: DateInput!
+    dateEnd: DateInput!
+    description: String
+    subtitle: String!
+    title: String!
+}
+
 type Preferences {
     subscribeEventCreationEmail: Boolean!
     subscribeWeeklyEmail: Boolean!
@@ -237,6 +246,8 @@ type Mutation {
     deleteEvent(eventId: ID!): IDPayload
     leaveEvent(eventId: ID!): Boolean
     participateEvent(eventId: ID!, me: MeInput!): Boolean
+
+    createChallenge(input: CreateChallengeInput!): IDPayload!
 
     updateMe(input: UpdateMeInput!): MeUser!
 
