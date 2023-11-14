@@ -1,0 +1,19 @@
+.title {
+    text-align: center;
+    text-shadow: black 2px 2px 10px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    font-size: rem(23);
+    color: var(--mantine-color-white);
+    background: linear-gradient(
+            0deg,
+            rgba(134, 142, 150, 0.1) 0%,
+            rgba(134, 142, 150, 0.3) 25%,
+            rgba(134, 142, 150, 0.3) 75%,
+            rgba(134, 142, 150, 0.1) 100%
+    );
+}
+
+.box {
+    height: 200px;
+}
