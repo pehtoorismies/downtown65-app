@@ -1,4 +1,4 @@
-import { Button, Container, Group, Stepper } from '@mantine/core'
+import { Button, Center, Container, Group, Stepper, Title } from '@mantine/core'
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
@@ -61,6 +61,9 @@ export default function CreateNewChallenge() {
 
   return (
     <Container pt={12}>
+      <Title order={1} size="h5">
+        Haaste: {challengeState.title || 'uusi haaste'}
+      </Title>
       <Stepper
         size="xs"
         active={challengeState.activeStep}
@@ -124,6 +127,9 @@ export default function CreateNewChallenge() {
           {challengeState.nextButtonText}
         </Button>
       </Group>
+      <Center>
+        <Button color="red">Keskeytä</Button>
+      </Center>
     </Container>
   )
 }
