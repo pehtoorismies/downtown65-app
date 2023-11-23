@@ -9,13 +9,16 @@ import {
 } from '@mantine/core'
 import React from 'react'
 import { Voucher } from '~/components/voucher/voucher'
-import type { ReducerProps } from '~/routes-common/challenges/create-edit/reducer'
+import type { ChallengeReducerProps } from '~/routes-common/challenges/create-edit/challenge-reducer'
 import {
   formatRunningTimeFromMonth,
   getChallengeStatusFromMonth,
 } from '~/util/challenge-status'
 
-export const StepPreview = ({ state, dispatch }: ReducerProps) => {
+export const ChallengePreview = ({
+  state,
+  dispatch,
+}: ChallengeReducerProps) => {
   const dateRange = formatRunningTimeFromMonth(state.date)
   const challengeStatus = getChallengeStatusFromMonth(state.date, new Date())
 

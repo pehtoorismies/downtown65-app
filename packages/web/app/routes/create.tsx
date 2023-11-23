@@ -1,20 +1,16 @@
 import {
-  BackgroundImage,
   Button,
   Card,
   Center,
   Container,
   Image,
   SimpleGrid,
-  Stack,
-  Text,
   Title,
 } from '@mantine/core'
 import { json } from '@remix-run/node'
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import React from 'react'
-import classes from '../routes-common/styles/create.module.css'
 import { loaderAuthenticate } from '~/session.server'
 
 export const meta: MetaFunction = () => {
@@ -37,7 +33,7 @@ export default function Create() {
   return (
     <Container>
       <Center>
-        <Title my="md">Luo uusi</Title>
+        <Title my="md">Valitse tyyppi</Title>
       </Center>
       <SimpleGrid cols={{ base: 1, sm: 2 }}></SimpleGrid>
 
@@ -51,15 +47,11 @@ export default function Create() {
           to="/events/new"
         >
           <Card.Section>
-            <BackgroundImage src="/event-images/skiing.jpg">
-              <Stack className={classes.box} align="center" justify="center">
-                <Title order={2} className={classes.title}>
-                  Haaste
-                </Title>
-              </Stack>
-            </BackgroundImage>
+            <Image src="/images/suo.jpg" height={160} alt="Event" />
           </Card.Section>
-          <Text>Luo uusi tapahtuma</Text>
+          <Button color="blue" fullWidth mt="md" radius="md">
+            Luo Tapahtuma
+          </Button>
         </Card>
 
         <Card
@@ -71,10 +63,10 @@ export default function Create() {
           to="/challenges/new"
         >
           <Card.Section>
-            <Image src="/images/create-new.jpg" height={160} alt="Challenge" />
+            <Image src="/images/abs.jpg" height={160} alt="Challenge" />
           </Card.Section>
           <Button color="yellow" fullWidth mt="md" radius="md">
-            Kuukausi-haaste
+            Luo Kuukausi-haaste
           </Button>
         </Card>
       </SimpleGrid>

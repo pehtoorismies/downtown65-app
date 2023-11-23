@@ -31,7 +31,7 @@ export interface ChallengeState extends ButtonStates {
   minDate: Date
 }
 
-export interface ReducerProps {
+export interface ChallengeReducerProps {
   state: ChallengeState
   dispatch: Dispatch<ChallengeAction>
 }
@@ -81,7 +81,7 @@ const getNextState = (state: ChallengeState) => {
   }
 }
 
-export const reducer = (
+export const challengeReducer = (
   state: ChallengeState,
   action: ChallengeAction
 ): ChallengeState => {

@@ -3,21 +3,25 @@ import { Link, RichTextEditor } from '@mantine/tiptap'
 import { Underline } from '@tiptap/extension-underline'
 import { useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
-import type { ReducerProps } from './reducer'
+import type { ChallengeReducerProps } from '~/routes-common/challenges/create-edit/challenge-reducer'
 
 /**
  * This component is available only client side
  */
-export const StepDescriptionClient = ({ state, dispatch }: ReducerProps) => {
+export const ChallengeDescription = ({
+  state,
+  dispatch,
+}: ChallengeReducerProps) => {
   const editor = useEditor({
     extensions: [StarterKit, Link, Underline],
     content: state.description,
     autofocus: true,
     editable: true,
     onUpdate: ({ editor }) => {
+      const value = editor.getHTML()
       dispatch({
         kind: 'description',
-        value: editor.getHTML(),
+        value,
       })
     },
   })
@@ -47,6 +51,7 @@ export const StepDescriptionClient = ({ state, dispatch }: ReducerProps) => {
             <RichTextEditor.Unlink />
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
+
         <RichTextEditor.Content />
       </RichTextEditor>
     </Box>

@@ -1,4 +1,12 @@
-import { Button, Center, Container, Group, Stepper, Title } from '@mantine/core'
+import {
+  Button,
+  Center,
+  Container,
+  Divider,
+  Group,
+  Stepper,
+  Title,
+} from '@mantine/core'
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
@@ -6,20 +14,21 @@ import {
   IconAlignLeft,
   IconArrowLeft,
   IconArrowRight,
+  IconCircleOff,
   IconClockHour5,
   IconEdit,
   IconRocket,
 } from '@tabler/icons-react'
 import { addMonths, parseISO } from 'date-fns'
-import { useReducer } from 'react'
+import React, { useReducer } from 'react'
 import {
+  challengeReducer,
   isActiveStep,
-  reducer,
-} from '~/routes-common/challenges/create-edit/reducer'
-import { StepDate } from '~/routes-common/challenges/create-edit/step-date'
-import { StepDescriptionClient } from '~/routes-common/challenges/create-edit/step-description.client'
-import { StepPreview } from '~/routes-common/challenges/create-edit/step-preview'
-import { StepTitle } from '~/routes-common/challenges/create-edit/step-title'
+} from '~/routes-common/challenges/create-edit/challenge-reducer'
+import { ChallengeDate } from '~/routes-common/challenges/create-edit/steps/challenge-date'
+import { ChallengeDescription } from '~/routes-common/challenges/create-edit/steps/challenge-description'
+import { ChallengePreview } from '~/routes-common/challenges/create-edit/steps/challenge-preview'
+import { ChallengeTitle } from '~/routes-common/challenges/create-edit/steps/challenge-title'
 import { loaderAuthenticate } from '~/session.server'
 
 const ICON_SIZE = 20
@@ -47,7 +56,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function CreateNewChallenge() {
   const { selectedMonth, minDate } = useLoaderData<typeof loader>()
 
-  const [challengeState, dispatch] = useReducer(reducer, {
+  const [challengeState, dispatch] = useReducer(challengeReducer, {
     activeStep: 0,
     date: parseISO(selectedMonth),
     minDate: parseISO(minDate),
@@ -81,28 +90,28 @@ export default function CreateNewChallenge() {
           icon={<IconEdit size={ICON_SIZE} />}
           data-testid="step-basic-info"
         >
-          <StepTitle state={challengeState} dispatch={dispatch} />
+          <ChallengeTitle state={challengeState} dispatch={dispatch} />
         </Stepper.Step>
         <Stepper.Step
           icon={<IconClockHour5 size={ICON_SIZE} />}
           data-testid="step-date"
           allowStepSelect={!!challengeState.title && !!challengeState.subtitle}
         >
-          <StepDate state={challengeState} dispatch={dispatch} />
+          <ChallengeDate state={challengeState} dispatch={dispatch} />
         </Stepper.Step>
         <Stepper.Step
           icon={<IconAlignLeft size={ICON_SIZE} />}
           data-testid="step-description"
           allowStepSelect={!!challengeState.title && !!challengeState.subtitle}
         >
-          <StepDescriptionClient state={challengeState} dispatch={dispatch} />
+          <ChallengeDescription state={challengeState} dispatch={dispatch} />
         </Stepper.Step>
         <Stepper.Step
           icon={<IconRocket size={ICON_SIZE} />}
           data-testid="step-preview"
           allowStepSelect={!!challengeState.title && !!challengeState.subtitle}
         >
-          <StepPreview state={challengeState} dispatch={dispatch} />
+          <ChallengePreview state={challengeState} dispatch={dispatch} />
         </Stepper.Step>
       </Stepper>
       <Group justify="space-between">
@@ -127,8 +136,11 @@ export default function CreateNewChallenge() {
           {challengeState.nextButtonText}
         </Button>
       </Group>
+      <Divider label="Danger zone" />
       <Center>
-        <Button color="red">Keskeytä</Button>
+        <Button my="md" color="red" rightSection={<IconCircleOff size={18} />}>
+          Keskeytä uuden haasteen luonti
+        </Button>
       </Center>
     </Container>
   )
