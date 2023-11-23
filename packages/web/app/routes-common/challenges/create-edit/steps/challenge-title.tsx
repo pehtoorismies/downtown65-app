@@ -1,14 +1,14 @@
 import { TextInput } from '@mantine/core'
-import type { ReducerProps } from '~/routes-common/challenges/create-edit/reducer'
+import type { ChallengeReducerProps } from '~/routes-common/challenges/create-edit/challenge-reducer'
 
-const spacing = 'md'
+const SPACING = 'md'
 
-export const StepTitle = ({ state, dispatch }: ReducerProps) => {
+export const ChallengeTitle = ({ state, dispatch }: ChallengeReducerProps) => {
   return (
     <>
       <TextInput
         name="title"
-        my={spacing}
+        my={SPACING}
         placeholder="Bissehaaste"
         label="Haasteen nimi"
         size="lg"
@@ -20,7 +20,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
       />
       <TextInput
         name="subtitle"
-        my={spacing}
+        my={SPACING}
         placeholder="10 ipaa päivässä"
         label="Tarkenne"
         size="lg"

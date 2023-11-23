@@ -2,9 +2,9 @@ import 'dayjs/locale/fi'
 import { Group } from '@mantine/core'
 import { MonthPicker } from '@mantine/dates'
 import styles from './month-picker.module.css'
-import type { ReducerProps } from '~/routes-common/challenges/create-edit/reducer'
+import type { ChallengeReducerProps } from '~/routes-common/challenges/create-edit/challenge-reducer'
 
-export const StepDate = ({ state, dispatch }: ReducerProps) => {
+export const ChallengeDate = ({ state, dispatch }: ChallengeReducerProps) => {
   return (
     <Group justify="center">
       <MonthPicker
