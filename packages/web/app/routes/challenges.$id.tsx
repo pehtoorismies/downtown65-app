@@ -1,35 +1,77 @@
+import { graphql } from '@downtown65-app/graphql/gql'
+import { GetChallengeDocument } from '@downtown65-app/graphql/graphql'
 import {
   Box,
   Button,
   Center,
   Container,
+  Divider,
   Group,
-  Paper,
   Stack,
   Text,
   Title,
   TypographyStylesProvider,
 } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { IconCheck, IconCircle } from '@tabler/icons-react'
-import { differenceInCalendarDays, formatISO, parseISO } from 'date-fns'
+import { IconCheck, IconCircle, IconEye, IconEyeOff } from '@tabler/icons-react'
+import { formatISO, parseISO } from 'date-fns'
 import React from 'react'
+import invariant from 'tiny-invariant'
 import { LeaderboardRow } from '~/components/challenge/leaderboard-row'
 import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
 import { Voucher } from '~/components/voucher/voucher'
 import type { Context } from '~/contexts/participating-context'
 import { ParticipatingContext } from '~/contexts/participating-context'
 import type { ChallengeParticipant } from '~/domain/user'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
-import { addChallengePosition } from '~/util/add-challenge-position'
 import { getChallengeDates } from '~/util/challenge-date'
-import { formatRunningTime } from '~/util/challenge-status'
+import {
+  formatRunningTimeFromMonth,
+  getChallengeStatusFromMonth,
+} from '~/util/challenge-status'
 import { logger } from '~/util/logger.server'
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+const _GqlIgnored = graphql(`
+  query GetChallenge($id: ID!) {
+    challenge(id: $id) {
+      id
+      createdBy {
+        id
+        nickname
+        picture
+      }
+      dateEnd
+      dateStart
+      description
+      subtitle
+      title
+    }
+  }
+`)
+
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  invariant(params.id, 'Expected params.id')
+
   const { user } = await loaderAuthenticate(request)
+
+  const { challenge } = await gqlClient.request(
+    GetChallengeDocument,
+    {
+      id: params.id,
+    },
+    PUBLIC_AUTH_HEADERS
+  )
+
+  if (!challenge) {
+    throw new Response('Not Found', {
+      status: 404,
+      statusText: 'Haastetta ei löydy',
+    })
+  }
 
   const participants: ChallengeParticipant[] = [
     {
@@ -64,26 +106,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   const myDoneDates = ['2023-11-01', '2023-11-02', '2023-11-03']
 
-  const challenge = {
-    title: 'Kyykkyhaaste - Marraskuu 2023',
-    subtitle: '100 kyykkyä päivässä',
-    startDate: '2023-11-01',
-    endDate: '2023-11-30',
-    kind: 'daily',
-    participants: addChallengePosition(participants),
-    description: '<h2>Kk haaste</h2><h3>kissa</h3>',
-  }
-
-  const endDate = parseISO(challenge.endDate)
-  const today = new Date()
-  const start = parseISO(challenge.startDate)
-  const end = parseISO(challenge.endDate)
-
-  const runningTime = formatRunningTime(start, end)
+  const start = parseISO(challenge.dateStart)
 
   const dates = getChallengeDates({
-    startISODate: challenge.startDate,
-    endISODate: challenge.endDate,
+    startISODate: challenge.dateStart,
+    endISODate: challenge.dateEnd,
     todayISODate: formatISO(new Date()).slice(0, 10),
     doneISODates: myDoneDates,
     outputFormat: 'd.M.yyyy (EEEEEE)',
@@ -91,15 +118,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   logger.debug(dates, 'Dates')
 
+  const challengeStatus = getChallengeStatusFromMonth(start, new Date())
+  const dateRange = formatRunningTimeFromMonth(start)
+
   return json({
     user,
     doneDates: dates,
-    today: 'KOIRA',
-    runningTime,
-    daysLeft: differenceInCalendarDays(endDate, today),
+    challengeStatus,
+    dateRange,
     challenge: {
       ...challenge,
-      daysCount: dates.length,
+      participants: participants,
     },
   })
 }
@@ -113,12 +142,9 @@ export const meta: MetaFunction = () => {
 }
 
 export default function GetChallenge() {
-  const { user, challenge, doneDates, runningTime, daysLeft } =
+  const { user, challenge, doneDates, dateRange, challengeStatus } =
     useLoaderData<typeof loader>()
-
-  const dayFi = daysLeft === 1 ? 'päivä' : 'päivää'
-
-  const dayInfo = `${daysLeft} ${dayFi} jäljellä`
+  const [opened, { toggle }] = useDisclosure()
 
   const participationActions: Context = {
     onParticipate: () => {},
@@ -178,6 +204,18 @@ export default function GetChallenge() {
     }
   })
 
+  const toggleButton = opened ? (
+    <Button mt="md" onClick={toggle} rightSection={<IconEyeOff size={18} />}>
+      Piilota omat suoritukset
+    </Button>
+  ) : (
+    <Button m="md" onClick={toggle} rightSection={<IconEye size={18} />}>
+      Näytä/editoi omat suoritukset
+    </Button>
+  )
+
+  const description = challenge.description?.trim()
+
   return (
     <Container data-testid="challenges" p="xs" size="1000">
       <Voucher>
@@ -194,20 +232,20 @@ export default function GetChallenge() {
           <Group justify="space-between">
             <Box>
               <Text fw={700} mt={2}>
-                100 kyykkyä päivässä
+                {challenge.title}
               </Text>
               <Text size="sm" fw={500}>
-                Omaan tahtiin
+                {challenge.subtitle}
               </Text>
               <Text size="sm" c="dimmed" fw={400}>
-                {runningTime}
+                {dateRange}
               </Text>
               <Text size="sm" fw={500}>
-                {dayInfo}
+                {challengeStatus.description}
               </Text>
             </Box>
             <Group>
-              {isParticipating && (
+              {isParticipating && challengeStatus.status === 'RUNNING' && (
                 <Button leftSection={<IconCircle size={14} />}>
                   Merkitse tämä päivä tehdyksi
                 </Button>
@@ -222,46 +260,57 @@ export default function GetChallenge() {
               )}
             </Group>
           </Group>
-          <Paper bg="#FAFAF8" my="sm">
-            <TypographyStylesProvider p="xs" m={0}>
-              <div
-                dangerouslySetInnerHTML={{ __html: challenge.description }}
-              />
+          <Divider my="xs" label="Lisätiedot" labelPosition="center" />
+          {!!description && (
+            <TypographyStylesProvider p={0} mt="sm">
+              <div dangerouslySetInnerHTML={{ __html: description }} />
             </TypographyStylesProvider>
-          </Paper>
+          )}
+          {!description && (
+            <Text ta="center" p="sm" c="dimmed" fw={400}>
+              ei tarkempaa tapahtuman kuvausta
+            </Text>
+          )}
+          <Divider my="xs" label="Leaderboard" labelPosition="center" />
           <Center>
-            <Title order={2} my="md">
-              Leaderboard
-            </Title>
-          </Center>
-          <Center>
-            <Paper shadow="sm" p="xs" withBorder style={{ width: '100%' }}>
+            {challengeStatus.status === 'NOT_STARTED' && (
+              <Text fs="italic">
+                Haaste ei ole alkanut. {challengeStatus.description}
+              </Text>
+            )}
+            {challengeStatus.status !== 'NOT_STARTED' && (
               <Stack my="md">
                 {challenge.participants.map((cp) => {
                   return (
                     <LeaderboardRow
                       key={cp.id}
-                      position={cp.position}
+                      position={1}
                       participant={cp}
-                      daysTotal={challenge.daysCount}
+                      daysTotal={15}
                       daysDone={cp.doneDatesCount}
                     />
                   )
                 })}
               </Stack>
-            </Paper>
+            )}
           </Center>
-          <Center>
-            <Title my="md" order={2}>
-              Omat suoritukset
-            </Title>
-          </Center>
-          <Center>
-            <Text>Muokkaa menneitä suorituksia klikkaamalla päivää.</Text>
-          </Center>
-          <Group m="sm" gap="xs" justify="center">
-            {buttonList}
-          </Group>
+          <Center>{toggleButton}</Center>
+          {opened && (
+            <>
+              <Center>
+                <Title my="md" order={2}>
+                  Omat suoritukset
+                </Title>
+              </Center>
+              <Center>
+                <Text>Muokkaa menneitä suorituksia klikkaamalla päivää.</Text>
+              </Center>
+
+              <Group m="sm" gap="xs" justify="center">
+                {buttonList}
+              </Group>
+            </>
+          )}
         </Voucher.Content>
       </Voucher>
     </Container>

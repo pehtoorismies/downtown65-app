@@ -478,6 +478,29 @@ export type SignupErrorFragmentFragment = {
   error: string
 }
 
+export type GetChallengeQueryVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type GetChallengeQuery = {
+  __typename: 'Query'
+  challenge?: {
+    __typename: 'Challenge'
+    id: string
+    dateEnd: string
+    dateStart: string
+    description?: string | null
+    subtitle: string
+    title: string
+    createdBy: {
+      __typename: 'Creator'
+      id: string
+      nickname: string
+      picture: string
+    }
+  } | null
+}
+
 export type CreateChallengeMutationVariables = Exact<{
   input: CreateChallengeInput
 }>
@@ -1238,6 +1261,74 @@ export const SignupDocument = {
     },
   ],
 } as unknown as DocumentNode<SignupMutation, SignupMutationVariables>
+export const GetChallengeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetChallenge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'challenge' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'createdBy' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nickname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'picture' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'dateEnd' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'dateStart' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'subtitle' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetChallengeQuery, GetChallengeQueryVariables>
 export const CreateChallengeDocument = {
   kind: 'Document',
   definitions: [
