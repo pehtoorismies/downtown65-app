@@ -462,6 +462,15 @@ export type SignupErrorFragmentFragment = {
   error: string
 }
 
+export type CreateChallengeMutationVariables = Exact<{
+  input: CreateChallengeInput
+}>
+
+export type CreateChallengeMutation = {
+  __typename: 'Mutation'
+  createChallenge: { __typename: 'IDPayload'; id: string }
+}
+
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID']['input']
 }>
@@ -1213,6 +1222,60 @@ export const SignupDocument = {
     },
   ],
 } as unknown as DocumentNode<SignupMutation, SignupMutationVariables>
+export const CreateChallengeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateChallenge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateChallengeInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createChallenge' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateChallengeMutation,
+  CreateChallengeMutationVariables
+>
 export const GetEventDocument = {
   kind: 'Document',
   definitions: [

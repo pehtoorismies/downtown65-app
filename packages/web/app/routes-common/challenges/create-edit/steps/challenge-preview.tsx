@@ -4,7 +4,6 @@ import {
   Group,
   Paper,
   Text,
-  Title,
   TypographyStylesProvider,
 } from '@mantine/core'
 import React from 'react'
@@ -15,12 +14,11 @@ import {
   getChallengeStatusFromMonth,
 } from '~/util/challenge-status'
 
-export const ChallengePreview = ({
-  state,
-  dispatch,
-}: ChallengeReducerProps) => {
+export const ChallengePreview = ({ state }: ChallengeReducerProps) => {
   const dateRange = formatRunningTimeFromMonth(state.date)
   const challengeStatus = getChallengeStatusFromMonth(state.date, new Date())
+
+  const hasDescription = !!state.description.trim()
 
   return (
     <Voucher>
@@ -46,20 +44,18 @@ export const ChallengePreview = ({
           </Box>
         </Group>
         <Paper bg="#FAFAF8" my="sm">
-          <TypographyStylesProvider p="xs" m={0}>
-            <div dangerouslySetInnerHTML={{ __html: state.description }} />
-          </TypographyStylesProvider>
+          {hasDescription ? (
+            <TypographyStylesProvider p="xs" m={0}>
+              <div dangerouslySetInnerHTML={{ __html: state.description }} />
+            </TypographyStylesProvider>
+          ) : (
+            <Center>
+              <Text py="xl" fs="italic">
+                -- Ei tarkempaa kuvausta --
+              </Text>
+            </Center>
+          )}
         </Paper>
-        <Center>
-          <Title order={2} my="md">
-            Leaderboard
-          </Title>
-        </Center>
-        <Center>
-          <Text c="dimmed" fs="italic" my="md">
-            -- N/A --
-          </Text>
-        </Center>
       </Voucher.Content>
     </Voucher>
   )
