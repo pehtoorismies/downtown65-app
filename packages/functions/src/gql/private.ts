@@ -2,6 +2,7 @@ import type {
   Event as Dt65Event,
   IdPayload,
   MeUser,
+  MutationCreateChallengeArgs,
   MutationCreateEventArgs,
   MutationDeleteEventArgs,
   MutationLeaveEventArgs,
@@ -30,6 +31,7 @@ import { getUser } from './users/get-user'
 import { getUsers } from './users/get-users'
 import { updateAvatar } from './users/update-avatar'
 import { updateMe } from './users/update-me'
+import { createChallenge } from '~/gql/challenges/create-challenge'
 
 export type Inputs =
   | EmptyArgs
@@ -41,6 +43,7 @@ export type Inputs =
   | QueryEventArguments
   | QueryUserArgs
   | QueryUsersArgs
+  | MutationCreateChallengeArgs
 
 export type Outputs =
   | Dt65Event
@@ -66,6 +69,7 @@ const PRIVATE_FIELDS = [
   'updateMe',
   'users',
   'user',
+  'createChallenge',
 ] as const
 type PrivateField = (typeof PRIVATE_FIELDS)[number]
 
@@ -164,6 +168,14 @@ export const privateResolver = (
         allowScopes(['write:me'])
         return updateAvatar(
           event as AppSyncResolverEvent<MutationUpdateAvatarArgs>,
+          context,
+          callback
+        )
+      }
+      case 'createChallenge': {
+        allowScopes(['write:events'])
+        return createChallenge(
+          event as AppSyncResolverEvent<MutationCreateChallengeArgs>,
           context,
           callback
         )
