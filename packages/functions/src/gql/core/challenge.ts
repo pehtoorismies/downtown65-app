@@ -1,5 +1,8 @@
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
-import type { CreateChallengeInput } from '@downtown65-app/graphql/graphql'
+import type {
+  Challenge,
+  CreateChallengeInput,
+} from '@downtown65-app/graphql/graphql'
 import { format } from 'date-fns'
 import { ulid } from 'ulid'
 import { ChallengeCreateSchema } from '~/gql/core/dynamo-schemas/challenge-schema'
@@ -46,18 +49,20 @@ export const create = async (
   return id
 }
 
-export const getById = async (id: string) => {
+export const getById = async (id: string): Promise<Challenge | null> => {
   const result = await ChallengeEntity.get(getPrimaryKey(id))
 
   if (!result.Item) {
     return null
   }
 
-  const createdBy = Auth0UserSchema.parse(result.Item.createdBy)
-
   return {
     ...result.Item,
-    createdBy,
+    createdBy: {
+      ...Auth0UserSchema.parse(result.Item.createdBy),
+      __typename: 'Creator',
+    },
+    __typename: 'Challenge',
   }
 }
 

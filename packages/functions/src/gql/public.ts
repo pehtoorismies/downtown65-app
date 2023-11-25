@@ -1,11 +1,13 @@
 import type {
+  Challenge,
   Event as Dt65Event,
   LoginResponse,
   MutationForgotPasswordArgs,
   MutationLoginArgs,
   MutationRefreshTokenArgs,
   MutationSignupArgs,
-  QueryEventArgs as QueryEventArguments,
+  QueryChallengeArgs,
+  QueryEventArgs,
   RefreshResponse,
   SignupResponse,
 } from '@downtown65-app/graphql/graphql'
@@ -16,16 +18,19 @@ import { refreshToken } from './auth/refresh-token'
 import { signup } from './auth/signup'
 import { getEventById } from './events/get-event-by-id'
 import { assertUnreachable } from './support/assert-unreachable'
+import { getChallengeById } from '~/gql/challenges/get-challenge-by-id'
 
 export type Inputs =
   | MutationForgotPasswordArgs
   | MutationLoginArgs
   | MutationRefreshTokenArgs
   | MutationSignupArgs
-  | QueryEventArguments
+  | QueryEventArgs
+  | QueryChallengeArgs
 
 export type Outputs =
   | Dt65Event
+  | Challenge
   | LoginResponse
   | RefreshResponse
   | SignupResponse
@@ -34,6 +39,7 @@ export type Outputs =
   | null
 
 const PUBLIC_FIELDS = [
+  'challenge',
   'event',
   'forgotPassword',
   'login',
@@ -54,7 +60,14 @@ export const publicResolver = (
     switch (field) {
       case 'event': {
         return getEventById(
-          event as AppSyncResolverEvent<QueryEventArguments>,
+          event as AppSyncResolverEvent<QueryEventArgs>,
+          context,
+          callback
+        )
+      }
+      case 'challenge': {
+        return getChallengeById(
+          event as AppSyncResolverEvent<QueryChallengeArgs>,
           context,
           callback
         )

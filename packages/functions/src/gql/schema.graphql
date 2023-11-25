@@ -58,6 +58,16 @@ type Event @aws_api_key @aws_oidc {
     type: EventType!
 }
 
+type Challenge @aws_api_key @aws_oidc {
+    createdBy: Creator!
+    dateStart: AWSDate!
+    dateEnd: AWSDate!
+    description: String
+    id: ID!
+    subtitle: String!
+    title: String!
+}
+
 type MeUser implements User & DetailedUser @aws_api_key @aws_oidc {
     email: String!
     id: ID!
@@ -232,6 +242,8 @@ type UsersResponse {
 
 type Query {
     event(eventId: ID!): Event @aws_api_key
+    challenge(id: ID!): Challenge @aws_api_key
+
     # Future events
     events: [Event!]!
     eventsByUser(userId: String!): [Event!]!
