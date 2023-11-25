@@ -1,5 +1,6 @@
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
+import { DateObject, preprocessNumber } from '~/routes-common/form-object'
 
 const isEventType = (eventType: unknown): eventType is EventType => {
   if (typeof eventType !== 'string') {
@@ -7,16 +8,6 @@ const isEventType = (eventType: unknown): eventType is EventType => {
   }
   return Object.values(EventType).includes(eventType as EventType)
 }
-
-const preprocessNumber = (a: unknown) => {
-  return typeof a === 'string' ? Number.parseInt(a, 10) : undefined
-}
-
-const DateObject = z.object({
-  year: z.preprocess(preprocessNumber, z.number().positive().gte(2000)),
-  month: z.preprocess(preprocessNumber, z.number().positive().lte(12)),
-  day: z.preprocess(preprocessNumber, z.number().positive().lte(31)),
-})
 
 const EventForm = z.object({
   date: DateObject,
