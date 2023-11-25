@@ -76,6 +76,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
     resolvers: {
       'Query    event': 'gql',
       'Query    events': 'gql',
+      'Query    challenge': 'gql',
       'Query    me': 'gql',
       'Query    users': 'gql',
       'Query    user': 'gql',

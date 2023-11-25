@@ -36,6 +36,17 @@ export type AuthError = {
   statusCode: Scalars['Int']['output']
 }
 
+export type Challenge = {
+  __typename: 'Challenge'
+  createdBy: Creator
+  dateEnd: Scalars['AWSDate']['output']
+  dateStart: Scalars['AWSDate']['output']
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['ID']['output']
+  subtitle: Scalars['String']['output']
+  title: Scalars['String']['output']
+}
+
 export type CreateChallengeInput = {
   createdBy: MeInput
   dateEnd: DateInput
@@ -245,12 +256,17 @@ export type PreferencesInput = {
 
 export type Query = {
   __typename: 'Query'
+  challenge?: Maybe<Challenge>
   event?: Maybe<Event>
   events: Array<Event>
   eventsByUser: Array<Event>
   me: MeUser
   user?: Maybe<OtherUser>
   users: UsersResponse
+}
+
+export type QueryChallengeArgs = {
+  id: Scalars['ID']['input']
 }
 
 export type QueryEventArgs = {
