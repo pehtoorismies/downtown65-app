@@ -31,7 +31,7 @@ interface DetailedUser  {
     name: String!
 }
 
-type EventParticipant implements User @aws_api_key @aws_oidc {
+type Participant implements User @aws_api_key @aws_oidc {
     id: ID!
     nickname: String!
     joinedAt: String!
@@ -50,7 +50,7 @@ type Event @aws_api_key @aws_oidc {
     description: String
     id: ID!
     location: String!
-    participants: [EventParticipant!]!
+    participants: [Participant!]!
     race: Boolean!
     timeStart: String
     subtitle: String!
@@ -64,7 +64,7 @@ type Challenge @aws_api_key @aws_oidc {
     dateStart: AWSDate!
     description: String
     id: ID!
-    participants: [EventParticipant!]!
+    participants: [Participant!]!
     subtitle: String!
     title: String!
 }

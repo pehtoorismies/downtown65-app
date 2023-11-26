@@ -71,7 +71,7 @@ export const getById = async (id: string): Promise<Challenge | null> => {
     participants: participantHashMapToList(result.Item.participants).map(
       (p) => ({
         ...p,
-        __typename: 'EventParticipant',
+        __typename: 'Participant',
       })
     ),
     __typename: 'Challenge',
