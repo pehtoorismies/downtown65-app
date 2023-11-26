@@ -1,4 +1,3 @@
-import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type {
   CreateEventInput,
@@ -13,9 +12,9 @@ import {
   Dt65EventCreateSchema,
   Dt65EventGetSchema,
   Dt65EventUpdateSchema,
-  ParticipatingUserSchema,
 } from './dynamo-schemas/dt65-event-schema'
 import { Dt65EventEntity } from './dynamo-table'
+import { getParticipationFunctions } from '~/gql/core/common'
 
 const getExpression = (d: Date) => {
   const lt = format(
@@ -203,59 +202,11 @@ export const getFutureEvents = async () => {
   )
 }
 
-function isError(error: unknown): error is Error {
-  return (error as Error).name !== undefined
-}
+const participationFunctions = getParticipationFunctions({
+  documentClient: Dt65EventEntity.DocumentClient,
+  getPrimaryKey,
+  tableName: Dt65EventEntity.table?.name,
+})
 
-export const participate = async (
-  eventId: string,
-  user: { nickname: string; id: string; picture: string }
-) => {
-  const participatingUser: ParticipatingUserSchema = {
-    joinedAt: formatISO(new Date()).slice(0, 19),
-    ...user,
-  }
-
-  const command = new UpdateCommand({
-    Key: getPrimaryKey(eventId),
-    TableName: Dt65EventEntity.table?.name,
-    UpdateExpression: 'SET #participants.#userId = :user',
-    ConditionExpression: 'attribute_not_exists(#participants.#userId)',
-    ExpressionAttributeNames: {
-      '#participants': 'participants',
-      '#userId': user.id,
-    },
-    ExpressionAttributeValues: {
-      ':user': ParticipatingUserSchema.parse(participatingUser),
-    },
-  })
-
-  try {
-    await Dt65EventEntity.DocumentClient.send(command)
-  } catch (error) {
-    if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
-      console.error(error)
-    }
-  }
-}
-
-export const leave = async (eventId: string, userId: string) => {
-  const command = new UpdateCommand({
-    Key: getPrimaryKey(eventId),
-    TableName: Dt65EventEntity.table?.name,
-    UpdateExpression: 'REMOVE #participants.#userId',
-    ConditionExpression: 'attribute_exists(#participants.#userId)',
-    ExpressionAttributeNames: {
-      '#participants': 'participants',
-      '#userId': userId,
-    },
-  })
-
-  try {
-    await Dt65EventEntity.DocumentClient.send(command)
-  } catch (error) {
-    if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
-      console.error(error)
-    }
-  }
-}
+export const participate = participationFunctions.participate
+export const leave = participationFunctions.leave
