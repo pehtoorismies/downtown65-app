@@ -19,7 +19,7 @@ const documents = {
     types.LoginDocument,
   '\n  mutation Signup(\n    $name: String!\n    $email: String!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n':
     types.SignupDocument,
-  '\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n    }\n  }\n':
+  '\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n      participants {\n        id\n        picture\n        nickname\n      }\n    }\n  }\n  mutation ParticipateChallenge($id: ID!, $me: MeInput!) {\n    participateChallenge(id: $id, me: $me)\n  }\n  mutation LeaveChallenge($id: ID!) {\n    leaveChallenge(id: $id)\n  }\n':
     types.GetChallengeDocument,
   '\n  mutation CreateChallenge($input: CreateChallengeInput!) {\n    createChallenge(input: $input) {\n      id\n    }\n  }\n':
     types.CreateChallengeDocument,
@@ -79,8 +79,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n    }\n  }\n'
-): (typeof documents)['\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n    }\n  }\n']
+  source: '\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n      participants {\n        id\n        picture\n        nickname\n      }\n    }\n  }\n  mutation ParticipateChallenge($id: ID!, $me: MeInput!) {\n    participateChallenge(id: $id, me: $me)\n  }\n  mutation LeaveChallenge($id: ID!) {\n    leaveChallenge(id: $id)\n  }\n'
+): (typeof documents)['\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n      participants {\n        id\n        picture\n        nickname\n      }\n    }\n  }\n  mutation ParticipateChallenge($id: ID!, $me: MeInput!) {\n    participateChallenge(id: $id, me: $me)\n  }\n  mutation LeaveChallenge($id: ID!) {\n    leaveChallenge(id: $id)\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
