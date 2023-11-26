@@ -247,7 +247,6 @@ type Query {
 
     # Future events
     events: [Event!]!
-    eventsByUser(userId: String!): [Event!]!
     me: MeUser!
     users(page: Int!, perPage: Int!): UsersResponse!
     user(nickname: String!): OtherUser

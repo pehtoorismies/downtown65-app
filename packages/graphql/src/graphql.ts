@@ -271,7 +271,6 @@ export type Query = {
   challenge?: Maybe<Challenge>
   event?: Maybe<Event>
   events: Array<Event>
-  eventsByUser: Array<Event>
   me: MeUser
   user?: Maybe<OtherUser>
   users: UsersResponse
@@ -283,10 +282,6 @@ export type QueryChallengeArgs = {
 
 export type QueryEventArgs = {
   eventId: Scalars['ID']['input']
-}
-
-export type QueryEventsByUserArgs = {
-  userId: Scalars['String']['input']
 }
 
 export type QueryUserArgs = {
