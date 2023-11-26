@@ -1,9 +1,6 @@
 import { Grid, Group, Text } from '@mantine/core'
 import React from 'react'
-import {
-  GotoLoginButton,
-  ToggleJoinButton,
-} from '~/components/event-card/toggle-join-button'
+import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
 import type { User } from '~/domain/user'
 
 interface Props {
@@ -45,10 +42,7 @@ export const EventInfo = ({
       </Grid.Col>
       <Grid.Col span={5}>
         <Group justify="end">
-          {!user && <GotoLoginButton />}
-          {user && (
-            <ToggleJoinButton isParticipating={meAttending} eventId={id} />
-          )}
+          <ToggleJoinButton isParticipating={meAttending} id={id} user={user} />
         </Group>
       </Grid.Col>
     </Grid>
