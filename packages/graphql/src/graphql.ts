@@ -43,7 +43,7 @@ export type Challenge = {
   dateStart: Scalars['AWSDate']['output']
   description?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
-  participants: Array<EventParticipant>
+  participants: Array<Participant>
   subtitle: Scalars['String']['output']
   title: Scalars['String']['output']
 }
@@ -96,20 +96,12 @@ export type Event = {
   description?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
   location: Scalars['String']['output']
-  participants: Array<EventParticipant>
+  participants: Array<Participant>
   race: Scalars['Boolean']['output']
   subtitle: Scalars['String']['output']
   timeStart?: Maybe<Scalars['String']['output']>
   title: Scalars['String']['output']
   type: EventType
-}
-
-export type EventParticipant = User & {
-  __typename: 'EventParticipant'
-  id: Scalars['ID']['output']
-  joinedAt: Scalars['String']['output']
-  nickname: Scalars['String']['output']
-  picture: Scalars['String']['output']
 }
 
 export enum EventType {
@@ -254,6 +246,14 @@ export type OtherUser = DetailedUser &
     nickname: Scalars['String']['output']
     picture: Scalars['String']['output']
   }
+
+export type Participant = User & {
+  __typename: 'Participant'
+  id: Scalars['ID']['output']
+  joinedAt: Scalars['String']['output']
+  nickname: Scalars['String']['output']
+  picture: Scalars['String']['output']
+}
 
 export type Preferences = {
   __typename: 'Preferences'
@@ -511,7 +511,7 @@ export type GetChallengeQuery = {
       picture: string
     }
     participants: Array<{
-      __typename: 'EventParticipant'
+      __typename: 'Participant'
       id: string
       picture: string
       nickname: string
@@ -571,7 +571,7 @@ export type GetEventQuery = {
       picture: string
     }
     participants: Array<{
-      __typename: 'EventParticipant'
+      __typename: 'Participant'
       id: string
       joinedAt: string
       nickname: string
@@ -630,7 +630,7 @@ export type GetEventsQuery = {
       picture: string
     }
     participants: Array<{
-      __typename: 'EventParticipant'
+      __typename: 'Participant'
       id: string
       joinedAt: string
       nickname: string

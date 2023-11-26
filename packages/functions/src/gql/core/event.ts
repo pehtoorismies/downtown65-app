@@ -55,7 +55,7 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
     participants: participantHashMapToList(result.data.participants).map(
       (p) => ({
         ...p,
-        __typename: 'EventParticipant',
+        __typename: 'Participant',
       })
     ),
   }
