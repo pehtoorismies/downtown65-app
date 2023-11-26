@@ -92,6 +92,8 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       'Mutation refreshToken': 'gql',
       'Mutation forgotPassword': 'gql',
       'Mutation createChallenge': 'gql',
+      'Mutation participateChallenge': 'gql',
+      'Mutation leaveChallenge': 'gql',
     },
   })
 

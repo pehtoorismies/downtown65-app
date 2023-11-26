@@ -5,7 +5,9 @@ import type {
   MutationCreateChallengeArgs,
   MutationCreateEventArgs,
   MutationDeleteEventArgs,
+  MutationLeaveChallengeArgs,
   MutationLeaveEventArgs,
+  MutationParticipateChallengeArgs,
   MutationParticipateEventArgs,
   MutationUpdateAvatarArgs,
   MutationUpdateEventArgs,
@@ -32,18 +34,24 @@ import { getUsers } from './users/get-users'
 import { updateAvatar } from './users/update-avatar'
 import { updateMe } from './users/update-me'
 import { createChallenge } from '~/gql/challenges/create-challenge'
+import { leaveChallenge } from '~/gql/challenges/leave-challenge'
+import { participateChallenge } from '~/gql/challenges/participate-event'
 
 export type Inputs =
   | EmptyArgs
+  | MutationCreateChallengeArgs
   | MutationCreateEventArgs
   | MutationDeleteEventArgs
+  | MutationLeaveChallengeArgs
+  | MutationLeaveEventArgs
+  | MutationParticipateChallengeArgs
+  | MutationParticipateEventArgs
   | MutationUpdateAvatarArgs
   | MutationUpdateEventArgs
   | MutationUpdateMeArgs
   | QueryEventArguments
   | QueryUserArgs
   | QueryUsersArgs
-  | MutationCreateChallengeArgs
 
 export type Outputs =
   | Dt65Event
@@ -62,8 +70,10 @@ const PRIVATE_FIELDS = [
   'deleteEvent',
   'events',
   'leaveEvent',
+  'leaveChallenge',
   'me',
   'participateEvent',
+  'participateChallenge',
   'updateEvent',
   'updateAvatar',
   'updateMe',
@@ -176,6 +186,22 @@ export const privateResolver = (
         allowScopes(['write:events'])
         return createChallenge(
           event as AppSyncResolverEvent<MutationCreateChallengeArgs>,
+          context,
+          callback
+        )
+      }
+      case 'leaveChallenge': {
+        allowScopes(['write:events'])
+        return leaveChallenge(
+          event as AppSyncResolverEvent<MutationLeaveChallengeArgs>,
+          context,
+          callback
+        )
+      }
+      case 'participateChallenge': {
+        allowScopes(['write:events'])
+        return participateChallenge(
+          event as AppSyncResolverEvent<MutationParticipateChallengeArgs>,
           context,
           callback
         )

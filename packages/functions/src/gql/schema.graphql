@@ -260,6 +260,8 @@ type Mutation {
     participateEvent(eventId: ID!, me: MeInput!): Boolean
 
     createChallenge(input: CreateChallengeInput!): IDPayload!
+    leaveChallenge(id: ID!): Boolean!
+    participateChallenge(id: ID!, me: MeInput!): Boolean!
 
     updateMe(input: UpdateMeInput!): MeUser!
 

@@ -1,7 +1,7 @@
 import type { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import formatISO from 'date-fns/formatISO'
-import { ParticipatingUserSchema } from '~/gql/core/dynamo-schemas/dt65-event-schema'
+import { ParticipatingUserSchema } from '~/gql/core/dynamo-schemas/common'
 
 function isError(error: unknown): error is Error {
   return (error as Error).name !== undefined

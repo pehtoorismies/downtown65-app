@@ -1,42 +1,20 @@
 import { EventType } from '@downtown65-app/graphql/graphql'
-import { isValid } from 'date-fns'
 import { z } from 'zod'
 import {
-  Auth0IDString,
   Auth0UserSchema,
   HyphenDate,
+  ParticipantsSchema,
   UlidSchema,
-  UrlString,
   getKeySchema,
 } from '~/gql/core/dynamo-schemas/common'
 
 // EVENT#<ulid>
 const KeyPattern = /^EVENT#(?<id>[\dA-HJKMNP-TV-Z]{26})$/
-// 2020-01-01T00:00:00
-const DateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z?/
 // 13:00
 const TimePattern = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/
 // DATE#2023-03-22T14:55:00#01GW4MMH
 const GSI1SKPattern =
   /^DATE#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}#[\dA-HJKMNP-TV-Z]{8}$/
-
-export const ParticipatingUserSchema = z.object({
-  joinedAt: z.string().refine(
-    (value) => {
-      return isValid(new Date(value)) && DateTimePattern.test(value)
-    },
-    (value) => ({
-      message: `${value} is not in correct format. Use: 2020-01-01T00:00:00`,
-    })
-  ),
-  nickname: z.string(),
-  picture: UrlString,
-  id: Auth0IDString,
-})
-
-export type ParticipatingUserSchema = z.infer<typeof ParticipatingUserSchema>
-
-const ParticipantsSchema = z.record(Auth0IDString, ParticipatingUserSchema)
 
 const createGSI1SKVerifier = ({
   PK,
