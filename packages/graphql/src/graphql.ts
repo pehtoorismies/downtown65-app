@@ -171,8 +171,10 @@ export type Mutation = {
   createEvent: IdPayload
   deleteEvent?: Maybe<IdPayload>
   forgotPassword: Scalars['Boolean']['output']
+  leaveChallenge: Scalars['Boolean']['output']
   leaveEvent?: Maybe<Scalars['Boolean']['output']>
   login: LoginResponse
+  participateChallenge: Scalars['Boolean']['output']
   participateEvent?: Maybe<Scalars['Boolean']['output']>
   refreshToken: RefreshResponse
   signup: SignupResponse
@@ -197,6 +199,10 @@ export type MutationForgotPasswordArgs = {
   email: Scalars['String']['input']
 }
 
+export type MutationLeaveChallengeArgs = {
+  id: Scalars['ID']['input']
+}
+
 export type MutationLeaveEventArgs = {
   eventId: Scalars['ID']['input']
 }
@@ -204,6 +210,11 @@ export type MutationLeaveEventArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String']['input']
   password: Scalars['String']['input']
+}
+
+export type MutationParticipateChallengeArgs = {
+  id: Scalars['ID']['input']
+  me: MeInput
 }
 
 export type MutationParticipateEventArgs = {

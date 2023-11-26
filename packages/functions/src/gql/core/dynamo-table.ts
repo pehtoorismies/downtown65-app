@@ -63,6 +63,7 @@ export const ChallengeEntity = new Entity({
     dateEnd: { type: 'string', required: true },
     description: { type: 'string', required: false },
     id: { type: 'string', map: 'eventId', required: true }, // map 'id' to table attribute 'eventId'
+    participants: { type: 'map', required: true },
     subtitle: { type: 'string', required: true },
     title: { type: 'string', required: true },
   },

@@ -3,6 +3,7 @@ import { z } from 'zod'
 import {
   Auth0UserSchema,
   HyphenDate,
+  ParticipantsSchema,
   UlidSchema,
   getKeySchema,
 } from '~/gql/core/dynamo-schemas/common'
@@ -43,6 +44,7 @@ export const ChallengeCreateSchema = z
     title: z.string().trim(),
     dateStart: HyphenDate,
     dateEnd: HyphenDate,
+    participants: ParticipantsSchema,
   })
   .refine(
     ({ PK, SK }) => PK === SK,

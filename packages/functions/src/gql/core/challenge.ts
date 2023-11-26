@@ -5,6 +5,7 @@ import type {
 } from '@downtown65-app/graphql/graphql'
 import { format } from 'date-fns'
 import { ulid } from 'ulid'
+import { getParticipationFunctions } from '~/gql/core/common'
 import { ChallengeCreateSchema } from '~/gql/core/dynamo-schemas/challenge-schema'
 import { Auth0UserSchema } from '~/gql/core/dynamo-schemas/common'
 import { ChallengeEntity } from '~/gql/core/dynamo-table'
@@ -36,6 +37,8 @@ export const create = async (
       GSI1SK: `DATE#${gsi1sk}#${id.slice(0, 8)}`,
       // add props
       createdBy,
+      // TODO: add creator
+      participants: {},
       dateStart: start.getISODate(),
       dateEnd: end.getISODate(),
       description,
@@ -108,3 +111,12 @@ export const getUpcoming = async () => {
     }
   })
 }
+
+const participationFunctions = getParticipationFunctions({
+  documentClient: ChallengeEntity.DocumentClient,
+  getPrimaryKey,
+  tableName: ChallengeEntity.table?.name,
+})
+
+export const participate = participationFunctions.participate
+export const leave = participationFunctions.leave
