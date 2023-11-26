@@ -1,7 +1,10 @@
 import type { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import formatISO from 'date-fns/formatISO'
-import { ParticipatingUserSchema } from '~/gql/core/dynamo-schemas/common'
+import {
+  ParticipantsSchema,
+  ParticipatingUserSchema,
+} from '~/gql/core/dynamo-schemas/common'
 
 function isError(error: unknown): error is Error {
   return (error as Error).name !== undefined
@@ -80,4 +83,34 @@ export const getParticipationFunctions = ({
       }
     },
   }
+}
+
+export const participantHashMapToList = (participantsHashMap: unknown) => {
+  const parsed = ParticipantsSchema.safeParse(participantsHashMap)
+  if (!parsed.success) {
+    throw new Error(
+      `Error in dynamo item participants: ${JSON.stringify(
+        participantsHashMap
+      )}. Error: ${parsed.error}`
+    )
+  }
+
+  return (
+    Object.entries(parsed.data)
+      // eslint-disable-next-line no-unused-vars
+      .map(([_, value]) => {
+        return {
+          ...value,
+        }
+      })
+      .sort((a, b) => {
+        if (a.joinedAt < b.joinedAt) {
+          return -1
+        }
+        if (a.joinedAt > b.joinedAt) {
+          return 1
+        }
+        return 0
+      })
+  )
 }

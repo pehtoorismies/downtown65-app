@@ -14,7 +14,10 @@ import {
   Dt65EventUpdateSchema,
 } from './dynamo-schemas/dt65-event-schema'
 import { Dt65EventEntity } from './dynamo-table'
-import { getParticipationFunctions } from '~/gql/core/common'
+import {
+  getParticipationFunctions,
+  participantHashMapToList,
+} from '~/gql/core/common'
 
 const getExpression = (d: Date) => {
   const lt = format(
@@ -49,26 +52,12 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
       __typename: 'Creator',
       ...parsed.createdBy,
     },
-    participants: Object.entries(parsed.participants)
-      // eslint-disable-next-line no-unused-vars
-      .map(([_, value]) => {
-        return {
-          ...value,
-        }
-      })
-      .sort((a, b) => {
-        if (a.joinedAt < b.joinedAt) {
-          return -1
-        }
-        if (a.joinedAt > b.joinedAt) {
-          return 1
-        }
-        return 0
-      })
-      .map((event) => ({
-        ...event,
+    participants: participantHashMapToList(result.data.participants).map(
+      (p) => ({
+        ...p,
         __typename: 'EventParticipant',
-      })),
+      })
+    ),
   }
 }
 

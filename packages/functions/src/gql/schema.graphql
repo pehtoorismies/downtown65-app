@@ -60,10 +60,11 @@ type Event @aws_api_key @aws_oidc {
 
 type Challenge @aws_api_key @aws_oidc {
     createdBy: Creator!
-    dateStart: AWSDate!
     dateEnd: AWSDate!
+    dateStart: AWSDate!
     description: String
     id: ID!
+    participants: [EventParticipant!]!
     subtitle: String!
     title: String!
 }

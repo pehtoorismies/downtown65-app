@@ -5,7 +5,10 @@ import type {
 } from '@downtown65-app/graphql/graphql'
 import { format } from 'date-fns'
 import { ulid } from 'ulid'
-import { getParticipationFunctions } from '~/gql/core/common'
+import {
+  getParticipationFunctions,
+  participantHashMapToList,
+} from '~/gql/core/common'
 import { ChallengeCreateSchema } from '~/gql/core/dynamo-schemas/challenge-schema'
 import { Auth0UserSchema } from '~/gql/core/dynamo-schemas/common'
 import { ChallengeEntity } from '~/gql/core/dynamo-table'
@@ -65,6 +68,12 @@ export const getById = async (id: string): Promise<Challenge | null> => {
       ...Auth0UserSchema.parse(result.Item.createdBy),
       __typename: 'Creator',
     },
+    participants: participantHashMapToList(result.Item.participants).map(
+      (p) => ({
+        ...p,
+        __typename: 'EventParticipant',
+      })
+    ),
     __typename: 'Challenge',
   }
 }
