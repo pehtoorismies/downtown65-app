@@ -14,22 +14,22 @@ describe('Challenge dates', () => {
     })
 
     expect(dates.length).toBe(31)
-    expect(dates[0].text).toBe('1.10.2023')
+    expect(dates[0].date).toBe('1.10.2023')
     expect(dates[0].status).toBe('DONE')
 
-    expect(dates[1].text).toBe('2.10.2023')
+    expect(dates[1].date).toBe('2.10.2023')
     expect(dates[1].status).toBe('DONE')
 
-    expect(dates[2].text).toBe('3.10.2023')
+    expect(dates[2].date).toBe('3.10.2023')
     expect(dates[2].status).toBe('DONE')
 
-    expect(dates[3].text).toBe('4.10.2023')
+    expect(dates[3].date).toBe('4.10.2023')
     expect(dates[3].status).toBe('UNDONE')
 
-    expect(dates[15].text).toBe('16.10.2023')
+    expect(dates[15].date).toBe('16.10.2023')
     expect(dates[15].status).toBe('UNDONE')
 
-    expect(dates[16].text).toBe('17.10.2023')
+    expect(dates[16].date).toBe('17.10.2023')
     expect(dates[16].status).toBe('FUTURE')
   })
 
@@ -43,25 +43,25 @@ describe('Challenge dates', () => {
     })
 
     expect(dates.length).toBe(31)
-    expect(dates[0].text).toBe('1.10.2023')
+    expect(dates[0].date).toBe('1.10.2023')
     expect(dates[0].status).toBe('DONE')
 
-    expect(dates[1].text).toBe('2.10.2023')
+    expect(dates[1].date).toBe('2.10.2023')
     expect(dates[1].status).toBe('DONE')
 
-    expect(dates[2].text).toBe('3.10.2023')
+    expect(dates[2].date).toBe('3.10.2023')
     expect(dates[2].status).toBe('DONE')
 
-    expect(dates[3].text).toBe('4.10.2023')
+    expect(dates[3].date).toBe('4.10.2023')
     expect(dates[3].status).toBe('UNDONE')
 
-    expect(dates[15].text).toBe('16.10.2023')
+    expect(dates[15].date).toBe('16.10.2023')
     expect(dates[15].status).toBe('UNDONE')
 
-    expect(dates[16].text).toBe('17.10.2023')
+    expect(dates[16].date).toBe('17.10.2023')
     expect(dates[16].status).toBe('UNDONE')
 
-    expect(dates[30].text).toBe('31.10.2023')
+    expect(dates[30].date).toBe('31.10.2023')
     expect(dates[30].status).toBe('UNDONE')
   })
 })

@@ -12,7 +12,7 @@ import type { ChallengeReducerProps } from '~/routes-common/challenges/create-ed
 import {
   formatRunningTimeFromMonth,
   getChallengeStatusFromMonth,
-} from '~/util/challenge-status'
+} from '~/util/challenge-tools'
 
 export const ChallengePreview = ({ state }: ChallengeReducerProps) => {
   const dateRange = formatRunningTimeFromMonth(state.date)

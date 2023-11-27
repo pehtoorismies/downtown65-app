@@ -1,6 +1,6 @@
 import { parse } from 'date-fns'
 import { expect, test } from 'vitest'
-import { challengeStatus } from '~/util/challenge-status'
+import { challengeStatus } from '~/util/challenge-tools'
 
 const getDate = (date: string) => {
   return parse(date, 'dd.MM.yyyy', new Date())

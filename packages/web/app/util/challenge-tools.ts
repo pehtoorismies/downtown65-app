@@ -4,6 +4,7 @@ import {
   formatDistance,
   isAfter,
   isBefore,
+  parseISO,
   startOfMonth,
 } from 'date-fns'
 import { fi } from 'date-fns/locale'
@@ -23,7 +24,7 @@ type NotStarted = {
   description: string
 }
 
-type ChallengeStatus = Ended | Running | NotStarted
+export type ChallengeStatus = Ended | Running | NotStarted
 
 export const challengeStatus = (
   start: Date,
@@ -62,4 +63,13 @@ export const formatRunningTime = (start: Date, end: Date) => {
 }
 export const formatRunningTimeFromMonth = (month: Date) => {
   return formatRunningTime(startOfMonth(month), endOfMonth(month))
+}
+export const formatISORunningTime = ({
+  dateEnd,
+  dateStart,
+}: {
+  dateEnd: string
+  dateStart: string
+}) => {
+  return formatRunningTime(parseISO(dateStart), parseISO(dateEnd))
 }
