@@ -26,13 +26,17 @@ export const LeaderboardRow = ({
       </Grid.Col>
       <Grid.Col span="auto">
         <Stack gap={2}>
-          <Text>{participant.nickname}</Text>
+          <Text size="sm">{participant.nickname}</Text>
           <Progress value={progress} size="sm" />
         </Stack>
       </Grid.Col>
       <Grid.Col span="content">
-        <Text>
-          {daysDone} / {daysTotal}
+        <Text span size="sm">
+          {daysDone} /
+        </Text>
+        <Text span size="sm" fw={500}>
+          {' '}
+          {daysTotal}
         </Text>
       </Grid.Col>
     </Grid>

@@ -16,8 +16,9 @@ interface Props {
   outputFormat: string
 }
 
-type Result = {
-  text: string
+// TODO: move to tools
+export type DoneDate = {
+  date: string
   status: 'DONE' | 'UNDONE' | 'FUTURE'
 }
 
@@ -36,7 +37,7 @@ export const getChallengeDates = ({
   todayISODate,
   doneISODates,
   outputFormat,
-}: Props): Result[] => {
+}: Props): DoneDate[] => {
   const start = fromISODate(startISODate)
   const end = fromISODate(endISODate)
   const today = fromISODate(todayISODate)
@@ -53,7 +54,7 @@ export const getChallengeDates = ({
     if (isAfter(challengeDate, today)) {
       return {
         status: 'FUTURE',
-        text,
+        date: text,
       }
     }
 
@@ -64,7 +65,7 @@ export const getChallengeDates = ({
       : 'UNDONE'
 
     return {
-      text,
+      date: text,
       status,
     }
   })

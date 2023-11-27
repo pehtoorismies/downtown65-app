@@ -275,7 +275,7 @@ export default function GetEvent() {
   const { eventItem, user } = useLoaderData<typeof loader>()
   const navigation = useNavigation()
 
-  const participationActions = useParticipationActions()
+  const participationActions = useParticipationActions('event')
   const [opened, setOpened] = useState(false)
   const [formValue, setFormValue] = useState('')
 

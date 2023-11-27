@@ -1,39 +1,30 @@
 import { graphql } from '@downtown65-app/graphql/gql'
-import { GetChallengeDocument } from '@downtown65-app/graphql/graphql'
 import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Divider,
-  Group,
-  Stack,
-  Text,
-  Title,
-  TypographyStylesProvider,
-} from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
-import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
+  GetChallengeDocument,
+  LeaveChallengeDocument,
+  ParticipateChallengeDocument,
+} from '@downtown65-app/graphql/graphql'
+import { Anchor, Breadcrumbs, Container, Text } from '@mantine/core'
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
-import { IconCheck, IconCircle, IconEye, IconEyeOff } from '@tabler/icons-react'
+import { Link, useLoaderData } from '@remix-run/react'
 import { formatISO, parseISO } from 'date-fns'
 import React from 'react'
 import invariant from 'tiny-invariant'
-import { LeaderboardRow } from '~/components/challenge/leaderboard-row'
-import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
-import { Voucher } from '~/components/voucher/voucher'
-import type { Context } from '~/contexts/participating-context'
-import { ParticipatingContext } from '~/contexts/participating-context'
-import type { ChallengeParticipant } from '~/domain/user'
-import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
-import { loaderAuthenticate } from '~/session.server'
-import { getChallengeDates } from '~/util/challenge-date'
+import { ChallengeCard } from '~/components/challenge/challenge-card'
 import {
-  formatRunningTimeFromMonth,
-  getChallengeStatusFromMonth,
-} from '~/util/challenge-status'
-import { logger } from '~/util/logger.server'
+  ParticipatingContext,
+  useParticipationActions,
+} from '~/contexts/participating-context'
+import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
+import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
+import { getChallengeDates } from '~/util/challenge-date'
+import type { ChallengeStatus } from '~/util/challenge-tools'
+import { getChallengeStatusFromMonth } from '~/util/challenge-tools'
 
 const _GqlIgnored = graphql(`
   query GetChallenge($id: ID!) {
@@ -49,9 +40,29 @@ const _GqlIgnored = graphql(`
       description
       subtitle
       title
+      participants {
+        id
+        picture
+        nickname
+        joinedAt
+      }
     }
   }
+  mutation ParticipateChallenge($id: ID!, $me: MeInput!) {
+    participateChallenge(id: $id, me: $me)
+  }
+  mutation LeaveChallenge($id: ID!) {
+    leaveChallenge(id: $id)
+  }
 `)
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      title: 'Dt65 - challenge',
+    },
+  ]
+}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
@@ -73,37 +84,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     })
   }
 
-  const participants: ChallengeParticipant[] = [
-    {
-      ...user,
-      doneDatesCount: 6,
-    },
-    {
-      id: '10',
-      nickname: 'Koira',
-      picture: 'https://picsum.photos/100/100',
-      doneDatesCount: 5,
-    },
-    {
-      id: '20',
-      nickname: 'Kissa',
-      picture: 'https://picsum.photos/100?123',
-      doneDatesCount: 2,
-    },
-    {
-      id: '30',
-      nickname: 'Hevoinen',
-      picture: 'https://picsum.photos/100?12',
-      doneDatesCount: 2,
-    },
-    {
-      id: '40',
-      nickname: 'Hevoinen',
-      picture: 'https://picsum.photos/100?12',
-      doneDatesCount: 8,
-    },
-  ]
-
   const myDoneDates = ['2023-11-01', '2023-11-02', '2023-11-03']
 
   const start = parseISO(challenge.dateStart)
@@ -116,203 +96,108 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     outputFormat: 'd.M.yyyy (EEEEEE)',
   })
 
-  logger.debug(dates, 'Dates')
-
-  const challengeStatus = getChallengeStatusFromMonth(start, new Date())
-  const dateRange = formatRunningTimeFromMonth(start)
+  const challengeStatus: ChallengeStatus = getChallengeStatusFromMonth(
+    start,
+    new Date()
+  )
 
   return json({
     user,
     doneDates: dates,
     challengeStatus,
-    dateRange,
-    challenge: {
-      ...challenge,
-      participants: participants,
-    },
+    challenge,
   })
 }
 
-export const meta: MetaFunction = () => {
-  return [
-    {
-      title: 'Dt65 - challenge',
-    },
-  ]
+export const action = async ({ request, params }: ActionFunctionArgs) => {
+  invariant(params.id, 'Expected params.id')
+  const { headers, user, accessToken } = await actionAuthenticate(request)
+  const body = await request.formData()
+  const action = body.get('action')
+
+  switch (action) {
+    case 'participate': {
+      await gqlClient.request(
+        ParticipateChallengeDocument,
+        {
+          id: params.id,
+          me: user,
+        },
+        {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      )
+      return json({}, { headers })
+    }
+    case 'leave': {
+      await gqlClient.request(
+        LeaveChallengeDocument,
+        {
+          id: params.id,
+        },
+        {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      )
+      return json({}, { headers })
+    }
+    default: {
+      throw new Error(
+        `Incorrect action provided: '${action}'. Use 'leave' or 'participate'`
+      )
+    }
+  }
 }
 
 export default function GetChallenge() {
-  const { user, challenge, doneDates, dateRange, challengeStatus } =
+  const { user, challenge, doneDates, challengeStatus } =
     useLoaderData<typeof loader>()
-  const [opened, { toggle }] = useDisclosure()
 
-  const participationActions: Context = {
-    onParticipate: () => {},
-    onLeave: () => {},
-    state: 'idle',
-    loadingEventId: undefined,
-  }
+  const participationActions = useParticipationActions('challenge')
 
-  const isParticipating =
-    user !== null &&
-    challenge.participants.map(({ id }) => id).includes(user.id)
-
-  const hasDoneChallenges = doneDates.length > 0
-
-  const buttonList = doneDates.map(({ status, text }) => {
-    switch (status) {
-      case 'DONE': {
-        return (
-          <Button
-            key={text}
-            style={{ width: 150 }}
-            variant="filled"
-            color="green"
-            leftSection={<IconCheck size={14} />}
-          >
-            {text}
-          </Button>
-        )
-      }
-      case 'UNDONE': {
-        return (
-          <Button
-            key={text}
-            style={{ width: 150 }}
-            variant="outline"
-            color="red"
-            leftSection={<IconCircle size={14} />}
-          >
-            {text}
-          </Button>
-        )
-      }
-      case 'FUTURE': {
-        return (
-          <Button
-            key={text}
-            style={{ width: 150 }}
-            disabled
-            variant="default"
-            color="green"
-            leftSection={<IconCircle size={14} />}
-          >
-            {text}
-          </Button>
-        )
-      }
-    }
+  const items = [
+    { title: 'Haasteet', href: '/challenges' },
+    { title: challenge.title },
+  ].map((item, index) => {
+    return item.href ? (
+      <Anchor component={Link} to={item.href} key={index}>
+        {item.title}
+      </Anchor>
+    ) : (
+      <Text key={index}>{item.title}</Text>
+    )
   })
 
-  const toggleButton = opened ? (
-    <Button mt="md" onClick={toggle} rightSection={<IconEyeOff size={18} />}>
-      Piilota omat suoritukset
-    </Button>
-  ) : (
-    <Button m="md" onClick={toggle} rightSection={<IconEye size={18} />}>
-      Näytä/editoi omat suoritukset
-    </Button>
-  )
-
-  const description = challenge.description?.trim()
+  // const [opened, { toggle }] = useDisclosure()
+  //
+  // const participationActions = useParticipationActions('challenge')
+  //
+  // const isParticipating =
+  //   user !== null &&
+  //   challenge.participants.map(({ id }) => id).includes(user.id)
+  //
+  // const props = {
+  //   ...challenge,
+  //   user,
+  //   dateRange,
+  //   status: challengeStatus,
+  // }
 
   return (
-    <Container data-testid="challenges" p="xs" size="1000">
-      <Voucher>
-        <Voucher.Header bgImageUrl={'/event-images/nordicwalking.jpg'}>
-          <Voucher.Header.Title>{challenge.title}</Voucher.Header.Title>
-          <Voucher.Header.ParticipantCount
-            participants={challenge.participants}
+    <>
+      <Container fluid pt={12}>
+        <Breadcrumbs mb="xs">{items}</Breadcrumbs>
+      </Container>
+      <Container>
+        <ParticipatingContext.Provider value={participationActions}>
+          <ChallengeCard
             user={user}
+            challenge={challenge}
+            challengeStatus={challengeStatus}
+            myDoneDates={doneDates}
           />
-          <Voucher.Header.Creator nick="koira" />
-          <Voucher.Header.Competition />
-        </Voucher.Header>
-        <Voucher.Content>
-          <Group justify="space-between">
-            <Box>
-              <Text fw={700} mt={2}>
-                {challenge.title}
-              </Text>
-              <Text size="sm" fw={500}>
-                {challenge.subtitle}
-              </Text>
-              <Text size="sm" c="dimmed" fw={400}>
-                {dateRange}
-              </Text>
-              <Text size="sm" fw={500}>
-                {challengeStatus.description}
-              </Text>
-            </Box>
-            <Group>
-              {isParticipating && challengeStatus.status === 'RUNNING' && (
-                <Button leftSection={<IconCircle size={14} />}>
-                  Merkitse tämä päivä tehdyksi
-                </Button>
-              )}
-              {!hasDoneChallenges && (
-                <ParticipatingContext.Provider value={participationActions}>
-                  <ToggleJoinButton
-                    isParticipating={isParticipating}
-                    eventId="someUd"
-                  />
-                </ParticipatingContext.Provider>
-              )}
-            </Group>
-          </Group>
-          <Divider my="xs" label="Lisätiedot" labelPosition="center" />
-          {!!description && (
-            <TypographyStylesProvider p={0} mt="sm">
-              <div dangerouslySetInnerHTML={{ __html: description }} />
-            </TypographyStylesProvider>
-          )}
-          {!description && (
-            <Text ta="center" p="sm" c="dimmed" fw={400}>
-              ei tarkempaa tapahtuman kuvausta
-            </Text>
-          )}
-          <Divider my="xs" label="Leaderboard" labelPosition="center" />
-          <Center>
-            {challengeStatus.status === 'NOT_STARTED' && (
-              <Text fs="italic">
-                Haaste ei ole alkanut. {challengeStatus.description}
-              </Text>
-            )}
-            {challengeStatus.status !== 'NOT_STARTED' && (
-              <Stack my="md">
-                {challenge.participants.map((cp) => {
-                  return (
-                    <LeaderboardRow
-                      key={cp.id}
-                      position={1}
-                      participant={cp}
-                      daysTotal={15}
-                      daysDone={cp.doneDatesCount}
-                    />
-                  )
-                })}
-              </Stack>
-            )}
-          </Center>
-          <Center>{toggleButton}</Center>
-          {opened && (
-            <>
-              <Center>
-                <Title my="md" order={2}>
-                  Omat suoritukset
-                </Title>
-              </Center>
-              <Center>
-                <Text>Muokkaa menneitä suorituksia klikkaamalla päivää.</Text>
-              </Center>
-
-              <Group m="sm" gap="xs" justify="center">
-                {buttonList}
-              </Group>
-            </>
-          )}
-        </Voucher.Content>
-      </Voucher>
-    </Container>
+        </ParticipatingContext.Provider>
+      </Container>
+    </>
   )
 }

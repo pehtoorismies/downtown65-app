@@ -113,7 +113,7 @@ const Root = ({ children }: { children: ReactNode }) => (
 
 export default function GetEvents() {
   const { eventItems, user } = useLoaderData<typeof loader>()
-  const participationActions = useParticipationActions()
+  const participationActions = useParticipationActions('event')
 
   if (eventItems.length === 0) {
     return (
