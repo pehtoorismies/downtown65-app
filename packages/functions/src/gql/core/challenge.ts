@@ -2,8 +2,8 @@ import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import type {
   Challenge,
   CreateChallengeInput,
+  QueryChallengesArgs,
 } from '@downtown65-app/graphql/graphql'
-import { format } from 'date-fns'
 import { ulid } from 'ulid'
 import {
   getParticipationFunctions,
@@ -36,7 +36,7 @@ export const create = async (
     ChallengeCreateSchema.parse({
       // add keys
       ...getPrimaryKey(id),
-      GSI1PK: `CHALLENGE#FUTURE`,
+      GSI1PK: `CHALLENGE#CHALLENGE`,
       GSI1SK: `DATE#${gsi1sk}#${id.slice(0, 8)}`,
       // add props
       createdBy,
@@ -97,17 +97,39 @@ export const removeMany = async (ids: string[]) => {
   )
 }
 
-export const getUpcoming = async () => {
-  const now = new Date()
-  const today = format(
-    new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-    'yyyy-MM-dd'
-  )
-
-  const results = await ChallengeEntity.query(`CHALLENGE#FUTURE`, {
+const getOptions = (filter: QueryChallengesArgs['filter']) => {
+  const options = {
     index: 'GSI1',
-    gt: `DATE#${today}`,
-  })
+  }
+
+  if (filter == null) {
+    return options
+  }
+
+  const { before, after } = filter.dateEnd
+
+  if (before != null) {
+    return {
+      index: 'GSI1',
+      lt: `DATE#${DynamoDatetime.fromISO(before).getISODate()}`,
+    }
+  }
+  if (after != null) {
+    return {
+      index: 'GSI1',
+      gte: `DATE#${DynamoDatetime.fromISO(after).getISODate()}`,
+    }
+  }
+
+  return options
+}
+
+export const getAll = async (
+  filter: QueryChallengesArgs['filter']
+): Promise<Challenge[]> => {
+  const options = getOptions(filter)
+
+  const results = await ChallengeEntity.query(`CHALLENGE#CHALLENGE`, options)
 
   if (!results.Items) {
     return []
@@ -116,7 +138,15 @@ export const getUpcoming = async () => {
   return results.Items.map((data) => {
     return {
       ...data,
-      createdBy: Auth0UserSchema.parse(data.createdBy),
+      createdBy: {
+        ...Auth0UserSchema.parse(data.createdBy),
+        __typename: 'Creator',
+      },
+      participants: participantHashMapToList(data.participants).map((p) => ({
+        ...p,
+        __typename: 'Participant',
+      })),
+      __typename: 'Challenge',
     }
   })
 }

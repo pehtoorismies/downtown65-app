@@ -1,4 +1,5 @@
 import type {
+  Challenge,
   Event as Dt65Event,
   IdPayload,
   MeUser,
@@ -13,6 +14,7 @@ import type {
   MutationUpdateEventArgs,
   MutationUpdateMeArgs,
   OtherUser,
+  QueryChallengesArgs,
   QueryEventArgs as QueryEventArguments,
   QueryUserArgs,
   QueryUsersArgs,
@@ -34,6 +36,7 @@ import { getUsers } from './users/get-users'
 import { updateAvatar } from './users/update-avatar'
 import { updateMe } from './users/update-me'
 import { createChallenge } from '~/gql/challenges/create-challenge'
+import { getChallenges } from '~/gql/challenges/get-challenges'
 import { leaveChallenge } from '~/gql/challenges/leave-challenge'
 import { participateChallenge } from '~/gql/challenges/participate-event'
 
@@ -52,6 +55,7 @@ export type Inputs =
   | QueryEventArguments
   | QueryUserArgs
   | QueryUsersArgs
+  | QueryChallengesArgs
 
 export type Outputs =
   | Dt65Event
@@ -61,6 +65,7 @@ export type Outputs =
   | OtherUser
   | OtherUser[]
   | UsersResponse
+  | Challenge[]
   | boolean
   | string
   | undefined
@@ -80,6 +85,7 @@ const PRIVATE_FIELDS = [
   'users',
   'user',
   'createChallenge',
+  'challenges',
 ] as const
 type PrivateField = (typeof PRIVATE_FIELDS)[number]
 
@@ -202,6 +208,14 @@ export const privateResolver = (
         allowScopes(['write:events'])
         return participateChallenge(
           event as AppSyncResolverEvent<MutationParticipateChallengeArgs>,
+          context,
+          callback
+        )
+      }
+      case 'challenges': {
+        allowScopes(['read:events'])
+        return getChallenges(
+          event as AppSyncResolverEvent<QueryChallengesArgs>,
           context,
           callback
         )

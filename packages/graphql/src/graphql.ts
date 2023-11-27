@@ -48,6 +48,10 @@ export type Challenge = {
   title: Scalars['String']['output']
 }
 
+export type ChallengeFilter = {
+  dateEnd: DateFilter
+}
+
 export type CreateChallengeInput = {
   createdBy: MeInput
   dateEnd: DateInput
@@ -75,6 +79,11 @@ export type Creator = User & {
   id: Scalars['ID']['output']
   nickname: Scalars['String']['output']
   picture: Scalars['String']['output']
+}
+
+export type DateFilter = {
+  after?: InputMaybe<Scalars['AWSDate']['input']>
+  before?: InputMaybe<Scalars['AWSDate']['input']>
 }
 
 export type DateInput = {
@@ -269,6 +278,7 @@ export type PreferencesInput = {
 export type Query = {
   __typename: 'Query'
   challenge?: Maybe<Challenge>
+  challenges: Array<Challenge>
   event?: Maybe<Event>
   events: Array<Event>
   me: MeUser
@@ -278,6 +288,10 @@ export type Query = {
 
 export type QueryChallengeArgs = {
   id: Scalars['ID']['input']
+}
+
+export type QueryChallengesArgs = {
+  filter?: InputMaybe<ChallengeFilter>
 }
 
 export type QueryEventArgs = {
