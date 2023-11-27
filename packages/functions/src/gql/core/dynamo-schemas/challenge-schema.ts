@@ -28,7 +28,7 @@ export const ChallengeCreateSchema = z
   .object({
     PK: ChallengeKeySchema,
     SK: ChallengeKeySchema,
-    GSI1PK: z.literal('CHALLENGE#FUTURE'),
+    GSI1PK: z.literal('CHALLENGE#CHALLENGE'),
     GSI1SK: z.string().refine(
       (value) => /^DATE#\d{4}-\d{2}-\d{2}#[\dA-HJKMNP-TV-Z]{8}$/.test(value),
       (value) => {

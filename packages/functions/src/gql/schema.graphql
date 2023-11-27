@@ -233,6 +233,15 @@ input UpdateMeInput {
     preferences: PreferencesInput!
 }
 
+input DateFilter {
+    before: AWSDate
+    after: AWSDate
+}
+
+input ChallengeFilter {
+    dateEnd: DateFilter!
+}
+
 type UsersResponse {
     length: Int!
     limit: Int!
@@ -247,6 +256,8 @@ type Query {
 
     # Future events
     events: [Event!]!
+    # Upcoming challenges
+    challenges(filter: ChallengeFilter): [Challenge!]!
     me: MeUser!
     users(page: Int!, perPage: Int!): UsersResponse!
     user(nickname: String!): OtherUser
