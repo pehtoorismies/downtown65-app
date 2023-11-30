@@ -2,18 +2,7 @@ import type { MutationParticipateChallengeArgs } from '@downtown65-app/graphql/g
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import * as Challenge from '../core/challenge'
-
-type Claims = {
-  sub: string
-  aud: string[]
-  azp: string
-  scope: string
-  iss: string
-  ['https://graphql.downtown65.com/nickname']: string
-  exp: number
-  iat: number
-  gty: string
-}
+import type { Claims } from '~/gql/jwt-claims'
 
 export const participateChallenge: AppSyncResolverHandler<
   MutationParticipateChallengeArgs,
