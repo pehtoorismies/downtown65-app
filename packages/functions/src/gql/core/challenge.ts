@@ -13,7 +13,7 @@ import { ChallengeCreateSchema } from '~/gql/core/dynamo-schemas/challenge-schem
 import { Auth0UserSchema } from '~/gql/core/dynamo-schemas/common'
 import { ChallengeEntity } from '~/gql/core/dynamo-table'
 
-const getPrimaryKey = (id: string) => {
+const getChallengePrimaryKey = (id: string) => {
   return {
     PK: `CHALLENGE#${id}`,
     SK: `CHALLENGE#${id}`,
@@ -35,7 +35,7 @@ export const create = async (
   await ChallengeEntity.put(
     ChallengeCreateSchema.parse({
       // add keys
-      ...getPrimaryKey(id),
+      ...getChallengePrimaryKey(id),
       GSI1PK: `CHALLENGE#CHALLENGE`,
       GSI1SK: `DATE#${gsi1sk}#${id.slice(0, 8)}`,
       // add props
@@ -56,7 +56,7 @@ export const create = async (
 }
 
 export const getById = async (id: string): Promise<Challenge | null> => {
-  const result = await ChallengeEntity.get(getPrimaryKey(id))
+  const result = await ChallengeEntity.get(getChallengePrimaryKey(id))
 
   if (!result.Item) {
     return null
@@ -79,7 +79,7 @@ export const getById = async (id: string): Promise<Challenge | null> => {
 }
 
 export const remove = async (id: string) => {
-  await ChallengeEntity.delete(getPrimaryKey(id), {
+  await ChallengeEntity.delete(getChallengePrimaryKey(id), {
     returnValues: 'ALL_OLD',
   })
   return true
@@ -92,7 +92,7 @@ export const removeMany = async (ids: string[]) => {
 
   await ChallengeEntity.table?.batchWrite(
     ids.map((id) => {
-      return ChallengeEntity.deleteBatch(getPrimaryKey(id))
+      return ChallengeEntity.deleteBatch(getChallengePrimaryKey(id))
     })
   )
 }
@@ -153,7 +153,7 @@ export const getAll = async (
 
 const participationFunctions = getParticipationFunctions({
   documentClient: ChallengeEntity.DocumentClient,
-  getPrimaryKey,
+  getPrimaryKey: getChallengePrimaryKey,
   tableName: ChallengeEntity.table?.name,
 })
 
