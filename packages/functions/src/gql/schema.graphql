@@ -273,6 +273,7 @@ type Mutation {
     createChallenge(input: CreateChallengeInput!): IDPayload!
     leaveChallenge(id: ID!): Boolean!
     participateChallenge(id: ID!, me: MeInput!): Boolean!
+    addChallengeAccomplishment(id: ID!, me: MeInput!, date: AWSDate!): Boolean
 
     updateMe(input: UpdateMeInput!): MeUser!
 

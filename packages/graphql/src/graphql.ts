@@ -169,6 +169,7 @@ export type MeUser = DetailedUser &
 
 export type Mutation = {
   __typename: 'Mutation'
+  addChallengeAccomplishment?: Maybe<Scalars['Boolean']['output']>
   createChallenge: IdPayload
   createEvent: IdPayload
   deleteEvent?: Maybe<IdPayload>
@@ -183,6 +184,12 @@ export type Mutation = {
   updateAvatar: Scalars['Boolean']['output']
   updateEvent: Event
   updateMe: MeUser
+}
+
+export type MutationAddChallengeAccomplishmentArgs = {
+  date: Scalars['AWSDate']['input']
+  id: Scalars['ID']['input']
+  me: MeInput
 }
 
 export type MutationCreateChallengeArgs = {

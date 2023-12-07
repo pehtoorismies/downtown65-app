@@ -4,6 +4,7 @@ import type {
   CreateChallengeInput,
   QueryChallengesArgs,
 } from '@downtown65-app/graphql/graphql'
+import type { User } from '@downtown65-app/web/app/domain/user'
 import { ulid } from 'ulid'
 import {
   getParticipationFunctions,
@@ -11,7 +12,7 @@ import {
 } from '~/gql/core/common'
 import { ChallengeCreateSchema } from '~/gql/core/dynamo-schemas/challenge-schema'
 import { Auth0UserSchema } from '~/gql/core/dynamo-schemas/common'
-import { ChallengeEntity } from '~/gql/core/dynamo-table'
+import { ChallengeEntity, ChallengeExecution } from '~/gql/core/dynamo-table'
 
 const getChallengePrimaryKey = (id: string) => {
   return {
@@ -159,3 +160,53 @@ const participationFunctions = getParticipationFunctions({
 
 export const participate = participationFunctions.participate
 export const leave = participationFunctions.leave
+
+type ISODate = string
+type UserIdInput = {
+  id: string
+}
+
+const getChallengeAccomplishmentPrimaryKey = (
+  challengeId: string,
+  userIdInput: UserIdInput
+) => {
+  return {
+    PK: `CHALLENGE#${challengeId}`,
+    SK: `USER#${userIdInput.id}`,
+  }
+}
+
+interface AccomplishmentInput {
+  id: string
+  user: User
+  date: ISODate
+}
+
+export const addAccomplishment = async ({
+  id,
+  user,
+  date,
+}: AccomplishmentInput) => {
+  const result = await ChallengeEntity.get(getChallengePrimaryKey(id), {
+    attributes: ['participants'],
+  })
+  if (!result.Item) {
+    throw new Error('Challenge does not exist')
+  }
+  const participant = result.Item.participants[user.id]
+  if (participant == null) {
+    throw new Error('User is not participating the challenge')
+  }
+
+  const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
+  await ChallengeExecution.update(
+    {
+      ...getChallengeAccomplishmentPrimaryKey(id, user),
+      userNickname: user.nickname,
+      userId: user.id,
+      userPicture: user.picture,
+      challengeAccomplishments: { $add: [verifiedDate] },
+    },
+    { returnValues: 'NONE' }
+  )
+}
