@@ -69,3 +69,16 @@ export const ChallengeEntity = new Entity({
   },
   table: DtTable,
 } as const)
+
+export const ChallengeExecution = new Entity({
+  name: 'ChallengeExecution',
+  attributes: {
+    PK: { partitionKey: true, hidden: true },
+    SK: { hidden: true, sortKey: true },
+    userId: { type: 'string', required: true },
+    userNickname: { type: 'string', required: true },
+    userPicture: { type: 'string', required: true },
+    challengeAccomplishments: { type: 'set', required: true },
+  },
+  table: DtTable,
+} as const)
