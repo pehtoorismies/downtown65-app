@@ -1,18 +1,28 @@
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { logger } from '@downtown65-app/core/logger/logger'
 import type {
   Challenge,
   CreateChallengeInput,
+  DetailedChallenge,
   QueryChallengesArgs,
 } from '@downtown65-app/graphql/graphql'
-import type { User } from '@downtown65-app/web/app/domain/user'
+import * as R from 'remeda'
 import { ulid } from 'ulid'
 import {
   getParticipationFunctions,
   participantHashMapToList,
 } from '~/gql/core/common'
-import { ChallengeCreateSchema } from '~/gql/core/dynamo-schemas/challenge-schema'
+import {
+  ChallengeAccomplishmentSchema,
+  ChallengeCreateSchema,
+  ChallengeGetSchema,
+} from '~/gql/core/dynamo-schemas/challenge-schema'
 import { Auth0UserSchema } from '~/gql/core/dynamo-schemas/common'
-import { ChallengeEntity, ChallengeExecution } from '~/gql/core/dynamo-table'
+import {
+  ChallengeAccomplishment,
+  ChallengeEntity,
+  EntityNames,
+} from '~/gql/core/dynamo-table'
 
 const getChallengePrimaryKey = (id: string) => {
   return {
@@ -56,26 +66,57 @@ export const create = async (
   return id
 }
 
-export const getById = async (id: string): Promise<Challenge | null> => {
-  const result = await ChallengeEntity.get(getChallengePrimaryKey(id))
+export const getById = async (
+  id: string
+): Promise<DetailedChallenge | null> => {
+  const result = await ChallengeEntity.table?.query(`CHALLENGE#${id}`)
 
-  if (!result.Item) {
+  if (!result?.Items) {
     return null
   }
 
+  const groups = R.groupBy(result.Items ?? [], (x) => x.entity)
+
+  const dynamoChallenge = R.first(groups[EntityNames.ChallengeEntity])
+  if (!dynamoChallenge) {
+    logger.error(
+      { challengeId: id },
+      'Challenge found, but entity type Challenge is missing'
+    )
+    return null
+  }
+
+  const dynamoAccomplishments =
+    groups[EntityNames.ChallengeAccomplishment] ?? []
+
+  const challenge = ChallengeGetSchema.parse(dynamoChallenge)
+  const accomplishments = dynamoAccomplishments.map((x) => {
+    return ChallengeAccomplishmentSchema.parse(x)
+  })
+
+  const participants = participantHashMapToList(challenge.participants).map(
+    (p) => {
+      const match = accomplishments.find(({ userId }) => userId === p.id)
+      return {
+        ...p,
+        accomplishedDates: match ? match.challengeAccomplishments : [],
+      }
+    }
+  )
+
   return {
-    ...result.Item,
+    ...challenge,
     createdBy: {
-      ...Auth0UserSchema.parse(result.Item.createdBy),
+      ...Auth0UserSchema.parse(challenge.createdBy),
       __typename: 'Creator',
     },
-    participants: participantHashMapToList(result.Item.participants).map(
-      (p) => ({
+    participants: participants.map((p) => {
+      return {
         ...p,
-        __typename: 'Participant',
-      })
-    ),
-    __typename: 'Challenge',
+        __typename: 'ChallengeParticipant',
+      }
+    }),
+    __typename: 'DetailedChallenge',
   }
 }
 
@@ -162,23 +203,20 @@ export const participate = participationFunctions.participate
 export const leave = participationFunctions.leave
 
 type ISODate = string
-type UserIdInput = {
-  id: string
-}
 
 const getChallengeAccomplishmentPrimaryKey = (
   challengeId: string,
-  userIdInput: UserIdInput
+  userId: string
 ) => {
   return {
     PK: `CHALLENGE#${challengeId}`,
-    SK: `USER#${userIdInput.id}`,
+    SK: `USER#${userId}`,
   }
 }
 
-interface AddAccomplishmentInput {
+interface AccomplishmentInput {
   id: string
-  user: User
+  userId: string
   date: ISODate
 }
 
@@ -197,41 +235,33 @@ const verifyChallenge = async (id: string, userId: string) => {
 
 export const addAccomplishment = async ({
   id,
-  user,
+  userId,
   date,
-}: AddAccomplishmentInput) => {
-  await verifyChallenge(id, user.id)
+}: AccomplishmentInput) => {
+  await verifyChallenge(id, userId)
 
   const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
-  await ChallengeExecution.update(
+  await ChallengeAccomplishment.update(
     {
-      ...getChallengeAccomplishmentPrimaryKey(id, user),
-      userNickname: user.nickname,
-      userId: user.id,
-      userPicture: user.picture,
+      ...getChallengeAccomplishmentPrimaryKey(id, userId),
+      userId,
       challengeAccomplishments: { $add: [verifiedDate] },
     },
     { returnValues: 'NONE' }
   )
 }
 
-interface RemoveAccomplishmentInput {
-  id: string
-  userId: string
-  date: ISODate
-}
-
 export const removeAccomplishment = async ({
   id,
   userId,
   date,
-}: RemoveAccomplishmentInput) => {
+}: AccomplishmentInput) => {
   await verifyChallenge(id, userId)
 
   const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
-  await ChallengeExecution.update(
+  await ChallengeAccomplishment.update(
     {
-      ...getChallengeAccomplishmentPrimaryKey(id, { id: userId }),
+      ...getChallengeAccomplishmentPrimaryKey(id, userId),
       challengeAccomplishments: { $delete: [verifiedDate] },
     },
     { returnValues: 'NONE' }

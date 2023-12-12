@@ -9,11 +9,13 @@ export const addChallengeAccomplishment: AppSyncResolverHandler<
   MutationAddChallengeAccomplishmentArgs,
   boolean
 > = async (event) => {
-  const { id, me, date } = event.arguments
+  const {
+    input: { userId, id, date },
+  } = event.arguments
   const identity = event.identity as AppSyncIdentityOIDC
   const claims = identity.claims as Claims
 
-  if (claims.sub !== me.id) {
+  if (claims.sub !== userId) {
     throw new Error(
       'Trying to insert somebody else. You can only add execution to yourself.'
     )
@@ -23,7 +25,7 @@ export const addChallengeAccomplishment: AppSyncResolverHandler<
 
   await Challenge.addAccomplishment({
     id,
-    user: me,
+    userId,
     date,
   })
 
