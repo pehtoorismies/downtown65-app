@@ -274,6 +274,7 @@ type Mutation {
     leaveChallenge(id: ID!): Boolean!
     participateChallenge(id: ID!, me: MeInput!): Boolean!
     addChallengeAccomplishment(id: ID!, me: MeInput!, date: AWSDate!): Boolean
+    removeChallengeAccomplishment(id: ID!, userId: ID!, date: AWSDate!): Boolean
 
     updateMe(input: UpdateMeInput!): MeUser!
 
