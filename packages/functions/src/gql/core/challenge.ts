@@ -220,9 +220,23 @@ interface AccomplishmentInput {
   date: ISODate
 }
 
+const isBetweenISODate = (
+  start: ISODate,
+  end: ISODate,
+  date: ISODate
+): boolean => {
+  if (date < start) {
+    return false
+  }
+  if (date > end) {
+    return false
+  }
+  return true
+}
+
 const verifyChallenge = async (id: string, userId: string) => {
   const result = await ChallengeEntity.get(getChallengePrimaryKey(id), {
-    attributes: ['participants'],
+    attributes: ['participants', 'dateStart', 'dateEnd'],
   })
   if (!result.Item) {
     throw new Error('Challenge does not exist')
@@ -231,6 +245,8 @@ const verifyChallenge = async (id: string, userId: string) => {
   if (participant == null) {
     throw new Error('User is not participating the challenge')
   }
+
+  return result.Item
 }
 
 export const addAccomplishment = async ({
@@ -238,7 +254,17 @@ export const addAccomplishment = async ({
   userId,
   date,
 }: AccomplishmentInput) => {
-  await verifyChallenge(id, userId)
+  const { dateStart, dateEnd } = await verifyChallenge(id, userId)
+
+  if (!isBetweenISODate(dateStart, dateEnd, date)) {
+    throw new Error('Can not insert date that is outside challenge dates')
+  }
+
+  const now = new Date().toISOString().slice(0, 10) // Just date
+
+  if (date > now) {
+    throw new Error('Can not insert date that is in future')
+  }
 
   const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
   await ChallengeAccomplishment.update(
@@ -257,6 +283,11 @@ export const removeAccomplishment = async ({
   date,
 }: AccomplishmentInput) => {
   await verifyChallenge(id, userId)
+  const now = new Date().toISOString().slice(0, 10) // Just date
+
+  if (date > now) {
+    throw new Error('Can remove date that is in future')
+  }
 
   const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
   await ChallengeAccomplishment.update(
