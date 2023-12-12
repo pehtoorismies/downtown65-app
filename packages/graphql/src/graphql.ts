@@ -180,6 +180,7 @@ export type Mutation = {
   participateChallenge: Scalars['Boolean']['output']
   participateEvent?: Maybe<Scalars['Boolean']['output']>
   refreshToken: RefreshResponse
+  removeChallengeAccomplishment?: Maybe<Scalars['Boolean']['output']>
   signup: SignupResponse
   updateAvatar: Scalars['Boolean']['output']
   updateEvent: Event
@@ -233,6 +234,12 @@ export type MutationParticipateEventArgs = {
 
 export type MutationRefreshTokenArgs = {
   refreshToken: Scalars['String']['input']
+}
+
+export type MutationRemoveChallengeAccomplishmentArgs = {
+  date: Scalars['AWSDate']['input']
+  id: Scalars['ID']['input']
+  userId: Scalars['ID']['input']
 }
 
 export type MutationSignupArgs = {

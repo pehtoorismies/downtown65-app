@@ -11,6 +11,7 @@ import type {
   MutationLeaveEventArgs,
   MutationParticipateChallengeArgs,
   MutationParticipateEventArgs,
+  MutationRemoveChallengeAccomplishmentArgs,
   MutationUpdateAvatarArgs,
   MutationUpdateEventArgs,
   MutationUpdateMeArgs,
@@ -41,6 +42,7 @@ import { createChallenge } from '~/gql/challenges/create-challenge'
 import { getChallenges } from '~/gql/challenges/get-challenges'
 import { leaveChallenge } from '~/gql/challenges/leave-challenge'
 import { participateChallenge } from '~/gql/challenges/participate-event'
+import { removeChallengeAccomplishment } from '~/gql/challenges/remove-challenge-accomplishment'
 
 export type Inputs =
   | EmptyArgs
@@ -89,6 +91,7 @@ const PRIVATE_FIELDS = [
   'createChallenge',
   'challenges',
   'addChallengeAccomplishment',
+  'removeChallengeAccomplishment',
 ] as const
 type PrivateField = (typeof PRIVATE_FIELDS)[number]
 
@@ -227,6 +230,14 @@ export const privateResolver = (
         allowScopes(['write:events'])
         return addChallengeAccomplishment(
           event as AppSyncResolverEvent<MutationAddChallengeAccomplishmentArgs>,
+          context,
+          callback
+        )
+      }
+      case 'removeChallengeAccomplishment': {
+        allowScopes(['write:events'])
+        return removeChallengeAccomplishment(
+          event as AppSyncResolverEvent<MutationRemoveChallengeAccomplishmentArgs>,
           context,
           callback
         )

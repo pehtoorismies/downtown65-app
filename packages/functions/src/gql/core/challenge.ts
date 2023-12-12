@@ -176,27 +176,31 @@ const getChallengeAccomplishmentPrimaryKey = (
   }
 }
 
-interface AccomplishmentInput {
+interface AddAccomplishmentInput {
   id: string
   user: User
   date: ISODate
 }
 
-export const addAccomplishment = async ({
-  id,
-  user,
-  date,
-}: AccomplishmentInput) => {
+const verifyChallenge = async (id: string, userId: string) => {
   const result = await ChallengeEntity.get(getChallengePrimaryKey(id), {
     attributes: ['participants'],
   })
   if (!result.Item) {
     throw new Error('Challenge does not exist')
   }
-  const participant = result.Item.participants[user.id]
+  const participant = result.Item.participants[userId]
   if (participant == null) {
     throw new Error('User is not participating the challenge')
   }
+}
+
+export const addAccomplishment = async ({
+  id,
+  user,
+  date,
+}: AddAccomplishmentInput) => {
+  await verifyChallenge(id, user.id)
 
   const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
   await ChallengeExecution.update(
@@ -206,6 +210,29 @@ export const addAccomplishment = async ({
       userId: user.id,
       userPicture: user.picture,
       challengeAccomplishments: { $add: [verifiedDate] },
+    },
+    { returnValues: 'NONE' }
+  )
+}
+
+interface RemoveAccomplishmentInput {
+  id: string
+  userId: string
+  date: ISODate
+}
+
+export const removeAccomplishment = async ({
+  id,
+  userId,
+  date,
+}: RemoveAccomplishmentInput) => {
+  await verifyChallenge(id, userId)
+
+  const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
+  await ChallengeExecution.update(
+    {
+      ...getChallengeAccomplishmentPrimaryKey(id, { id: userId }),
+      challengeAccomplishments: { $delete: [verifiedDate] },
     },
     { returnValues: 'NONE' }
   )
