@@ -15,6 +15,12 @@ const DocumentClient = DynamoDBDocumentClient.from(
   translateConfig
 )
 
+export const EntityNames = {
+  Dt65EventEntity: 'Dt65Event',
+  ChallengeEntity: 'Challenge',
+  ChallengeAccomplishment: 'ChallengeAccomplishment',
+} as const
+
 const DtTable = new Table({
   name: Config.TABLE_NAME,
   partitionKey: 'PK',
@@ -30,7 +36,7 @@ const DtTable = new Table({
 })
 
 export const Dt65EventEntity = new Entity({
-  name: 'Dt65Event',
+  name: EntityNames.Dt65EventEntity,
   attributes: {
     PK: { partitionKey: true, hidden: true },
     SK: { hidden: true, sortKey: true },
@@ -52,7 +58,7 @@ export const Dt65EventEntity = new Entity({
 } as const)
 
 export const ChallengeEntity = new Entity({
-  name: 'Challenge',
+  name: EntityNames.ChallengeEntity,
   attributes: {
     PK: { partitionKey: true, hidden: true },
     SK: { hidden: true, sortKey: true },
@@ -70,14 +76,12 @@ export const ChallengeEntity = new Entity({
   table: DtTable,
 } as const)
 
-export const ChallengeExecution = new Entity({
-  name: 'ChallengeExecution',
+export const ChallengeAccomplishment = new Entity({
+  name: EntityNames.ChallengeAccomplishment,
   attributes: {
     PK: { partitionKey: true, hidden: true },
     SK: { hidden: true, sortKey: true },
     userId: { type: 'string', required: true },
-    userNickname: { type: 'string', required: true },
-    userPicture: { type: 'string', required: true },
     challengeAccomplishments: { type: 'set', required: true },
   },
   table: DtTable,

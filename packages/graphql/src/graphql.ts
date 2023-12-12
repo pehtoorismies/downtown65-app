@@ -30,6 +30,12 @@ export type Scalars = {
   AWSDate: { input: string; output: string }
 }
 
+export type AccomplishmentInput = {
+  date: Scalars['AWSDate']['input']
+  id: Scalars['ID']['input']
+  userId: Scalars['ID']['input']
+}
+
 export type AuthError = {
   error: Scalars['String']['output']
   message: Scalars['String']['output']
@@ -50,6 +56,15 @@ export type Challenge = {
 
 export type ChallengeFilter = {
   dateEnd: DateFilter
+}
+
+export type ChallengeParticipant = User & {
+  __typename: 'ChallengeParticipant'
+  accomplishedDates: Array<Scalars['AWSDate']['output']>
+  id: Scalars['ID']['output']
+  joinedAt: Scalars['String']['output']
+  nickname: Scalars['String']['output']
+  picture: Scalars['String']['output']
 }
 
 export type CreateChallengeInput = {
@@ -90,6 +105,18 @@ export type DateInput = {
   day: Scalars['Int']['input']
   month: Scalars['Int']['input']
   year: Scalars['Int']['input']
+}
+
+export type DetailedChallenge = {
+  __typename: 'DetailedChallenge'
+  createdBy: Creator
+  dateEnd: Scalars['AWSDate']['output']
+  dateStart: Scalars['AWSDate']['output']
+  description?: Maybe<Scalars['String']['output']>
+  id: Scalars['ID']['output']
+  participants: Array<ChallengeParticipant>
+  subtitle: Scalars['String']['output']
+  title: Scalars['String']['output']
 }
 
 export type DetailedUser = {
@@ -188,9 +215,7 @@ export type Mutation = {
 }
 
 export type MutationAddChallengeAccomplishmentArgs = {
-  date: Scalars['AWSDate']['input']
-  id: Scalars['ID']['input']
-  me: MeInput
+  input: AccomplishmentInput
 }
 
 export type MutationCreateChallengeArgs = {
@@ -237,9 +262,7 @@ export type MutationRefreshTokenArgs = {
 }
 
 export type MutationRemoveChallengeAccomplishmentArgs = {
-  date: Scalars['AWSDate']['input']
-  id: Scalars['ID']['input']
-  userId: Scalars['ID']['input']
+  input: AccomplishmentInput
 }
 
 export type MutationSignupArgs = {
@@ -291,7 +314,7 @@ export type PreferencesInput = {
 
 export type Query = {
   __typename: 'Query'
-  challenge?: Maybe<Challenge>
+  challenge?: Maybe<DetailedChallenge>
   challenges: Array<Challenge>
   event?: Maybe<Event>
   events: Array<Event>
@@ -520,7 +543,7 @@ export type GetChallengeQueryVariables = Exact<{
 export type GetChallengeQuery = {
   __typename: 'Query'
   challenge?: {
-    __typename: 'Challenge'
+    __typename: 'DetailedChallenge'
     id: string
     dateEnd: string
     dateStart: string
@@ -534,7 +557,7 @@ export type GetChallengeQuery = {
       picture: string
     }
     participants: Array<{
-      __typename: 'Participant'
+      __typename: 'ChallengeParticipant'
       id: string
       picture: string
       nickname: string

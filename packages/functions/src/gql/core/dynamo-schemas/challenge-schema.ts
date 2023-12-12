@@ -1,6 +1,7 @@
 import { isBefore } from 'date-fns'
 import { z } from 'zod'
 import {
+  Auth0IDString,
   Auth0UserSchema,
   HyphenDate,
   ParticipantsSchema,
@@ -23,6 +24,17 @@ const createGSI1SKVerifier = ({
   const id = PK.match(KeyPattern)?.groups?.id
   return `DATE#${dateEnd}#${id?.slice(0, 8)}`
 }
+
+export const ChallengeGetSchema = z.object({
+  id: UlidSchema,
+  dateStart: HyphenDate,
+  dateEnd: HyphenDate,
+  title: z.string(),
+  subtitle: z.string(),
+  description: z.string().optional(),
+  createdBy: Auth0UserSchema,
+  participants: ParticipantsSchema,
+})
 
 export const ChallengeCreateSchema = z
   .object({
@@ -93,3 +105,8 @@ export const ChallengeCreateSchema = z
   )
 
 export type ChallengeCreateSchema = z.infer<typeof ChallengeCreateSchema>
+
+export const ChallengeAccomplishmentSchema = z.object({
+  challengeAccomplishments: z.string().array(),
+  userId: Auth0IDString,
+})

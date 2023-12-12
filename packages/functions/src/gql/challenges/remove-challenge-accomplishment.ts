@@ -8,7 +8,10 @@ export const removeChallengeAccomplishment: AppSyncResolverHandler<
   MutationRemoveChallengeAccomplishmentArgs,
   boolean
 > = async (event) => {
-  const { id, userId, date } = event.arguments
+  const {
+    input: { userId, id, date },
+  } = event.arguments
+
   const identity = event.identity as AppSyncIdentityOIDC
   const claims = identity.claims as Claims
 
