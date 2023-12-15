@@ -305,6 +305,28 @@ export default function GetEvent() {
     )
   }
 
+  if (!user) {
+    return (
+      <>
+        <Container fluid pt={12}>
+          <Breadcrumbs mb="xs">{items}</Breadcrumbs>
+        </Container>
+        <Container>
+          <ParticipatingContext.Provider
+            value={{
+              onLeave: () => {},
+              onParticipate: () => {},
+              state: 'idle',
+              loadingId: undefined,
+            }}
+          >
+            <EventCard eventId={eventItem.id} {...eventItem} />
+          </ParticipatingContext.Provider>
+        </Container>
+      </>
+    )
+  }
+
   return (
     <>
       <Modal
@@ -368,31 +390,27 @@ export default function GetEvent() {
         <ParticipatingContext.Provider value={participationActions}>
           <EventCard eventId={eventItem.id} {...eventItem} />
         </ParticipatingContext.Provider>
-        {user && (
-          <>
-            <Text ta="center" mt="xl" fw={600} c="dimmed">
-              Modification zone
-            </Text>
-            <Group justify="center" my="xl" gap="xl">
-              <Button
-                component={Link}
-                to={`/events/edit/${eventItem.id}`}
-                rightSection={<IconPencil size={18} />}
-                data-testid="modify-event-btn"
-              >
-                Muokkaa
-              </Button>
-              <Button
-                color="grape"
-                onClick={() => setOpened(true)}
-                rightSection={<IconCircleOff size={18} />}
-                data-testid="delete-event-btn"
-              >
-                Poista tapahtuma
-              </Button>
-            </Group>
-          </>
-        )}
+        <Text ta="center" mt="xl" fw={600} c="dimmed">
+          Modification zone
+        </Text>
+        <Group justify="center" my="xl" gap="xl">
+          <Button
+            component={Link}
+            to={`/events/edit/${eventItem.id}`}
+            rightSection={<IconPencil size={18} />}
+            data-testid="modify-event-btn"
+          >
+            Muokkaa
+          </Button>
+          <Button
+            color="grape"
+            onClick={() => setOpened(true)}
+            rightSection={<IconCircleOff size={18} />}
+            data-testid="delete-event-btn"
+          >
+            Poista tapahtuma
+          </Button>
+        </Group>
       </Container>
     </>
   )
