@@ -1,12 +1,16 @@
 import { createContext, useContext } from 'react'
 import type { User } from '~/domain/user'
 
-export const UserContext = createContext<User | undefined>(undefined)
+interface Context {
+  user: User | undefined
+}
 
-export const useUserContext = (): User | undefined => {
+export const UserContext = createContext<Context | undefined>(undefined)
+
+export const useUserContext = (): Context => {
   const context = useContext(UserContext)
   if (!context) {
-    throw new Error('Context undefined')
+    throw new Error('UserContext undefined')
   }
   return context
 }
