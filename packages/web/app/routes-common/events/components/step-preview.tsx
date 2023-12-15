@@ -1,12 +1,8 @@
-import { Divider, Text, TypographyStylesProvider } from '@mantine/core'
 import { format } from 'date-fns'
 import { fi } from 'date-fns/locale'
 import React from 'react'
 import type { EventState } from './event-state'
-import { EventHeader } from '~/components/event-card/event-header'
-import { EventInfo } from '~/components/event-card/event-info'
-import { Participants } from '~/components/event-card/participants'
-import { Voucher } from '~/components/voucher/voucher'
+import { EventCard } from '~/components/event-card/event-card'
 import type { User } from '~/domain/user'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
@@ -33,37 +29,17 @@ export const StepPreview = ({ state, me }: Properties) => {
     throw new Error('Illegal state, not eventType defined')
   }
 
-  const hasDescription = !!state.description.trim()
-
   return (
-    <Voucher>
-      <EventHeader
-        title={state.title}
-        participants={state.participants}
-        type={state.eventType}
-        race={state.isRace}
-        createdBy={me}
-      />
-      <Voucher.Content>
-        <EventInfo
-          {...state}
-          participants={state.participants}
-          dateStart={getDate(state.date)}
-          timeStart={getTime(state.time)}
-        />
-        <Divider my="xs" label="Osallistujat" labelPosition="center" />
-        <Participants participants={state.participants} />
-        <Divider my="xs" label="Lisätiedot" labelPosition="center" />
-        {hasDescription ? (
-          <TypographyStylesProvider p={0} mt="sm">
-            <div dangerouslySetInnerHTML={{ __html: state.description }} />
-          </TypographyStylesProvider>
-        ) : (
-          <Text ta="center" p="sm" c="dimmed" fw={400}>
-            ei tarkempaa tapahtuman kuvausta
-          </Text>
-        )}
-      </Voucher.Content>
-    </Voucher>
+    <EventCard
+      title={state.title}
+      race={state.isRace}
+      subtitle={state.subtitle}
+      location={state.location}
+      type={state.eventType}
+      createdBy={me}
+      participants={state.participants}
+      dateStart={getDate(state.date)}
+      timeStart={getTime(state.time)}
+    />
   )
 }

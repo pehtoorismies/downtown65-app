@@ -13,7 +13,6 @@ import {
   Button,
   Center,
   Container,
-  Divider,
   Group,
   Image,
   Loader,
@@ -47,10 +46,7 @@ import {
 import type { ChangeEvent } from 'react'
 import React, { useState } from 'react'
 import invariant from 'tiny-invariant'
-import { EventHeader } from '~/components/event-card/event-header'
-import { EventInfo } from '~/components/event-card/event-info'
-import { Participants } from '~/components/event-card/participants'
-import { Voucher } from '~/components/voucher/voucher'
+import { EventCard } from '~/components/event-card/event-card'
 import { Config } from '~/config/config'
 import {
   ParticipatingContext,
@@ -372,26 +368,7 @@ export default function GetEvent() {
       </Container>
       <Container>
         <ParticipatingContext.Provider value={participationActions}>
-          <Voucher>
-            <EventHeader {...eventItem} />
-            <Voucher.Content>
-              <EventInfo {...eventItem} />
-              <Divider my="xs" label="Osallistujat" labelPosition="center" />
-              <Participants participants={eventItem.participants} />
-              <Divider my="xs" label="Lisätiedot" labelPosition="center" />
-              {hasDescription ? (
-                <TypographyStylesProvider p={0} mt="sm">
-                  <div
-                    dangerouslySetInnerHTML={{ __html: eventItem.description }}
-                  />
-                </TypographyStylesProvider>
-              ) : (
-                <Text ta="center" p="sm" c="dimmed" fw={400}>
-                  ei tarkempaa tapahtuman kuvausta
-                </Text>
-              )}
-            </Voucher.Content>
-          </Voucher>
+          <EventCard eventId={eventItem.id} {...eventItem} />
         </ParticipatingContext.Provider>
         {user && (
           <>
