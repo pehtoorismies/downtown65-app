@@ -29,7 +29,7 @@ export { loader } from '~/routes-common/auth/loader'
 const _GglIgnored = graphql(`
   mutation Signup(
     $name: String!
-    $email: String!
+    $email: AWSEmail!
     $password: String!
     $nickname: String!
     $registerSecret: String!
