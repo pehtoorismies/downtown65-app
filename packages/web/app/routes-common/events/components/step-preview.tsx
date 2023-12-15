@@ -4,6 +4,7 @@ import React from 'react'
 import type { EventState } from './event-state'
 import { EventCard } from '~/components/event/event-card'
 import type { User } from '~/domain/user'
+import { Heading } from '~/routes-common/events/components/heading'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 interface Properties {
@@ -30,16 +31,19 @@ export const StepPreview = ({ state, me }: Properties) => {
   }
 
   return (
-    <EventCard
-      title={state.title}
-      race={state.isRace}
-      subtitle={state.subtitle}
-      location={state.location}
-      type={state.eventType}
-      createdBy={me}
-      participants={state.participants}
-      dateStart={getDate(state.date)}
-      timeStart={getTime(state.time)}
-    />
+    <>
+      <Heading>Esikatselu</Heading>
+      <EventCard
+        title={state.title}
+        race={state.isRace}
+        subtitle={state.subtitle}
+        location={state.location}
+        type={state.eventType}
+        createdBy={me}
+        participants={state.participants}
+        dateStart={getDate(state.date)}
+        timeStart={getTime(state.time)}
+      />
+    </>
   )
 }

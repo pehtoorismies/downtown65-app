@@ -1,13 +1,16 @@
 import { graphql } from '@downtown65-app/graphql/gql'
 import { CreateEventDocument } from '@downtown65-app/graphql/graphql'
+import { Button, Center, Divider, Group, Modal, Title } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
-import { useReducer } from 'react'
+import { useLoaderData, useNavigate } from '@remix-run/react'
+import { IconCircleOff, IconCircleX } from '@tabler/icons-react'
+import React, { useReducer } from 'react'
 import type { Context } from '~/contexts/participating-context'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import {
@@ -93,7 +96,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 }
 
 export default function NewEvent() {
+  const [opened, handlers] = useDisclosure(false)
   const { user: me } = useLoaderData<typeof loader>()
+  const navigate = useNavigate()
   const [eventState, dispatch] = useReducer(reducer, {
     activeStep: ActiveStep.STEP_EVENT_TYPE,
     date: new Date(),
@@ -121,6 +126,41 @@ export default function NewEvent() {
 
   return (
     <>
+      <Modal
+        zIndex={2000}
+        opened={opened}
+        onClose={() => handlers.close()}
+        title="Keskeytä tapahtuman luonti"
+        closeButtonProps={{ 'aria-label': 'Close' }}
+      >
+        <Group
+          justify="space-between"
+          mt={50}
+          data-testid="confirmation-modal-content"
+        >
+          <Button
+            onClick={() => handlers.close()}
+            leftSection={<IconCircleX size={18} />}
+            data-testid="modal-close"
+          >
+            Sulje
+          </Button>
+          <Button
+            onClick={() => navigate('/events')}
+            name="action"
+            value="delete"
+            type="submit"
+            color="red"
+            rightSection={<IconCircleOff size={18} />}
+            data-testid="modal-cancel-event-creation"
+          >
+            Keskeytä
+          </Button>
+        </Group>
+      </Modal>
+      <Title order={1} size="h5">
+        Uusi tapahtuma: {eventState.title || 'ei nimeä'}
+      </Title>
       <EditOrCreate
         cancelRedirectPath="/events"
         state={eventState}
@@ -128,6 +168,17 @@ export default function NewEvent() {
         dispatch={dispatch}
         participatingActions={participatingActions}
       />
+      <Divider my="sm" />
+      <Center>
+        <Button
+          my="md"
+          color="red"
+          rightSection={<IconCircleOff size={18} />}
+          onClick={handlers.open}
+        >
+          Keskeytä luonti
+        </Button>
+      </Center>
     </>
   )
 }

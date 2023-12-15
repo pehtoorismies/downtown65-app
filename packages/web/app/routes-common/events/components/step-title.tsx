@@ -1,11 +1,13 @@
 import { Center, Switch, TextInput } from '@mantine/core'
 import type { ReducerProps } from './reducer'
+import { Heading } from '~/routes-common/events/components/heading'
 
 const spacing = 'md'
 
 export const StepTitle = ({ state, dispatch }: ReducerProps) => {
   return (
     <>
+      <Heading>Perustiedot</Heading>
       <TextInput
         name="title"
         my={spacing}

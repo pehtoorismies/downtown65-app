@@ -1,7 +1,9 @@
 import 'dayjs/locale/fi'
 import { Button, Center, Container, Grid, Stack, Text } from '@mantine/core'
+import React from 'react'
 import type { EventState } from './event-state'
 import type { ReducerProps } from './reducer'
+import { Heading } from '~/routes-common/events/components/heading'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 const HOURS = [
@@ -89,55 +91,58 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
     ))
 
   return (
-    <Container>
-      <Grid gutter="xs" mt="sm">
-        <Grid.Col span={6}>
-          <Text size="sm">Tunnit</Text>
-        </Grid.Col>
-        <Grid.Col span={6}>
-          <Text size="sm">Minuutit</Text>
-        </Grid.Col>
-      </Grid>
+    <>
+      <Heading>Kellonaika</Heading>
+      <Container>
+        <Grid gutter="xs" mt="sm">
+          <Grid.Col span={6}>
+            <Text size="sm">Tunnit</Text>
+          </Grid.Col>
+          <Grid.Col span={6}>
+            <Text size="sm">Minuutit</Text>
+          </Grid.Col>
+        </Grid>
 
-      <Grid gutter="xs">
-        <Grid.Col span={2}>
-          <Stack gap="xs">{getHoursCol(HOURS[0])}</Stack>
-        </Grid.Col>
-        <Grid.Col span={2}>
-          <Stack gap="xs">{getHoursCol(HOURS[1])}</Stack>
-        </Grid.Col>
-        <Grid.Col span={2}>
-          <Stack gap="xs">{getHoursCol(HOURS[2])}</Stack>
-        </Grid.Col>
-        <Grid.Col span={3}>
-          <Stack gap="xs">{getMinutesCol(MINUTES[0])}</Stack>
-        </Grid.Col>
-        <Grid.Col span={3}>
-          <Stack gap="xs">{getMinutesCol(MINUTES[1])}</Stack>
-        </Grid.Col>
-      </Grid>
-      <Center>
-        <Button
-          data-testid="clear-time"
-          mt="md"
-          variant="outline"
-          size="compact-sm"
-          onClick={() =>
-            dispatch({
-              kind: 'time',
-              time: {
-                hours: undefined,
-                minutes: undefined,
-              },
-            })
-          }
-        >
-          Tyhjennä aika
-        </Button>
-      </Center>
-      <Text ta="center" fz="xl" fw={700} mt="md" data-testid="time-display">
-        {getTime(state)}
-      </Text>
-    </Container>
+        <Grid gutter="xs">
+          <Grid.Col span={2}>
+            <Stack gap="xs">{getHoursCol(HOURS[0])}</Stack>
+          </Grid.Col>
+          <Grid.Col span={2}>
+            <Stack gap="xs">{getHoursCol(HOURS[1])}</Stack>
+          </Grid.Col>
+          <Grid.Col span={2}>
+            <Stack gap="xs">{getHoursCol(HOURS[2])}</Stack>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Stack gap="xs">{getMinutesCol(MINUTES[0])}</Stack>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Stack gap="xs">{getMinutesCol(MINUTES[1])}</Stack>
+          </Grid.Col>
+        </Grid>
+        <Center>
+          <Button
+            data-testid="clear-time"
+            mt="md"
+            variant="outline"
+            size="compact-sm"
+            onClick={() =>
+              dispatch({
+                kind: 'time',
+                time: {
+                  hours: undefined,
+                  minutes: undefined,
+                },
+              })
+            }
+          >
+            Tyhjennä aika
+          </Button>
+        </Center>
+        <Text ta="center" fz="xl" fw={700} mt="md" data-testid="time-display">
+          {getTime(state)}
+        </Text>
+      </Container>
+    </>
   )
 }
