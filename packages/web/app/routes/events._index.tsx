@@ -112,7 +112,7 @@ const Root = ({ children }: { children: ReactNode }) => (
 )
 
 export default function GetEvents() {
-  const { eventItems, user } = useLoaderData<typeof loader>()
+  const { eventItems } = useLoaderData<typeof loader>()
   const participationActions = useParticipationActions('event')
 
   if (eventItems.length === 0) {
@@ -147,9 +147,9 @@ export default function GetEvents() {
           {eventItems.map((m) => {
             return (
               <Voucher key={m.id}>
-                <EventHeader {...m} user={user} />
+                <EventHeader {...m} />
                 <Voucher.Content>
-                  <EventInfo {...m} user={user} />
+                  <EventInfo {...m} />
                   <Button
                     component={Link}
                     to={`/events/${m.id}`}

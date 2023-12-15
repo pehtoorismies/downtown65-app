@@ -11,7 +11,7 @@ import { IconMedal, IconUsers } from '@tabler/icons-react'
 import type { PropsWithChildren } from 'react'
 import classes from './voucher.module.css'
 import { Gradient } from '~/components/colors'
-import type { User } from '~/domain/user'
+import { useUserContext } from '~/contexts/user-context'
 
 export const VoucherHeader = ({
   children,
@@ -74,15 +74,15 @@ VoucherHeader.Competition = () => {
   )
 }
 
-VoucherHeader.ParticipantCount = ({
-  user,
+const ParticipantCount = ({
   participants,
 }: {
   participants: { id: string }[]
-  user: User | null
 }) => {
+  const { user } = useUserContext()
+
   const meAttending =
-    user !== null && participants.map(({ id }) => id).includes(user.id)
+    user != null && participants.map(({ id }) => id).includes(user.id)
 
   return (
     <Badge
@@ -103,3 +103,5 @@ VoucherHeader.ParticipantCount = ({
     </Badge>
   )
 }
+
+VoucherHeader.ParticipantCount = ParticipantCount

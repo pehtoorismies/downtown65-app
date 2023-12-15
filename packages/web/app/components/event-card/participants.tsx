@@ -1,14 +1,16 @@
 import { Avatar, Badge, Group, Text, ThemeIcon } from '@mantine/core'
 import { IconUserOff } from '@tabler/icons-react'
 import { Gradient } from '~/components/colors'
+import { useUserContext } from '~/contexts/user-context'
 import type { User } from '~/domain/user'
 
 interface Props {
   participants: User[]
-  me: User | null
 }
 
-export const Participants = ({ me, participants }: Props) => {
+export const Participants = ({ participants }: Props) => {
+  const { user } = useUserContext()
+
   if (participants.length === 0) {
     return (
       <Group justify="center" p="md">
@@ -24,7 +26,7 @@ export const Participants = ({ me, participants }: Props) => {
     <Group align="left" gap={2}>
       {participants.map((p) => {
         const gradient =
-          me?.id === p.id
+          user?.id === p.id
             ? Gradient.dtPink
             : { from: 'indigo', to: 'blue', deg: 45 }
 

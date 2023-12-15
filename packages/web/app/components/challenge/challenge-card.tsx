@@ -95,6 +95,7 @@ export const ChallengeCard = (props: Props) => {
       return (
         <ChallengeRoot {...props} button={<ChallengeButton {...props} />}>
           {descriptionElement}
+
           <Divider my="xs" label="Leaderboard" labelPosition="center" />
           <Box my="md">
             <LeaderboardRow

@@ -373,11 +373,11 @@ export default function GetEvent() {
       <Container>
         <ParticipatingContext.Provider value={participationActions}>
           <Voucher>
-            <EventHeader {...eventItem} user={user} />
+            <EventHeader {...eventItem} />
             <Voucher.Content>
-              <EventInfo {...eventItem} user={user} />
+              <EventInfo {...eventItem} />
               <Divider my="xs" label="Osallistujat" labelPosition="center" />
-              <Participants participants={eventItem.participants} me={user} />
+              <Participants participants={eventItem.participants} />
               <Divider my="xs" label="Lisätiedot" labelPosition="center" />
               {hasDescription ? (
                 <TypographyStylesProvider p={0} mt="sm">
