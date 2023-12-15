@@ -115,7 +115,7 @@ export const EditOrCreate: FC<Props> = ({
           </Button>
         </Group>
       </Modal>
-      <Container pt={12}>
+      <Container p={{ base: 1, sm: 'xs' }}>
         <Stepper
           color={state.kind === 'edit' ? 'dtPink.4' : 'blue'}
           iconSize={iconSize}
