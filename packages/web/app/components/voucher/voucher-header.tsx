@@ -7,11 +7,10 @@ import {
   Text,
   ThemeIcon,
 } from '@mantine/core'
-import { IconMedal, IconUsers } from '@tabler/icons-react'
+import { IconUsers } from '@tabler/icons-react'
 import type { PropsWithChildren } from 'react'
 import classes from './voucher.module.css'
 import { Gradient } from '~/components/colors'
-import { useUserContext } from '~/contexts/user-context'
 
 export const VoucherHeader = ({
   children,
@@ -56,7 +55,7 @@ VoucherHeader.Creator = ({ nick }: { nick: string }) => {
     </Badge>
   )
 }
-VoucherHeader.Competition = () => {
+VoucherHeader.Icon = ({ icon }: { icon: React.ReactNode }) => {
   return (
     <ThemeIcon
       data-testid="event-race"
@@ -69,21 +68,18 @@ VoucherHeader.Competition = () => {
       variant="outline"
       color="blue.0"
     >
-      <IconMedal color="white" />
+      {icon}
     </ThemeIcon>
   )
 }
 
 const ParticipantCount = ({
-  participants,
+  count,
+  highlighted,
 }: {
-  participants: { id: string }[]
+  count: number
+  highlighted: boolean
 }) => {
-  const { user } = useUserContext()
-
-  const meAttending =
-    user != null && participants.map(({ id }) => id).includes(user.id)
-
   return (
     <Badge
       data-testid="event-participant-count"
@@ -95,11 +91,11 @@ const ParticipantCount = ({
         </Center>
       }
       radius="sm"
-      variant={meAttending ? 'gradient' : 'filled'}
+      variant={highlighted ? 'gradient' : 'filled'}
       gradient={Gradient.dtPink}
       className={classes.areaParticipantCount}
     >
-      {participants.length}
+      {count}
     </Badge>
   )
 }

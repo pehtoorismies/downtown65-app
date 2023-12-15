@@ -6,11 +6,12 @@ import {
   Text,
   TypographyStylesProvider,
 } from '@mantine/core'
+import { IconMedal } from '@tabler/icons-react'
 import React from 'react'
 import { Participants } from '~/components/participants'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 import { Voucher } from '~/components/voucher/voucher'
-import { useUserContext } from '~/contexts/user-context'
+import { useParticipantsCount } from '~/hooks/use-participants-count'
 import { mapToData } from '~/util/event-type'
 
 interface Props {
@@ -23,7 +24,11 @@ interface Props {
   createdBy: {
     nickname: string
   }
-  participants: { id: string; nickname: string; picture: string }[]
+  participants: {
+    id: string
+    nickname: string
+    picture: string
+  }[]
   dateStart: string
   timeStart?: string | null
   description?: string
@@ -48,10 +53,7 @@ export const EventCard = ({
   timeStart,
   description,
 }: Props) => {
-  const { user } = useUserContext()
-
-  const meAttending =
-    user != null && participants.map(({ id }) => id).includes(user.id)
+  const { count, meAttending } = useParticipantsCount(participants)
 
   const time = timeStart ? `klo ${timeStart}` : ''
   const descriptionText = getDescription(description)
@@ -60,9 +62,12 @@ export const EventCard = ({
     <Voucher>
       <Voucher.Header bgImageUrl={mapToData(type).imageUrl}>
         <Voucher.Header.Title>{title}</Voucher.Header.Title>
-        <Voucher.Header.ParticipantCount participants={participants} />
+        <Voucher.Header.ParticipantCount
+          count={count}
+          highlighted={meAttending}
+        />
         <Voucher.Header.Creator nick={createdBy.nickname} />
-        {race && <Voucher.Header.Competition />}
+        {race && <Voucher.Header.Icon icon={<IconMedal color="white" />} />}
       </Voucher.Header>
       <Voucher.Content>
         <Grid align="center" my={2} gutter="xs">
