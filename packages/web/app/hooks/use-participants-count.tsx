@@ -5,7 +5,7 @@ export const useParticipantsCount = (
     id: string
   }[]
 ) => {
-  const { user } = useUserContext()
+  const user = useUserContext()
   const meAttending =
     user != null && participants.map(({ id }) => id).includes(user.id)
   return {

@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Participants = ({ participants }: Props) => {
-  const { user } = useUserContext()
+  const user = useUserContext()
 
   if (participants.length === 0) {
     return (
