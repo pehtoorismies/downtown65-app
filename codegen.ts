@@ -24,6 +24,7 @@ const config: CodegenConfig = {
         // maybeValue: 'T | null | undefined',
         scalars: {
           AWSDate: 'string',
+          AWSEmail: 'string',
         },
       },
     },

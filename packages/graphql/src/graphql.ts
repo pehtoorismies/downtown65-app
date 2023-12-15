@@ -28,7 +28,7 @@ export type Scalars = {
   Int: { input: number; output: number }
   Float: { input: number; output: number }
   AWSDate: { input: string; output: string }
-  AWSEmail: { input: unknown; output: unknown }
+  AWSEmail: { input: string; output: string }
 }
 
 export type AccomplishmentInput = {
