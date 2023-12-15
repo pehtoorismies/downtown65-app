@@ -1,11 +1,12 @@
 import { Grid, Group, Text } from '@mantine/core'
 import React from 'react'
 import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
+import { useUserContext } from '~/contexts/user-context'
 import type { User } from '~/domain/user'
 
 interface Props {
   id?: string
-  user: User | null
+
   subtitle: string
   location: string
   dateStart: string
@@ -15,15 +16,16 @@ interface Props {
 
 export const EventInfo = ({
   id,
-  user,
   subtitle,
   dateStart,
   timeStart,
   location,
   participants,
 }: Props) => {
+  const { user } = useUserContext()
+
   const meAttending =
-    user !== null && participants.map(({ id }) => id).includes(user.id)
+    user != null && participants.map(({ id }) => id).includes(user.id)
 
   const time = timeStart ? `klo ${timeStart}` : ''
 

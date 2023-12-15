@@ -3,16 +3,16 @@ import { Link } from '@remix-run/react'
 import { IconHandOff, IconHandStop, IconLogin } from '@tabler/icons-react'
 import { Gradient } from '~/components/colors'
 import { useParticipatingContext } from '~/contexts/participating-context'
-import type { User } from '~/domain/user'
+import { useUserContext } from '~/contexts/user-context'
 
 interface Properties {
   isParticipating: boolean
   id?: string
-  user: User | null
 }
 
-export const ToggleJoinButton = ({ isParticipating, id, user }: Properties) => {
+export const ToggleJoinButton = ({ isParticipating, id }: Properties) => {
   const actions = useParticipatingContext()
+  const user = useUserContext()
 
   if (!user) {
     return (
