@@ -9,7 +9,7 @@ import { prefixZero, suffixZero } from '~/util/pad-zeros'
 const HOURS = [
   [6, 9, 12, 15, 18, 21, 0, 3],
   [7, 10, 13, 16, 19, 22, 1, 4],
-  [8, 11, 14, 17, 20, 23, 2],
+  [8, 11, 14, 17, 20, 23, 2, 5],
 ]
 
 const MINUTES = [
