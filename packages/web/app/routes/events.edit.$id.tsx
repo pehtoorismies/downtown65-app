@@ -177,7 +177,7 @@ export default function EditEvent() {
       dispatch({ kind: 'participateEvent', me })
     },
     state: 'idle',
-    loadingEventId: 'not-defined',
+    loadingId: 'not-defined',
   }
 
   const items = [
