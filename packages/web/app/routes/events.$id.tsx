@@ -46,7 +46,7 @@ import {
 import type { ChangeEvent } from 'react'
 import React, { useState } from 'react'
 import invariant from 'tiny-invariant'
-import { EventCard } from '~/components/event-card/event-card'
+import { EventCard } from '~/components/event/event-card'
 import { Config } from '~/config/config'
 import {
   ParticipatingContext,

@@ -2,7 +2,7 @@ import { format } from 'date-fns'
 import { fi } from 'date-fns/locale'
 import React from 'react'
 import type { EventState } from './event-state'
-import { EventCard } from '~/components/event-card/event-card'
+import { EventCard } from '~/components/event/event-card'
 import type { User } from '~/domain/user'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
