@@ -115,7 +115,7 @@ export const EditOrCreate: FC<Props> = ({
   const skipContent = (
     <Grid gutter="xs" my="sm" align="center">
       <Grid.Col span={3}>
-        <Group justify="flex-end">
+        <Group justify="flex-start">
           <Button
             variant="outline"
             color="orange"
