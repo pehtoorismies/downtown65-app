@@ -206,7 +206,7 @@ export default function App() {
               <Navbar close={close} />
             </AppShell.Navbar>
             <AppShell.Main>
-              <UserContext.Provider value={{ user }}>
+              <UserContext.Provider value={user}>
                 <Outlet />
               </UserContext.Provider>
             </AppShell.Main>
