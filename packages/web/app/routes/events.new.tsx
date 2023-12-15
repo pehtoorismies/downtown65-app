@@ -1,6 +1,14 @@
 import { graphql } from '@downtown65-app/graphql/gql'
 import { CreateEventDocument } from '@downtown65-app/graphql/graphql'
-import { Button, Center, Divider, Group, Modal, Title } from '@mantine/core'
+import {
+  Box,
+  Button,
+  Center,
+  Divider,
+  Group,
+  Modal,
+  Title,
+} from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import type {
   ActionFunctionArgs,
@@ -9,7 +17,11 @@ import type {
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { useLoaderData, useNavigate } from '@remix-run/react'
-import { IconCircleOff, IconCircleX } from '@tabler/icons-react'
+import {
+  IconAlertTriangleFilled,
+  IconCircleOff,
+  IconCircleX,
+} from '@tabler/icons-react'
 import React, { useReducer } from 'react'
 import type { Context } from '~/contexts/participating-context'
 import { gqlClient } from '~/gql/get-gql-client.server'
@@ -168,7 +180,18 @@ export default function NewEvent() {
         dispatch={dispatch}
         participatingActions={participatingActions}
       />
-      <Divider my="sm" />
+      <Divider
+        mt="xl"
+        size="sm"
+        variant="dashed"
+        labelPosition="center"
+        label={
+          <>
+            <IconAlertTriangleFilled size={12} />
+            <Box ml={5}>Modification zone</Box>
+          </>
+        }
+      />
       <Center>
         <Button
           my="md"
