@@ -28,6 +28,7 @@ export type Scalars = {
   Int: { input: number; output: number }
   Float: { input: number; output: number }
   AWSDate: { input: string; output: string }
+  AWSEmail: { input: unknown; output: unknown }
 }
 
 export type AccomplishmentInput = {
@@ -231,7 +232,7 @@ export type MutationLeaveEventArgs = {
 }
 
 export type MutationLoginArgs = {
-  email: Scalars['String']['input']
+  email: Scalars['AWSEmail']['input']
   password: Scalars['String']['input']
 }
 
@@ -369,7 +370,7 @@ export type SignupFieldError = {
 }
 
 export type SignupInput = {
-  email: Scalars['String']['input']
+  email: Scalars['AWSEmail']['input']
   name: Scalars['String']['input']
   nickname: Scalars['String']['input']
   password: Scalars['String']['input']
@@ -440,7 +441,7 @@ export type ForgotPasswordMutation = {
 }
 
 export type LoginMutationVariables = Exact<{
-  email: Scalars['String']['input']
+  email: Scalars['AWSEmail']['input']
   password: Scalars['String']['input']
 }>
 
@@ -477,7 +478,7 @@ export type ErrorFragmentFragment = {
 
 export type SignupMutationVariables = Exact<{
   name: Scalars['String']['input']
-  email: Scalars['String']['input']
+  email: Scalars['AWSEmail']['input']
   password: Scalars['String']['input']
   nickname: Scalars['String']['input']
   registerSecret: Scalars['String']['input']
@@ -1057,7 +1058,7 @@ export const LoginDocument = {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
+              name: { kind: 'Name', value: 'AWSEmail' },
             },
           },
         },
@@ -1181,7 +1182,7 @@ export const SignupDocument = {
             kind: 'NonNullType',
             type: {
               kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
+              name: { kind: 'Name', value: 'AWSEmail' },
             },
           },
         },
