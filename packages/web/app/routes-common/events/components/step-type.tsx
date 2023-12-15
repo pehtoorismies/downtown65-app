@@ -56,7 +56,9 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
   return (
     <>
       <Heading>Laji</Heading>
-      <SimpleGrid cols={2}>{buttons}</SimpleGrid>
+      <SimpleGrid cols={2} spacing={{ base: 'xs', sm: 'md' }}>
+        {buttons}
+      </SimpleGrid>
     </>
   )
 }
