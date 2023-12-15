@@ -35,12 +35,12 @@ const getActionPath = (eventType: EventType): string => {
 
 export const useParticipationActions = (eventType: 'event' | 'challenge') => {
   const fetcher = useFetcher()
-  const [loadingId, setLoadingtId] = useState<string | undefined>()
+  const [loadingId, setLoadingId] = useState<string | undefined>()
   const actionPath = getActionPath(eventType)
 
   return {
     onParticipate: (id: string) => {
-      setLoadingtId(id)
+      setLoadingId(id)
       fetcher.submit(
         {
           action: 'participate',
@@ -52,7 +52,7 @@ export const useParticipationActions = (eventType: 'event' | 'challenge') => {
       )
     },
     onLeave: (id: string) => {
-      setLoadingtId(id)
+      setLoadingId(id)
       fetcher.submit(
         {
           action: 'leave',
