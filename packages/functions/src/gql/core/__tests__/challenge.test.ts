@@ -1,5 +1,8 @@
 import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
-import type { CreateChallengeInput } from '@downtown65-app/graphql/graphql'
+import type {
+  CreateChallengeInput,
+  QueryChallengesArgs,
+} from '@downtown65-app/graphql/graphql'
 import {
   randFutureDate,
   randIceHockeyTeam,
@@ -78,12 +81,17 @@ describe('Events', () => {
       ids.push(id)
     }
 
-    const upcomingChallenges = await Challenge.getUpcoming()
+    const upcomingFilter: QueryChallengesArgs['filter'] = {
+      dateEnd: {
+        after: DynamoDatetime.fromDate(new Date()).getISODate(),
+      },
+    }
+    const upcomingChallenges = await Challenge.getAll(upcomingFilter)
     expect(upcomingChallenges.length).toBe(4)
 
     await Challenge.removeMany([...ids])
 
-    const noUpcoming = await Challenge.getUpcoming()
+    const noUpcoming = await Challenge.getAll(upcomingFilter)
 
     expect(noUpcoming.length).toBe(0)
   })

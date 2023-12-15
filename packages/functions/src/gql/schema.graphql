@@ -43,7 +43,8 @@ type ChallengeParticipant implements User @aws_api_key @aws_oidc {
     nickname: String!
     joinedAt: String!
     picture: String!
-    accomplishedDates: [AWSDate!]!
+    # Note this is not always available
+    accomplishedDates: [AWSDate!]
 }
 
 type Creator implements User @aws_api_key @aws_oidc {
@@ -66,16 +67,6 @@ type Event @aws_api_key @aws_oidc {
     type: EventType!
 }
 
-type DetailedChallenge @aws_api_key @aws_oidc {
-    createdBy: Creator!
-    dateEnd: AWSDate!
-    dateStart: AWSDate!
-    description: String
-    id: ID!
-    participants: [ChallengeParticipant!]!
-    subtitle: String!
-    title: String!
-}
 
 type Challenge @aws_api_key @aws_oidc {
     createdBy: Creator!
@@ -83,7 +74,7 @@ type Challenge @aws_api_key @aws_oidc {
     dateStart: AWSDate!
     description: String
     id: ID!
-    participants: [Participant!]!
+    participants: [ChallengeParticipant!]!
     subtitle: String!
     title: String!
 }
@@ -277,7 +268,7 @@ type UsersResponse {
 
 type Query {
     event(eventId: ID!): Event @aws_api_key
-    challenge(id: ID!): DetailedChallenge @aws_api_key
+    challenge(id: ID!): Challenge @aws_api_key
 
     # Future events
     events: [Event!]!

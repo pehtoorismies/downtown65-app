@@ -3,7 +3,6 @@ import { logger } from '@downtown65-app/core/logger/logger'
 import type {
   Challenge,
   CreateChallengeInput,
-  DetailedChallenge,
   QueryChallengesArgs,
 } from '@downtown65-app/graphql/graphql'
 import * as R from 'remeda'
@@ -66,9 +65,7 @@ export const create = async (
   return id
 }
 
-export const getById = async (
-  id: string
-): Promise<DetailedChallenge | null> => {
+export const getById = async (id: string): Promise<Challenge | null> => {
   const result = await ChallengeEntity.table?.query(`CHALLENGE#${id}`)
 
   if (!result?.Items) {
@@ -116,7 +113,7 @@ export const getById = async (
         __typename: 'ChallengeParticipant',
       }
     }),
-    __typename: 'DetailedChallenge',
+    __typename: 'Challenge',
   }
 }
 
@@ -186,7 +183,7 @@ export const getAll = async (
       },
       participants: participantHashMapToList(data.participants).map((p) => ({
         ...p,
-        __typename: 'Participant',
+        __typename: 'ChallengeParticipant',
       })),
       __typename: 'Challenge',
     }

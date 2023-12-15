@@ -40,7 +40,6 @@ export const StepPreview = ({ state, me }: Properties) => {
       <EventHeader
         title={state.title}
         participants={state.participants}
-        user={me}
         type={state.eventType}
         race={state.isRace}
         createdBy={me}
@@ -49,12 +48,11 @@ export const StepPreview = ({ state, me }: Properties) => {
         <EventInfo
           {...state}
           participants={state.participants}
-          user={me}
           dateStart={getDate(state.date)}
           timeStart={getTime(state.time)}
         />
         <Divider my="xs" label="Osallistujat" labelPosition="center" />
-        <Participants participants={state.participants} me={me} />
+        <Participants participants={state.participants} />
         <Divider my="xs" label="Lisätiedot" labelPosition="center" />
         {hasDescription ? (
           <TypographyStylesProvider p={0} mt="sm">

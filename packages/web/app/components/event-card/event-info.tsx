@@ -44,7 +44,7 @@ export const EventInfo = ({
       </Grid.Col>
       <Grid.Col span={5}>
         <Group justify="end">
-          <ToggleJoinButton isParticipating={meAttending} id={id} user={user} />
+          <ToggleJoinButton isParticipating={meAttending} id={id} />
         </Group>
       </Grid.Col>
     </Grid>

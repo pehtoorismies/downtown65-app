@@ -63,7 +63,7 @@ export const ChallengeCard = (props: Props) => {
           {descriptionElement}
           <Divider my="xs" label="Osallistujat" labelPosition="center" />
           <Box mb="sm">
-            <Participants participants={challenge.participants} me={user} />
+            <Participants participants={challenge.participants} />
           </Box>
         </ChallengeRoot>
       )
