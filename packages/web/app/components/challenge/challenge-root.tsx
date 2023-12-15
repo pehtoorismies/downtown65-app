@@ -3,6 +3,7 @@ import { Box, Group, Text } from '@mantine/core'
 import type { PropsWithChildren } from 'react'
 import React from 'react'
 import { Voucher } from '~/components/voucher/voucher'
+import { useParticipantsCount } from '~/hooks/use-participants-count'
 import type { ChallengeStatus } from '~/util/challenge-tools'
 import { formatISORunningTime } from '~/util/challenge-tools'
 
@@ -18,12 +19,15 @@ export const ChallengeRoot = ({
   button,
   challengeStatus,
 }: PropsWithChildren<RootProps>) => {
+  const { meAttending, count } = useParticipantsCount(challenge.participants)
+
   return (
     <Voucher>
       <Voucher.Header bgImageUrl={'/event-images/nordicwalking.jpg'}>
         <Voucher.Header.Title>{challenge.title}</Voucher.Header.Title>
         <Voucher.Header.ParticipantCount
-          participants={challenge.participants}
+          count={count}
+          highlighted={meAttending}
         />
         <Voucher.Header.Creator nick={challenge.createdBy.nickname} />
       </Voucher.Header>
