@@ -12,7 +12,7 @@ interface Properties {
 
 export const ToggleJoinButton = ({ isParticipating, id }: Properties) => {
   const actions = useParticipatingContext()
-  const user = useUserContext()
+  const { user } = useUserContext()
 
   if (!user) {
     return (
