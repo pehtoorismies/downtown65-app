@@ -1,4 +1,5 @@
 import { Button, Grid, Group } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import type { Icon } from '@tabler/icons-react'
 import {
   IconArrowLeft,
@@ -101,6 +102,11 @@ const getButtonAttributes = (state: EventState): ButtonAttributes => {
 }
 
 export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
+  const matches = useMediaQuery('(max-width: 48em)', true, {
+    getInitialValueInEffect: false,
+  })
+  const size = matches ? 'xs' : 'sm'
+
   const isReviewStep = state.activeStep === ActiveStep.STEP_PREVIEW
 
   const { nextTitle, prevTitle, NextIcon, isNextVisible, isPreviousVisible } =
@@ -112,15 +118,10 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
         <Grid.Col span={6}>
           {isPreviousVisible && (
             <Button
+              size={size}
               data-testid="prev-button"
               mt="xs"
               leftSection={<IconArrowLeft size={18} />}
-              // TODO: fix below
-              // styles={() => ({
-              //   leftIcon: {
-              //     marginRight: 15,
-              //   },
-              // })}
               onClick={onPreviousStep}
             >
               {prevTitle}
@@ -134,14 +135,9 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
                 data-testid="next-button"
                 mt="xs"
                 rightSection={<NextIcon size={18} />}
-                // TODO: fix below
-                // styles={() => ({
-                //   leftIcon: {
-                //     marginRight: 15,
-                //   },
-                // })}
                 color={isReviewStep ? 'dtPink.3' : 'blue'}
                 onClick={onNextStep}
+                size={size}
               >
                 {nextTitle}
               </Button>
