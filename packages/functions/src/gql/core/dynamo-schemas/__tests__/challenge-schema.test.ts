@@ -10,7 +10,7 @@ interface CreateData {
 const createSchema: ChallengeCreateSchema = {
   PK: 'CHALLENGE#01GW4MMH6S4RXM9GSW37CC0HXP',
   SK: 'CHALLENGE#01GW4MMH6S4RXM9GSW37CC0HXP',
-  GSI1PK: 'CHALLENGE#FUTURE',
+  GSI1PK: 'CHALLENGE#CHALLENGE',
   GSI1SK: 'DATE#2024-02-29#01GW4MMH',
   id: '01GW4MMH6S4RXM9GSW37CC0HXP',
   createdBy: {
@@ -23,6 +23,7 @@ const createSchema: ChallengeCreateSchema = {
   dateEnd: '2024-02-29',
   subtitle: 'Subtitle',
   title: ' Title',
+  participants: {},
 }
 
 describe('ChallengeCreateSchema', () => {

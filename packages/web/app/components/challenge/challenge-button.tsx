@@ -25,11 +25,7 @@ export const ChallengeButton = ({
       return isParticipating ? (
         <Button color="yellow">Merkitse tehdyksi</Button>
       ) : (
-        <ToggleJoinButton
-          isParticipating={isParticipating}
-          id={challenge.id}
-          user={user}
-        />
+        <ToggleJoinButton isParticipating={isParticipating} id={challenge.id} />
       )
     }
     case 'ENDED': {
@@ -41,11 +37,7 @@ export const ChallengeButton = ({
     }
     case 'NOT_STARTED': {
       return (
-        <ToggleJoinButton
-          isParticipating={isParticipating}
-          id={challenge.id}
-          user={user}
-        />
+        <ToggleJoinButton isParticipating={isParticipating} id={challenge.id} />
       )
     }
   }

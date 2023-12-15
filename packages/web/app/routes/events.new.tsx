@@ -116,7 +116,7 @@ export default function NewEvent() {
       dispatch({ kind: 'participateEvent', me })
     },
     state: 'idle',
-    loadingEventId: 'not-defined',
+    loadingId: 'not-defined',
   }
 
   return (

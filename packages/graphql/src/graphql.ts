@@ -49,7 +49,7 @@ export type Challenge = {
   dateStart: Scalars['AWSDate']['output']
   description?: Maybe<Scalars['String']['output']>
   id: Scalars['ID']['output']
-  participants: Array<Participant>
+  participants: Array<ChallengeParticipant>
   subtitle: Scalars['String']['output']
   title: Scalars['String']['output']
 }
@@ -60,7 +60,7 @@ export type ChallengeFilter = {
 
 export type ChallengeParticipant = User & {
   __typename: 'ChallengeParticipant'
-  accomplishedDates: Array<Scalars['AWSDate']['output']>
+  accomplishedDates?: Maybe<Array<Scalars['AWSDate']['output']>>
   id: Scalars['ID']['output']
   joinedAt: Scalars['String']['output']
   nickname: Scalars['String']['output']
@@ -105,18 +105,6 @@ export type DateInput = {
   day: Scalars['Int']['input']
   month: Scalars['Int']['input']
   year: Scalars['Int']['input']
-}
-
-export type DetailedChallenge = {
-  __typename: 'DetailedChallenge'
-  createdBy: Creator
-  dateEnd: Scalars['AWSDate']['output']
-  dateStart: Scalars['AWSDate']['output']
-  description?: Maybe<Scalars['String']['output']>
-  id: Scalars['ID']['output']
-  participants: Array<ChallengeParticipant>
-  subtitle: Scalars['String']['output']
-  title: Scalars['String']['output']
 }
 
 export type DetailedUser = {
@@ -314,7 +302,7 @@ export type PreferencesInput = {
 
 export type Query = {
   __typename: 'Query'
-  challenge?: Maybe<DetailedChallenge>
+  challenge?: Maybe<Challenge>
   challenges: Array<Challenge>
   event?: Maybe<Event>
   events: Array<Event>
@@ -543,7 +531,7 @@ export type GetChallengeQueryVariables = Exact<{
 export type GetChallengeQuery = {
   __typename: 'Query'
   challenge?: {
-    __typename: 'DetailedChallenge'
+    __typename: 'Challenge'
     id: string
     dateEnd: string
     dateStart: string
@@ -606,7 +594,7 @@ export type GetChallengesQuery = {
       picture: string
     }
     participants: Array<{
-      __typename: 'Participant'
+      __typename: 'ChallengeParticipant'
       id: string
       joinedAt: string
       nickname: string
