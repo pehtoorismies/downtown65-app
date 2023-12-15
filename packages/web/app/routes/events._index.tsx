@@ -13,12 +13,10 @@ import {
 import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
-import { IconArrowNarrowRight, IconSquarePlus } from '@tabler/icons-react'
+import { IconSquarePlus } from '@tabler/icons-react'
 import type { ReactNode } from 'react'
 import React from 'react'
-import { EventHeader } from '~/components/event-card/event-header'
-import { EventInfo } from '~/components/event-card/event-info'
-import { Voucher } from '~/components/voucher/voucher'
+import { ListEventCard } from '~/components/event-card/list-event-card'
 import {
   ParticipatingContext,
   useParticipationActions,
@@ -144,26 +142,8 @@ export default function GetEvents() {
           spacing={{ base: 'sm', md: 'xl' }}
           verticalSpacing={{ base: 'sm', md: 'xl' }}
         >
-          {eventItems.map((m) => {
-            return (
-              <Voucher key={m.id}>
-                <EventHeader {...m} />
-                <Voucher.Content>
-                  <EventInfo {...m} />
-                  <Button
-                    component={Link}
-                    to={`/events/${m.id}`}
-                    fullWidth
-                    my="xs"
-                    size="compact-sm"
-                    rightSection={<IconArrowNarrowRight size={18} />}
-                    variant="subtle"
-                  >
-                    Näytä lisää
-                  </Button>
-                </Voucher.Content>
-              </Voucher>
-            )
+          {eventItems.map((x) => {
+            return <ListEventCard key={x.id} {...x} eventId={x.id} />
           })}
         </SimpleGrid>
       </ParticipatingContext.Provider>
