@@ -2,13 +2,12 @@ import {
   Button,
   Center,
   Container,
-  Grid,
   Group,
   Loader,
   Modal,
   Stepper,
-  Title,
 } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { useFetcher, useNavigate, useNavigation } from '@remix-run/react'
 import {
   IconAlignLeft,
@@ -26,10 +25,10 @@ import { eventStateToSubmittable } from '../event-state-to-submittable'
 import { Buttons } from './buttons'
 import type { EventState } from './event-state'
 import { isValidStateToSave } from './event-state'
-import type { EventAction, StepNumber } from './reducer'
+import type { EventAction } from './reducer'
 import { ActiveStep, isStepNumber } from './reducer'
 import { StepDate } from './step-date'
-import { StepDescriptionClient } from './step-description.client'
+import { StepDescription } from './step-description'
 import { StepPreview } from './step-preview'
 import { StepTime } from './step-time'
 import { StepTitle } from './step-title'
@@ -37,41 +36,6 @@ import { StepType } from './step-type'
 import { ParticipatingContext } from '~/contexts/participating-context'
 import type { Context } from '~/contexts/participating-context'
 import type { User } from '~/domain/user'
-
-const iconSize = 20
-
-const TITLES: Record<
-  StepNumber,
-  {
-    title: string
-    isSkippable: boolean
-  }
-> = {
-  [ActiveStep.STEP_EVENT_TYPE]: {
-    title: 'Laji',
-    isSkippable: false,
-  },
-  [ActiveStep.STEP_TITLE]: {
-    title: 'Perustiedot',
-    isSkippable: false,
-  },
-  [ActiveStep.STEP_DATE]: {
-    title: 'Päivämäärä',
-    isSkippable: false,
-  },
-  [ActiveStep.STEP_TIME]: {
-    title: 'Kellonaika',
-    isSkippable: true,
-  },
-  [ActiveStep.STEP_DESCRIPTION]: {
-    title: 'Vapaa kuvaus',
-    isSkippable: true,
-  },
-  [ActiveStep.STEP_PREVIEW]: {
-    title: 'Esikatselu',
-    isSkippable: false,
-  },
-}
 
 const getModalTitle = (kind: EventState['kind']): string => {
   switch (kind) {
@@ -103,6 +67,11 @@ export const EditOrCreate: FC<Props> = ({
   const navigation = useNavigation()
   const navigate = useNavigate()
   const fetcher = useFetcher()
+  const matches = useMediaQuery('(max-width: 48em)', true, {
+    getInitialValueInEffect: false,
+  })
+
+  const iconSize = matches ? 18 : 34
 
   if (navigation.state === 'loading') {
     return (
@@ -111,44 +80,6 @@ export const EditOrCreate: FC<Props> = ({
       </Center>
     )
   }
-
-  const skipContent = (
-    <Grid gutter="xs" my="sm" align="center">
-      <Grid.Col span={3}>
-        <Group justify="flex-start">
-          <Button
-            variant="outline"
-            color="orange"
-            size="compact-sm"
-            onClick={() => setOpened(true)}
-            data-testid="cancel-event-creation-button"
-          >
-            Keskeytä
-          </Button>
-        </Group>
-      </Grid.Col>
-      <Grid.Col span={6}>
-        <Title ta="center" order={1} size="h3">
-          {TITLES[state.activeStep].title}
-        </Title>
-      </Grid.Col>
-      <Grid.Col span={3}>
-        <Group justify="flex-end">
-          <Button
-            data-testid="skip-step-button"
-            variant="outline"
-            size="compact-sm"
-            disabled={!TITLES[state.activeStep].isSkippable}
-            onClick={() => {
-              dispatch({ kind: 'nextStep' })
-            }}
-          >
-            Ohita
-          </Button>
-        </Group>
-      </Grid.Col>
-    </Grid>
-  )
 
   return (
     <>
@@ -187,7 +118,7 @@ export const EditOrCreate: FC<Props> = ({
       <Container pt={12}>
         <Stepper
           color={state.kind === 'edit' ? 'dtPink.4' : 'blue'}
-          size="xs"
+          iconSize={iconSize}
           active={state.activeStep}
           onStepClick={(stepIndex: number) => {
             if (!isStepNumber(stepIndex)) {
@@ -196,24 +127,15 @@ export const EditOrCreate: FC<Props> = ({
             dispatch({ kind: 'step', step: stepIndex })
           }}
         >
-          <Stepper.Step
-            icon={<IconRun size={iconSize} />}
-            data-testid="step-type"
-          >
-            <>
-              {skipContent}
-              <StepType state={state} dispatch={dispatch} />
-            </>
+          <Stepper.Step icon={<IconRun />} data-testid="step-type">
+            <StepType state={state} dispatch={dispatch} />
           </Stepper.Step>
           <Stepper.Step
             allowStepSelect={state.eventType !== undefined}
-            icon={<IconEdit size={iconSize} />}
+            icon={<IconEdit />}
             data-testid="step-basic-info"
           >
-            <>
-              {skipContent}
-              <StepTitle state={state} dispatch={dispatch} />
-            </>
+            <StepTitle state={state} dispatch={dispatch} />
           </Stepper.Step>
           <Stepper.Step
             allowStepSelect={
@@ -222,45 +144,33 @@ export const EditOrCreate: FC<Props> = ({
               !!state.location &&
               !!state.subtitle
             }
-            icon={<IconCalendar size={iconSize} />}
+            icon={<IconCalendar />}
             data-testid="step-date"
           >
-            <>
-              {skipContent}
-              <StepDate state={state} dispatch={dispatch} />
-            </>
+            <StepDate state={state} dispatch={dispatch} />
           </Stepper.Step>
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
-            icon={<IconClockHour5 size={iconSize} />}
+            icon={<IconClockHour5 />}
             data-testid="step-time"
           >
-            <>
-              {skipContent}
-              <StepTime state={state} dispatch={dispatch} />
-            </>
+            <StepTime state={state} dispatch={dispatch} />
           </Stepper.Step>
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
-            icon={<IconAlignLeft size={iconSize} />}
+            icon={<IconAlignLeft />}
             data-testid="step-description"
           >
-            <>
-              {skipContent}
-              <StepDescriptionClient state={state} dispatch={dispatch} />
-            </>
+            <StepDescription state={state} dispatch={dispatch} />
           </Stepper.Step>
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
-            icon={<IconRocket size={iconSize} />}
+            icon={<IconRocket />}
             data-testid="step-preview"
           >
-            <>
-              {skipContent}
-              <ParticipatingContext.Provider value={participatingActions}>
-                <StepPreview state={state} me={me} />
-              </ParticipatingContext.Provider>
-            </>
+            <ParticipatingContext.Provider value={participatingActions}>
+              <StepPreview state={state} me={me} />
+            </ParticipatingContext.Provider>
           </Stepper.Step>
         </Stepper>
         <Buttons

@@ -2,6 +2,7 @@ import { EventType } from '@downtown65-app/graphql/graphql'
 import { Button, SimpleGrid } from '@mantine/core'
 import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
+import { Heading } from '~/routes-common/events/components/heading'
 import { mapToData } from '~/util/event-type'
 
 export const StepType = ({ state, dispatch }: ReducerProps) => {
@@ -52,5 +53,10 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
       )
     })
 
-  return <SimpleGrid cols={2}>{buttons}</SimpleGrid>
+  return (
+    <>
+      <Heading>Laji</Heading>
+      <SimpleGrid cols={2}>{buttons}</SimpleGrid>
+    </>
+  )
 }

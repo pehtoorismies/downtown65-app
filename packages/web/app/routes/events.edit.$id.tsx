@@ -11,17 +11,21 @@ import {
   Center,
   Container,
   Divider,
+  Group,
+  Modal,
   Text,
+  Title,
 } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   MetaFunction,
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
-import { IconRocket } from '@tabler/icons-react'
-import { useReducer } from 'react'
+import { Link, useLoaderData, useNavigate } from '@remix-run/react'
+import { IconCircleOff, IconCircleX, IconRocket } from '@tabler/icons-react'
+import React, { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import type { Context } from '~/contexts/participating-context'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
@@ -51,13 +55,6 @@ export const meta: MetaFunction = () => {
     },
   ]
 }
-
-// interface LoaderData extends PrivateRoute {
-//   initState: Omit<EventState, 'date' | 'time'>
-//   initDateStart: string
-//   initTimeStart?: string
-//   eventId: string
-// }
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
@@ -156,6 +153,9 @@ export default function EditEvent() {
     initDateStart,
     eventId,
   } = useLoaderData<typeof loader>()
+  const navigate = useNavigate()
+  const [opened, handlers] = useDisclosure(false)
+
   const ddt = DynamoDatetime.fromISO(initDateStart, initTimeStart ?? undefined)
 
   const [eventState, dispatch] = useReducer(reducer, {
@@ -182,7 +182,7 @@ export default function EditEvent() {
 
   const items = [
     { title: 'Tapahtumat', href: '/events' },
-    { title: eventState.title, href: `/events/${eventId}` },
+    { title: initState.title, href: `/events/${eventId}` },
     { title: 'edit' },
   ].map((item, index) => {
     return item.href ? (
@@ -196,8 +196,43 @@ export default function EditEvent() {
 
   return (
     <>
+      <Modal
+        zIndex={2000}
+        opened={opened}
+        onClose={() => handlers.close()}
+        title="Keskeytä tapahtuman luonti"
+        closeButtonProps={{ 'aria-label': 'Close' }}
+      >
+        <Group
+          justify="space-between"
+          mt={50}
+          data-testid="confirmation-modal-content"
+        >
+          <Button
+            onClick={() => handlers.close()}
+            leftSection={<IconCircleX size={18} />}
+            data-testid="modal-close"
+          >
+            Sulje
+          </Button>
+          <Button
+            onClick={() => navigate(`/events/${eventId}`)}
+            name="action"
+            value="delete"
+            type="submit"
+            color="red"
+            rightSection={<IconCircleOff size={18} />}
+            data-testid="modal-cancel-event-creation"
+          >
+            Keskeytä
+          </Button>
+        </Group>
+      </Modal>
       <Container>
         <Breadcrumbs py="xs">{items}</Breadcrumbs>
+        <Title order={1} size="h3" my="sm">
+          Muokkaat tapahtumaa "{initState.title}"
+        </Title>
       </Container>
       <EditOrCreate
         cancelRedirectPath={`/events/${eventId}`}
@@ -213,24 +248,22 @@ export default function EditEvent() {
             disabled={!isValidStateToSave(eventState)}
             mt="xs"
             rightSection={<IconRocket size={18} />}
-            // TODO: fix below
-            // styles={() => ({
-            //   leftIcon: {
-            //     marginRight: 15,
-            //   },
-            // })}
           >
             Näytä esikatselu
           </Button>
         </Center>
       )}
-      <Divider mt="md" m="sm" />
-      <Text ta="center" fz="md" fw={400} c="dtPink.4" mt="xs">
-        Muokkaat tapahtumaa:
-      </Text>
-      <Text ta="center" fz="md" fw={700} c="dtPink.4">
-        {`${initState.title}`}
-      </Text>
+      <Divider my="sm" />
+      <Center>
+        <Button
+          my="md"
+          color="red"
+          rightSection={<IconCircleOff size={18} />}
+          onClick={handlers.open}
+        >
+          Keskeytä muokkaus
+        </Button>
+      </Center>
     </>
   )
 }
