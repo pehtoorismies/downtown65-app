@@ -6,7 +6,6 @@ import type { User } from '~/domain/user'
 
 interface Props {
   id?: string
-
   subtitle: string
   location: string
   dateStart: string
