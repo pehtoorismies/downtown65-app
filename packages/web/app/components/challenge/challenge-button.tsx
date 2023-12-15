@@ -1,7 +1,7 @@
 import type { Challenge } from '@downtown65-app/graphql/graphql'
 import { Button } from '@mantine/core'
 import React from 'react'
-import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
+import { ToggleJoinButton } from '~/components/toggle-join-button'
 import type { User } from '~/domain/user'
 import type { ChallengeStatus } from '~/util/challenge-tools'
 
