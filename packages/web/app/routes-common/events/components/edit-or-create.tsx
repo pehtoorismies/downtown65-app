@@ -112,6 +112,44 @@ export const EditOrCreate: FC<Props> = ({
     )
   }
 
+  const skipContent = (
+    <Grid gutter="xs" my="sm" align="center">
+      <Grid.Col span={3}>
+        <Group justify="flex-end">
+          <Button
+            variant="outline"
+            color="orange"
+            size="compact-sm"
+            onClick={() => setOpened(true)}
+            data-testid="cancel-event-creation-button"
+          >
+            Keskeytä
+          </Button>
+        </Group>
+      </Grid.Col>
+      <Grid.Col span={6}>
+        <Title ta="center" order={1} size="h3">
+          {TITLES[state.activeStep].title}
+        </Title>
+      </Grid.Col>
+      <Grid.Col span={3}>
+        <Group justify="flex-end">
+          <Button
+            data-testid="skip-step-button"
+            variant="outline"
+            size="compact-sm"
+            disabled={!TITLES[state.activeStep].isSkippable}
+            onClick={() => {
+              dispatch({ kind: 'nextStep' })
+            }}
+          >
+            Ohita
+          </Button>
+        </Group>
+      </Grid.Col>
+    </Grid>
+  )
+
   return (
     <>
       <Modal
@@ -161,12 +199,22 @@ export const EditOrCreate: FC<Props> = ({
           <Stepper.Step
             icon={<IconRun size={iconSize} />}
             data-testid="step-type"
-          />
+          >
+            <>
+              {skipContent}
+              <StepType state={state} dispatch={dispatch} />
+            </>
+          </Stepper.Step>
           <Stepper.Step
             allowStepSelect={state.eventType !== undefined}
             icon={<IconEdit size={iconSize} />}
             data-testid="step-basic-info"
-          />
+          >
+            <>
+              {skipContent}
+              <StepTitle state={state} dispatch={dispatch} />
+            </>
+          </Stepper.Step>
           <Stepper.Step
             allowStepSelect={
               state.eventType !== undefined &&
@@ -176,78 +224,45 @@ export const EditOrCreate: FC<Props> = ({
             }
             icon={<IconCalendar size={iconSize} />}
             data-testid="step-date"
-          />
+          >
+            <>
+              {skipContent}
+              <StepDate state={state} dispatch={dispatch} />
+            </>
+          </Stepper.Step>
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconClockHour5 size={iconSize} />}
             data-testid="step-time"
-          />
+          >
+            <>
+              {skipContent}
+              <StepTime state={state} dispatch={dispatch} />
+            </>
+          </Stepper.Step>
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconAlignLeft size={iconSize} />}
             data-testid="step-description"
-          />
+          >
+            <>
+              {skipContent}
+              <StepDescriptionClient state={state} dispatch={dispatch} />
+            </>
+          </Stepper.Step>
           <Stepper.Step
             allowStepSelect={isValidStateToSave(state)}
             icon={<IconRocket size={iconSize} />}
             data-testid="step-preview"
-          />
+          >
+            <>
+              {skipContent}
+              <ParticipatingContext.Provider value={participatingActions}>
+                <StepPreview state={state} me={me} />
+              </ParticipatingContext.Provider>
+            </>
+          </Stepper.Step>
         </Stepper>
-        <Grid gutter="xs" my="sm" align="center">
-          <Grid.Col span={3}>
-            <Group justify="flex-end">
-              <Button
-                variant="outline"
-                color="orange"
-                size="compact-sm"
-                onClick={() => setOpened(true)}
-                data-testid="cancel-event-creation-button"
-              >
-                Keskeytä
-              </Button>
-            </Group>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Title ta="center" order={1} size="h3">
-              {TITLES[state.activeStep].title}
-            </Title>
-          </Grid.Col>
-          <Grid.Col span={3}>
-            <Group justify="flex-end">
-              <Button
-                data-testid="skip-step-button"
-                variant="outline"
-                size="compact-sm"
-                disabled={!TITLES[state.activeStep].isSkippable}
-                onClick={() => {
-                  dispatch({ kind: 'nextStep' })
-                }}
-              >
-                Ohita
-              </Button>
-            </Group>
-          </Grid.Col>
-        </Grid>
-        {state.activeStep === ActiveStep.STEP_EVENT_TYPE && (
-          <StepType state={state} dispatch={dispatch} />
-        )}
-        {state.activeStep === ActiveStep.STEP_TITLE && (
-          <StepTitle state={state} dispatch={dispatch} />
-        )}
-        {state.activeStep === ActiveStep.STEP_DATE && (
-          <StepDate state={state} dispatch={dispatch} />
-        )}
-        {state.activeStep === ActiveStep.STEP_TIME && (
-          <StepTime state={state} dispatch={dispatch} />
-        )}
-        {state.activeStep === ActiveStep.STEP_DESCRIPTION && (
-          <StepDescriptionClient state={state} dispatch={dispatch} />
-        )}
-        {state.activeStep === ActiveStep.STEP_PREVIEW && (
-          <ParticipatingContext.Provider value={participatingActions}>
-            <StepPreview state={state} me={me} />
-          </ParticipatingContext.Provider>
-        )}
         <Buttons
           state={state}
           onNextStep={() => {
