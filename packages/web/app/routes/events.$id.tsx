@@ -9,10 +9,12 @@ import {
 } from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
+  Box,
   Breadcrumbs,
   Button,
   Center,
   Container,
+  Divider,
   Group,
   Image,
   Loader,
@@ -38,6 +40,7 @@ import {
   useRouteError,
 } from '@remix-run/react'
 import {
+  IconAlertTriangleFilled,
   IconArrowNarrowLeft,
   IconCircleOff,
   IconCircleX,
@@ -386,10 +389,19 @@ export default function GetEvent() {
         <ParticipatingContext.Provider value={participationActions}>
           <EventCard eventId={eventItem.id} {...eventItem} />
         </ParticipatingContext.Provider>
-        <Text ta="center" mt="xl" fw={600} c="dimmed">
-          Modification zone
-        </Text>
-        <Group justify="center" my="xl" gap="xl">
+        <Divider
+          mt="xl"
+          size="sm"
+          variant="dashed"
+          labelPosition="center"
+          label={
+            <>
+              <IconAlertTriangleFilled size={12} />
+              <Box ml={5}>Modification zone</Box>
+            </>
+          }
+        />
+        <Group justify="center" my="sm" gap="xl">
           <Button
             component={Link}
             to={`/events/edit/${eventItem.id}`}
