@@ -297,8 +297,6 @@ export default function GetEvent() {
     setOpened(false)
   }
 
-  const hasDescription = !!eventItem.description.trim()
-
   if (navigation.state === 'loading') {
     return (
       <Center py={100}>
