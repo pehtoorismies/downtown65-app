@@ -1,10 +1,18 @@
 import { Center, Switch, TextInput } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import type { ReducerProps } from './reducer'
 import { Heading } from '~/routes-common/events/components/heading'
 
 const spacing = 'md'
 
 export const StepTitle = ({ state, dispatch }: ReducerProps) => {
+  const matches = useMediaQuery('(max-width: 48em)', true, {
+    getInitialValueInEffect: false,
+  })
+
+  const size = matches ? 'md' : 'xl'
+  const switchSize = matches ? 'md' : 'xl'
+
   return (
     <>
       <Heading>Perustiedot</Heading>
@@ -13,7 +21,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         my={spacing}
         placeholder="Jukola Konala"
         label="Tapahtuman nimi"
-        size="lg"
+        size={size}
         withAsterisk
         onChange={(event) =>
           dispatch({ kind: 'title', title: event.target.value })
@@ -25,7 +33,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         my={spacing}
         placeholder="6-7 joukkuetta"
         label="Tarkenne"
-        size="lg"
+        size={size}
         withAsterisk
         onChange={(event) =>
           dispatch({ kind: 'subtitle', subtitle: event.target.value })
@@ -37,7 +45,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         my={spacing}
         placeholder="Sijainti"
         label="Missä tapahtuma järjestetään?"
-        size="lg"
+        size={size}
         withAsterisk
         onChange={(event) =>
           dispatch({ kind: 'location', location: event.target.value })
@@ -49,7 +57,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
           data-testid="race-switch"
           onLabel="ON"
           offLabel="EI"
-          size="xl"
+          size={switchSize}
           labelPosition="left"
           label="Onko kilpailu?"
           onChange={(event) => {
