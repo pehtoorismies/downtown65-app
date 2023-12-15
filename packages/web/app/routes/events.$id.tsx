@@ -308,10 +308,8 @@ export default function GetEvent() {
   if (!user) {
     return (
       <>
-        <Container fluid pt={12}>
+        <Container p={{ base: 1, sm: 'xs' }}>
           <Breadcrumbs mb="xs">{items}</Breadcrumbs>
-        </Container>
-        <Container>
           <ParticipatingContext.Provider
             value={{
               onLeave: () => {},
@@ -383,10 +381,8 @@ export default function GetEvent() {
           </Group>
         </Form>
       </Modal>
-      <Container fluid pt={12}>
+      <Container p={{ base: 1, sm: 'xs' }}>
         <Breadcrumbs mb="xs">{items}</Breadcrumbs>
-      </Container>
-      <Container>
         <ParticipatingContext.Provider value={participationActions}>
           <EventCard eventId={eventItem.id} {...eventItem} />
         </ParticipatingContext.Provider>

@@ -15,7 +15,7 @@ export const ParticipatingContext = createContext<Context | undefined>(
 export const useParticipatingContext = (): Context => {
   const context = useContext(ParticipatingContext)
   if (!context) {
-    throw new Error('Context undefined')
+    throw new Error('ParticipatingContext undefined')
   }
   return context
 }

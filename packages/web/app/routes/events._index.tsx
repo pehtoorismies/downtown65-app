@@ -90,24 +90,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   })
 }
 
-const EventsBreadcrumb = () => {
+const Root = ({ children }: { children: ReactNode }) => {
   return (
-    <Container fluid>
-      <Breadcrumbs mb="xs">
-        <Text data-testid="breadcrumbs-current">Tapahtumat</Text>
-      </Breadcrumbs>
-    </Container>
+    <>
+      <Container data-testid="events" p={{ base: 1, sm: 'xs' }} size="1000">
+        <Breadcrumbs mb="xs">
+          <Text data-testid="breadcrumbs-current">Tapahtumat</Text>
+        </Breadcrumbs>
+        {children}
+      </Container>
+    </>
   )
 }
-
-const Root = ({ children }: { children: ReactNode }) => (
-  <>
-    <EventsBreadcrumb />
-    <Container data-testid="events" p="xs" size="1000">
-      {children}
-    </Container>
-  </>
-)
 
 export default function GetEvents() {
   const { eventItems } = useLoaderData<typeof loader>()

@@ -1,13 +1,4 @@
-import { Container, createTheme, rem } from '@mantine/core'
-
-const CONTAINER_SIZES: Record<string, string> = {
-  xxs: rem(300),
-  xs: rem(540),
-  sm: rem(720),
-  md: rem(960),
-  lg: rem(1140),
-  xl: rem(1320),
-}
+import { createTheme } from '@mantine/core'
 
 export const theme = createTheme({
   breakpoints: {
@@ -37,19 +28,6 @@ export const theme = createTheme({
     xl: '5px 5px 3px rgba(0, 0, 0, .25)',
   },
 
-  components: {
-    Container: Container.extend({
-      vars: (_, { size, fluid }) => ({
-        root: {
-          '--container-size': fluid
-            ? '100%'
-            : size !== undefined && size in CONTAINER_SIZES
-            ? CONTAINER_SIZES[size]
-            : rem(size),
-        },
-      }),
-    }),
-  },
   headings: {
     fontFamily: 'Roboto, sans-serif',
     sizes: {
