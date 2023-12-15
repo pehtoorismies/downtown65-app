@@ -7,8 +7,8 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core'
 import React from 'react'
-import { ToggleJoinButton } from '~/components/event-card/toggle-join-button'
 import { Participants } from '~/components/participants'
+import { ToggleJoinButton } from '~/components/toggle-join-button'
 import { Voucher } from '~/components/voucher/voucher'
 import { useUserContext } from '~/contexts/user-context'
 import { mapToData } from '~/util/event-type'
