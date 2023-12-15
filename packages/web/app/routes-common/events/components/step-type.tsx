@@ -24,7 +24,7 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
       }
       return 0
     })
-    .map(({ text, type }) => {
+    .map(({ text, type, icon }) => {
       return (
         <Button
           data-testid={
@@ -37,6 +37,9 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
           onClick={() => {
             dispatch({ kind: 'type', type })
           }}
+          leftSection={icon}
+          rightSection={<span />}
+          justify="space-between"
           variant="gradient"
           gradient={
             state.eventType === type
