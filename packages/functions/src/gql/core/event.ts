@@ -74,6 +74,10 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
   }
 }
 
+const getDefaultIfEmpty = (value: string) => {
+  return value.trim().length === 0 ? 'ei määritelty' : value
+}
+
 export const create = async (
   creatableEvent: CreateEventInput
 ): Promise<string> => {
@@ -124,12 +128,12 @@ export const create = async (
       dateStart: ddt.getDate(),
       description,
       id: eventId,
-      location,
+      location: getDefaultIfEmpty(location),
       participants: participantHashMap,
       race: race ?? false,
-      subtitle,
+      subtitle: getDefaultIfEmpty(subtitle),
       timeStart: ddt.getTime(),
-      title,
+      title: getDefaultIfEmpty(title),
       type,
     }),
     { returnValues: 'none' }
