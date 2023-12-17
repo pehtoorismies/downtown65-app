@@ -1,4 +1,5 @@
 import { Button } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { Link } from '@remix-run/react'
 import { IconHandOff, IconHandStop, IconLogin } from '@tabler/icons-react'
 import { Gradient } from '~/components/colors'
@@ -11,16 +12,24 @@ interface Properties {
 }
 
 export const ToggleJoinButton = ({ isParticipating, id }: Properties) => {
+  const matches = useMediaQuery('(max-width: 48em)', true, {
+    getInitialValueInEffect: false,
+  })
+
   const actions = useParticipatingContext()
   const { user } = useUserContext()
+
+  const size = matches ? 'xs' : 'sm'
+  const iconSize = matches ? 14 : 18
 
   if (user == null) {
     return (
       <Button
         component={Link}
         to="/login"
-        leftSection={<IconLogin size={18} />}
+        leftSection={<IconLogin size={iconSize} />}
         data-testid="event-goto-login"
+        size={size}
       >
         Kirjaudu
       </Button>
@@ -36,10 +45,11 @@ export const ToggleJoinButton = ({ isParticipating, id }: Properties) => {
           actions.onLeave(id ?? 'no-event-id')
         }}
         loading={loading}
-        leftSection={<IconHandOff size={18} />}
+        leftSection={<IconHandOff size={iconSize} />}
         variant="gradient"
         gradient={Gradient.dtPink}
         data-testid="leave"
+        size={size}
       >
         Poistu
       </Button>
@@ -49,11 +59,12 @@ export const ToggleJoinButton = ({ isParticipating, id }: Properties) => {
   return (
     <Button
       style={{ width: 140 }}
+      size={size}
       onClick={() => {
         actions.onParticipate(id ?? 'no-event-id')
       }}
       loading={loading}
-      leftSection={<IconHandStop size={18} />}
+      leftSection={<IconHandStop size={iconSize} />}
       data-testid="participate"
     >
       Osallistu
