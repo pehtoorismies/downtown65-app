@@ -61,7 +61,13 @@ export const handler: DynamoDBStreamHandler = async (
     return
   }
 
-  const params = EmailableEvent.parse(createdRecord)
+  const result = EmailableEvent.safeParse(createdRecord)
+  if (!result.success) {
+    logger.error(result.error, 'Parsing failed')
+    return
+  }
+
+  const params = result.data
 
   const body = createEventAddedEmail({
     ...params,
