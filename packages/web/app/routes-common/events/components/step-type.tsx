@@ -1,11 +1,21 @@
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { Button, SimpleGrid } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
+import { IconArrowRight } from '@tabler/icons-react'
 import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
-import { Heading } from '~/routes-common/events/components/heading'
+import {
+  ProgressButton,
+  StepLayout,
+} from '~/routes-common/events/components/buttons'
 import { mapToData } from '~/util/event-type'
 
 export const StepType = ({ state, dispatch }: ReducerProps) => {
+  const matches = useMediaQuery('(max-width: 48em)', true, {
+    getInitialValueInEffect: false,
+  })
+  const size = matches ? 'xs' : 'sm'
+
   const buttons = Object.values(EventType)
     .map((v) => {
       return {
@@ -41,6 +51,7 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
           rightSection={<span />}
           justify="space-between"
           variant="gradient"
+          size={size}
           gradient={
             state.eventType === type
               ? Gradient.dtPink
@@ -56,12 +67,20 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
       )
     })
 
+  const nextButton = state.eventType ? (
+    <ProgressButton
+      rightSection={<IconArrowRight size={18} />}
+      onClick={() => dispatch({ kind: 'nextStep' })}
+    >
+      Perustiedot
+    </ProgressButton>
+  ) : null
+
   return (
-    <>
-      <Heading>Laji</Heading>
+    <StepLayout prevButton={null} nextButton={nextButton} title="Laji">
       <SimpleGrid cols={2} spacing={{ base: 'xs', sm: 'md' }}>
         {buttons}
       </SimpleGrid>
-    </>
+    </StepLayout>
   )
 }

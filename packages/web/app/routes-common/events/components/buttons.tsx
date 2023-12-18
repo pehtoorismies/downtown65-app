@@ -1,4 +1,5 @@
-import { Button, Grid, Group } from '@mantine/core'
+import type { ButtonProps } from '@mantine/core'
+import { Button, Grid, Group, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import type { Icon } from '@tabler/icons-react'
 import {
@@ -7,6 +8,7 @@ import {
   IconArrowUp,
   IconDeviceFloppy,
 } from '@tabler/icons-react'
+import type { PropsWithChildren, ReactNode } from 'react'
 import type { EventState } from './event-state'
 import { ActiveStep } from './reducer'
 
@@ -145,6 +147,67 @@ export const Buttons = ({ state, onPreviousStep, onNextStep }: Props) => {
           )}
         </Grid.Col>
       </Grid>
+    </>
+  )
+}
+
+interface ButtonLayout {
+  prevButton: ReactNode
+  nextButton: ReactNode
+  title: string
+}
+
+export const StepLayout = ({
+  prevButton,
+  nextButton,
+  title,
+  children,
+}: PropsWithChildren<ButtonLayout>) => {
+  return (
+    <>
+      <Title ta="center" order={2} size="h3" mb="xs">
+        {title}
+      </Title>
+      {children}
+      <Grid justify="center" mt="xl">
+        <Grid.Col span={6}>{prevButton}</Grid.Col>
+        <Grid.Col span={6}>
+          <Group justify="right">{nextButton}</Group>
+        </Grid.Col>
+      </Grid>
+    </>
+  )
+}
+
+interface ProgressButtonProps {
+  onClick: () => void
+}
+
+export const ProgressButton = (
+  props: PropsWithChildren<ProgressButtonProps & ButtonProps>
+) => {
+  const { children, ...rest } = props
+
+  return (
+    <>
+      <Button
+        {...rest}
+        data-testid="prev-button"
+        mt="xs"
+        hiddenFrom="sm"
+        size="xs"
+      >
+        {children}
+      </Button>
+      <Button
+        {...rest}
+        data-testid="prev-button"
+        mt="xs"
+        visibleFrom="sm"
+        size="sm"
+      >
+        {children}
+      </Button>
     </>
   )
 }

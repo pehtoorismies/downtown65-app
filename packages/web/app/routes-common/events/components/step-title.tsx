@@ -10,8 +10,8 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
     getInitialValueInEffect: false,
   })
 
-  const size = matches ? 'md' : 'xl'
-  const switchSize = matches ? 'md' : 'xl'
+  const size = matches ? 'md' : 'lg'
+  const switchSize = matches ? 'md' : 'lg'
 
   return (
     <>
