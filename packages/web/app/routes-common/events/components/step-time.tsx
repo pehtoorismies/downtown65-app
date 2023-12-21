@@ -8,7 +8,7 @@ import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
 import {
   NextButton,
-  PrevButton,
+  PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
@@ -109,9 +109,9 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
     ))
 
   const previousButton = (
-    <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
+    <PreviousButton onClick={() => dispatch({ kind: 'previousStep' })}>
       Päivämäärä
-    </PrevButton>
+    </PreviousButton>
   )
   const nextButton = (
     <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>
