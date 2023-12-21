@@ -1,53 +1,75 @@
 import 'dayjs/locale/fi'
-import { Button, Center, Container, Grid, Stack, Text } from '@mantine/core'
+import { Button, Center, Grid, Stack, Text } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
+import type { PropsWithChildren } from 'react'
 import React from 'react'
 import type { EventState } from './event-state'
 import type { ReducerProps } from './reducer'
-import { Heading } from '~/routes-common/events/components/heading'
+import { Gradient } from '~/components/colors'
+import {
+  NextButton,
+  PrevButton,
+  StepLayout,
+} from '~/routes-common/events/components/buttons'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 const HOURS = [
-  [6, 9, 12, 15, 18, 21, 0, 3],
-  [7, 10, 13, 16, 19, 22, 1, 4],
-  [8, 11, 14, 17, 20, 23, 2, 5],
+  [6, 7, 8, 9, 10, 11, 12, 13],
+  [14, 15, 16, 17, 18, 19, 20, 21],
+  [22, 23, 0, 1, 2, 3, 4, 5],
 ]
 
 const MINUTES = [
-  [0, 10, 20, 30, 40, 50],
-  [5, 15, 25, 35, 45, 55],
+  [0, 5, 10, 15, 20, 25],
+  [30, 35, 40, 45, 50, 55],
 ]
 
-const getHighlightColor = (
-  mainColor: string,
-  highliteColor: string,
-  currentValue: number,
-  value?: number
-) => {
+const getGradient = (currentValue: number, value?: number) => {
   if (value === currentValue) {
-    return highliteColor
+    return Gradient.dtPink
   }
-
-  return mainColor
+  return { from: 'blue', to: 'blue', deg: 45 }
 }
 
 const getTime = ({ time }: EventState): string => {
   if (time.hours !== undefined && time.minutes !== undefined) {
-    return `${prefixZero(time.hours)}:${suffixZero(time.minutes)}`
+    return `: ${prefixZero(time.hours)}:${suffixZero(time.minutes)}`
   }
   if (time.hours !== undefined) {
-    return `${prefixZero(time.hours)}:xx`
+    return `: ${prefixZero(time.hours)}:xx`
   }
-  return 'ei aikaa'
+  return ''
+}
+
+const ResponsiveText = ({ children }: PropsWithChildren) => {
+  return (
+    <>
+      <Text hiddenFrom="sm" size="sm">
+        {children}
+      </Text>
+      <Text visibleFrom="sm" size="lg">
+        {children}
+      </Text>
+    </>
+  )
 }
 
 export const StepTime = ({ state, dispatch }: ReducerProps) => {
+  const matches = useMediaQuery('(max-width: 48em)', true, {
+    getInitialValueInEffect: false,
+  })
+
+  const size = matches ? 'compact-xs' : 'sm'
+  const radius = matches ? 'xs' : 'sm'
+
   const getHoursCol = (hours: number[]) =>
     hours.map((hour) => (
       <Button
-        color={getHighlightColor('blue', 'dtPink.4', hour, state.time.hours)}
+        gradient={getGradient(hour, state.time.hours)}
+        variant="gradient"
+        radius={radius}
         key={hour}
-        radius="xs"
-        size="compact-xs"
+        size={size}
         onClick={() => {
           dispatch({
             kind: 'time',
@@ -65,16 +87,12 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
   const getMinutesCol = (minutes: number[]) =>
     minutes.map((minute) => (
       <Button
-        color={getHighlightColor(
-          'blue',
-          'dtPink.4',
-          minute,
-          state.time.minutes
-        )}
+        variant="gradient"
+        gradient={getGradient(minute, state.time.minutes)}
+        radius={radius}
         disabled={state.time.hours === undefined}
         key={minute}
-        radius="xs"
-        size="compact-xs"
+        size={size}
         onClick={() => {
           dispatch({
             kind: 'time',
@@ -90,59 +108,70 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
       </Button>
     ))
 
-  return (
-    <>
-      <Heading>Kellonaika</Heading>
-      <Container>
-        <Grid gutter="xs" mt="sm">
-          <Grid.Col span={6}>
-            <Text size="sm">Tunnit</Text>
-          </Grid.Col>
-          <Grid.Col span={6}>
-            <Text size="sm">Minuutit</Text>
-          </Grid.Col>
-        </Grid>
+  const previousButton = (
+    <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
+      Päivämäärä
+    </PrevButton>
+  )
+  const nextButton = (
+    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>
+      Kuvaus
+    </NextButton>
+  )
 
-        <Grid gutter="xs">
-          <Grid.Col span={2}>
-            <Stack gap="xs">{getHoursCol(HOURS[0])}</Stack>
-          </Grid.Col>
-          <Grid.Col span={2}>
-            <Stack gap="xs">{getHoursCol(HOURS[1])}</Stack>
-          </Grid.Col>
-          <Grid.Col span={2}>
-            <Stack gap="xs">{getHoursCol(HOURS[2])}</Stack>
-          </Grid.Col>
-          <Grid.Col span={3}>
-            <Stack gap="xs">{getMinutesCol(MINUTES[0])}</Stack>
-          </Grid.Col>
-          <Grid.Col span={3}>
-            <Stack gap="xs">{getMinutesCol(MINUTES[1])}</Stack>
-          </Grid.Col>
-        </Grid>
-        <Center>
-          <Button
-            data-testid="clear-time"
-            mt="md"
-            variant="outline"
-            size="compact-sm"
-            onClick={() =>
-              dispatch({
-                kind: 'time',
-                time: {
-                  hours: undefined,
-                  minutes: undefined,
-                },
-              })
-            }
-          >
-            Tyhjennä aika
-          </Button>
-        </Center>
-        <Text ta="center" fz="xl" fw={700} mt="md" data-testid="time-display">
-          {getTime(state)}
-        </Text>
-      </Container>
-    </>
+  const gap = matches ? 5 : 'sm'
+
+  return (
+    <StepLayout
+      title={`Kellon aika${getTime(state)}`}
+      nextButton={nextButton}
+      prevButton={previousButton}
+    >
+      <Grid gutter={{ base: 2, xs: 2, sm: 'sm' }} mt="sm">
+        <Grid.Col span={6}>
+          <ResponsiveText>Tunnit</ResponsiveText>
+        </Grid.Col>
+        <Grid.Col span={6}>
+          <ResponsiveText>Minuutit</ResponsiveText>
+        </Grid.Col>
+      </Grid>
+      <Grid gutter="xs">
+        <Grid.Col span={2}>
+          <Stack gap={gap}>{getHoursCol(HOURS[0])}</Stack>
+        </Grid.Col>
+        <Grid.Col span={2}>
+          <Stack gap={gap}>{getHoursCol(HOURS[1])}</Stack>
+        </Grid.Col>
+        <Grid.Col span={2}>
+          <Stack gap={gap}>{getHoursCol(HOURS[2])}</Stack>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Stack gap={gap}>{getMinutesCol(MINUTES[0])}</Stack>
+        </Grid.Col>
+        <Grid.Col span={3}>
+          <Stack gap={gap}>{getMinutesCol(MINUTES[1])}</Stack>
+        </Grid.Col>
+      </Grid>
+      <Center>
+        <Button
+          data-testid="clear-time"
+          mt="md"
+          color="red"
+          variant="outline"
+          size={size}
+          onClick={() =>
+            dispatch({
+              kind: 'time',
+              time: {
+                hours: undefined,
+                minutes: undefined,
+              },
+            })
+          }
+        >
+          Tyhjennä aika
+        </Button>
+      </Center>
+    </StepLayout>
   )
 }
