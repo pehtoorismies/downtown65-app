@@ -6,12 +6,12 @@ import type { EventState } from './event-state'
 import { Gradient } from '~/components/colors'
 import { EventCard } from '~/components/event/event-card'
 import type { User } from '~/domain/user'
+import type { ReducerProps } from '~/routes-common/events/components/reducer'
 import {
   NextButton,
   PrevButton,
   StepLayout,
-} from '~/routes-common/events/components/buttons'
-import type { ReducerProps } from '~/routes-common/events/components/reducer'
+} from '~/routes-common/events/components/step-layout'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 interface Properties extends ReducerProps {

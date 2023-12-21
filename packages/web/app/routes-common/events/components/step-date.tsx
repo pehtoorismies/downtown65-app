@@ -9,7 +9,7 @@ import {
   NextButton,
   PrevButton,
   StepLayout,
-} from '~/routes-common/events/components/buttons'
+} from '~/routes-common/events/components/step-layout'
 
 export const StepDate = ({ state, dispatch }: ReducerProps) => {
   const previousButton = (
