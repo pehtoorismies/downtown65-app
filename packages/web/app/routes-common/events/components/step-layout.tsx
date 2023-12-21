@@ -9,6 +9,19 @@ interface StepLayoutProps {
   title: string
 }
 
+const ResponsiveTitle = ({ children }: PropsWithChildren) => {
+  return (
+    <>
+      <Title ta="center" order={2} size="h4" mb="xs" hiddenFrom="sm">
+        {children}
+      </Title>
+      <Title ta="center" order={2} size="h2" mb="xs" visibleFrom="sm">
+        {children}
+      </Title>
+    </>
+  )
+}
+
 export const StepLayout = ({
   prevButton,
   nextButton,
@@ -17,9 +30,7 @@ export const StepLayout = ({
 }: PropsWithChildren<StepLayoutProps>) => {
   return (
     <>
-      <Title ta="center" order={2} size="h3" mb="xs">
-        {title}
-      </Title>
+      <ResponsiveTitle>{title}</ResponsiveTitle>
       {children}
       <Grid justify="center" mt="xl">
         <Grid.Col span={6}>{prevButton}</Grid.Col>
