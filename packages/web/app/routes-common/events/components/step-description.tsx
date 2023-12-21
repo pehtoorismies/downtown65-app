@@ -4,12 +4,12 @@ import { Underline } from '@tiptap/extension-underline'
 import { useEditor } from '@tiptap/react'
 import { StarterKit } from '@tiptap/starter-kit'
 import type { ReducerProps } from './reducer'
-import { Heading } from '~/routes-common/events/components/heading'
+import {
+  NextButton,
+  PrevButton,
+  StepLayout,
+} from '~/routes-common/events/components/buttons'
 
-/**
- * This component is available only client side
- */
-// TODO; update editor
 export const StepDescription = ({ state, dispatch }: ReducerProps) => {
   const editor = useEditor({
     extensions: [StarterKit, Link, Underline],
@@ -25,9 +25,23 @@ export const StepDescription = ({ state, dispatch }: ReducerProps) => {
     },
   })
 
+  const previousButton = (
+    <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
+      Aika
+    </PrevButton>
+  )
+  const nextButton = (
+    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>
+      Esikatselu
+    </NextButton>
+  )
+
   return (
-    <>
-      <Heading>Vapaa kuvaus</Heading>
+    <StepLayout
+      title="Vapaa kuvaus"
+      prevButton={previousButton}
+      nextButton={nextButton}
+    >
       <Box style={{ minHeight: '300px' }}>
         <RichTextEditor editor={editor} id="rte">
           <RichTextEditor.Toolbar sticky stickyOffset={60}>
@@ -52,10 +66,9 @@ export const StepDescription = ({ state, dispatch }: ReducerProps) => {
               <RichTextEditor.Unlink />
             </RichTextEditor.ControlsGroup>
           </RichTextEditor.Toolbar>
-
           <RichTextEditor.Content />
         </RichTextEditor>
       </Box>
-    </>
+    </StepLayout>
   )
 }
