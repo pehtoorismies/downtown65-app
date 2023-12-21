@@ -18,23 +18,19 @@ export const isStepNumber = (step: number): step is StepNumber => {
   return Object.values(ActiveStep).includes(step as StepNumber)
 }
 
-type TitleAction = {
-  kind: 'title'
+type InfoAction = {
+  kind: 'info'
   title: string
-}
-type SubtitleAction = {
-  kind: 'subtitle'
   subtitle: string
+  location: string
+  activeStep: StepNumber
 }
+
 type TypeAction = {
   kind: 'type'
   type: EventType
 }
 
-type LocationAction = {
-  kind: 'location'
-  location: string
-}
 type StepAction = {
   kind: 'step'
   step: StepNumber
@@ -79,16 +75,14 @@ export type ToPreviewAction = {
 export type EventAction =
   | DateAction
   | DescriptionAction
+  | InfoAction
   | LeaveEventAction
-  | LocationAction
   | NextStepAction
   | ParticipateEventAction
   | PreviousStepAction
   | RaceAction
   | StepAction
-  | SubtitleAction
   | TimeAction
-  | TitleAction
   | ToPreviewAction
   | TypeAction
 
@@ -109,14 +103,14 @@ export const reducer = (state: EventState, action: EventAction): EventState => {
       }
       return { ...state, eventType: action.type }
     }
-    case 'title': {
-      return { ...state, title: action.title }
-    }
-    case 'subtitle': {
-      return { ...state, subtitle: action.subtitle }
-    }
-    case 'location': {
-      return { ...state, location: action.location }
+    case 'info': {
+      return {
+        ...state,
+        title: action.title,
+        subtitle: action.subtitle,
+        location: action.location,
+        activeStep: action.activeStep,
+      }
     }
     case 'step': {
       return { ...state, activeStep: action.step }
