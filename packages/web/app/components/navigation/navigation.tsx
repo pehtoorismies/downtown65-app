@@ -9,11 +9,12 @@ const SIDE_COL_WIDTH = 130
 
 const navLinks = [
   { id: 10, title: 'Tapahtumat', to: '/events' },
-  { id: 20, title: 'Haasteet', to: '/challenges' },
+  // { id: 20, title: 'Haasteet', to: '/challenges' },
   {
     id: 30,
     title: 'Luo uusi',
-    to: '/create',
+    to: '/events/new',
+    // to: '/create',
     testId: 'nav-create-new-event',
   },
   { id: 40, title: 'Jäsenet', to: '/members' },
