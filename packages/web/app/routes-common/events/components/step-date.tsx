@@ -2,6 +2,7 @@ import 'dayjs/locale/fi'
 import { Group } from '@mantine/core'
 import type { DateValue } from '@mantine/dates'
 import { DatePicker } from '@mantine/dates'
+import { useMediaQuery } from '@mantine/hooks'
 import { format } from 'date-fns'
 import dayjs from 'dayjs'
 import type { ReducerProps } from './reducer'
@@ -12,6 +13,12 @@ import {
 } from '~/routes-common/events/components/step-layout'
 
 export const StepDate = ({ state, dispatch }: ReducerProps) => {
+  const matches = useMediaQuery('(max-width: 48em)', true, {
+    getInitialValueInEffect: false,
+  })
+
+  const size = matches ? 'sm' : 'lg'
+
   const previousButton = (
     <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
       Perustiedot
@@ -41,7 +48,7 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
             dispatch({ kind: 'date', date })
           }}
           numberOfColumns={1}
-          size="md"
+          size={size}
           locale="fi"
         />
       </Group>
