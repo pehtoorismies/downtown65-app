@@ -2,14 +2,33 @@ import 'dayjs/locale/fi'
 import { Group } from '@mantine/core'
 import type { DateValue } from '@mantine/dates'
 import { DatePicker } from '@mantine/dates'
+import { format } from 'date-fns'
 import dayjs from 'dayjs'
 import type { ReducerProps } from './reducer'
-import { Heading } from '~/routes-common/events/components/heading'
+import {
+  NextButton,
+  PrevButton,
+  StepLayout,
+} from '~/routes-common/events/components/buttons'
 
 export const StepDate = ({ state, dispatch }: ReducerProps) => {
+  const previousButton = (
+    <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
+      Perustiedot
+    </PrevButton>
+  )
+  const nextButton = (
+    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>
+      Kuvaus
+    </NextButton>
+  )
+
   return (
-    <>
-      <Heading>Päivämäärä</Heading>
+    <StepLayout
+      prevButton={previousButton}
+      nextButton={nextButton}
+      title={`Päivämäärä: ${format(state.date, 'dd.MM.yyyy')}`}
+    >
       <Group justify="center">
         <DatePicker
           minDate={dayjs(new Date()).toDate()}
@@ -26,6 +45,6 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
           locale="fi"
         />
       </Group>
-    </>
+    </StepLayout>
   )
 }
