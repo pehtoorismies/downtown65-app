@@ -1,5 +1,6 @@
 /** @type {import("@remix-run/dev").AppConfig} */
 export default {
+  // check ignoredRouteFiles https://docs.sst.dev/constructs/RemixSite
   ignoredRouteFiles: ['**/.*'],
   postcss: true,
   serverDependenciesToBundle: [/^date-fns.*/, /^dayjs.*/],
