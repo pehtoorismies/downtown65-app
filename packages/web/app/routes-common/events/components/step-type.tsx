@@ -6,7 +6,7 @@ import { Gradient } from '~/components/colors'
 import {
   NextButton,
   StepLayout,
-} from '~/routes-common/events/components/buttons'
+} from '~/routes-common/events/components/step-layout'
 import { mapToData } from '~/util/event-type'
 
 export const StepType = ({ state, dispatch }: ReducerProps) => {

@@ -10,7 +10,7 @@ import {
   NextButton,
   PrevButton,
   StepLayout,
-} from '~/routes-common/events/components/buttons'
+} from '~/routes-common/events/components/step-layout'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 const HOURS = [
