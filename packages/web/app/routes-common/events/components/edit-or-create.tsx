@@ -34,6 +34,7 @@ import { StepType } from './step-type'
 import { ParticipatingContext } from '~/contexts/participating-context'
 import type { Context } from '~/contexts/participating-context'
 import type { User } from '~/domain/user'
+import { eventStateToSubmittable } from '~/routes-common/events/event-state-to-submittable'
 
 const getModalTitle = (kind: EventState['kind']): string => {
   switch (kind) {
@@ -77,6 +78,12 @@ export const EditOrCreate: FC<Props> = ({
         <Loader />
       </Center>
     )
+  }
+
+  const submit = () => {
+    fetcher.submit(eventStateToSubmittable(state), {
+      method: 'post',
+    })
   }
 
   return (
@@ -167,7 +174,12 @@ export const EditOrCreate: FC<Props> = ({
             data-testid="step-preview"
           >
             <ParticipatingContext.Provider value={participatingActions}>
-              <StepPreview state={state} me={me} />
+              <StepPreview
+                state={state}
+                me={me}
+                dispatch={dispatch}
+                submit={submit}
+              />
             </ParticipatingContext.Provider>
           </Stepper.Step>
         </Stepper>
