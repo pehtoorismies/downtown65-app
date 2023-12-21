@@ -6,7 +6,7 @@ import { StarterKit } from '@tiptap/starter-kit'
 import type { ReducerProps } from './reducer'
 import {
   NextButton,
-  PrevButton,
+  PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
 
@@ -26,9 +26,9 @@ export const StepDescription = ({ state, dispatch }: ReducerProps) => {
   })
 
   const previousButton = (
-    <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
+    <PreviousButton onClick={() => dispatch({ kind: 'previousStep' })}>
       Aika
-    </PrevButton>
+    </PreviousButton>
   )
   const nextButton = (
     <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>

@@ -5,7 +5,7 @@ import type { ReducerProps } from './reducer'
 import { ActiveStep } from './reducer'
 import {
   NextButton,
-  PrevButton,
+  PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
 
@@ -41,7 +41,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
     <StepLayout
       title="Perustiedot"
       prevButton={
-        <PrevButton
+        <PreviousButton
           onClick={() => {
             dispatch({
               kind: 'info',
@@ -51,7 +51,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
           }}
         >
           Laji
-        </PrevButton>
+        </PreviousButton>
       }
       nextButton={
         <NextButton

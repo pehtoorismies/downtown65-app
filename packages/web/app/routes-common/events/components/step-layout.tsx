@@ -71,7 +71,7 @@ export const NextButton = (
   )
 }
 
-export const PrevButton = (
+export const PreviousButton = (
   props: PropsWithChildren<ProgressButtonProps & ButtonProps>
 ) => {
   const { children, ...rest } = props

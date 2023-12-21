@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import type { ReducerProps } from './reducer'
 import {
   NextButton,
-  PrevButton,
+  PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
 
@@ -20,9 +20,9 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
   const size = matches ? 'sm' : 'lg'
 
   const previousButton = (
-    <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
+    <PreviousButton onClick={() => dispatch({ kind: 'previousStep' })}>
       Perustiedot
-    </PrevButton>
+    </PreviousButton>
   )
   const nextButton = (
     <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>

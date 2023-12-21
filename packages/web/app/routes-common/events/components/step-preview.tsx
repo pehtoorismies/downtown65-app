@@ -9,7 +9,7 @@ import type { User } from '~/domain/user'
 import type { ReducerProps } from '~/routes-common/events/components/reducer'
 import {
   NextButton,
-  PrevButton,
+  PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
@@ -51,9 +51,9 @@ export const StepPreview = ({ state, me, dispatch, submit }: Properties) => {
   }
 
   const previousButton = (
-    <PrevButton onClick={() => dispatch({ kind: 'previousStep' })}>
+    <PreviousButton onClick={() => dispatch({ kind: 'previousStep' })}>
       Kuvaus
-    </PrevButton>
+    </PreviousButton>
   )
 
   const { text, icon } = getButtonProps(state.kind)
