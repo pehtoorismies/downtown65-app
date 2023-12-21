@@ -21,12 +21,10 @@ import {
 } from '@tabler/icons-react'
 import type { Dispatch, FC } from 'react'
 import { useState } from 'react'
-import { eventStateToSubmittable } from '../event-state-to-submittable'
-import { Buttons } from './buttons'
 import type { EventState } from './event-state'
 import { isValidStateToSave } from './event-state'
 import type { EventAction } from './reducer'
-import { ActiveStep, isStepNumber } from './reducer'
+import { isStepNumber } from './reducer'
 import { StepDate } from './step-date'
 import { StepDescription } from './step-description'
 import { StepPreview } from './step-preview'
@@ -173,21 +171,6 @@ export const EditOrCreate: FC<Props> = ({
             </ParticipatingContext.Provider>
           </Stepper.Step>
         </Stepper>
-        <Buttons
-          state={state}
-          onNextStep={() => {
-            if (state.activeStep === ActiveStep.STEP_PREVIEW) {
-              fetcher.submit(eventStateToSubmittable(state), {
-                method: 'post',
-              })
-            } else {
-              dispatch({ kind: 'nextStep' })
-            }
-          }}
-          onPreviousStep={() => {
-            dispatch({ kind: 'previousStep' })
-          }}
-        />
       </Container>
     </>
   )
