@@ -1,11 +1,10 @@
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { Button, SimpleGrid } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { IconArrowRight } from '@tabler/icons-react'
 import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
 import {
-  ProgressButton,
+  NextButton,
   StepLayout,
 } from '~/routes-common/events/components/buttons'
 import { mapToData } from '~/util/event-type'
@@ -68,12 +67,9 @@ export const StepType = ({ state, dispatch }: ReducerProps) => {
     })
 
   const nextButton = state.eventType ? (
-    <ProgressButton
-      rightSection={<IconArrowRight size={18} />}
-      onClick={() => dispatch({ kind: 'nextStep' })}
-    >
+    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>
       Perustiedot
-    </ProgressButton>
+    </NextButton>
   ) : null
 
   return (

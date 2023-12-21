@@ -28,7 +28,10 @@ type ButtonAttributes = {
 
 const getNextStuff = (
   kind: EventState['kind']
-): { nextTitle: string; NextIcon: Icon } => {
+): {
+  nextTitle: string
+  NextIcon: Icon
+} => {
   switch (kind) {
     case 'create': {
       return {
@@ -180,32 +183,54 @@ export const StepLayout = ({
 }
 
 interface ProgressButtonProps {
-  onClick: () => void
+  onClick?: () => void
+  type?: 'button' | 'reset' | 'submit'
 }
 
-export const ProgressButton = (
+export const NextButton = (
   props: PropsWithChildren<ProgressButtonProps & ButtonProps>
 ) => {
   const { children, ...rest } = props
 
+  const common = {
+    'data-testid': 'next-button',
+    mt: 'xs',
+    rightSection: <IconArrowRight size={18} />,
+    type: props.type ? props.type : 'button',
+    onClick: props.onClick,
+  }
+
   return (
     <>
-      <Button
-        {...rest}
-        data-testid="prev-button"
-        mt="xs"
-        hiddenFrom="sm"
-        size="xs"
-      >
+      <Button {...common} hiddenFrom="sm" size="xs" {...rest}>
         {children}
       </Button>
-      <Button
-        {...rest}
-        data-testid="prev-button"
-        mt="xs"
-        visibleFrom="sm"
-        size="sm"
-      >
+      <Button {...common} visibleFrom="sm" size="sm" {...rest}>
+        {children}
+      </Button>
+    </>
+  )
+}
+
+export const PrevButton = (
+  props: PropsWithChildren<ProgressButtonProps & ButtonProps>
+) => {
+  const { children, ...rest } = props
+
+  const common = {
+    'data-testid': 'prev-button',
+    mt: 'xs',
+    leftSection: <IconArrowLeft size={18} />,
+    type: props.type ? props.type : 'button',
+    onClick: props.onClick,
+  }
+
+  return (
+    <>
+      <Button {...common} hiddenFrom="sm" size="xs" {...rest}>
+        {children}
+      </Button>
+      <Button {...common} visibleFrom="sm" size="sm" {...rest}>
         {children}
       </Button>
     </>

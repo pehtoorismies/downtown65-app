@@ -1,11 +1,34 @@
-import { Center, Switch, TextInput } from '@mantine/core'
+import { Grid, Group, Center, Switch, TextInput, Title } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import type { ReducerProps } from './reducer'
-import { Heading } from '~/routes-common/events/components/heading'
+import { ActiveStep, ReducerProps } from './reducer'
+import {
+  NextButton,
+  PrevButton,
+  StepLayout,
+} from '~/routes-common/events/components/buttons'
+import { useForm } from '@mantine/form'
 
 const spacing = 'md'
 
+const validate = (value: string) => {
+  return value.trim().length === 0 ? 'Kenttä ei voi olla tyhjä' : null
+}
+
 export const StepTitle = ({ state, dispatch }: ReducerProps) => {
+  const form = useForm({
+    initialValues: {
+      title: state.title,
+      subtitle: state.subtitle,
+      location: state.location,
+    },
+    // validateInputOnChange: true,
+    validate: {
+      title: validate,
+      subtitle: validate,
+      location: validate,
+    },
+  })
+
   const matches = useMediaQuery('(max-width: 48em)', true, {
     getInitialValueInEffect: false,
   })
@@ -14,8 +37,37 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
   const switchSize = matches ? 'md' : 'lg'
 
   return (
-    <>
-      <Heading>Perustiedot</Heading>
+    <StepLayout
+      title="Perustiedot"
+      prevButton={
+        <PrevButton
+          onClick={() => {
+            dispatch({
+              kind: 'info',
+              ...form.values,
+              activeStep: ActiveStep.STEP_EVENT_TYPE,
+            })
+          }}
+        >
+          Laji
+        </PrevButton>
+      }
+      nextButton={
+        <NextButton
+          onClick={() => {
+            if (!form.validate().hasErrors) {
+              dispatch({
+                kind: 'info',
+                ...form.values,
+                activeStep: ActiveStep.STEP_DATE,
+              })
+            }
+          }}
+        >
+          Päivämäärä
+        </NextButton>
+      }
+    >
       <TextInput
         name="title"
         my={spacing}
@@ -23,10 +75,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         label="Tapahtuman nimi"
         size={size}
         withAsterisk
-        onChange={(event) =>
-          dispatch({ kind: 'title', title: event.target.value })
-        }
-        value={state.title}
+        {...form.getInputProps('title')}
       />
       <TextInput
         name="subtitle"
@@ -35,10 +84,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         label="Tarkenne"
         size={size}
         withAsterisk
-        onChange={(event) =>
-          dispatch({ kind: 'subtitle', subtitle: event.target.value })
-        }
-        value={state.subtitle}
+        {...form.getInputProps('subtitle')}
       />
       <TextInput
         name="location"
@@ -47,10 +93,7 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
         label="Missä tapahtuma järjestetään?"
         size={size}
         withAsterisk
-        onChange={(event) =>
-          dispatch({ kind: 'location', location: event.target.value })
-        }
-        value={state.location}
+        {...form.getInputProps('location')}
       />
       <Center>
         <Switch
@@ -66,6 +109,6 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
           checked={state.isRace}
         />
       </Center>
-    </>
+    </StepLayout>
   )
 }
