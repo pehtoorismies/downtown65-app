@@ -25,9 +25,7 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
     </PreviousButton>
   )
   const nextButton = (
-    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>
-      Kuvaus
-    </NextButton>
+    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>Aika</NextButton>
   )
 
   return (
