@@ -22,7 +22,7 @@ export class NewEventPage extends EventPage {
   }
 
   async headerVisible(text: string) {
-    await expect(this.page.getByRole('heading', { level: 1 })).toContainText(
+    await expect(this.page.getByRole('heading', { level: 2 })).toContainText(
       text
     )
   }
@@ -62,10 +62,6 @@ export class NewEventPage extends EventPage {
     return this.page.getByTestId('prev-button')
   }
 
-  skipStepBtn() {
-    return this.page.getByTestId('skip-step-button')
-  }
-
   async stepBtnClick(
     step: 'type' | 'basic-info' | 'date' | 'time' | 'description' | 'preview'
   ) {
@@ -100,10 +96,6 @@ export class NewEventPage extends EventPage {
       .fill(location)
   }
 
-  getTimeDisplay() {
-    return this.page.getByTestId('time-display')
-  }
-
   async hourClick(hour: number) {
     if (!Number.isInteger(hour) || hour > 24 || hour < 0) {
       throw new Error('Wrong hour provided')
@@ -131,6 +123,21 @@ export class NewEventPage extends EventPage {
     await this.page.getByText('Onko kilpailu?').click()
   }
 
+  async clickThroughStepsFromBasicInfo() {
+    await this.headerVisible('Perustiedot')
+    await this.nextBtnClick()
+    await this.headerVisible('Päivämäärä')
+
+    await this.nextBtnClick()
+    await this.headerVisible('Kellonaika')
+
+    await this.nextBtnClick()
+    await this.headerVisible('Vapaa kuvaus')
+
+    await this.nextBtnClick()
+    await this.headerVisible('Esikatselu')
+  }
+
   async fillBasicInfo({
     title,
     subtitle,
@@ -155,8 +162,8 @@ export class NewEventPage extends EventPage {
     await this.headerVisible('Perustiedot')
     await this.fillBasicInfo(basicInfo)
 
-    await this.page.getByTestId('next-button').click()
-    await this.page.getByTestId('step-preview').click()
+    await this.clickThroughStepsFromBasicInfo()
+
     await this.page.getByRole('button', { name: 'Luo tapahtuma' }).click()
 
     await expect(

@@ -198,6 +198,7 @@ export default function NewEvent() {
           color="red"
           rightSection={<IconCircleOff size={18} />}
           onClick={handlers.open}
+          data-testid="cancel-event-creation-button"
         >
           Keskeytä luonti
         </Button>
