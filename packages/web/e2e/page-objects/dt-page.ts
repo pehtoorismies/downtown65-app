@@ -10,4 +10,8 @@ export class DtPage {
   getMeta(attributeName: string, attributeValue: string) {
     return this.page.locator(`meta[${attributeName}="${attributeValue}"]`)
   }
+
+  async clickButton(text: string) {
+    await this.page.getByRole('button', { name: text }).click()
+  }
 }
