@@ -24,7 +24,7 @@ import type {
 } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
-import { IconCircleOff, IconCircleX, IconRocket } from '@tabler/icons-react'
+import { IconCircleOff, IconCircleX } from '@tabler/icons-react'
 import React, { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import type { Context } from '~/contexts/participating-context'
@@ -35,7 +35,6 @@ import {
   setSuccessMessage,
 } from '~/message.server'
 import { EditOrCreate } from '~/routes-common/events/components/edit-or-create'
-import { isValidStateToSave } from '~/routes-common/events/components/event-state'
 import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
 import { getEventForm } from '~/routes-common/events/get-event-form'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
@@ -241,18 +240,6 @@ export default function EditEvent() {
         dispatch={dispatch}
         participatingActions={participatingActions}
       />
-      {eventState.activeStep !== ActiveStep.STEP_PREVIEW && (
-        <Center>
-          <Button
-            onClick={() => dispatch({ kind: 'toPreview' })}
-            disabled={!isValidStateToSave(eventState)}
-            mt="xs"
-            rightSection={<IconRocket size={18} />}
-          >
-            Näytä esikatselu
-          </Button>
-        </Center>
-      )}
       <Divider my="sm" />
       <Center>
         <Button
