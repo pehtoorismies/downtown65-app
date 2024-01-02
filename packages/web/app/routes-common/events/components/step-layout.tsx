@@ -53,7 +53,6 @@ export const NextButton = (
   const { children, ...rest } = props
 
   const common = {
-    'data-testid': 'next-button',
     mt: 'xs',
     rightSection: <IconArrowRight size={18} />,
     onClick: props.onClick,
@@ -64,7 +63,13 @@ export const NextButton = (
       <Button {...common} hiddenFrom="sm" size="xs" {...rest}>
         {children}
       </Button>
-      <Button {...common} visibleFrom="sm" size="sm" {...rest}>
+      <Button
+        {...common}
+        visibleFrom="sm"
+        size="sm"
+        {...rest}
+        data-testid="next-button"
+      >
         {children}
       </Button>
     </>
@@ -77,7 +82,6 @@ export const PreviousButton = (
   const { children, ...rest } = props
 
   const common = {
-    'data-testid': 'prev-button',
     mt: 'xs',
     leftSection: <IconArrowLeft size={18} />,
     onClick: props.onClick,
@@ -88,7 +92,13 @@ export const PreviousButton = (
       <Button {...common} hiddenFrom="sm" size="xs" {...rest}>
         {children}
       </Button>
-      <Button {...common} visibleFrom="sm" size="sm" {...rest}>
+      <Button
+        {...common}
+        visibleFrom="sm"
+        size="sm"
+        {...rest}
+        data-testid="prev-button"
+      >
         {children}
       </Button>
     </>
