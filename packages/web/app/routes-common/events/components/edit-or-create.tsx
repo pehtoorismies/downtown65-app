@@ -22,7 +22,6 @@ import {
 import type { Dispatch, FC } from 'react'
 import { useState } from 'react'
 import type { EventState } from './event-state'
-import { isValidStateToSave } from './event-state'
 import type { EventAction } from './reducer'
 import { isStepNumber } from './reducer'
 import { StepDate } from './step-date'
@@ -122,6 +121,7 @@ export const EditOrCreate: FC<Props> = ({
       </Modal>
       <Container p={{ base: 1, sm: 'xs' }}>
         <Stepper
+          allowNextStepsSelect={false}
           color={state.kind === 'edit' ? 'dtPink.4' : 'blue'}
           iconSize={iconSize}
           active={state.activeStep}
@@ -135,44 +135,19 @@ export const EditOrCreate: FC<Props> = ({
           <Stepper.Step icon={<IconRun />} data-testid="step-type">
             <StepType state={state} dispatch={dispatch} />
           </Stepper.Step>
-          <Stepper.Step
-            allowStepSelect={state.eventType !== undefined}
-            icon={<IconEdit />}
-            data-testid="step-basic-info"
-          >
+          <Stepper.Step icon={<IconEdit />} data-testid="step-basic-info">
             <StepTitle state={state} dispatch={dispatch} />
           </Stepper.Step>
-          <Stepper.Step
-            allowStepSelect={
-              state.eventType !== undefined &&
-              !!state.title &&
-              !!state.location &&
-              !!state.subtitle
-            }
-            icon={<IconCalendar />}
-            data-testid="step-date"
-          >
+          <Stepper.Step icon={<IconCalendar />} data-testid="step-date">
             <StepDate state={state} dispatch={dispatch} />
           </Stepper.Step>
-          <Stepper.Step
-            allowStepSelect={isValidStateToSave(state)}
-            icon={<IconClockHour5 />}
-            data-testid="step-time"
-          >
+          <Stepper.Step icon={<IconClockHour5 />} data-testid="step-time">
             <StepTime state={state} dispatch={dispatch} />
           </Stepper.Step>
-          <Stepper.Step
-            allowStepSelect={isValidStateToSave(state)}
-            icon={<IconAlignLeft />}
-            data-testid="step-description"
-          >
+          <Stepper.Step icon={<IconAlignLeft />} data-testid="step-description">
             <StepDescription state={state} dispatch={dispatch} />
           </Stepper.Step>
-          <Stepper.Step
-            allowStepSelect={isValidStateToSave(state)}
-            icon={<IconRocket />}
-            data-testid="step-preview"
-          >
+          <Stepper.Step icon={<IconRocket />} data-testid="step-preview">
             <ParticipatingContext.Provider value={participatingActions}>
               <StepPreview
                 state={state}
