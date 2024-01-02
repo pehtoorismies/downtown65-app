@@ -50,30 +50,14 @@ export class NewEventPage extends EventPage {
     await this.page.getByTestId(`button-${eventType}`).click()
   }
 
-  eventTypeSelected(eventType: EventType) {
+  expectEventTypeSelected(eventType: EventType) {
     expect(this.page.getByTestId(`button-${eventType}-selected`)).toBeDefined()
-  }
-
-  nextBtn() {
-    return this.page.getByTestId('next-button')
-  }
-
-  prevBtn() {
-    return this.page.getByTestId('prev-button')
   }
 
   async stepBtnClick(
     step: 'type' | 'basic-info' | 'date' | 'time' | 'description' | 'preview'
   ) {
     await this.page.getByTestId(`step-${step}`).click()
-  }
-
-  async nextBtnClick() {
-    await this.nextBtn().click()
-  }
-
-  async prevBtnClick() {
-    await this.prevBtn().click()
   }
 
   async clearTitle() {
@@ -125,16 +109,17 @@ export class NewEventPage extends EventPage {
 
   async clickThroughStepsFromBasicInfo() {
     await this.headerVisible('Perustiedot')
-    await this.nextBtnClick()
+
+    await this.clickButton('Päivämäärä')
     await this.headerVisible('Päivämäärä')
 
-    await this.nextBtnClick()
+    await this.clickButton('Kellonaika')
     await this.headerVisible('Kellonaika')
 
-    await this.nextBtnClick()
+    await this.clickButton('Kuvaus')
     await this.headerVisible('Vapaa kuvaus')
 
-    await this.nextBtnClick()
+    await this.clickButton('Esikatselu')
     await this.headerVisible('Esikatselu')
   }
 
