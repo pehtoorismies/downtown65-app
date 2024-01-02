@@ -71,11 +71,10 @@ test.describe('Create event', () => {
 
     // 1. step type
     await newEventPage.headerVisible('Laji')
-    await expect(newEventPage.skipStepBtn()).toBeDisabled()
     // clicking should not do anything
     await newEventPage.stepBtnClick('preview')
     await newEventPage.eventTypeClick(initType)
-    await expect(newEventPage.nextBtn()).toBeHidden()
+    await expect(newEventPage.nextBtn()).toBeVisible()
     await newEventPage.prevBtnClick()
     newEventPage.eventTypeSelected(initType)
     await newEventPage.eventTypeClick(selectedType)
@@ -83,23 +82,19 @@ test.describe('Create event', () => {
     await newEventPage.nextBtnClick()
 
     // 2. step basic info
+    // TODO: add empty field test error
     await newEventPage.headerVisible('Perustiedot')
-    await expect(newEventPage.nextBtn()).toBeHidden()
-    await expect(newEventPage.skipStepBtn()).toBeDisabled()
+    await expect(newEventPage.nextBtn()).toBeVisible()
     // clicking should not do anything
     await newEventPage.stepBtnClick('description')
     await newEventPage.fillTitle(title)
-    await expect(newEventPage.nextBtn()).toBeHidden()
     await newEventPage.fillSubtitle(subtitle)
-    await expect(newEventPage.nextBtn()).toBeHidden()
     await newEventPage.fillLocation(location)
-    await expect(newEventPage.nextBtn()).toBeVisible()
     await newEventPage.raceSwitchClick()
     await newEventPage.nextBtnClick()
 
     // 3. step date
     await newEventPage.headerVisible('Päivämäärä')
-    await expect(newEventPage.skipStepBtn()).toBeDisabled()
     // await expect(
     //   page
     //     .getByRole('button', { name: new Date().getDate().toString() })
@@ -107,36 +102,33 @@ test.describe('Create event', () => {
     // ).toHaveAttribute('data-selected', 'true')
 
     await newEventPage.stepBtnClick('preview')
-    await newEventPage.headerVisible('Esikatselu')
+    await newEventPage.headerVisible('Päivämäärä')
     await newEventPage.stepBtnClick('date')
+    await newEventPage.headerVisible('Päivämäärä')
     await newEventPage.nextBtnClick()
 
     // 4. step time
-    await newEventPage.skipStepBtn().click()
+    await newEventPage.nextBtnClick()
     await newEventPage.headerVisible('Vapaa kuvaus')
     await newEventPage.prevBtnClick()
     await newEventPage.headerVisible('Kellonaika')
-    await expect(newEventPage.skipStepBtn()).toBeEnabled()
-    await expect(newEventPage.getTimeDisplay()).toHaveText('ei aikaa')
     await newEventPage.hourClick(14)
-    await expect(newEventPage.getTimeDisplay()).toHaveText('14:xx')
+    await newEventPage.headerVisible('Kellonaika: 14:xx')
     await newEventPage.clearTimeClick()
-    await expect(newEventPage.getTimeDisplay()).toHaveText('ei aikaa')
+    await newEventPage.headerVisible('Kellonaika')
     await newEventPage.hourClick(14)
     await newEventPage.minuteClick(55)
-    await expect(newEventPage.getTimeDisplay()).toHaveText('14:55')
+    await newEventPage.headerVisible('Kellonaika: 14:55')
     await newEventPage.nextBtnClick()
 
     // 5. step description
     await newEventPage.headerVisible('Vapaa kuvaus')
-    await expect(newEventPage.skipStepBtn()).toBeEnabled()
     // TODO: add some text description
 
     await newEventPage.nextBtnClick()
 
     // step preview
     await newEventPage.headerVisible('Esikatselu')
-    await expect(newEventPage.skipStepBtn()).toBeDisabled()
 
     await expect(newEventPage.getTitle()).toHaveText(title)
     await expect(newEventPage.getSubtitle()).toHaveText(subtitle)
@@ -164,19 +156,10 @@ test.describe('Create event', () => {
     await newEventPage.headerVisible('Laji')
 
     await newEventPage.stepBtnClick('basic-info')
-    await newEventPage.headerVisible('Perustiedot')
+    await newEventPage.headerVisible('Laji')
+    await newEventPage.nextBtnClick()
 
-    await newEventPage.stepBtnClick('date')
-    await newEventPage.headerVisible('Päivämäärä')
-
-    await newEventPage.stepBtnClick('time')
-    await newEventPage.headerVisible('Kellonaika')
-
-    await newEventPage.stepBtnClick('description')
-    await newEventPage.headerVisible('Vapaa kuvaus')
-
-    await newEventPage.stepBtnClick('preview')
-    await newEventPage.headerVisible('Esikatselu')
+    await newEventPage.clickThroughStepsFromBasicInfo()
 
     // create new event
     await newEventPage.nextBtnClick()
@@ -209,14 +192,17 @@ test.describe('Create event', () => {
     await newEventPage.getModifyEventBtn().click()
     await page.waitForURL(/\/events\/edit/)
     await newEventPage.headerVisible('Laji')
-    await newEventPage.stepBtnClick('basic-info')
+
+    await newEventPage.nextBtnClick()
     await newEventPage.clearTitle()
-    await expect(newEventPage.nextBtn()).toBeHidden()
+    // TODO: add check...
     // // should not go anywhere
     await newEventPage.stepBtnClick('preview')
     await newEventPage.headerVisible('Perustiedot')
     await newEventPage.fillTitle(updatedTitle)
-    await newEventPage.stepBtnClick('preview')
+
+    await newEventPage.clickThroughStepsFromBasicInfo()
+
     // create
     await newEventPage.nextBtnClick()
 
