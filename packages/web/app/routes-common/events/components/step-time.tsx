@@ -123,7 +123,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
 
   return (
     <StepLayout
-      title={`Kellon aika${getTime(state)}`}
+      title={`Kellonaika${getTime(state)}`}
       nextButton={nextButton}
       prevButton={previousButton}
     >
