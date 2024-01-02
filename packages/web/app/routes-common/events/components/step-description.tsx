@@ -27,7 +27,7 @@ export const StepDescription = ({ state, dispatch }: ReducerProps) => {
 
   const previousButton = (
     <PreviousButton onClick={() => dispatch({ kind: 'previousStep' })}>
-      Aika
+      Kellonaika
     </PreviousButton>
   )
   const nextButton = (

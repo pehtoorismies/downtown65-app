@@ -25,7 +25,9 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
     </PreviousButton>
   )
   const nextButton = (
-    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>Aika</NextButton>
+    <NextButton onClick={() => dispatch({ kind: 'nextStep' })}>
+      Kellonaika
+    </NextButton>
   )
 
   return (
