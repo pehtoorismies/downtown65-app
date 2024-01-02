@@ -63,13 +63,7 @@ export const NextButton = (
       <Button {...common} hiddenFrom="sm" size="xs" {...rest}>
         {children}
       </Button>
-      <Button
-        {...common}
-        visibleFrom="sm"
-        size="sm"
-        {...rest}
-        data-testid="next-button"
-      >
+      <Button {...common} visibleFrom="sm" size="sm" {...rest}>
         {children}
       </Button>
     </>
@@ -92,13 +86,7 @@ export const PreviousButton = (
       <Button {...common} hiddenFrom="sm" size="xs" {...rest}>
         {children}
       </Button>
-      <Button
-        {...common}
-        visibleFrom="sm"
-        size="sm"
-        {...rest}
-        data-testid="prev-button"
-      >
+      <Button {...common} visibleFrom="sm" size="sm" {...rest}>
         {children}
       </Button>
     </>
