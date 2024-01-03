@@ -1,8 +1,8 @@
+import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
 import {
   Auth0UserSchema,
-  HyphenDate,
   ParticipantsSchema,
   UlidSchema,
   getKeySchema,
@@ -11,8 +11,6 @@ import {
 // EVENT#<ulid>
 const KeyPattern = /^EVENT#(?<id>[\dA-HJKMNP-TV-Z]{26})$/
 // 13:00
-const TimePattern = /^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$/
-// DATE#2023-03-22T14:55:00#01GW4MMH
 const GSI1SKPattern =
   /^DATE#\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}#[\dA-HJKMNP-TV-Z]{8}$/
 
@@ -79,20 +77,12 @@ const gsi1skRefine = (value: {
 }
 
 const Dt65EventUpdateableFields = z.object({
-  dateStart: HyphenDate,
+  dateStart: ISODate,
   description: z.string().trim().optional(),
   location: z.string().trim(),
   race: z.boolean(),
   subtitle: z.string().trim(),
-  timeStart: z
-    .string()
-    .refine(
-      (value) => TimePattern.test(value),
-      (value) => ({
-        message: `${value} is not in correct format. Use: 23:59`,
-      })
-    )
-    .optional(),
+  timeStart: ISOTime.optional(),
   title: z.string().trim(),
   type: z.nativeEnum(EventType),
 })

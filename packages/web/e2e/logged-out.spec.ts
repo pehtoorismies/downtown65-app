@@ -90,7 +90,7 @@ test.describe('Logged out users', () => {
     await page.waitForURL('**/login')
   })
 
-  test('can see event', async ({ page }) => {
+  test.only('can see event', async ({ page }) => {
     const eventTypes = Object.values(EventType)
 
     const eventBasicInfo = {

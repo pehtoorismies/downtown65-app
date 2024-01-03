@@ -1,4 +1,3 @@
-import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
 import { graphql } from '@downtown65-app/graphql/gql'
 import { GetChallengesDocument } from '@downtown65-app/graphql/graphql'
 import {
@@ -64,14 +63,13 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { user, accessToken } = await loaderAuthenticate(request)
 
-  const now = DynamoDatetime.fromDate(new Date())
-
   const { challenges } = await gqlClient.request(
     GetChallengesDocument,
     {
       filter: {
         dateEnd: {
-          after: now.getISODate(),
+          // 2022-21-12
+          after: new Date().toISOString().slice(0, 10),
         },
       },
     },

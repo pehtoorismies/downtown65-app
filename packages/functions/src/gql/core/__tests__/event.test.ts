@@ -1,3 +1,4 @@
+import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { describe, expect, test } from 'vitest'
 import * as Event from '../event'
@@ -11,11 +12,7 @@ const creatableEvent = {
       'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png',
     id: userId,
   },
-  dateStart: {
-    year: 2018,
-    month: 12,
-    day: 13,
-  },
+  dateStart: ISODate.parse('2018-12-13'),
   location: 'Sipoo',
   participants: [
     {
@@ -27,10 +24,7 @@ const creatableEvent = {
   ],
   race: false,
   subtitle: 'Some subtitle',
-  timeStart: {
-    hours: 9,
-    minutes: 30,
-  },
+  timeStart: ISOTime.parse('09:30'),
   title: 'Title   ',
   type: EventType.Karonkka,
 }
@@ -65,18 +59,11 @@ describe('Events', () => {
     expect(updatedEvent2?.participants.length).toBe(1)
 
     await Event.update(id, {
-      dateStart: {
-        year: 2018,
-        month: 12,
-        day: 13,
-      },
+      dateStart: ISODate.parse('2018-12-13'),
       location: 'Vantaa',
       race: true,
       subtitle: 'Some other subtitle',
-      timeStart: {
-        hours: 9,
-        minutes: 30,
-      },
+      timeStart: ISOTime.parse('09:30'),
       title: 'Updated title',
       type: EventType.Other,
     })

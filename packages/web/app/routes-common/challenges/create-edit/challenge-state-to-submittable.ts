@@ -1,4 +1,4 @@
-import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { toISODate } from '@downtown65-app/core/event-time'
 import { z } from 'zod'
 import type { ChallengeState } from '~/routes-common/challenges/create-edit/challenge-reducer'
 
@@ -9,10 +9,13 @@ export const StringDate = z.object({
 })
 
 export const challengeStateToSubmittable = (state: ChallengeState) => {
-  const date = DynamoDatetime.fromDate(state.date).dateComponents
+  const result = toISODate(state.date)
+  if (!result.success) {
+    throw new Error(`Illegal date in state`)
+  }
 
   return {
-    ...StringDate.parse(date),
+    date: result.data,
     subtitle: state.subtitle,
     title: state.title,
     description: state.description,

@@ -1,6 +1,6 @@
 import type { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
-import { DynamoDatetime } from '../dynamo-datetime'
+import { EventTime, ISODate } from '../event-time'
 
 const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
   CYCLING: {
@@ -99,16 +99,18 @@ export const EmailableEvent = z
           eventId,
           location,
           subtitle,
-          timeStart,
           title,
           type,
         },
       },
     }) => {
-      const ddt = DynamoDatetime.fromISO(dateStart, timeStart)
+      const date = ISODate.safeParse(dateStart)
+      const formattedDate = date.success
+        ? EventTime.create(date.data).getFormattedDate()
+        : 'unavailable'
 
       return {
-        date: ddt.getFormattedDate(),
+        date: formattedDate,
         description,
         eventId,
         eventImagePath: EVENT_DATA_MAP[type as EventType].imageUrl,

@@ -1,43 +1,30 @@
+import { toISODate, toISOTime } from '@downtown65-app/core/event-time'
 import type { EventState } from './components/event-state'
 
-const getDateComponents = (
-  d?: Date
-): { month: string; year: string; day: string } | undefined => {
-  if (!d) {
-    return
-  }
-
-  return {
-    day: `${d.getDate()}`,
-    month: `${d.getMonth() + 1}`,
-    year: `${d.getFullYear()}`,
-  }
-}
-
-const getTimeComponents = (
-  time: EventState['time']
-): { minutes: string; hours: string } | undefined => {
+const getAsISOTime = (time: EventState['time']) => {
   if (time.minutes === undefined || time.hours === undefined) {
     return
   }
-  return {
-    hours: `${time.hours}`,
-    minutes: `${time.minutes}`,
-  }
+  const result = toISOTime({
+    hours: time.hours,
+    minutes: time.minutes,
+  })
+
+  return result.success ? result.data : undefined
 }
 
 export const eventStateToSubmittable = (eventState: EventState) => {
   if (eventState.eventType === undefined) {
     throw new Error('Cannot submit undefined eventType')
   }
-  const dateComponents = getDateComponents(eventState.date)
-  if (dateComponents === undefined) {
-    throw new Error('Cannot submit undefined date')
+
+  const dateResult = toISODate(eventState.date)
+  if (!dateResult.success) {
+    throw new Error('Date format is incorrect')
   }
 
-  return {
-    ...dateComponents,
-    ...getTimeComponents(eventState.time),
+  const form = {
+    date: dateResult.data,
     description: eventState.description,
     eventType: eventState.eventType,
     isRace: eventState.isRace ? 'true' : 'false',
@@ -46,4 +33,13 @@ export const eventStateToSubmittable = (eventState: EventState) => {
     subtitle: eventState.subtitle,
     title: eventState.title,
   }
+
+  const timeValue = getAsISOTime(eventState.time)
+
+  return timeValue
+    ? {
+        ...form,
+        time: timeValue,
+      }
+    : form
 }

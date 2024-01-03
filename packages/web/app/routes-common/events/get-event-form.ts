@@ -1,6 +1,6 @@
+import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
-import { DateObject, preprocessNumber } from '~/routes-common/form-object'
 
 const isEventType = (eventType: unknown): eventType is EventType => {
   if (typeof eventType !== 'string') {
@@ -10,7 +10,7 @@ const isEventType = (eventType: unknown): eventType is EventType => {
 }
 
 const EventForm = z.object({
-  date: DateObject,
+  date: ISODate,
   description: z.string(),
   isRace: z.enum(['true', 'false']).transform((v) => v === 'true'),
   location: z.string(),
@@ -22,46 +22,23 @@ const EventForm = z.object({
     })
   ),
   subtitle: z.string(),
-  time: z
-    .object({
-      minutes: z.preprocess(
-        preprocessNumber,
-        z.union([z.undefined(), z.number().nonnegative().lt(60)])
-      ),
-      hours: z.preprocess(
-        preprocessNumber,
-        z.union([z.undefined(), z.number().nonnegative().lt(24)])
-      ),
-    })
-    .transform(({ minutes, hours }) => {
-      if (minutes !== undefined && hours !== undefined) {
-        return { minutes, hours }
-      }
-    })
-    .optional(),
+  time: ISOTime.optional(),
   title: z.string().min(2),
-  type: z.custom(isEventType, { message: 'Not a valid phone number' }),
+  type: z.custom(isEventType, { message: 'Not a valid event type' }),
 })
 
 type EventForm = z.infer<typeof EventForm>
 
 export const getEventForm = (body: FormData): EventForm => {
   return EventForm.parse({
-    date: {
-      year: body.get('year'),
-      month: body.get('month'),
-      day: body.get('day'),
-    },
+    date: body.get('date'),
     description: body.get('description'),
     isRace: body.get('isRace'),
     location: body.get('location'),
     participants: JSON.parse(String(body.get('participants'))),
     subtitle: body.get('subtitle'),
     title: body.get('title'),
-    time: {
-      minutes: body.get('minutes'),
-      hours: body.get('hours'),
-    },
+    time: body.get('time'),
     type: body.get('eventType'),
   })
 }

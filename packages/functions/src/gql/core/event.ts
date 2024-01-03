@@ -1,4 +1,8 @@
-import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import type { ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import {
+  EventTime,
+  toISODatetimeCompact,
+} from '@downtown65-app/core/event-time'
 import type {
   CreateEventInput,
   Event,
@@ -30,6 +34,10 @@ const getPrimaryKey = (eventId: string) => {
     PK: `EVENT#${eventId}`,
     SK: `EVENT#${eventId}`,
   }
+}
+
+const getISODateTimeCompact = (date: Date) => {
+  return formatISO(date).slice(0, 19)
 }
 
 const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
@@ -80,10 +88,8 @@ export const create = async (
   } = creatableEvent
   const eventId = ulid()
 
-  const ddt = DynamoDatetime.fromComponents(dateStart, timeStart ?? undefined)
-
-  const gsi1sk = ddt.getIsoDatetime()
-  const now = formatISO(new Date()).slice(0, 19)
+  const gsi1sk = toISODatetimeCompact(dateStart, timeStart ?? undefined)
+  const nowISOString = getISODateTimeCompact(new Date())
 
   const parts = participants ?? []
   const participantHashMap = {}
@@ -91,7 +97,7 @@ export const create = async (
   for (const participant of parts) {
     Object.assign(participantHashMap, {
       [participant.id]: {
-        joinedAt: now,
+        joinedAt: nowISOString,
         nickname: participant.nickname,
         picture: participant.picture,
         id: participant.id,
@@ -107,14 +113,14 @@ export const create = async (
       GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
       // add props
       createdBy,
-      dateStart: ddt.getISODate(),
+      dateStart,
       description,
       id: eventId,
       location: getDefaultIfEmpty(location),
       participants: participantHashMap,
       race: race ?? false,
       subtitle: getDefaultIfEmpty(subtitle),
-      timeStart: ddt.getTime(),
+      timeStart,
       title: getDefaultIfEmpty(title),
       type,
     }),
@@ -126,20 +132,22 @@ export const create = async (
 
 export const update = async (
   eventId: string,
-  updateEventInput: UpdateEventInput
+  updateEventInput: Omit<UpdateEventInput, 'dateStart' | 'timeStart'> & {
+    dateStart: ISODate // override type
+    timeStart?: ISOTime // override type
+  }
 ): Promise<Event> => {
   const { dateStart, timeStart, type, ...rest } = updateEventInput
 
-  const ddt = DynamoDatetime.fromComponents(dateStart, timeStart ?? undefined)
-
-  const gsi1sk = ddt.getIsoDatetime()
+  const eventTime = EventTime.create(dateStart, timeStart)
+  const gsi1sk = eventTime.getISODateTimeCompact()
 
   const update: Dt65EventUpdateSchema = {
     ...getPrimaryKey(eventId),
     ...rest,
     description: rest.description ?? undefined,
-    dateStart: ddt.getISODate(),
-    timeStart: ddt.getTime(),
+    dateStart: eventTime.getISODate(),
+    timeStart: eventTime.getISOTime(),
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     type,
   }

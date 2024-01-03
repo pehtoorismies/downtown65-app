@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react'
 import React from 'react'
 import type { EventState } from './event-state'
 import type { ReducerProps } from './reducer'
-import { Gradient } from '~/components/colors'
+import { Gradient, GradientInverse } from '~/components/colors'
 import {
   NextButton,
   PreviousButton,
@@ -14,9 +14,12 @@ import {
 import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 const HOURS = [
-  [6, 7, 8, 9, 10, 11, 12, 13],
-  [14, 15, 16, 17, 18, 19, 20, 21],
-  [22, 23, 0, 1, 2, 3, 4, 5],
+  // [6, 7, 8, 9, 10, 11, 12, 13],
+  // [14, 15, 16, 17, 18, 19, 20, 21],
+  // [22, 23, 0, 1, 2, 3, 4, 5],
+  [6, 9, 12, 15, 18, 21, 0, 3],
+  [7, 10, 13, 16, 19, 22, 1, 4],
+  [8, 11, 14, 17, 20, 23, 2, 5],
 ]
 
 const MINUTES = [
@@ -24,11 +27,18 @@ const MINUTES = [
   [30, 35, 40, 45, 50, 55],
 ]
 
-const getGradient = (currentValue: number, value?: number) => {
+const getHourGradient = (currentValue: number, value?: number) => {
   if (value === currentValue) {
     return Gradient.dtPink
   }
-  return { from: 'blue', to: 'blue', deg: 45 }
+  return { from: 'blue.5', to: 'blue.5', deg: 45 }
+}
+
+const getMinuteGradient = (currentValue: number, value?: number) => {
+  if (value === currentValue) {
+    return GradientInverse.dtPink
+  }
+  return { from: 'violet.5', to: 'violet.5', deg: 45 }
 }
 
 const getTime = ({ time }: EventState): string => {
@@ -65,7 +75,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
   const getHoursCol = (hours: number[]) =>
     hours.map((hour) => (
       <Button
-        gradient={getGradient(hour, state.time.hours)}
+        gradient={getHourGradient(hour, state.time.hours)}
         variant="gradient"
         radius={radius}
         key={hour}
@@ -88,7 +98,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
     minutes.map((minute) => (
       <Button
         variant="gradient"
-        gradient={getGradient(minute, state.time.minutes)}
+        gradient={getMinuteGradient(minute, state.time.minutes)}
         radius={radius}
         disabled={state.time.hours === undefined}
         key={minute}

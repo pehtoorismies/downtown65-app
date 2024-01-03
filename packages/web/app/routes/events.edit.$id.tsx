@@ -1,4 +1,4 @@
-import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { EventTime, ISODate, ISOTime } from '@downtown65-app/core/event-time'
 import { graphql } from '@downtown65-app/graphql/gql'
 import {
   GetEventDocument,
@@ -144,6 +144,13 @@ const getInitKind = (kind: string): 'edit' | 'create' => {
   throw new Error('Unsupported initial state')
 }
 
+const getISOTime = (time?: string | null) => {
+  if (time == null) {
+    return
+  }
+  return ISOTime.parse(time)
+}
+
 export default function EditEvent() {
   const {
     user: me,
@@ -155,17 +162,17 @@ export default function EditEvent() {
   const navigate = useNavigate()
   const [opened, handlers] = useDisclosure(false)
 
-  const ddt = DynamoDatetime.fromISO(initDateStart, initTimeStart ?? undefined)
+  const dateResult = ISODate.parse(initDateStart)
+  const time = getISOTime(initTimeStart)
+
+  const eventTime = EventTime.create(dateResult, time)
 
   const [eventState, dispatch] = useReducer(reducer, {
     ...initState,
     // TODO: smell
     kind: getInitKind(initState.kind),
-    date: ddt.getDateObject(),
-    time: ddt.getTimeComponents() ?? {
-      hours: undefined,
-      minutes: undefined,
-    },
+    date: eventTime.getDate(),
+    time: eventTime.getTimeComponents() ?? {},
   })
 
   const participatingActions: Context = {

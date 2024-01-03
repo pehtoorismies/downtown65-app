@@ -1,4 +1,4 @@
-import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { EventTime, ISODate } from '@downtown65-app/core/event-time'
 import { graphql } from '@downtown65-app/graphql/gql'
 import { GetEventsDocument } from '@downtown65-app/graphql/graphql'
 import {
@@ -69,15 +69,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       Authorization: `Bearer ${accessToken}`,
     }
   )
+
   const eventItems = events.map((event) => {
-    const ddt = DynamoDatetime.fromISO(
-      event.dateStart,
-      event.timeStart ?? undefined
-    )
+    const dateResult = ISODate.safeParse(event.dateStart)
+    const formattedDate = dateResult.success
+      ? EventTime.create(dateResult.data).getFormattedDate()
+      : 'unavailable'
 
     return {
       ...event,
-      dateStart: ddt.getFormattedDate(),
+      dateStart: formattedDate,
       description: event.description ?? '',
       isRace: event.race,
       me: user,

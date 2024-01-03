@@ -23,16 +23,6 @@ export const Auth0UserSchema = z.object({
   id: Auth0IDString,
 })
 
-export const HyphenDate = z.string().refine(
-  (value) => {
-    // 2020-01-01
-    return isValid(new Date(value)) && /^\d{4}-\d{2}-\d{2}$/.test(value)
-  },
-  (value) => ({
-    message: `${value} is not in correct format. Use: 2020-01-01`,
-  })
-)
-
 // 2020-01-01T00:00:00
 const DateTimePattern = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z?/
 

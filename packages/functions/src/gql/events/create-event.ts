@@ -11,10 +11,7 @@ export const createEvent: AppSyncResolverHandler<
 > = async (event) => {
   const { input: creatableEvent } = event.arguments
 
-  const id = await Event.create({
-    ...creatableEvent,
-    type: creatableEvent.type,
-  })
+  const id = await Event.create(creatableEvent)
   return {
     __typename: 'IDPayload',
     id,

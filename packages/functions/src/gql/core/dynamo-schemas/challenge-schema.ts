@@ -1,9 +1,9 @@
+import { ISODate } from '@downtown65-app/core/event-time'
 import { isBefore } from 'date-fns'
 import { z } from 'zod'
 import {
   Auth0IDString,
   Auth0UserSchema,
-  HyphenDate,
   ParticipantsSchema,
   UlidSchema,
   getKeySchema,
@@ -27,8 +27,8 @@ const createGSI1SKVerifier = ({
 
 export const ChallengeGetSchema = z.object({
   id: UlidSchema,
-  dateStart: HyphenDate,
-  dateEnd: HyphenDate,
+  dateStart: ISODate,
+  dateEnd: ISODate,
   title: z.string(),
   subtitle: z.string(),
   description: z.string().optional(),
@@ -54,8 +54,8 @@ export const ChallengeCreateSchema = z
     description: z.string().trim().optional(),
     subtitle: z.string().trim(),
     title: z.string().trim(),
-    dateStart: HyphenDate,
-    dateEnd: HyphenDate,
+    dateStart: ISODate,
+    dateEnd: ISODate,
     participants: ParticipantsSchema,
   })
   .refine(

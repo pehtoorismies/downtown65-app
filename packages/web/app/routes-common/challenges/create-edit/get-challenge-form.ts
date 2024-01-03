@@ -1,23 +1,26 @@
-import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { EventTime, ISODate } from '@downtown65-app/core/event-time'
 import type { CreateChallengeInput } from '@downtown65-app/graphql/graphql'
 import { endOfMonth, startOfMonth } from 'date-fns'
 import type { ZodError } from 'zod'
 import { z } from 'zod'
 import type { User } from '~/domain/user'
-import { DateObject } from '~/routes-common/form-object'
 
 const ChallengeInputForm = z.object({
+  date: ISODate,
   description: z.string().optional(),
   subtitle: z.string(),
   title: z.string().min(2),
 })
 
-const createMonthRange = (date: DateObject) => {
-  const value = DynamoDatetime.fromComponents(date).getDateObject()
+const createMonthRange = (date: ISODate) => {
+  const value = EventTime.create(date).getDate()
+
+  const start = startOfMonth(value)
+  const end = endOfMonth(value)
 
   return {
-    dateStart: DynamoDatetime.fromDate(startOfMonth(value)).dateComponents,
-    dateEnd: DynamoDatetime.fromDate(endOfMonth(value)).dateComponents,
+    dateStart: start.toISOString().slice(0, 10),
+    dateEnd: end.toISOString().slice(0, 10),
   }
 }
 
@@ -35,34 +38,26 @@ export const getChallengeInput = (
   body: FormData,
   createdBy: User
 ): Success | Error => {
-  const maybeDate = DateObject.safeParse({
-    year: body.get('year'),
-    month: body.get('month'),
-    day: body.get('day'),
-  })
-
-  const maybeInfo = ChallengeInputForm.safeParse({
+  const challengeInput = ChallengeInputForm.safeParse({
+    date: body.get('date'),
     title: body.get('title'),
     subtitle: body.get('subtitle'),
     description: body.get('description'),
   })
 
-  if (!maybeDate.success) {
-    return { error: maybeDate.error, kind: 'error' }
-  }
-  if (!maybeInfo.success) {
+  if (!challengeInput.success) {
     return {
-      error: maybeInfo.error,
+      error: challengeInput.error,
       kind: 'error',
     }
   }
 
-  const dateRange = createMonthRange(maybeDate.data)
+  const dateRange = createMonthRange(challengeInput.data.date)
 
   return {
     kind: 'success',
     challengeInputForm: {
-      ...maybeInfo.data,
+      ...challengeInput.data,
       createdBy,
       dateStart: dateRange.dateStart,
       dateEnd: dateRange.dateEnd,
