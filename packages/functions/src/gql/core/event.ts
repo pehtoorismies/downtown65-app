@@ -4,9 +4,7 @@ import type {
   Event,
   UpdateEventInput,
 } from '@downtown65-app/graphql/graphql'
-import { format } from 'date-fns'
-import formatISO from 'date-fns/formatISO'
-import startOfToday from 'date-fns/startOfToday'
+import { format, formatISO, startOfToday } from 'date-fns'
 import { ulid } from 'ulid'
 import {
   Dt65EventCreateSchema,
