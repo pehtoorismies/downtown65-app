@@ -54,6 +54,15 @@ export class NewEventPage extends EventPage {
     expect(this.page.getByTestId(`button-${eventType}-selected`)).toBeDefined()
   }
 
+  async calendarNextMonthClick() {
+    await this.page
+      .getByRole('button')
+      .filter({
+        has: this.page.locator('[data-direction=next]'),
+      })
+      .click()
+  }
+
   async stepBtnClick(
     step: 'type' | 'basic-info' | 'date' | 'time' | 'description' | 'preview'
   ) {
