@@ -97,13 +97,24 @@ test.describe('Create event', () => {
     // errors in fields
     await newEventPage.clickButton('Päivämäärä')
     await newEventPage.headerVisible('Perustiedot')
-    // TODO: check errors
+
+    await expect(page.getByText('Nimi ei voi olla tyhjä')).toBeVisible()
+    await expect(page.getByText('Tarkenne ei voi olla tyhjä')).toBeVisible()
+    await expect(page.getByText('Sijainti ei voi olla tyhjä')).toBeVisible()
+
+    await newEventPage.fillTitle('   ')
+    await newEventPage.fillSubtitle('   ')
+    await newEventPage.fillLocation('Kerava')
+    await newEventPage.clickButton('Päivämäärä')
+
+    await expect(page.getByText('Nimi ei voi olla tyhjä')).toBeVisible()
+    await expect(page.getByText('Tarkenne ei voi olla tyhjä')).toBeVisible()
+    await expect(page.getByText('Sijainti ei voi olla tyhjä')).not.toBeVisible()
 
     // clicking should not do anything
     await newEventPage.stepBtnClick('description')
     await newEventPage.headerVisible('Perustiedot')
 
-    // fill fields
     await newEventPage.fillTitle(title)
     await newEventPage.fillSubtitle(subtitle)
     await newEventPage.fillLocation(location)
@@ -209,12 +220,14 @@ test.describe('Create event', () => {
     await newEventPage.headerVisible('Laji')
 
     await newEventPage.clickButton('Perustiedot')
-    await newEventPage.clearTitle()
-    // TODO: add check...
+    await newEventPage.getInputTitle().clear()
+    await newEventPage.clickButton('Päivämäärä')
+    await expect(page.getByText('Nimi ei voi olla tyhjä')).toBeVisible()
+    await newEventPage.fillTitle(updatedTitle)
+
     // // should not go anywhere
     await newEventPage.stepBtnClick('preview')
     await newEventPage.headerVisible('Perustiedot')
-    await newEventPage.fillTitle(updatedTitle)
 
     await newEventPage.clickThroughStepsFromBasicInfo()
 

@@ -11,8 +11,8 @@ import {
 
 const spacing = 'md'
 
-const validate = (value: string) => {
-  return value.trim().length === 0 ? 'Kenttä ei voi olla tyhjä' : null
+const validate = (inputTitle: string) => (value: string) => {
+  return value.trim().length === 0 ? `${inputTitle} ei voi olla tyhjä` : null
 }
 
 export const StepTitle = ({ state, dispatch }: ReducerProps) => {
@@ -24,9 +24,9 @@ export const StepTitle = ({ state, dispatch }: ReducerProps) => {
     },
     // validateInputOnChange: true,
     validate: {
-      title: validate,
-      subtitle: validate,
-      location: validate,
+      title: validate('Nimi'),
+      subtitle: validate('Tarkenne'),
+      location: validate('Sijainti'),
     },
   })
 

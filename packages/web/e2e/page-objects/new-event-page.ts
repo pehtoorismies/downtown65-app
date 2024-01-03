@@ -60,24 +60,30 @@ export class NewEventPage extends EventPage {
     await this.page.getByTestId(`step-${step}`).click()
   }
 
-  async clearTitle() {
-    await this.page.getByRole('textbox', { name: 'Tapahtuman nimi' }).clear()
+  getInputTitle() {
+    return this.page.getByRole('textbox', { name: 'Tapahtuman nimi' })
+  }
+
+  getInputSubtitle() {
+    return this.page.getByRole('textbox', { name: 'Tarkenne' })
+  }
+
+  getInputLocation() {
+    return this.page.getByRole('textbox', {
+      name: 'Missä tapahtuma järjestetään?',
+    })
   }
 
   async fillTitle(title: string) {
-    await this.page
-      .getByRole('textbox', { name: 'Tapahtuman nimi' })
-      .fill(title)
+    await this.getInputTitle().fill(title)
   }
 
   async fillSubtitle(subtitle: string) {
-    await this.page.getByRole('textbox', { name: 'Tarkenne' }).fill(subtitle)
+    await this.getInputSubtitle().fill(subtitle)
   }
 
   async fillLocation(location: string) {
-    await this.page
-      .getByRole('textbox', { name: 'Missä tapahtuma järjestetään?' })
-      .fill(location)
+    await this.getInputLocation().fill(location)
   }
 
   async hourClick(hour: number) {
