@@ -6,6 +6,9 @@ import {
   randSports,
 } from '@ngneat/falso'
 import { test as base, expect } from '@playwright/test'
+import { format } from 'date-fns'
+import { addMonths, setDate } from 'date-fns/fp'
+import * as R from 'remeda'
 import { NewEventPage } from './page-objects/new-event-page'
 import { testUser } from './test-user'
 
@@ -122,13 +125,23 @@ test.describe('Create event', () => {
     await newEventPage.clickButton('Päivämäärä')
 
     // 3. step date
-    await newEventPage.headerVisible('Päivämäärä')
-    // await expect(
-    //   page
-    //     .getByRole('button', { name: new Date().getDate().toString() })
-    //     .filter({ has: page.locator() })
-    // ).toHaveAttribute('data-selected', 'true')
-    // TODO: click change date
+    const now = new Date()
+
+    await newEventPage.headerVisible(`Päivämäärä: ${format(now, 'd.M.yyyy')}`)
+
+    await newEventPage.calendarNextMonthClick()
+    await newEventPage.clickButton('15')
+
+    const nextMonthDate = R.pipe(now, addMonths(1), setDate(15))
+
+    if (!(nextMonthDate instanceof Date)) {
+      throw new TypeError('Invalid type of Date')
+    }
+
+    await newEventPage.headerVisible(
+      `Päivämäärä: ${format(nextMonthDate, 'd.M.yyyy')}`
+    )
+
     await newEventPage.headerVisible('Päivämäärä')
     await newEventPage.clickButton('Kellonaika')
 
@@ -161,7 +174,12 @@ test.describe('Create event', () => {
     await expect(newEventPage.getLocation()).toHaveText(location)
     await expect(newEventPage.getRace()).toBeVisible()
 
+    // Date start and time
+    await expect(newEventPage.getDate()).toContainText(
+      format(nextMonthDate, 'd.M.yyyy')
+    )
     await expect(newEventPage.getDate()).toHaveText(/14:55$/)
+
     await newEventPage.expectParticipantCount(0)
     await newEventPage.participateClick()
     await newEventPage.expectParticipantCount(1)
