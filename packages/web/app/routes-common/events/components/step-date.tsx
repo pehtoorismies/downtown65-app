@@ -34,7 +34,7 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
     <StepLayout
       prevButton={previousButton}
       nextButton={nextButton}
-      title={`Päivämäärä: ${format(state.date, 'dd.MM.yyyy')}`}
+      title={`Päivämäärä: ${format(state.date, 'd.M.yyyy')}`}
     >
       <Group justify="center">
         <DatePicker
