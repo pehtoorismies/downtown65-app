@@ -1,3 +1,4 @@
+import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
 import type {
   Event as Dt65Event,
   MutationUpdateEventArgs,
@@ -10,7 +11,12 @@ export const updateEvent: AppSyncResolverHandler<
   Dt65Event
 > = async (event) => {
   const { input, eventId } = event.arguments
-  const result = await Event.update(eventId, input)
+
+  const result = await Event.update(eventId, {
+    ...input,
+    dateStart: ISODate.parse(input.dateStart),
+    timeStart: input.timeStart ? ISOTime.parse(input.timeStart) : undefined,
+  })
 
   return result
 }

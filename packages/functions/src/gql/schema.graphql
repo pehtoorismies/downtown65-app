@@ -1,4 +1,5 @@
 scalar AWSDate
+scalar AWSTime
 scalar AWSEmail
 
 directive @aws_api_key on OBJECT | FIELD_DEFINITION
@@ -62,7 +63,7 @@ type Event @aws_api_key @aws_oidc {
     location: String!
     participants: [Participant!]!
     race: Boolean!
-    timeStart: String
+    timeStart: AWSTime
     subtitle: String!
     title: String!
     type: EventType!
@@ -104,35 +105,24 @@ input MeInput {
     nickname: String!
 }
 
-input TimeInput {
-    hours: Int!
-    minutes: Int!
-}
-
-input DateInput {
-    year: Int!
-    month: Int!
-    day: Int!
-}
-
-
 input CreateEventInput {
     createdBy: MeInput!
-    dateStart: DateInput!
+    dateStart: AWSDate!
     description: String
     location: String!
     participants: [MeInput!]
     race: Boolean!
     subtitle: String!
     title: String!
-    timeStart: TimeInput
+    timeStart: AWSTime
     type: EventType!
 }
 
 input CreateChallengeInput {
     createdBy: MeInput!
-    dateStart: DateInput!
-    dateEnd: DateInput!
+    dateStart: AWSDate!
+    dateEnd: AWSDate!
+
     description: String
     subtitle: String!
     title: String!
@@ -148,13 +138,13 @@ type IDPayload {
 }
 
 input UpdateEventInput {
-    dateStart: DateInput!
+    dateStart: AWSDate!
     description: String
     location: String!
     race: Boolean!
     subtitle: String!
     title: String!
-    timeStart: TimeInput
+    timeStart: AWSTime
     type: EventType!
 }
 

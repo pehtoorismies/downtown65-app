@@ -1,4 +1,4 @@
-import { DynamoDatetime } from '@downtown65-app/core/dynamo-datetime'
+import { ISODate } from '@downtown65-app/core/event-time'
 import { logger } from '@downtown65-app/core/logger/logger'
 import type {
   Challenge,
@@ -37,10 +37,7 @@ export const create = async (
     creatable
   const id = ulid()
 
-  const start = DynamoDatetime.fromComponents(dateStart)
-  const end = DynamoDatetime.fromComponents(dateEnd)
-
-  const gsi1sk = end.getISODate()
+  const gsi1sk = end.getISODateTimeCompact()
 
   await ChallengeEntity.put(
     ChallengeCreateSchema.parse({
@@ -52,8 +49,8 @@ export const create = async (
       createdBy,
       // TODO: add creator
       participants: {},
-      dateStart: start.getISODate(),
-      dateEnd: end.getISODate(),
+      dateStart: dateStart,
+      dateEnd: dateEnd,
       description,
       id,
       subtitle,
@@ -148,15 +145,18 @@ const getOptions = (filter: QueryChallengesArgs['filter']) => {
   const { before, after } = filter.dateEnd
 
   if (before != null) {
+    const beforeDate = ISODate.parse(before)
+
     return {
       index: 'GSI1',
-      lt: `DATE#${DynamoDatetime.fromISO(before).getISODate()}`,
+      lt: `DATE#${beforeDate}`,
     }
   }
   if (after != null) {
+    const afterDate = ISODate.parse(after)
     return {
       index: 'GSI1',
-      gte: `DATE#${DynamoDatetime.fromISO(after).getISODate()}`,
+      gte: `DATE#${afterDate}`,
     }
   }
 
@@ -198,8 +198,6 @@ const participationFunctions = getParticipationFunctions({
 
 export const participate = participationFunctions.participate
 export const leave = participationFunctions.leave
-
-type ISODate = string
 
 const getChallengeAccomplishmentPrimaryKey = (
   challengeId: string,
@@ -253,7 +251,9 @@ export const addAccomplishment = async ({
 }: AccomplishmentInput) => {
   const { dateStart, dateEnd } = await verifyChallenge(id, userId)
 
-  if (!isBetweenISODate(dateStart, dateEnd, date)) {
+  if (
+    !isBetweenISODate(ISODate.parse(dateStart), ISODate.parse(dateEnd), date)
+  ) {
     throw new Error('Can not insert date that is outside challenge dates')
   }
 
@@ -263,12 +263,11 @@ export const addAccomplishment = async ({
     throw new Error('Can not insert date that is in future')
   }
 
-  const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
   await ChallengeAccomplishment.update(
     {
       ...getChallengeAccomplishmentPrimaryKey(id, userId),
       userId,
-      challengeAccomplishments: { $add: [verifiedDate] },
+      challengeAccomplishments: { $add: [date] },
     },
     { returnValues: 'NONE' }
   )
@@ -286,11 +285,10 @@ export const removeAccomplishment = async ({
     throw new Error('Can remove date that is in future')
   }
 
-  const verifiedDate = DynamoDatetime.fromISO(date).getISODate()
   await ChallengeAccomplishment.update(
     {
       ...getChallengeAccomplishmentPrimaryKey(id, userId),
-      challengeAccomplishments: { $delete: [verifiedDate] },
+      challengeAccomplishments: { $delete: [date] },
     },
     { returnValues: 'NONE' }
   )

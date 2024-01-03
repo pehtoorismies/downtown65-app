@@ -9,6 +9,14 @@ const config: CodegenConfig = {
       presetConfig: {
         fragmentMasking: false,
       },
+      plugins: [
+        {
+          add: {
+            content:
+              "import type { ISODate, ISOTime } from '@downtown65-app/core/event-time'",
+          },
+        },
+      ],
       config: {
         // dedupeFragments: false,
         useTypeImports: true,
@@ -23,7 +31,8 @@ const config: CodegenConfig = {
         // },
         // maybeValue: 'T | null | undefined',
         scalars: {
-          AWSDate: 'string',
+          AWSDate: 'ISODate',
+          AWSTime: 'ISOTime',
           AWSEmail: 'string',
         },
       },

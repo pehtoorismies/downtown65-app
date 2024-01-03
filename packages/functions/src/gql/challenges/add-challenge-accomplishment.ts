@@ -1,3 +1,4 @@
+import { ISODate } from '@downtown65-app/core/event-time'
 import { logger } from '@downtown65-app/core/logger/logger'
 import type { MutationAddChallengeAccomplishmentArgs } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
@@ -26,7 +27,7 @@ export const addChallengeAccomplishment: AppSyncResolverHandler<
   await Challenge.addAccomplishment({
     id,
     userId,
-    date,
+    date: ISODate.parse(date),
   })
 
   return true

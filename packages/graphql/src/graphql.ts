@@ -1,4 +1,5 @@
 /* eslint-disable */
+import type { ISODate, ISOTime } from '@downtown65-app/core/event-time'
 import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
@@ -27,8 +28,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean }
   Int: { input: number; output: number }
   Float: { input: number; output: number }
-  AWSDate: { input: string; output: string }
+  AWSDate: { input: ISODate; output: ISODate }
   AWSEmail: { input: string; output: string }
+  AWSTime: { input: ISOTime; output: ISOTime }
 }
 
 export type AccomplishmentInput = {
@@ -70,8 +72,8 @@ export type ChallengeParticipant = User & {
 
 export type CreateChallengeInput = {
   createdBy: MeInput
-  dateEnd: DateInput
-  dateStart: DateInput
+  dateEnd: Scalars['AWSDate']['input']
+  dateStart: Scalars['AWSDate']['input']
   description?: InputMaybe<Scalars['String']['input']>
   subtitle: Scalars['String']['input']
   title: Scalars['String']['input']
@@ -79,13 +81,13 @@ export type CreateChallengeInput = {
 
 export type CreateEventInput = {
   createdBy: MeInput
-  dateStart: DateInput
+  dateStart: Scalars['AWSDate']['input']
   description?: InputMaybe<Scalars['String']['input']>
   location: Scalars['String']['input']
   participants?: InputMaybe<Array<MeInput>>
   race: Scalars['Boolean']['input']
   subtitle: Scalars['String']['input']
-  timeStart?: InputMaybe<TimeInput>
+  timeStart?: InputMaybe<Scalars['AWSTime']['input']>
   title: Scalars['String']['input']
   type: EventType
 }
@@ -100,12 +102,6 @@ export type Creator = User & {
 export type DateFilter = {
   after?: InputMaybe<Scalars['AWSDate']['input']>
   before?: InputMaybe<Scalars['AWSDate']['input']>
-}
-
-export type DateInput = {
-  day: Scalars['Int']['input']
-  month: Scalars['Int']['input']
-  year: Scalars['Int']['input']
 }
 
 export type DetailedUser = {
@@ -124,7 +120,7 @@ export type Event = {
   participants: Array<Participant>
   race: Scalars['Boolean']['output']
   subtitle: Scalars['String']['output']
-  timeStart?: Maybe<Scalars['String']['output']>
+  timeStart?: Maybe<Scalars['AWSTime']['output']>
   title: Scalars['String']['output']
   type: EventType
 }
@@ -384,11 +380,6 @@ export type SignupSuccess = {
   message: Scalars['String']['output']
 }
 
-export type TimeInput = {
-  hours: Scalars['Int']['input']
-  minutes: Scalars['Int']['input']
-}
-
 export type Tokens = {
   __typename: 'Tokens'
   accessToken: Scalars['String']['output']
@@ -398,12 +389,12 @@ export type Tokens = {
 }
 
 export type UpdateEventInput = {
-  dateStart: DateInput
+  dateStart: Scalars['AWSDate']['input']
   description?: InputMaybe<Scalars['String']['input']>
   location: Scalars['String']['input']
   race: Scalars['Boolean']['input']
   subtitle: Scalars['String']['input']
-  timeStart?: InputMaybe<TimeInput>
+  timeStart?: InputMaybe<Scalars['AWSTime']['input']>
   title: Scalars['String']['input']
   type: EventType
 }
@@ -429,6 +420,94 @@ export type UsersResponse = {
   start: Scalars['Int']['output']
   total: Scalars['Int']['output']
   users: Array<OtherUser>
+}
+
+export type GetChallengeQueryVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type GetChallengeQuery = {
+  __typename: 'Query'
+  challenge?: {
+    __typename: 'Challenge'
+    id: string
+    dateEnd: ISODate
+    dateStart: ISODate
+    description?: string | null
+    subtitle: string
+    title: string
+    createdBy: {
+      __typename: 'Creator'
+      id: string
+      nickname: string
+      picture: string
+    }
+    participants: Array<{
+      __typename: 'ChallengeParticipant'
+      id: string
+      picture: string
+      nickname: string
+      joinedAt: string
+    }>
+  } | null
+}
+
+export type ParticipateChallengeMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+  me: MeInput
+}>
+
+export type ParticipateChallengeMutation = {
+  __typename: 'Mutation'
+  participateChallenge: boolean
+}
+
+export type LeaveChallengeMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+}>
+
+export type LeaveChallengeMutation = {
+  __typename: 'Mutation'
+  leaveChallenge: boolean
+}
+
+export type GetChallengesQueryVariables = Exact<{
+  filter?: InputMaybe<ChallengeFilter>
+}>
+
+export type GetChallengesQuery = {
+  __typename: 'Query'
+  challenges: Array<{
+    __typename: 'Challenge'
+    id: string
+    dateStart: ISODate
+    dateEnd: ISODate
+    description?: string | null
+    subtitle: string
+    title: string
+    createdBy: {
+      __typename: 'Creator'
+      id: string
+      nickname: string
+      picture: string
+    }
+    participants: Array<{
+      __typename: 'ChallengeParticipant'
+      id: string
+      joinedAt: string
+      nickname: string
+      picture: string
+    }>
+  }>
+}
+
+export type CreateChallengeMutationVariables = Exact<{
+  input: CreateChallengeInput
+}>
+
+export type CreateChallengeMutation = {
+  __typename: 'Mutation'
+  createChallenge: { __typename: 'IDPayload'; id: string }
 }
 
 export type ForgotPasswordMutationVariables = Exact<{
@@ -525,94 +604,6 @@ export type SignupErrorFragmentFragment = {
   error: string
 }
 
-export type GetChallengeQueryVariables = Exact<{
-  id: Scalars['ID']['input']
-}>
-
-export type GetChallengeQuery = {
-  __typename: 'Query'
-  challenge?: {
-    __typename: 'Challenge'
-    id: string
-    dateEnd: string
-    dateStart: string
-    description?: string | null
-    subtitle: string
-    title: string
-    createdBy: {
-      __typename: 'Creator'
-      id: string
-      nickname: string
-      picture: string
-    }
-    participants: Array<{
-      __typename: 'ChallengeParticipant'
-      id: string
-      picture: string
-      nickname: string
-      joinedAt: string
-    }>
-  } | null
-}
-
-export type ParticipateChallengeMutationVariables = Exact<{
-  id: Scalars['ID']['input']
-  me: MeInput
-}>
-
-export type ParticipateChallengeMutation = {
-  __typename: 'Mutation'
-  participateChallenge: boolean
-}
-
-export type LeaveChallengeMutationVariables = Exact<{
-  id: Scalars['ID']['input']
-}>
-
-export type LeaveChallengeMutation = {
-  __typename: 'Mutation'
-  leaveChallenge: boolean
-}
-
-export type GetChallengesQueryVariables = Exact<{
-  filter?: InputMaybe<ChallengeFilter>
-}>
-
-export type GetChallengesQuery = {
-  __typename: 'Query'
-  challenges: Array<{
-    __typename: 'Challenge'
-    id: string
-    dateStart: string
-    dateEnd: string
-    description?: string | null
-    subtitle: string
-    title: string
-    createdBy: {
-      __typename: 'Creator'
-      id: string
-      nickname: string
-      picture: string
-    }
-    participants: Array<{
-      __typename: 'ChallengeParticipant'
-      id: string
-      joinedAt: string
-      nickname: string
-      picture: string
-    }>
-  }>
-}
-
-export type CreateChallengeMutationVariables = Exact<{
-  input: CreateChallengeInput
-}>
-
-export type CreateChallengeMutation = {
-  __typename: 'Mutation'
-  createChallenge: { __typename: 'IDPayload'; id: string }
-}
-
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID']['input']
 }>
@@ -622,13 +613,13 @@ export type GetEventQuery = {
   event?: {
     __typename: 'Event'
     id: string
-    dateStart: string
+    dateStart: ISODate
     description?: string | null
     location: string
     race: boolean
     subtitle: string
     title: string
-    timeStart?: string | null
+    timeStart?: ISOTime | null
     type: EventType
     createdBy: {
       __typename: 'Creator'
@@ -681,13 +672,13 @@ export type GetEventsQuery = {
   events: Array<{
     __typename: 'Event'
     id: string
-    dateStart: string
+    dateStart: ISODate
     description?: string | null
     location: string
     race: boolean
     subtitle: string
     title: string
-    timeStart?: string | null
+    timeStart?: ISOTime | null
     type: EventType
     createdBy: {
       __typename: 'Creator'
@@ -992,6 +983,346 @@ export const RefreshErrorFragmentFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<RefreshErrorFragmentFragment, unknown>
+export const GetChallengeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetChallenge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'challenge' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'createdBy' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nickname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'picture' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'dateEnd' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'dateStart' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'subtitle' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'participants' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'picture' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nickname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'joinedAt' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetChallengeQuery, GetChallengeQueryVariables>
+export const ParticipateChallengeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ParticipateChallenge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'me' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'MeInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'participateChallenge' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'me' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'me' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ParticipateChallengeMutation,
+  ParticipateChallengeMutationVariables
+>
+export const LeaveChallengeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'LeaveChallenge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'leaveChallenge' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  LeaveChallengeMutation,
+  LeaveChallengeMutationVariables
+>
+export const GetChallengesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetChallenges' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'filter' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'ChallengeFilter' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'challenges' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'filter' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'filter' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'createdBy' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nickname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'picture' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'dateStart' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'dateEnd' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'participants' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'joinedAt' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'nickname' },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'picture' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'subtitle' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetChallengesQuery, GetChallengesQueryVariables>
+export const CreateChallengeDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateChallenge' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'CreateChallengeInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createChallenge' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateChallengeMutation,
+  CreateChallengeMutationVariables
+>
 export const ForgotPasswordDocument = {
   kind: 'Document',
   definitions: [
@@ -1364,346 +1695,6 @@ export const SignupDocument = {
     },
   ],
 } as unknown as DocumentNode<SignupMutation, SignupMutationVariables>
-export const GetChallengeDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetChallenge' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'challenge' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'createdBy' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'nickname' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'picture' },
-                      },
-                    ],
-                  },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'dateEnd' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'dateStart' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'subtitle' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'participants' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'picture' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'nickname' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'joinedAt' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetChallengeQuery, GetChallengeQueryVariables>
-export const ParticipateChallengeDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'ParticipateChallenge' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'me' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'MeInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'participateChallenge' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'me' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'me' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  ParticipateChallengeMutation,
-  ParticipateChallengeMutationVariables
->
-export const LeaveChallengeDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'LeaveChallenge' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'leaveChallenge' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  LeaveChallengeMutation,
-  LeaveChallengeMutationVariables
->
-export const GetChallengesDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetChallenges' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'filter' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'ChallengeFilter' },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'challenges' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'filter' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'filter' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'createdBy' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'nickname' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'picture' },
-                      },
-                    ],
-                  },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'dateStart' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'dateEnd' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'description' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'participants' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'joinedAt' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'nickname' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'picture' },
-                      },
-                    ],
-                  },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'subtitle' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'title' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetChallengesQuery, GetChallengesQueryVariables>
-export const CreateChallengeDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'CreateChallenge' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'input' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'CreateChallengeInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'createChallenge' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'input' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  CreateChallengeMutation,
-  CreateChallengeMutationVariables
->
 export const GetEventDocument = {
   kind: 'Document',
   definitions: [
