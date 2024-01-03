@@ -1,9 +1,5 @@
-import format from 'date-fns/format'
-import formatISO from 'date-fns/formatISO'
-import isAfter from 'date-fns/isAfter'
-import isValid from 'date-fns/isValid'
-import fi from 'date-fns/locale/fi'
-import parse from 'date-fns/parse'
+import { format, formatISO, isAfter, isValid, parse } from 'date-fns'
+import { fi } from 'date-fns/locale/fi'
 
 type ISODate = string
 type ISOTime = string

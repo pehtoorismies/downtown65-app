@@ -1,6 +1,6 @@
 import type { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
-import formatISO from 'date-fns/formatISO'
+import { formatISO } from 'date-fns'
 import {
   ParticipantsSchema,
   ParticipatingUserSchema,
