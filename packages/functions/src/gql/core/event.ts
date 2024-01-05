@@ -1,14 +1,14 @@
-import type { ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import { logger } from '@downtown65-app/core/logger/logger'
 import {
-  EventTime,
+  toISODate,
   toISODatetimeCompact,
-} from '@downtown65-app/core/event-time'
+} from '@downtown65-app/core/time-functions'
 import type {
   CreateEventInput,
   Event,
   UpdateEventInput,
 } from '@downtown65-app/graphql/graphql'
-import { format, formatISO, startOfToday } from 'date-fns'
+import { format, startOfToday } from 'date-fns'
 import { ulid } from 'ulid'
 import {
   Dt65EventCreateSchema,
@@ -34,10 +34,6 @@ const getPrimaryKey = (eventId: string) => {
     PK: `EVENT#${eventId}`,
     SK: `EVENT#${eventId}`,
   }
-}
-
-const getISODateTimeCompact = (date: Date) => {
-  return formatISO(date).slice(0, 19)
 }
 
 const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
@@ -67,10 +63,6 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
   }
 }
 
-const getDefaultIfEmpty = (value: string) => {
-  return value.trim().length === 0 ? 'ei määritelty' : value
-}
-
 export const create = async (
   creatableEvent: CreateEventInput
 ): Promise<string> => {
@@ -89,7 +81,11 @@ export const create = async (
   const eventId = ulid()
 
   const gsi1sk = toISODatetimeCompact(dateStart, timeStart ?? undefined)
-  const nowISOString = getISODateTimeCompact(new Date())
+  const nowDate = toISODate(new Date())
+  if (!nowDate.success) {
+    throw new Error('Unexpected error formatting toISODate(new Date())')
+  }
+  const nowISOString = toISODatetimeCompact(nowDate.data)
 
   const parts = participants ?? []
   const participantHashMap = {}
@@ -104,7 +100,7 @@ export const create = async (
       },
     })
   }
-
+  logger.debug(creatableEvent, 'Creatable event')
   await Dt65EventEntity.put(
     Dt65EventCreateSchema.parse({
       // add keys
@@ -116,12 +112,12 @@ export const create = async (
       dateStart,
       description,
       id: eventId,
-      location: getDefaultIfEmpty(location),
+      location,
       participants: participantHashMap,
-      race: race ?? false,
-      subtitle: getDefaultIfEmpty(subtitle),
+      race,
+      subtitle,
       timeStart,
-      title: getDefaultIfEmpty(title),
+      title,
       type,
     }),
     { returnValues: 'NONE' }
@@ -132,22 +128,18 @@ export const create = async (
 
 export const update = async (
   eventId: string,
-  updateEventInput: Omit<UpdateEventInput, 'dateStart' | 'timeStart'> & {
-    dateStart: ISODate // override type
-    timeStart?: ISOTime // override type
-  }
+  updateEventInput: UpdateEventInput
 ): Promise<Event> => {
-  const { dateStart, timeStart, type, ...rest } = updateEventInput
+  const { dateStart, description, timeStart, type, ...rest } = updateEventInput
 
-  const eventTime = EventTime.create(dateStart, timeStart)
-  const gsi1sk = eventTime.getISODateTimeCompact()
+  const gsi1sk = toISODatetimeCompact(dateStart, timeStart ?? undefined)
 
   const update: Dt65EventUpdateSchema = {
     ...getPrimaryKey(eventId),
     ...rest,
-    description: rest.description ?? undefined,
-    dateStart: eventTime.getISODate(),
-    timeStart: eventTime.getISOTime(),
+    dateStart,
+    timeStart: timeStart ?? undefined,
+    description: description ?? undefined,
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     type,
   }

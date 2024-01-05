@@ -1,4 +1,9 @@
-import { EventTime, ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import {
+  ISODate,
+  ISOTime,
+  toDate,
+  toTimeComponents,
+} from '@downtown65-app/core/time-functions'
 import { graphql } from '@downtown65-app/graphql/gql'
 import {
   GetEventDocument,
@@ -110,7 +115,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
       eventId,
       input: {
         dateStart: date,
-        description: description.trim() === '' ? undefined : description,
+        description,
         location,
         race: isRace,
         subtitle,
@@ -162,17 +167,17 @@ export default function EditEvent() {
   const navigate = useNavigate()
   const [opened, handlers] = useDisclosure(false)
 
-  const dateResult = ISODate.parse(initDateStart)
   const time = getISOTime(initTimeStart)
+  const timeComponents = time ? toTimeComponents(time) : {}
 
-  const eventTime = EventTime.create(dateResult, time)
+  const eventDate = toDate(ISODate.parse(initDateStart))
 
   const [eventState, dispatch] = useReducer(reducer, {
     ...initState,
     // TODO: smell
     kind: getInitKind(initState.kind),
-    date: eventTime.getDate(),
-    time: eventTime.getTimeComponents() ?? {},
+    date: eventDate,
+    time: timeComponents,
   })
 
   const participatingActions: Context = {

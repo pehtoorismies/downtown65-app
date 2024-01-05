@@ -1,4 +1,4 @@
-import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
 import type {
   Event as Dt65Event,
   MutationUpdateEventArgs,

@@ -1,4 +1,4 @@
-import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { describe, expect, test } from 'vitest'
 import * as Event from '../event'

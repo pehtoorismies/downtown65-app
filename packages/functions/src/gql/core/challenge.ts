@@ -1,5 +1,8 @@
-import { ISODate } from '@downtown65-app/core/event-time'
 import { logger } from '@downtown65-app/core/logger/logger'
+import {
+  ISODate,
+  toISODatetimeCompact,
+} from '@downtown65-app/core/time-functions'
 import type {
   Challenge,
   CreateChallengeInput,
@@ -35,9 +38,9 @@ export const create = async (
 ): Promise<string> => {
   const { createdBy, dateStart, dateEnd, description, subtitle, title } =
     creatable
-  const id = ulid()
 
-  const gsi1sk = end.getISODateTimeCompact()
+  const id = ulid()
+  const gsi1sk = toISODatetimeCompact(dateEnd)
 
   await ChallengeEntity.put(
     ChallengeCreateSchema.parse({
@@ -49,8 +52,8 @@ export const create = async (
       createdBy,
       // TODO: add creator
       participants: {},
-      dateStart: dateStart,
-      dateEnd: dateEnd,
+      dateStart,
+      dateEnd,
       description,
       id,
       subtitle,
@@ -107,6 +110,7 @@ export const getById = async (id: string): Promise<Challenge | null> => {
     participants: participants.map((p) => {
       return {
         ...p,
+        accomplishedDates: p.accomplishedDates.map((x) => ISODate.parse(x)),
         __typename: 'ChallengeParticipant',
       }
     }),
@@ -177,6 +181,8 @@ export const getAll = async (
   return results.Items.map((data) => {
     return {
       ...data,
+      dateStart: ISODate.parse(data.dateStart),
+      dateEnd: ISODate.parse(data.dateEnd),
       createdBy: {
         ...Auth0UserSchema.parse(data.createdBy),
         __typename: 'Creator',

@@ -1,4 +1,4 @@
-import { toISODate } from '@downtown65-app/core/event-time'
+import { toISODate } from '@downtown65-app/core/time-functions'
 import { z } from 'zod'
 import type { ChallengeState } from '~/routes-common/challenges/create-edit/challenge-reducer'
 

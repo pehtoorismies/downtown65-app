@@ -1,4 +1,4 @@
-import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import { ISODate, toISOTime } from '@downtown65-app/core/time-functions'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
 
@@ -11,7 +11,12 @@ const isEventType = (eventType: unknown): eventType is EventType => {
 
 const EventForm = z.object({
   date: ISODate,
-  description: z.string(),
+  description: z
+    .string()
+    .trim()
+    .transform((x) => {
+      return x.length === 0 ? undefined : x
+    }),
   isRace: z.enum(['true', 'false']).transform((v) => v === 'true'),
   location: z.string(),
   participants: z.array(
@@ -22,8 +27,11 @@ const EventForm = z.object({
     })
   ),
   subtitle: z.string(),
-  time: ISOTime.optional(),
-  title: z.string().min(2),
+  time: z.string().transform((x) => {
+    const maybeISOTime = toISOTime(x)
+    return maybeISOTime.success ? maybeISOTime.data : undefined
+  }),
+  title: z.string().trim().min(1),
   type: z.custom(isEventType, { message: 'Not a valid event type' }),
 })
 

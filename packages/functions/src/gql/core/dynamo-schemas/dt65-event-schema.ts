@@ -1,4 +1,4 @@
-import { ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
 import {
@@ -76,14 +76,16 @@ const gsi1skRefine = (value: {
   return gsi1SKVerifier === value.GSI1SK
 }
 
+const TrimmedNotEmpty = z.string().trim().min(1)
+
 const Dt65EventUpdateableFields = z.object({
   dateStart: ISODate,
   description: z.string().trim().optional(),
-  location: z.string().trim(),
+  location: TrimmedNotEmpty,
   race: z.boolean(),
-  subtitle: z.string().trim(),
+  subtitle: TrimmedNotEmpty,
   timeStart: ISOTime.optional(),
-  title: z.string().trim(),
+  title: TrimmedNotEmpty,
   type: z.nativeEnum(EventType),
 })
 

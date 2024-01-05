@@ -1,3 +1,4 @@
+import { toISODate } from '@downtown65-app/core/time-functions'
 import { graphql } from '@downtown65-app/graphql/gql'
 import { GetChallengesDocument } from '@downtown65-app/graphql/graphql'
 import {
@@ -63,13 +64,18 @@ export const meta: MetaFunction = () => {
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { user, accessToken } = await loaderAuthenticate(request)
 
+  const now = toISODate(new Date())
+  if (!now.success) {
+    throw new Error('Unexpected error formatting toISODate(new Date())')
+  }
+
   const { challenges } = await gqlClient.request(
     GetChallengesDocument,
     {
       filter: {
         dateEnd: {
           // 2022-21-12
-          after: new Date().toISOString().slice(0, 10),
+          after: now.data,
         },
       },
     },

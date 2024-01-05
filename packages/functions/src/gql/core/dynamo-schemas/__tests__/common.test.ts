@@ -1,20 +1,7 @@
 import { describe, expect, test } from 'vitest'
-import { HyphenDate, getKeySchema } from '~/gql/core/dynamo-schemas/common'
+import { getKeySchema } from '~/gql/core/dynamo-schemas/common'
 
 describe('Common schema', () => {
-  describe('HyphenDate', () => {
-    test('date is correct', () => {
-      expect(HyphenDate.safeParse('2023-02-02').success).toBe(true)
-      expect(HyphenDate.safeParse('1977-11-30').success).toBe(true)
-    })
-
-    test('date is incorrect', () => {
-      expect(HyphenDate.safeParse('2023-13-02').success).toBe(false)
-      expect(HyphenDate.safeParse('1977-1-30').success).toBe(false)
-      expect(HyphenDate.safeParse('1977-1-300').success).toBe(false)
-    })
-  })
-
   describe('Key schema', () => {
     test('EVENT schema is correct', () => {
       const eventKey = getKeySchema('EVENT')

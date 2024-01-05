@@ -1,4 +1,4 @@
-import { EventTime, ISODate } from '@downtown65-app/core/event-time'
+import { ISODate, toDate } from '@downtown65-app/core/time-functions'
 import type { CreateChallengeInput } from '@downtown65-app/graphql/graphql'
 import { endOfMonth, startOfMonth } from 'date-fns'
 import type { ZodError } from 'zod'
@@ -13,7 +13,7 @@ const ChallengeInputForm = z.object({
 })
 
 const createMonthRange = (date: ISODate) => {
-  const value = EventTime.create(date).getDate()
+  const value = toDate(date)
 
   const start = startOfMonth(value)
   const end = endOfMonth(value)
@@ -59,8 +59,8 @@ export const getChallengeInput = (
     challengeInputForm: {
       ...challengeInput.data,
       createdBy,
-      dateStart: dateRange.dateStart,
-      dateEnd: dateRange.dateEnd,
+      dateStart: ISODate.parse(dateRange.dateStart),
+      dateEnd: ISODate.parse(dateRange.dateStart),
     },
   }
 }

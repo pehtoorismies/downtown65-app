@@ -13,6 +13,9 @@
     "paths": {
       "@downtown65-app/graphql/*": [
         "../graphql/src/*"
+      ],
+      "@downtown65-app/core/*": [
+        "src/*"
       ]
     }
   }

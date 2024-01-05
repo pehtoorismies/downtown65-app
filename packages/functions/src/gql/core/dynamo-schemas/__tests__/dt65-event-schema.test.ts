@@ -1,3 +1,4 @@
+import { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { describe, expect, it, test } from 'vitest'
 import {
@@ -17,7 +18,7 @@ const createSchema: Dt65EventCreateSchema = {
       'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png',
     id: 'auth0|some_id',
   },
-  dateStart: '2023-02-02',
+  dateStart: ISODate.parse('2023-02-02'),
   location: 'Sipoo   ',
   participants: {
     'auth0|12341234': {
@@ -30,7 +31,7 @@ const createSchema: Dt65EventCreateSchema = {
   },
   race: false,
   subtitle: 'Some subtitle',
-  timeStart: '09:30',
+  timeStart: ISOTime.parse('09:30'),
   title: ' Title',
   type: EventType.Karonkka,
 }
@@ -39,11 +40,11 @@ const updateSchema: Dt65EventUpdateSchema = {
   PK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
   SK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
   GSI1SK: 'DATE#2023-02-02T09:30:00#01GW4MMH',
-  dateStart: '2023-02-02',
+  dateStart: ISODate.parse('2023-02-02'),
   location: 'Sipoo   ',
   race: false,
   subtitle: 'Some subtitle',
-  timeStart: '09:30',
+  timeStart: ISOTime.parse('09:30'),
   title: ' Title',
   type: EventType.Karonkka,
 }
@@ -111,30 +112,6 @@ describe('Dt65EventSchema', () => {
           GSI1SK: 'DATE#2023-02-02#01GW4MMH',
         },
         failKey: 'GSI1SK',
-      },
-      {
-        description: 'Wrong dateStart',
-        data: {
-          ...createSchema,
-          dateStart: '2023-30-30',
-        },
-        failKey: 'dateStart',
-      },
-      {
-        description: 'Wrong dateStart',
-        data: {
-          ...createSchema,
-          dateStart: '2023-30',
-        },
-        failKey: 'dateStart',
-      },
-      {
-        description: 'Wrong timeStart',
-        data: {
-          ...createSchema,
-          timeStart: '24:30',
-        },
-        failKey: 'timeStart',
       },
       {
         description: 'Wrong id',

@@ -1,3 +1,4 @@
+import { ISODate } from '@downtown65-app/core/time-functions'
 import { describe, expect, it, test } from 'vitest'
 import { ChallengeCreateSchema } from '../challenge-schema'
 
@@ -19,8 +20,8 @@ const createSchema: ChallengeCreateSchema = {
       'https://s.gravatar.com/avatar/176eb6f65cfff68dbcdde334af6e90da?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fpe.png',
     id: 'auth0|some_id',
   },
-  dateStart: '2024-02-01',
-  dateEnd: '2024-02-29',
+  dateStart: ISODate.parse('2024-02-01'),
+  dateEnd: ISODate.parse('2024-02-29'),
   subtitle: 'Subtitle',
   title: ' Title',
   participants: {},
@@ -71,30 +72,6 @@ describe('ChallengeCreateSchema', () => {
         failKey: 'GSI1SK',
       },
       {
-        description: 'Non-existing dateStart',
-        data: {
-          ...createSchema,
-          dateStart: '2023-30-30',
-        },
-        failKey: 'dateStart',
-      },
-      {
-        description: 'Non-existing',
-        data: {
-          ...createSchema,
-          dateEnd: '2023-30-30',
-        },
-        failKey: 'dateStart',
-      },
-      {
-        description: 'Wrongly formatted dateStart',
-        data: {
-          ...createSchema,
-          dateStart: '2023-30',
-        },
-        failKey: 'dateStart',
-      },
-      {
         description: 'Wrong id',
         data: {
           ...createSchema,
@@ -106,7 +83,7 @@ describe('ChallengeCreateSchema', () => {
         description: 'dateStart after dateEnd',
         data: {
           ...createSchema,
-          dateStart: '2025-01-01',
+          dateStart: ISODate.parse('2025-01-01'),
         },
         failKey: 'dateStart',
       },
