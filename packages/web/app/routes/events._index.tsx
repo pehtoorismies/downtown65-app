@@ -1,4 +1,4 @@
-import { EventTime, ISODate } from '@downtown65-app/core/event-time'
+import { ISODate, toFormattedDate } from '@downtown65-app/core/time-functions'
 import { graphql } from '@downtown65-app/graphql/gql'
 import { GetEventsDocument } from '@downtown65-app/graphql/graphql'
 import {
@@ -73,7 +73,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const eventItems = events.map((event) => {
     const dateResult = ISODate.safeParse(event.dateStart)
     const formattedDate = dateResult.success
-      ? EventTime.create(dateResult.data).getFormattedDate()
+      ? toFormattedDate(dateResult.data)
       : 'unavailable'
 
     return {

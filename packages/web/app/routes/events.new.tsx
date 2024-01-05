@@ -82,7 +82,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       input: {
         createdBy: user,
         dateStart: date,
-        description: description.trim() === '' ? undefined : description,
+        description,
         location,
         race: isRace,
         subtitle,

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import type { ISODate, ISOTime } from '@downtown65-app/core/event-time'
+import type { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
 import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>

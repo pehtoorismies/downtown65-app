@@ -13,7 +13,7 @@ const config: CodegenConfig = {
         {
           add: {
             content:
-              "import type { ISODate, ISOTime } from '@downtown65-app/core/event-time'",
+              "import type { ISODate, ISOTime } from '@downtown65-app/core/time-functions'",
           },
         },
       ],

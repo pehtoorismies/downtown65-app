@@ -1,4 +1,4 @@
-import { toISODate, toISOTime } from '@downtown65-app/core/event-time'
+import { toISODate, toISOTime } from '@downtown65-app/core/time-functions'
 import type { EventState } from './components/event-state'
 
 const getAsISOTime = (time: EventState['time']) => {
@@ -23,7 +23,9 @@ export const eventStateToSubmittable = (eventState: EventState) => {
     throw new Error('Date format is incorrect')
   }
 
-  const form = {
+  const timeValue = getAsISOTime(eventState.time)
+
+  return {
     date: dateResult.data,
     description: eventState.description,
     eventType: eventState.eventType,
@@ -32,14 +34,6 @@ export const eventStateToSubmittable = (eventState: EventState) => {
     participants: JSON.stringify(eventState.participants),
     subtitle: eventState.subtitle,
     title: eventState.title,
+    time: timeValue ?? '',
   }
-
-  const timeValue = getAsISOTime(eventState.time)
-
-  return timeValue
-    ? {
-        ...form,
-        time: timeValue,
-      }
-    : form
 }

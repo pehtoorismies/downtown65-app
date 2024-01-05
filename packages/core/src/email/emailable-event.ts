@@ -1,6 +1,6 @@
 import type { EventType } from '@downtown65-app/graphql/graphql'
 import { z } from 'zod'
-import { EventTime, ISODate } from '../event-time'
+import { ISODate, toFormattedDate } from '../time-functions'
 
 const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
   CYCLING: {
@@ -106,7 +106,7 @@ export const EmailableEvent = z
     }) => {
       const date = ISODate.safeParse(dateStart)
       const formattedDate = date.success
-        ? EventTime.create(date.data).getFormattedDate()
+        ? toFormattedDate(date.data)
         : 'unavailable'
 
       return {

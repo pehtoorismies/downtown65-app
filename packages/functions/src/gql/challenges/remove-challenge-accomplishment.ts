@@ -1,4 +1,4 @@
-import { ISODate } from '@downtown65-app/core/event-time'
+import { ISODate } from '@downtown65-app/core/time-functions'
 import type { MutationRemoveChallengeAccomplishmentArgs } from '@downtown65-app/graphql/graphql'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
