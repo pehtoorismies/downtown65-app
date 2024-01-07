@@ -1,6 +1,7 @@
 import type { EventType } from '@downtown65-app/graphql/graphql'
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
+import type { EventInfo } from '../support/event-info'
 import { EventPage } from './event-page'
 
 export class NewEventPage extends EventPage {
@@ -21,10 +22,12 @@ export class NewEventPage extends EventPage {
     return this.page.getByTestId('confirmation-modal-content')
   }
 
+  getStepHeading() {
+    return this.page.getByRole('heading', { level: 2 })
+  }
+
   async headerVisible(text: string) {
-    await expect(this.page.getByRole('heading', { level: 2 })).toContainText(
-      text
-    )
+    await expect(this.getStepHeading()).toContainText(text)
   }
 
   async modalClick(kind: 'closeWithX' | 'closeWithButton' | 'confirmCancel') {
@@ -138,7 +141,7 @@ export class NewEventPage extends EventPage {
     await this.headerVisible('Esikatselu')
   }
 
-  async fillBasicInfo({
+  async fillEventInfo({
     title,
     subtitle,
     location,
@@ -152,18 +155,29 @@ export class NewEventPage extends EventPage {
     await this.fillLocation(location)
   }
 
-  async createEvent(basicInfo: {
-    title: string
-    subtitle: string
-    location: string
-    type: EventType
-  }): Promise<string> {
-    await this.page.getByTestId(`button-${basicInfo.type}`).click()
+  async actionCreateEvent(eventInfo: EventInfo): Promise<string> {
+    await this.page.getByTestId(`button-${eventInfo.type}`).click()
     await this.headerVisible('Perustiedot')
-    await this.fillBasicInfo(basicInfo)
+    await this.fillEventInfo(eventInfo)
 
-    await this.clickThroughStepsFromBasicInfo()
+    await this.clickButton('Päivämäärä')
+    // TODO: set date from eventInfo
 
+    await this.clickButton('Kellonaika')
+
+    if (eventInfo.time !== null) {
+      await this.hourClick(eventInfo.time.hours)
+      await this.minuteClick(eventInfo.time.minutes)
+    }
+
+    await this.clickButton('Kuvaus')
+
+    await this.clickButton('Esikatselu')
+
+    // verify preview
+    await this.verifyEventInfo(eventInfo)
+
+    // create
     await this.page.getByRole('button', { name: 'Luo tapahtuma' }).click()
 
     await expect(
