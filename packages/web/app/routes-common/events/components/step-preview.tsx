@@ -1,3 +1,4 @@
+import { padTime } from '@downtown65-app/core/time-functions'
 import { IconDeviceFloppy, IconRocket } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { fi } from 'date-fns/locale'
@@ -12,7 +13,6 @@ import {
   PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
-import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 interface Properties extends ReducerProps {
   me: User
@@ -28,7 +28,7 @@ const getDate = (date: EventState['date']) => {
 
 const getTime = ({ hours, minutes }: EventState['time']) => {
   if (hours !== undefined && minutes !== undefined) {
-    return `${prefixZero(hours)}:${suffixZero(minutes)}`
+    return `${padTime(hours)}:${padTime(minutes)}`
   }
 }
 
