@@ -1,5 +1,12 @@
+import {
+  toFormattedDate,
+  toISODate,
+  toISOTime,
+} from '@downtown65-app/core/time-functions'
 import { expect } from '@playwright/test'
 import type { Page } from '@playwright/test'
+import invariant from 'tiny-invariant'
+import type { EventInfo } from '../support/event-info'
 import { DtPage } from './dt-page'
 
 export class EventPage extends DtPage {
@@ -28,6 +35,33 @@ export class EventPage extends DtPage {
 
   getLocation() {
     return this.page.getByTestId('event-location')
+  }
+
+  async verifyEventInfo(eventInfo: EventInfo) {
+    await expect(this.getTitle()).toHaveText(eventInfo.title)
+    await expect(this.getSubtitle()).toHaveText(eventInfo.subtitle)
+    await expect(this.getLocation()).toHaveText(eventInfo.location)
+
+    const dateText = await this.getDate().textContent()
+    const isoDate = toISODate(eventInfo.date)
+    invariant(isoDate.success)
+
+    if (eventInfo.time) {
+      const isoTime = toISOTime(eventInfo.time)
+      invariant(isoTime.success)
+      expect(dateText).toBe(
+        `${toFormattedDate(isoDate.data)} klo ${isoTime.data}`
+      )
+    } else {
+      expect(dateText).toBe(toFormattedDate(isoDate.data))
+    }
+  }
+
+  async actionDeleteEvent() {
+    await this.getDeleteEventBtn().click()
+    await this.getDeleteConfirmationInput().fill('poista')
+    await this.getDeleteConfirmationBtn().click()
+    await this.page.waitForURL('**/events')
   }
 
   getDate() {

@@ -1,15 +1,13 @@
-import { EventType } from '@downtown65-app/graphql/graphql'
-import {
-  randCity,
-  randNumber,
-  randProductName,
-  randSports,
-} from '@ngneat/falso'
 import { test as base, expect } from '@playwright/test'
 import { format } from 'date-fns'
 import { addMonths, setDate } from 'date-fns/fp'
 import * as R from 'remeda'
 import { NewEventPage } from './page-objects/new-event-page'
+import {
+  getRandomEventInfo,
+  getRandomEventType,
+  getRandomEventTypes,
+} from './support/random-event'
 import { testUser } from './test-user'
 
 const test = base.extend<{ newEventPage: NewEventPage }>({
@@ -21,29 +19,14 @@ const test = base.extend<{ newEventPage: NewEventPage }>({
   },
 })
 
-const shuffleArray = <T>(array: T[]) => {
-  const clonedArray = [...array]
-
-  for (let index = clonedArray.length - 1; index > 0; index--) {
-    const index_ = Math.floor(Math.random() * (index + 1))
-    const temporary = clonedArray[index]
-    clonedArray[index] = clonedArray[index_]
-    clonedArray[index_] = temporary
-  }
-  return clonedArray
-}
-
 test.describe('Create event', () => {
   test('should cancel new event creation', async ({ page, newEventPage }) => {
     await newEventPage.cancelClick()
     await newEventPage.modalClick('closeWithX')
     await expect(newEventPage.getCancelModalContent()).toBeHidden()
 
-    const eventTypes = Object.values(EventType)
+    await newEventPage.eventTypeClick(getRandomEventType())
 
-    await newEventPage.eventTypeClick(
-      eventTypes[randNumber({ min: 0, max: eventTypes.length - 1 })]
-    )
     await newEventPage.headerVisible('Perustiedot')
     await newEventPage.cancelClick()
     await expect(newEventPage.getCancelModalContent()).toBeVisible()
@@ -56,15 +39,14 @@ test.describe('Create event', () => {
     await page.waitForURL('**/events')
   })
 
-  test('should create a new event, modify and delete it', async ({
+  test('should navigate creation wizard and then create event', async ({
     newEventPage,
     page,
   }) => {
-    const shuffled = shuffleArray(Object.values(EventType))
-    const title = randSports()
-    const updatedTitle = randSports()
-    const subtitle = randProductName()
-    const location = randCity()
+    const shuffled = getRandomEventTypes()
+    const { title, subtitle, location } = getRandomEventInfo({})
+    const { title: updatedTitle } = getRandomEventInfo({})
+
     const userNick = testUser.nick
     const initType = shuffled[0]
     const selectedType = shuffled[1]
@@ -214,6 +196,8 @@ test.describe('Create event', () => {
     if (!m || !m[1]) {
       throw new Error('Wrong url')
     }
+
+    // TODO: remove
     const createdEventId = m[1]
 
     await expect(newEventPage.getModifyEventBtn()).toBeEnabled()

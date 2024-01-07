@@ -102,7 +102,7 @@ test.describe('Logged out users', () => {
 
     const newEventPage = new NewEventPage(page)
     await newEventPage.goto()
-    const eventId = await newEventPage.createEvent(eventBasicInfo)
+    const eventId = await newEventPage.actionCreateEvent(eventBasicInfo)
 
     await page.getByRole('button', { name: testUser.nick }).click()
     await page.getByRole('menuitem', { name: 'Logout' }).click()
