@@ -1,4 +1,5 @@
 import 'dayjs/locale/fi'
+import { padTime } from '@downtown65-app/core/time-functions'
 import { Button, Center, Grid, Stack, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import type { PropsWithChildren } from 'react'
@@ -11,20 +12,16 @@ import {
   PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
-import { prefixZero, suffixZero } from '~/util/pad-zeros'
 
 const HOURS = [
-  // [6, 7, 8, 9, 10, 11, 12, 13],
-  // [14, 15, 16, 17, 18, 19, 20, 21],
-  // [22, 23, 0, 1, 2, 3, 4, 5],
   [6, 9, 12, 15, 18, 21, 0, 3],
   [7, 10, 13, 16, 19, 22, 1, 4],
   [8, 11, 14, 17, 20, 23, 2, 5],
 ]
 
 const MINUTES = [
-  [0, 5, 10, 15, 20, 25],
-  [30, 35, 40, 45, 50, 55],
+  [0, 10, 20, 30, 40, 50],
+  [5, 15, 25, 35, 45, 55],
 ]
 
 const getHourGradient = (currentValue: number, value?: number) => {
@@ -43,10 +40,10 @@ const getMinuteGradient = (currentValue: number, value?: number) => {
 
 const getTime = ({ time }: EventState): string => {
   if (time.hours !== undefined && time.minutes !== undefined) {
-    return `: ${prefixZero(time.hours)}:${suffixZero(time.minutes)}`
+    return `: ${padTime(time.hours)}:${padTime(time.minutes)}`
   }
   if (time.hours !== undefined) {
-    return `: ${prefixZero(time.hours)}:xx`
+    return `: ${padTime(time.hours)}:xx`
   }
   return ''
 }
@@ -91,7 +88,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
         }}
         data-testid={`hour-${hour}`}
       >
-        {prefixZero(hour)}
+        {padTime(hour)}
       </Button>
     ))
   const getMinutesCol = (minutes: number[]) =>
@@ -114,7 +111,7 @@ export const StepTime = ({ state, dispatch }: ReducerProps) => {
         }}
         data-testid={`minute-${minute}`}
       >
-        {suffixZero(minute)}
+        {padTime(minute)}
       </Button>
     ))
 
