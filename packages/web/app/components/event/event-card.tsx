@@ -58,6 +58,8 @@ export const EventCard = ({
   const time = timeStart ? `klo ${timeStart}` : ''
   const descriptionText = getDescription(description)
 
+  const formattedDate = time.length === 0 ? dateStart : `${dateStart} ${time}`
+
   return (
     <Voucher>
       <Voucher.Header bgImageUrl={mapToData(type).imageUrl}>
@@ -76,7 +78,7 @@ export const EventCard = ({
               {subtitle}
             </Text>
             <Text size="sm" fw={500} data-testid="event-date">
-              {dateStart} {time}
+              {formattedDate}
             </Text>
             <Text size="sm" c="dimmed" fw={400} data-testid="event-location">
               {location}
