@@ -66,6 +66,13 @@ const getDateAsString = (date: DateInput) => {
   return result.error
 }
 
+export const padTime = (x: number): string => {
+  if (x < 10) {
+    return String(x).padStart(2, '0')
+  }
+  return String(x)
+}
+
 export const toISODate = (date: DateInput) => {
   const d = getDateAsString(date)
   return ISODate.safeParse(d)
