@@ -13,6 +13,7 @@ const creatableEvent = {
     id: userId,
   },
   dateStart: ISODate.parse('2018-12-13'),
+  description: '<p>some thing</p>',
   location: 'Sipoo',
   participants: [
     {
@@ -36,6 +37,7 @@ describe('Events', () => {
     expect(event).toBeDefined()
     expect(event?.id).toBeDefined()
     expect(event?.timeStart).toBe('09:30')
+    expect(event?.description).toBe('<p>some thing</p>')
     expect(event?.participants.length).toBe(1)
 
     await Event.leave(id, userId)
@@ -58,12 +60,14 @@ describe('Events', () => {
     const updatedEvent2 = await Event.getById(id)
     expect(updatedEvent2?.participants.length).toBe(1)
 
+    // description missing should be removed
     await Event.update(id, {
       dateStart: ISODate.parse('2018-12-13'),
       location: 'Vantaa',
       race: true,
       subtitle: 'Some other subtitle',
-      timeStart: ISOTime.parse('09:30'),
+      timeStart: ISOTime.parse('12:45'),
+      description: undefined, // remove description
       title: 'Updated title',
       type: EventType.Other,
     })
@@ -73,7 +77,25 @@ describe('Events', () => {
     expect(titleUpdateEvent?.type).toBe('OTHER')
     expect(titleUpdateEvent?.race).toBe(true)
     expect(titleUpdateEvent?.location).toBe('Vantaa')
+    expect(titleUpdateEvent?.timeStart).toBe('12:45')
     expect(titleUpdateEvent?.subtitle).toBe('Some other subtitle')
+    expect(titleUpdateEvent?.description).toBeUndefined()
+
+    await Event.update(id, {
+      dateStart: ISODate.parse('2018-12-13'),
+      location: 'Vantaa',
+      race: true,
+      subtitle: 'Some other subtitle',
+      timeStart: undefined,
+      title: 'Updated title',
+      type: EventType.Other,
+    })
+
+    const timeRemoved = await Event.getById(id)
+    expect(timeRemoved?.timeStart).toBeUndefined()
+    expect(timeRemoved?.description).toBeUndefined()
+
+    await Event.remove(id)
   })
 
   test('remove should throw error if event is not found', async () => {

@@ -10,6 +10,7 @@ import type {
 } from '@downtown65-app/graphql/graphql'
 import { format, startOfToday } from 'date-fns'
 import { ulid } from 'ulid'
+import type { Dt65EventUpdateSchemaInput } from './dynamo-schemas/dt65-event-schema'
 import {
   Dt65EventCreateSchema,
   Dt65EventGetSchema,
@@ -134,7 +135,7 @@ export const update = async (
 
   const gsi1sk = toISODatetimeCompact(dateStart, timeStart ?? undefined)
 
-  const update: Dt65EventUpdateSchema = {
+  const update: Dt65EventUpdateSchemaInput = {
     ...getPrimaryKey(eventId),
     ...rest,
     dateStart,

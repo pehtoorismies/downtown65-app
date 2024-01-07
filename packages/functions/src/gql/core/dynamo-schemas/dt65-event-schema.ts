@@ -117,11 +117,30 @@ export const Dt65EventGetSchema = Dt65EventUpdateableFields.extend({
 
 export type Dt65EventCreateSchema = z.infer<typeof Dt65EventCreateSchema>
 
+export const UpdateRemoveFields = z
+  .union([z.literal('description'), z.literal('timeStart')])
+  .array()
+
+export type UpdateRemoveFields = z.infer<typeof UpdateRemoveFields>
+
 export const Dt65EventUpdateSchema = Dt65EventUpdateableFields.extend({
   PK: EventKeySchema,
   SK: EventKeySchema,
   GSI1SK: GS1SKSchema,
 })
+  .transform((v) => {
+    const $remove: UpdateRemoveFields = []
+    if (v.description == null) {
+      $remove.push('description')
+    }
+    if (v.timeStart == null) {
+      $remove.push('timeStart')
+    }
+    return {
+      ...v,
+      $remove,
+    }
+  })
   .refine(
     ({ PK, SK }) => PK === SK,
     ({ PK, SK }) => ({
@@ -131,4 +150,4 @@ export const Dt65EventUpdateSchema = Dt65EventUpdateableFields.extend({
   )
   .refine(gsi1skRefine, gs1SKErrorMessage)
 
-export type Dt65EventUpdateSchema = z.infer<typeof Dt65EventUpdateSchema>
+export type Dt65EventUpdateSchemaInput = z.input<typeof Dt65EventUpdateSchema>
