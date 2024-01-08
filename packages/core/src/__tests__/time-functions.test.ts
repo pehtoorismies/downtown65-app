@@ -76,9 +76,10 @@ describe('Time functions', () => {
     })
   })
 
-  test('toDate', () => {
-    const date = toDate(ISODate.parse('2022-12-12'), ISOTime.parse('20:15'))
-
+  test.each([
+    { date: toDate(ISODate.parse('2022-12-12'), ISOTime.parse('20:15')) },
+    { date: new Date(2022, 11, 12, 20, 15) },
+  ])('toDate from $date to Date-object', ({ date }) => {
     expect(date.getFullYear()).toBe(2022)
     expect(date.getMonth()).toBe(11)
     expect(date.getDate()).toBe(12)
