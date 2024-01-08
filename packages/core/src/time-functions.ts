@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 import {
   formatISO,
   formatWithOptions,
@@ -59,11 +60,11 @@ const getDateAsString = (date: DateInput) => {
   if (typeof date === 'string') {
     return date
   }
-  const result = z.date().safeParse(date)
-  if (result.success) {
-    return result.data.toISOString().slice(0, 10)
+
+  if (isValid(date)) {
+    return format(date, 'yyyy-MM-dd')
   }
-  return result.error
+  return 'not valid date'
 }
 
 export const padTime = (x: number): string => {
