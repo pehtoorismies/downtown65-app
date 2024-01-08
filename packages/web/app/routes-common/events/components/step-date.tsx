@@ -38,7 +38,9 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
     >
       <Group justify="center">
         <DatePicker
-          minDate={dayjs(new Date()).toDate()}
+          minDate={
+            state.kind === 'create' ? dayjs(new Date()).toDate() : undefined
+          }
           value={state.date}
           onChange={(date: DateValue) => {
             if (date == null) {
