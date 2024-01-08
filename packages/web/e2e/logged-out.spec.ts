@@ -1,16 +1,10 @@
-import { EventType } from '@downtown65-app/graphql/graphql'
-import {
-  randCity,
-  randNumber,
-  randProductName,
-  randSports,
-  randUser,
-} from '@ngneat/falso'
+import { randUser } from '@ngneat/falso'
 import { expect, test } from '@playwright/test'
 import { format } from 'date-fns'
 import { EventPage } from './page-objects/event-page'
 import { LoginPage } from './page-objects/login-page'
 import { NewEventPage } from './page-objects/new-event-page'
+import { getRandomEventInfo } from './support/random-event'
 import { testUser } from './test-user'
 
 test.describe('Logged out users', () => {
@@ -91,18 +85,11 @@ test.describe('Logged out users', () => {
   })
 
   test('can see event', async ({ page }) => {
-    const eventTypes = Object.values(EventType)
-
-    const eventBasicInfo = {
-      title: randSports(),
-      subtitle: randProductName(),
-      location: randCity(),
-      type: eventTypes[randNumber({ min: 0, max: eventTypes.length - 1 })],
-    }
+    const eventInfo = getRandomEventInfo()
 
     const newEventPage = new NewEventPage(page)
     await newEventPage.goto()
-    const eventId = await newEventPage.actionCreateEvent(eventBasicInfo)
+    const eventId = await newEventPage.actionCreateEvent(eventInfo)
 
     await page.getByRole('button', { name: testUser.nick }).click()
     await page.getByRole('menuitem', { name: 'Logout' }).click()
@@ -112,14 +99,14 @@ test.describe('Logged out users', () => {
     await eventPage.goto()
 
     await expect(eventPage.getRace()).toBeHidden()
-    await expect(eventPage.getTitle()).toContainText(eventBasicInfo.title)
-    await expect(eventPage.getSubtitle()).toContainText(eventBasicInfo.subtitle)
-    await expect(eventPage.getLocation()).toContainText(eventBasicInfo.location)
+    await expect(eventPage.getTitle()).toContainText(eventInfo.title)
+    await expect(eventPage.getSubtitle()).toContainText(eventInfo.subtitle)
+    await expect(eventPage.getLocation()).toContainText(eventInfo.location)
     await eventPage.expectParticipantCount(0)
 
     await expect(eventPage.getMeta('property', 'og:title')).toHaveAttribute(
       'content',
-      eventBasicInfo.title
+      eventInfo.title
     )
 
     const today = format(new Date(), 'd.M.yyyy')
