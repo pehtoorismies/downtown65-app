@@ -86,7 +86,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     initState: {
       kind: 'edit',
       ...rest,
-      activeStep: ActiveStep.STEP_EVENT_TYPE,
       eventType: type,
       description: description ?? '',
       isRace: race,
@@ -168,13 +167,14 @@ export default function EditEvent() {
   const [opened, handlers] = useDisclosure(false)
 
   const time = getISOTime(initTimeStart)
+
   const timeComponents = time ? toTimeComponents(time) : {}
 
   const eventDate = toDate(ISODate.parse(initDateStart))
 
   const [eventState, dispatch] = useReducer(reducer, {
     ...initState,
-    // TODO: smell
+    activeStep: ActiveStep.STEP_EVENT_TYPE,
     kind: getInitKind(initState.kind),
     date: eventDate,
     time: timeComponents,
