@@ -44,7 +44,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "date-fns": "3.0.6",
+    "date-fns": "3.2.0",
     "graphql": "16.8.1",
     "pino": "8.11.0",
     "pino-lambda": "4.1.0",
