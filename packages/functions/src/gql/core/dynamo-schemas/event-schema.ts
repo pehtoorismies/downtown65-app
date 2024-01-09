@@ -91,7 +91,7 @@ const Dt65EventUpdateableFields = z.object({
 
 const EventKeySchema = getKeySchema('EVENT')
 
-export const Dt65EventCreateSchema = Dt65EventUpdateableFields.extend({
+export const EventCreateSchema = Dt65EventUpdateableFields.extend({
   PK: EventKeySchema,
   SK: EventKeySchema,
   GSI1PK: z.literal('EVENT#FUTURE'),
@@ -109,13 +109,13 @@ export const Dt65EventCreateSchema = Dt65EventUpdateableFields.extend({
   )
   .refine(gsi1skRefine, gs1SKErrorMessage)
 
-export const Dt65EventGetSchema = Dt65EventUpdateableFields.extend({
+export const EventGetSchema = Dt65EventUpdateableFields.extend({
   createdBy: Auth0UserSchema,
   id: UlidSchema, // TODO: fix this is eventId in Dynamo
   participants: ParticipantsSchema,
 })
 
-export type Dt65EventCreateSchema = z.infer<typeof Dt65EventCreateSchema>
+export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 
 const UpdateRemoveFields = z
   .union([z.literal('description'), z.literal('timeStart')])
@@ -123,7 +123,7 @@ const UpdateRemoveFields = z
 
 type UpdateRemoveFields = z.infer<typeof UpdateRemoveFields>
 
-export const Dt65EventUpdateSchema = Dt65EventUpdateableFields.extend({
+export const EventUpdateSchema = Dt65EventUpdateableFields.extend({
   PK: EventKeySchema,
   SK: EventKeySchema,
   GSI1SK: GS1SKSchema,
@@ -150,4 +150,4 @@ export const Dt65EventUpdateSchema = Dt65EventUpdateableFields.extend({
   )
   .refine(gsi1skRefine, gs1SKErrorMessage)
 
-export type Dt65EventUpdateSchemaInput = z.input<typeof Dt65EventUpdateSchema>
+export type EventUpdateSchemaInput = z.input<typeof EventUpdateSchema>
