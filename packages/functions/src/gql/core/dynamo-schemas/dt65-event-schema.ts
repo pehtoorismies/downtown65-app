@@ -117,11 +117,11 @@ export const Dt65EventGetSchema = Dt65EventUpdateableFields.extend({
 
 export type Dt65EventCreateSchema = z.infer<typeof Dt65EventCreateSchema>
 
-export const UpdateRemoveFields = z
+const UpdateRemoveFields = z
   .union([z.literal('description'), z.literal('timeStart')])
   .array()
 
-export type UpdateRemoveFields = z.infer<typeof UpdateRemoveFields>
+type UpdateRemoveFields = z.infer<typeof UpdateRemoveFields>
 
 export const Dt65EventUpdateSchema = Dt65EventUpdateableFields.extend({
   PK: EventKeySchema,

@@ -18,7 +18,7 @@ const REFRESH_TOKEN_KEY = 'refreshToken'
 const USER_KEY = 'user'
 const ACCESS_TOKEN_KEY = 'accessToken'
 
-export const Tokens = z.object({
+const Tokens = z.object({
   refreshToken: z.string(),
   accessToken: z.string(),
   idToken: z.string(),

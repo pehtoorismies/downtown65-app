@@ -15,7 +15,7 @@ export const getKeySchema = (key: 'EVENT' | 'CHALLENGE') => {
 export const UlidSchema = z.string().ulid()
 
 export const Auth0IDString = z.string().startsWith('auth0|')
-export const UrlString = z.string().startsWith('https://')
+const UrlString = z.string().startsWith('https://')
 
 export const Auth0UserSchema = z.object({
   nickname: z.string(),
