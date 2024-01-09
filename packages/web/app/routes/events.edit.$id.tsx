@@ -211,7 +211,7 @@ export default function EditEvent() {
         zIndex={2000}
         opened={opened}
         onClose={() => handlers.close()}
-        title="Keskeytä tapahtuman luonti"
+        title="Keskeytä tapahtuman muokkaus"
         closeButtonProps={{ 'aria-label': 'Close' }}
       >
         <Group
