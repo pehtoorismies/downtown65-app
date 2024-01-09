@@ -1,9 +1,9 @@
 import { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { describe, expect, it, test } from 'vitest'
-import { Dt65EventCreateSchema } from '../dt65-event-schema'
+import { EventCreateSchema } from '../event-schema'
 
-const createSchema: Dt65EventCreateSchema = {
+const createSchema: EventCreateSchema = {
   PK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
   SK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
   GSI1PK: 'EVENT#FUTURE',
@@ -35,8 +35,8 @@ const createSchema: Dt65EventCreateSchema = {
 
 interface CreateData {
   description: string
-  data: Dt65EventCreateSchema
-  failKey: keyof Dt65EventCreateSchema
+  data: EventCreateSchema
+  failKey: keyof EventCreateSchema
 }
 
 describe('Dt65EventSchema', () => {
@@ -187,7 +187,7 @@ describe('Dt65EventSchema', () => {
     ]
 
     it('should succeed', () => {
-      const { title, location } = Dt65EventCreateSchema.parse(createSchema)
+      const { title, location } = EventCreateSchema.parse(createSchema)
       expect(title).toBe('Title')
       expect(location).toBe('Sipoo')
 
@@ -196,11 +196,11 @@ describe('Dt65EventSchema', () => {
         timeStart: undefined,
         GSI1SK: 'DATE#2023-02-02T00:00:00#01GW4MMH',
       }
-      Dt65EventCreateSchema.parse(noTimeStart)
+      EventCreateSchema.parse(noTimeStart)
     })
 
     test.each(createTestData)('$description', ({ data, failKey }) => {
-      const result = Dt65EventCreateSchema.safeParse(data)
+      const result = EventCreateSchema.safeParse(data)
       if (result.success) {
         throw new Error('Should fail')
       }

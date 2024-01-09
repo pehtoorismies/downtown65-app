@@ -1,10 +1,10 @@
 import { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
 import { EventType } from '@downtown65-app/graphql/graphql'
 import { describe, expect, it, test } from 'vitest'
-import type { Dt65EventUpdateSchemaInput } from '../dt65-event-schema'
-import { Dt65EventUpdateSchema } from '../dt65-event-schema'
+import type { EventUpdateSchemaInput } from '../event-schema'
+import { EventUpdateSchema } from '../event-schema'
 
-const updateSchema: Dt65EventUpdateSchemaInput = {
+const updateSchema: EventUpdateSchemaInput = {
   PK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
   SK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
   GSI1SK: 'DATE#2023-02-02T09:30:00#01GW4MMH',
@@ -20,8 +20,8 @@ const updateSchema: Dt65EventUpdateSchemaInput = {
 
 interface UpdateData {
   description: string
-  data: Dt65EventUpdateSchemaInput
-  failKey: keyof Dt65EventUpdateSchemaInput
+  data: EventUpdateSchemaInput
+  failKey: keyof EventUpdateSchemaInput
 }
 
 describe('Dt65EventUpdateSchema', () => {
@@ -46,13 +46,13 @@ describe('Dt65EventUpdateSchema', () => {
 
   describe('Dt65EventUpdateSchema', () => {
     it('should succeed to parse', () => {
-      const { title, location } = Dt65EventUpdateSchema.parse(updateSchema)
+      const { title, location } = EventUpdateSchema.parse(updateSchema)
       expect(title).toBe('Title')
       expect(location).toBe('Sipoo')
     })
 
     it('should add description to $remove', () => {
-      const { $remove } = Dt65EventUpdateSchema.parse({
+      const { $remove } = EventUpdateSchema.parse({
         ...updateSchema,
         description: undefined,
       })
@@ -61,7 +61,7 @@ describe('Dt65EventUpdateSchema', () => {
     })
 
     it('should add timeStart to $remove', () => {
-      const { $remove } = Dt65EventUpdateSchema.parse({
+      const { $remove } = EventUpdateSchema.parse({
         ...updateSchema,
         GSI1SK: 'DATE#2023-02-02T00:00:00#01GW4MMH',
         timeStart: undefined,
@@ -71,7 +71,7 @@ describe('Dt65EventUpdateSchema', () => {
     })
 
     it('should add all fields to $remove', () => {
-      const { $remove } = Dt65EventUpdateSchema.parse({
+      const { $remove } = EventUpdateSchema.parse({
         ...updateSchema,
         GSI1SK: 'DATE#2023-02-02T00:00:00#01GW4MMH',
         timeStart: undefined,
@@ -83,7 +83,7 @@ describe('Dt65EventUpdateSchema', () => {
     })
 
     test.each(updateTestData)('$description', ({ data, failKey }) => {
-      const result = Dt65EventUpdateSchema.safeParse(data)
+      const result = EventUpdateSchema.safeParse(data)
       if (result.success) {
         throw new Error('Should fail')
       }

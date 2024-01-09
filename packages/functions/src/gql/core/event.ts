@@ -10,12 +10,12 @@ import type {
 } from '@downtown65-app/graphql/graphql'
 import { format, startOfToday } from 'date-fns'
 import { ulid } from 'ulid'
-import type { Dt65EventUpdateSchemaInput } from './dynamo-schemas/dt65-event-schema'
+import type { EventUpdateSchemaInput } from './dynamo-schemas/event-schema'
 import {
-  Dt65EventCreateSchema,
-  Dt65EventGetSchema,
-  Dt65EventUpdateSchema,
-} from './dynamo-schemas/dt65-event-schema'
+  EventCreateSchema,
+  EventGetSchema,
+  EventUpdateSchema,
+} from './dynamo-schemas/event-schema'
 import { Dt65EventEntity } from './dynamo-table'
 import {
   getParticipationFunctions,
@@ -38,7 +38,7 @@ const getPrimaryKey = (eventId: string) => {
 }
 
 const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
-  const result = Dt65EventGetSchema.safeParse(persistedDynamoItem)
+  const result = EventGetSchema.safeParse(persistedDynamoItem)
 
   if (!result.success) {
     throw new Error(
@@ -103,7 +103,7 @@ export const create = async (
   }
   logger.debug(creatableEvent, 'Creatable event')
   await Dt65EventEntity.put(
-    Dt65EventCreateSchema.parse({
+    EventCreateSchema.parse({
       // add keys
       ...getPrimaryKey(eventId),
       GSI1PK: `EVENT#FUTURE`,
@@ -135,7 +135,7 @@ export const update = async (
 
   const gsi1sk = toISODatetimeCompact(dateStart, timeStart ?? undefined)
 
-  const update: Dt65EventUpdateSchemaInput = {
+  const update: EventUpdateSchemaInput = {
     ...getPrimaryKey(eventId),
     ...rest,
     dateStart,
@@ -145,12 +145,9 @@ export const update = async (
     type,
   }
 
-  const result = await Dt65EventEntity.update(
-    Dt65EventUpdateSchema.parse(update),
-    {
-      returnValues: 'ALL_NEW',
-    }
-  )
+  const result = await Dt65EventEntity.update(EventUpdateSchema.parse(update), {
+    returnValues: 'ALL_NEW',
+  })
 
   return mapDynamoToEvent(result.Attributes)
 }
