@@ -182,13 +182,14 @@ export default function EditEvent() {
 
   const participatingActions: Context = {
     onLeave: () => {
-      dispatch({ kind: 'leaveEvent', me })
+      // dispatch({ kind: 'leaveEvent', me })
     },
     onParticipate: () => {
-      dispatch({ kind: 'participateEvent', me })
+      // dispatch({ kind: 'participateEvent', me })
     },
     state: 'idle',
     loadingId: 'not-defined',
+    participationEnabled: false,
   }
 
   const items = [

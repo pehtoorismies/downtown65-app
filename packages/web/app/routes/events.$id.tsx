@@ -279,6 +279,7 @@ export default function GetEvent() {
             value={{
               onLeave: () => {},
               onParticipate: () => {},
+              participationEnabled: false,
               state: 'idle',
               loadingId: undefined,
             }}

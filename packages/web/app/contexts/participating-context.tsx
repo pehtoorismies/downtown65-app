@@ -6,6 +6,7 @@ export interface Context {
   onParticipate: (id: string) => void
   state: 'idle' | 'submitting' | 'loading'
   loadingId: string | undefined
+  participationEnabled: boolean
 }
 
 export const ParticipatingContext = createContext<Context | undefined>(
@@ -61,5 +62,6 @@ export const useParticipationActions = (eventType: 'event' | 'challenge') => {
     },
     state: fetcher.state,
     loadingId,
+    participationEnabled: true,
   }
 }

@@ -134,6 +134,7 @@ export default function NewEvent() {
     },
     state: 'idle',
     loadingId: 'not-defined',
+    participationEnabled: true,
   }
 
   return (
