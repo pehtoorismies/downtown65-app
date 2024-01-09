@@ -13,13 +13,13 @@ import { fi } from 'date-fns/locale/fi'
 import { pipe } from 'remeda'
 import { z } from 'zod'
 
-const isValidISODate = (date: string) => {
+const isValidISODate = (date: string): boolean => {
   const match = date.match(/^\d{4}-\d{2}-\d{2}$/)
   if (match === null) {
     return false
   }
 
-  return pipe(date, isoDateParser, isValid) as unknown as boolean
+  return pipe(date, isoDateParser, isValid)
 }
 
 const isValidISOTime = (time: string) => {
@@ -79,8 +79,8 @@ export const toISODate = (date: DateInput) => {
   return ISODate.safeParse(d)
 }
 
-export const toFormattedDate = (date: ISODate) => {
-  return pipe(date, isoDateParser, formatFinnish) as unknown as string
+export const toFormattedDate = (date: ISODate): string => {
+  return pipe(date, isoDateParser, formatFinnish)
 }
 
 export const toTimeComponents = (time: ISOTime) => {
@@ -109,7 +109,7 @@ export const toISODatetimeCompact = (date: ISODate | Date, time?: ISOTime) => {
     setHours(hours),
     setMinutes(minutes),
     formatISO
-  ) as unknown as string
+  )
 
   return iso.slice(0, 19)
 }
@@ -133,7 +133,7 @@ export const toDate = (date: ISODate, time?: ISOTime) => {
     setMinutes(minutes),
     setSeconds(0),
     setMilliseconds(0)
-  ) as unknown as Date
+  )
 }
 
 export const toISOTime = (time: TimeInput) => {
