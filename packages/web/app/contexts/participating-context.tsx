@@ -42,24 +42,20 @@ export const useParticipationActions = (eventType: 'event' | 'challenge') => {
     onParticipate: (id: string) => {
       setLoadingId(id)
       fetcher.submit(
+        {},
         {
-          action: 'participate',
-        },
-        {
-          action: `${actionPath}/${id}`,
-          method: 'post',
+          action: `${actionPath}/${id}/participate`,
+          method: 'put',
         }
       )
     },
     onLeave: (id: string) => {
       setLoadingId(id)
       fetcher.submit(
+        {},
         {
-          action: 'leave',
-        },
-        {
-          action: `${actionPath}/${id}`,
-          method: 'post',
+          action: `${actionPath}/${id}/leave`,
+          method: 'put',
         }
       )
     },

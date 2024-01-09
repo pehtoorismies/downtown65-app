@@ -25,7 +25,11 @@ const documents = {
     types.LoginDocument,
   '\n  mutation Signup(\n    $name: String!\n    $email: AWSEmail!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n':
     types.SignupDocument,
-  '\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n':
+  '\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n':
+    types.LeaveEventDocument,
+  '\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n':
+    types.ParticipateEventDocument,
+  '\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n':
     types.GetEventDocument,
   '\n  query GetEvents {\n    events {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n':
     types.GetEventsDocument,
@@ -99,8 +103,20 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n']
+  source: '\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n'
+): (typeof documents)['\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n'
+): (typeof documents)['\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n'
+): (typeof documents)['\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
