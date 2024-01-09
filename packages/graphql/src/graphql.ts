@@ -14,7 +14,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 }
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T,
+  K extends keyof T
 > = { [_ in K]?: never }
 export type Incremental<T> =
   | T
@@ -604,6 +604,25 @@ export type SignupErrorFragmentFragment = {
   error: string
 }
 
+export type LeaveEventMutationVariables = Exact<{
+  eventId: Scalars['ID']['input']
+}>
+
+export type LeaveEventMutation = {
+  __typename: 'Mutation'
+  leaveEvent?: boolean | null
+}
+
+export type ParticipateEventMutationVariables = Exact<{
+  eventId: Scalars['ID']['input']
+  me: MeInput
+}>
+
+export type ParticipateEventMutation = {
+  __typename: 'Mutation'
+  participateEvent?: boolean | null
+}
+
 export type GetEventQueryVariables = Exact<{
   eventId: Scalars['ID']['input']
 }>
@@ -635,25 +654,6 @@ export type GetEventQuery = {
       picture: string
     }>
   } | null
-}
-
-export type ParticipateEventMutationVariables = Exact<{
-  eventId: Scalars['ID']['input']
-  me: MeInput
-}>
-
-export type ParticipateEventMutation = {
-  __typename: 'Mutation'
-  participateEvent?: boolean | null
-}
-
-export type LeaveEventMutationVariables = Exact<{
-  eventId: Scalars['ID']['input']
-}>
-
-export type LeaveEventMutation = {
-  __typename: 'Mutation'
-  leaveEvent?: boolean | null
 }
 
 export type DeleteEventMutationVariables = Exact<{
@@ -1695,6 +1695,112 @@ export const SignupDocument = {
     },
   ],
 } as unknown as DocumentNode<SignupMutation, SignupMutationVariables>
+export const LeaveEventDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'LeaveEvent' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'eventId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'leaveEvent' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'eventId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'eventId' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<LeaveEventMutation, LeaveEventMutationVariables>
+export const ParticipateEventDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ParticipateEvent' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'eventId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'me' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'MeInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'participateEvent' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'eventId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'eventId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'me' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'me' },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ParticipateEventMutation,
+  ParticipateEventMutationVariables
+>
 export const GetEventDocument = {
   kind: 'Document',
   definitions: [
@@ -1791,112 +1897,6 @@ export const GetEventDocument = {
     },
   ],
 } as unknown as DocumentNode<GetEventQuery, GetEventQueryVariables>
-export const ParticipateEventDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'ParticipateEvent' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'eventId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'me' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'MeInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'participateEvent' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'eventId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'eventId' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'me' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'me' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  ParticipateEventMutation,
-  ParticipateEventMutationVariables
->
-export const LeaveEventDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'LeaveEvent' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'eventId' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'leaveEvent' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'eventId' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'eventId' },
-                },
-              },
-            ],
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<LeaveEventMutation, LeaveEventMutationVariables>
 export const DeleteEventDocument = {
   kind: 'Document',
   definitions: [

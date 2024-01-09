@@ -4,8 +4,6 @@ import {
   DeleteEventDocument,
   EventType,
   GetEventDocument,
-  LeaveEventDocument,
-  ParticipateEventDocument,
 } from '@downtown65-app/graphql/graphql'
 import {
   Anchor,
@@ -93,12 +91,7 @@ const _GqlIgnored = graphql(`
       type
     }
   }
-  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {
-    participateEvent(eventId: $eventId, me: $me)
-  }
-  mutation LeaveEvent($eventId: ID!) {
-    leaveEvent(eventId: $eventId)
-  }
+
   mutation DeleteEvent($eventId: ID!) {
     deleteEvent(eventId: $eventId) {
       id
@@ -214,61 +207,29 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export const action = async ({ request, params }: ActionFunctionArgs) => {
   invariant(params.id, 'Expected params.id')
-  const { headers, user, accessToken } = await actionAuthenticate(request)
-  const body = await request.formData()
-  const action = body.get('action')
+  const { headers, accessToken } = await actionAuthenticate(request)
 
-  switch (action) {
-    case 'delete': {
-      // TODO: add error handling
-      await gqlClient.request(
-        DeleteEventDocument,
-        {
-          eventId: params.id,
-        },
-        {
-          Authorization: `Bearer ${accessToken}`,
-        }
-      )
-      const session = await getMessageSession(request.headers.get('cookie'))
-      setSuccessMessage(session, 'Tapahtuma on poistettu')
-
-      headers.append('Set-Cookie', await commitMessageSession(session))
-
-      return redirect('/events', {
-        headers,
-      })
-    }
-    case 'participate': {
-      await gqlClient.request(
-        ParticipateEventDocument,
-        {
-          eventId: params.id,
-          me: user,
-        },
-        {
-          Authorization: `Bearer ${accessToken}`,
-        }
-      )
-      return json({}, { headers })
-    }
-    case 'leave': {
-      await gqlClient.request(
-        LeaveEventDocument,
-        {
-          eventId: params.id,
-        },
-        {
-          Authorization: `Bearer ${accessToken}`,
-        }
-      )
-      return json({}, { headers })
-    }
+  if (request.method !== 'DELETE') {
+    throw new Error(`Unsupported request method ${request.method}`)
   }
-
-  throw new Error(
-    `Incorrect action provided: '${action}'. Use 'leave' or 'participate'`
+  // TODO: add error handling
+  await gqlClient.request(
+    DeleteEventDocument,
+    {
+      eventId: params.id,
+    },
+    {
+      Authorization: `Bearer ${accessToken}`,
+    }
   )
+  const session = await getMessageSession(request.headers.get('cookie'))
+  setSuccessMessage(session, 'Tapahtuma on poistettu')
+
+  headers.append('Set-Cookie', await commitMessageSession(session))
+
+  return redirect('/events', {
+    headers,
+  })
 }
 
 export default function GetEvent() {
@@ -352,7 +313,7 @@ export default function GetEvent() {
             Kirjoita allaolevaan kenttään <i>poista</i> ja klikkaa Poista.
           </p>
         </TypographyStylesProvider>
-        <Form action={`/events/${eventItem.id}`} method="post">
+        <Form action={`/events/${eventItem.id}`} method="delete">
           <TextInput
             name="delete-confirm"
             placeholder="poista"
@@ -372,8 +333,6 @@ export default function GetEvent() {
               Peruuta
             </Button>
             <Button
-              name="action"
-              value="delete"
               type="submit"
               color="red"
               disabled={formValue !== 'poista'}
