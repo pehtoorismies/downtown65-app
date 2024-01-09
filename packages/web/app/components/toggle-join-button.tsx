@@ -50,6 +50,7 @@ export const ToggleJoinButton = ({ isParticipating, id }: Properties) => {
         gradient={Gradient.dtPink}
         data-testid="leave"
         size={size}
+        disabled={!actions.participationEnabled}
       >
         Poistu
       </Button>
@@ -66,6 +67,7 @@ export const ToggleJoinButton = ({ isParticipating, id }: Properties) => {
       loading={loading}
       leftSection={<IconHandStop size={iconSize} />}
       data-testid="participate"
+      disabled={!actions.participationEnabled}
     >
       Osallistu
     </Button>
