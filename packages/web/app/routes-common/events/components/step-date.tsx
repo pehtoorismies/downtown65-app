@@ -1,3 +1,4 @@
+import 'dayjs/locale/fi'
 import { Group } from '@mantine/core'
 import type { DateValue } from '@mantine/dates'
 import { DatePicker } from '@mantine/dates'
