@@ -1,6 +1,7 @@
 import { EventType } from '@downtown65-app/graphql/graphql'
 import {
   randCity,
+  randFutureDate,
   randNumber,
   randProductName,
   randSports,
@@ -49,6 +50,6 @@ export const getRandomEventInfo = (
     location: overrides?.location ?? randCity(),
     type: overrides?.type ?? shuffled[0],
     time,
-    date: overrides?.date ?? new Date(),
+    date: overrides?.date ?? randFutureDate({ years: 3 }),
   }
 }

@@ -21,6 +21,7 @@ test.describe('Edit event', () => {
       title: updatedTitle,
       subtitle: updatedSubtitle,
       location: updatedLocation,
+      date: updatedDate,
     } = getRandomEventInfo()
     const id = await newEventPage.actionCreateEvent(eventInfo)
 
@@ -49,6 +50,10 @@ test.describe('Edit event', () => {
     await newEventPage.headerVisible('Perustiedot')
 
     await newEventPage.clickButton('Päivämäärä')
+    await newEventPage.headerVisible('Päivämäärä: ')
+
+    await newEventPage.selectDate(eventInfo.date, updatedDate)
+
     await newEventPage.clickButton('Kellonaika')
 
     invariant(eventInfo.time)
@@ -67,6 +72,7 @@ test.describe('Edit event', () => {
     await newEventPage.verifyEventInfo({
       ...eventInfo,
       title: updatedTitle,
+      date: updatedDate,
       subtitle: updatedSubtitle,
       location: updatedLocation,
       time: null,
@@ -81,6 +87,7 @@ test.describe('Edit event', () => {
       title: updatedTitle,
       subtitle: updatedSubtitle,
       location: updatedLocation,
+      date: updatedDate,
       time: null,
     })
   })
