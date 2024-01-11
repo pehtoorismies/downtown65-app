@@ -38,6 +38,7 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
         <DatePicker
           minDate={state.kind === 'create' ? new Date() : undefined}
           value={state.date}
+          defaultDate={state.date}
           onChange={(date: DateValue) => {
             if (date == null) {
               throw new Error('Date can not be null')
