@@ -1,7 +1,5 @@
 import { test as base, expect } from '@playwright/test'
 import { format } from 'date-fns'
-import { addMonths, setDate } from 'date-fns/fp'
-import * as R from 'remeda'
 import { NewEventPage } from './page-objects/new-event-page'
 import {
   getRandomEventInfo,
@@ -44,7 +42,7 @@ test.describe('Create event', () => {
     page,
   }) => {
     const shuffled = getRandomEventTypes()
-    const { title, subtitle, location } = getRandomEventInfo({})
+    const { title, subtitle, location, date } = getRandomEventInfo({})
     const { title: updatedTitle } = getRandomEventInfo({})
 
     const userNick = testUser.nick
@@ -107,22 +105,11 @@ test.describe('Create event', () => {
     await newEventPage.clickButton('Päivämäärä')
 
     // 3. step date
-    const now = new Date()
-
-    await newEventPage.headerVisible(`Päivämäärä: ${format(now, 'd.M.yyyy')}`)
-
-    await newEventPage.calendarNextMonthClick()
-    await newEventPage.clickButton('15')
-
-    const nextMonthDate = R.pipe(now, addMonths(1), setDate(15))
-
-    if (!(nextMonthDate instanceof Date)) {
-      throw new TypeError('Invalid type of Date')
-    }
-
     await newEventPage.headerVisible(
-      `Päivämäärä: ${format(nextMonthDate, 'd.M.yyyy')}`
+      `Päivämäärä: ${format(new Date(), 'd.M.yyyy')}`
     )
+    await newEventPage.selectDate(new Date(), date)
+    await newEventPage.headerVisible(`Päivämäärä: ${format(date, 'd.M.yyyy')}`)
 
     await newEventPage.headerVisible('Päivämäärä')
     await newEventPage.clickButton('Kellonaika')
@@ -157,9 +144,7 @@ test.describe('Create event', () => {
     await expect(newEventPage.getRace()).toBeVisible()
 
     // Date start and time
-    await expect(newEventPage.getDate()).toContainText(
-      format(nextMonthDate, 'd.M.yyyy')
-    )
+    await expect(newEventPage.getDate()).toContainText(format(date, 'd.M.yyyy'))
     await expect(newEventPage.getDate()).toHaveText(/14:55$/)
 
     await newEventPage.expectParticipantCount(0)

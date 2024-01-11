@@ -1,6 +1,8 @@
 import type { EventType } from '@downtown65-app/graphql/graphql'
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
+import { format } from 'date-fns'
+import { fi } from 'date-fns/locale'
 import type { EventInfo } from '../support/event-info'
 import { EventPage } from './event-page'
 
@@ -141,6 +143,29 @@ export class NewEventPage extends EventPage {
     await this.headerVisible('Esikatselu')
   }
 
+  async selectDate(now: Date, date: Date) {
+    const currentMonthYearFi = format(now, 'LLLL yyyy', {
+      locale: fi,
+    }).toLowerCase()
+
+    await this.page
+      .getByRole('button', { name: currentMonthYearFi, exact: true })
+      .click()
+
+    const monthAbbreviatedFi = format(date, 'LLL', { locale: fi }).toLowerCase()
+    const dayMonthFi = format(date, 'd LLLL', { locale: fi }).toLowerCase()
+
+    if (date.getFullYear() !== now.getFullYear()) {
+      await this.page.getByRole('button', { name: format(now, 'yyyy') }).click()
+      await this.page
+        .getByRole('button', { name: format(date, 'yyyy') })
+        .click()
+    }
+
+    await this.page.getByRole('button', { name: monthAbbreviatedFi }).click()
+    await this.page.getByLabel(new RegExp(`^${dayMonthFi}`)).click()
+  }
+
   async fillEventInfo({
     title,
     subtitle,
@@ -161,7 +186,7 @@ export class NewEventPage extends EventPage {
     await this.fillEventInfo(eventInfo)
 
     await this.clickButton('Päivämäärä')
-    // TODO: set date from eventInfo
+    await this.selectDate(new Date(), eventInfo.date)
 
     await this.clickButton('Kellonaika')
 

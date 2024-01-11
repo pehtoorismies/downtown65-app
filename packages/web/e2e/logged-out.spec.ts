@@ -109,7 +109,7 @@ test.describe('Logged out users', () => {
       eventInfo.title
     )
 
-    const today = format(new Date(), 'd.M.yyyy')
+    const today = format(eventInfo.date, 'd.M.yyyy')
     const startsWithToday = new RegExp(`^${today}`)
 
     await expect(
