@@ -55,6 +55,12 @@ export class EventPage extends DtPage {
     } else {
       expect(dateText).toBe(toFormattedDate(isoDate.data))
     }
+
+    await (eventInfo.description.trim().length === 0
+      ? expect(
+          this.page.getByText('ei tarkempaa tapahtuman kuvausta')
+        ).toBeVisible()
+      : expect(this.page.getByText(eventInfo.description)).toBeVisible())
   }
 
   async actionDeleteEvent() {

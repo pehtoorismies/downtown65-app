@@ -3,6 +3,7 @@ import {
   randCity,
   randFutureDate,
   randNumber,
+  randParagraph,
   randProductName,
   randSports,
 } from '@ngneat/falso'
@@ -51,5 +52,6 @@ export const getRandomEventInfo = (
     type: overrides?.type ?? shuffled[0],
     time,
     date: overrides?.date ?? randFutureDate({ years: 3 }),
+    description: overrides?.description ?? randParagraph(),
   }
 }

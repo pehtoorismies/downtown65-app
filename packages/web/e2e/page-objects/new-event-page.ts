@@ -166,6 +166,15 @@ export class NewEventPage extends EventPage {
     await this.page.getByLabel(new RegExp(`^${dayMonthFi}`)).click()
   }
 
+  async fillDescription(description: string) {
+    if (description.trim().length === 0) {
+      return
+    }
+
+    await this.page.locator('#rte').getByRole('paragraph').click()
+    await this.page.locator('.tiptap').fill(description)
+  }
+
   async fillEventInfo({
     title,
     subtitle,
@@ -196,6 +205,7 @@ export class NewEventPage extends EventPage {
     }
 
     await this.clickButton('Kuvaus')
+    await this.fillDescription(eventInfo.description)
 
     await this.clickButton('Esikatselu')
 
