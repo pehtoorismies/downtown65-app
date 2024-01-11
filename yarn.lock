@@ -4105,10 +4105,10 @@
     unist-util-visit "^4.0.0"
     vfile "^5.0.0"
 
-"@ngneat/falso@6.4.0":
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/@ngneat/falso/-/falso-6.4.0.tgz#7ed98a95ab2a2dc39b0a0d317fe8c24512869edc"
-  integrity sha512-f6r036h2fX/AoHw1eV2t8+qWQwrbSrozs3zXMhhwoO7SJBc+DGMxRWEhFeYIinfwx0uhUH8ggx5+PDLzYESLOA==
+"@ngneat/falso@7.1.1":
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/@ngneat/falso/-/falso-7.1.1.tgz#ee48cbd968dbf21b507004f2f190803526777401"
+  integrity sha512-/5HuJDaZHXl3WVdgvYBAM52OSYbSKfiNazVOZOw/3KjeZ6dQW9F0QCG+W6z52lUu5MZvp/TkPGaVRtoz6h9T1w==
   dependencies:
     seedrandom "3.0.5"
     uuid "8.3.2"
