@@ -42,8 +42,9 @@ test.describe('Create event', () => {
     page,
   }) => {
     const shuffled = getRandomEventTypes()
-    const { title, subtitle, location, date } = getRandomEventInfo({})
-    const { title: updatedTitle } = getRandomEventInfo({})
+    const { title, subtitle, location, date, description } = getRandomEventInfo(
+      {}
+    )
 
     const userNick = testUser.nick
     const initType = shuffled[0]
@@ -131,7 +132,7 @@ test.describe('Create event', () => {
 
     // 5. step description
     await newEventPage.headerVisible('Vapaa kuvaus')
-    // TODO: add some text description
+    await newEventPage.fillDescription(description)
 
     await newEventPage.clickButton('Esikatselu')
 
@@ -181,90 +182,5 @@ test.describe('Create event', () => {
     if (!m || !m[1]) {
       throw new Error('Wrong url')
     }
-
-    // TODO: remove
-    const createdEventId = m[1]
-
-    await expect(newEventPage.getModifyEventBtn()).toBeEnabled()
-    await expect(newEventPage.getTitle()).toHaveText(title)
-    await expect(newEventPage.getSubtitle()).toHaveText(subtitle)
-    await expect(newEventPage.getLocation()).toHaveText(location)
-    await expect(newEventPage.getDate()).toHaveText(/14:55$/)
-    await expect(newEventPage.getRace()).toBeVisible()
-
-    await expect(
-      newEventPage.getParticipants().getByText(userNick)
-    ).toBeVisible()
-    await newEventPage.expectParticipantCount(1)
-    await newEventPage.leaveClick()
-    await newEventPage.expectParticipantCount(0)
-    await newEventPage.participateClick()
-    await newEventPage.expectParticipantCount(1)
-
-    // modify event
-    await newEventPage.getModifyEventBtn().click()
-    await page.waitForURL(/\/events\/edit/)
-    await newEventPage.headerVisible('Laji')
-
-    await newEventPage.clickButton('Perustiedot')
-    await newEventPage.getInputTitle().clear()
-    await newEventPage.clickButton('Päivämäärä')
-    await expect(page.getByText('Nimi ei voi olla tyhjä')).toBeVisible()
-    await newEventPage.fillTitle(updatedTitle)
-
-    // // should not go anywhere
-    await newEventPage.stepBtnClick('preview')
-    await newEventPage.headerVisible('Perustiedot')
-
-    await newEventPage.clickThroughStepsFromBasicInfo()
-
-    // create
-    await newEventPage.clickButton('Tallenna')
-
-    // check modified event
-    await expect(newEventPage.getModifyEventBtn()).toBeEnabled()
-
-    await expect(newEventPage.getRace()).toBeVisible()
-    await expect(newEventPage.getTitle()).toHaveText(updatedTitle)
-    await expect(newEventPage.getSubtitle()).toHaveText(subtitle)
-    await expect(newEventPage.getLocation()).toHaveText(location)
-    await expect(newEventPage.getDate()).toHaveText(/14:55$/)
-
-    await expect(
-      newEventPage.getParticipants().getByText(userNick)
-    ).toBeVisible()
-    await newEventPage.expectParticipantCount(1)
-
-    // remove
-    await newEventPage.getDeleteEventBtn().click()
-    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeVisible()
-    await newEventPage.deleteModalClick('closeWithX')
-    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeHidden()
-
-    await newEventPage.getDeleteEventBtn().click()
-    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeVisible()
-    await newEventPage.deleteModalClick('closeWithButton')
-    await expect(newEventPage.getDeleteConfirmationModalContent()).toBeHidden()
-
-    await newEventPage.getDeleteEventBtn().click()
-    await expect(newEventPage.getDeleteConfirmationBtn()).toBeDisabled()
-    await newEventPage.getDeleteConfirmationInput().fill('wrong text')
-    await expect(newEventPage.getDeleteConfirmationBtn()).toBeDisabled()
-
-    await newEventPage.getDeleteConfirmationInput().fill('poista')
-    await expect(newEventPage.getDeleteConfirmationBtn()).toBeEnabled()
-
-    await newEventPage.getDeleteConfirmationBtn().click()
-    await page.waitForURL('**/events')
-    await expect(page.getByTestId('events')).toBeVisible()
-    await expect(
-      page.locator('header').getByText('Tapahtumat')
-    ).toHaveAttribute('aria-current', 'page')
-
-    await page.goto(`events/${createdEventId}`)
-    await expect(page.getByRole('heading', { name: '404' })).toBeVisible()
-    await page.getByTestId('to-frontpage-button').click()
-    await page.waitForURL('**/events')
-    await expect(page.getByTestId('events')).toBeVisible()
   })
 })

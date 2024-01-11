@@ -4,6 +4,7 @@ export interface EventInfo {
   title: string
   subtitle: string
   location: string
+  description: string
   type: EventType
   date: Date
   time: {

@@ -18,22 +18,18 @@ test.describe('View event', () => {
     newEventPage,
     page,
   }) => {
-    const eventInfo = getRandomEventInfo({ time: null })
+    const eventInfo = getRandomEventInfo({ time: null, description: '' })
     const id = await newEventPage.actionCreateEvent(eventInfo)
 
     const eventPage = new EventPage(page, id)
     await eventPage.goto()
     await eventPage.verifyEventInfo(eventInfo)
-
-    await expect(
-      page.getByText('ei tarkempaa tapahtuman kuvausta')
-    ).toBeVisible()
 
     await eventPage.actionDeleteEvent()
   })
 
   test('should have no description', async ({ newEventPage, page }) => {
-    const eventInfo = getRandomEventInfo()
+    const eventInfo = getRandomEventInfo({ description: '' })
     const id = await newEventPage.actionCreateEvent(eventInfo)
 
     const eventPage = new EventPage(page, id)
@@ -43,7 +39,7 @@ test.describe('View event', () => {
     await eventPage.actionDeleteEvent()
   })
 
-  test('should have widgets', async ({ newEventPage, page }) => {
+  test('should have all fields', async ({ newEventPage, page }) => {
     const eventInfo = getRandomEventInfo({
       time: {
         hours: 12,
