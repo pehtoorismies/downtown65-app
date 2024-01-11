@@ -85,6 +85,7 @@ export const StepPreview = ({ state, me, dispatch, submit }: Properties) => {
         participants={state.participants}
         dateStart={getDate(state.date)}
         timeStart={getTime(state.time)}
+        description={state.description}
       />
     </StepLayout>
   )
