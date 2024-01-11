@@ -3,7 +3,7 @@ export default {
   // check ignoredRouteFiles https://docs.sst.dev/constructs/RemixSite
   ignoredRouteFiles: ['**/.*'],
   postcss: true,
-  serverDependenciesToBundle: [/^date-fns.*/, /^dayjs.*/],
+  serverDependenciesToBundle: [/^dayjs.*/],
   // serverModuleFormat: 'esm',
   // serverModuleFormat: "cjs",
   // appDirectory: "app",
