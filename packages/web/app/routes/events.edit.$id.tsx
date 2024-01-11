@@ -260,6 +260,7 @@ export default function EditEvent() {
           color="red"
           rightSection={<IconCircleOff size={18} />}
           onClick={handlers.open}
+          data-testid="cancel-event-edit-button"
         >
           Keskeytä muokkaus
         </Button>
