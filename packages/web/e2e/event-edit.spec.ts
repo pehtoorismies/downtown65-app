@@ -15,6 +15,26 @@ const test = base.extend<{ newEventPage: NewEventPage }>({
 })
 
 test.describe('Edit event', () => {
+  test('should cancel event creation', async ({ page, newEventPage }) => {
+    const eventInfo = getRandomEventInfo()
+
+    const id = await newEventPage.actionCreateEvent(eventInfo)
+    const eventPage = new EventPage(page, id)
+    await eventPage.goto()
+    await newEventPage.getModifyEventBtn().click()
+
+    await newEventPage.headerVisible('Laji')
+
+    // TODO: separate edit and create
+    await page.getByTestId('cancel-event-edit-button').click()
+    await expect(newEventPage.getCancelModalContent()).toBeVisible()
+    // await newEventPage.cancelClick()
+    await expect(page.getByText('Keskeytä tapahtuman muokkaus')).toBeVisible()
+    await newEventPage.modalClick('confirmCancel')
+    await page.waitForURL(`events/${id}`)
+    await expect(eventPage.getTitle()).toHaveText(eventInfo.title)
+  })
+
   test('should edit event page', async ({ page, newEventPage }) => {
     const eventInfo = getRandomEventInfo()
     const {
