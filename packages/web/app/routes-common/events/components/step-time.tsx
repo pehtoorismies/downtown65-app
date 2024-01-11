@@ -1,4 +1,3 @@
-import 'dayjs/locale/fi'
 import { padTime } from '@downtown65-app/core/time-functions'
 import { Button, Center, Grid, Stack, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'

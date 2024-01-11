@@ -1,4 +1,3 @@
-import 'dayjs/locale/fi'
 import { Group } from '@mantine/core'
 import { MonthPicker } from '@mantine/dates'
 import styles from './month-picker.module.css'

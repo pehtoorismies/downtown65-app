@@ -1,10 +1,8 @@
-import 'dayjs/locale/fi'
 import { Group } from '@mantine/core'
 import type { DateValue } from '@mantine/dates'
 import { DatePicker } from '@mantine/dates'
 import { useMediaQuery } from '@mantine/hooks'
 import { format } from 'date-fns'
-import dayjs from 'dayjs'
 import type { ReducerProps } from './reducer'
 import {
   NextButton,
@@ -38,9 +36,7 @@ export const StepDate = ({ state, dispatch }: ReducerProps) => {
     >
       <Group justify="center">
         <DatePicker
-          minDate={
-            state.kind === 'create' ? dayjs(new Date()).toDate() : undefined
-          }
+          minDate={state.kind === 'create' ? new Date() : undefined}
           value={state.date}
           onChange={(date: DateValue) => {
             if (date == null) {
