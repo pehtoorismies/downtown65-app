@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@graphql-codegen/typescript-graphql-request": "4.5.8",
-    "@ngneat/falso": "6.4.0",
+    "@ngneat/falso": "7.1.1",
     "@playwright/test": "1.40.1",
     "@remix-run/dev": "2.1.0",
     "@remix-run/eslint-config": "2.1.0",
