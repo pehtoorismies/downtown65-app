@@ -28,17 +28,16 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-  useMatches,
   useNavigation,
 } from '@remix-run/react'
 import { useEffect } from 'react'
 import classes from './routes-styles/root.module.css'
 import { LoggedIn, LoggedOut, Navbar } from '~/components/navigation/navigation'
 import { UserContext } from '~/contexts/user-context'
-import type { User } from '~/domain/user'
 import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
 import { theme } from '~/routes-styles/theme'
+import { getAuthenticatedUser } from '~/session.server'
 
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 36
 
@@ -54,17 +53,18 @@ export const getStage = (): string => {
 }
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const user = await getAuthenticatedUser(request)
   const stage = getStage()
 
   const session = await getMessageSession(request.headers.get('cookie'))
   const toastMessage = session.get('toastMessage') as ToastMessage
 
   if (!toastMessage) {
-    return json({ toastMessage: null, stage })
+    return json({ toastMessage: null, stage, user })
   }
 
   return json(
-    { toastMessage, stage },
+    { toastMessage, stage, user },
     {
       headers: {
         'Set-Cookie': await commitMessageSession(session, {
@@ -116,13 +116,8 @@ export const links: LinksFunction = () => {
   ]
 }
 
-interface UserData {
-  user?: User
-}
-
 export default function App() {
-  const { stage, toastMessage } = useLoaderData<typeof loader>()
-  const matches = useMatches()
+  const { stage, toastMessage, user } = useLoaderData<typeof loader>()
   const navigation = useNavigation()
   const [navigationOpened, { toggle, close }] = useDisclosure()
 
@@ -154,12 +149,6 @@ export default function App() {
       nprogress.complete()
     }
   }, [navigation.state])
-
-  const user = matches
-    .map((matches) => matches.data as UserData)
-    .filter(Boolean)
-    .map(({ user }: UserData) => user)
-    .find(Boolean)
 
   return (
     <html lang="en">
