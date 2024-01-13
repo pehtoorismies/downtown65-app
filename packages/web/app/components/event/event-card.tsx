@@ -68,6 +68,7 @@ export const EventCard = ({
           count={count}
           highlighted={meAttending}
         />
+        <Voucher.Header.Type type={mapToData(type).text} />
         <Voucher.Header.Creator nick={createdBy.nickname} />
         {race && <Voucher.Header.Icon icon={<IconMedal color="white" />} />}
       </Voucher.Header>
