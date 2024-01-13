@@ -37,21 +37,30 @@ VoucherHeader.Title = ({ children }: PropsWithChildren) => {
   )
 }
 
+VoucherHeader.Type = ({ type }: { type: string }) => {
+  return (
+    <Badge
+      className={classes.type}
+      styles={{ label: { textTransform: 'none' } }}
+      size="md"
+      color="violet"
+      data-testid="event-type"
+    >
+      {type}
+    </Badge>
+  )
+}
+
 VoucherHeader.Creator = ({ nick }: { nick: string }) => {
   return (
     <Badge
-      m={0}
-      py="xs"
-      px={4}
       className={classes.areaCreator}
       styles={{ label: { textTransform: 'none' } }}
-      size="md"
-      radius="xs"
-      variant="outline"
+      size="sm"
       color="blue.0"
       data-testid="event-created-by"
     >
-      by #{nick}
+      created by #{nick}
     </Badge>
   )
 }
@@ -87,10 +96,10 @@ const ParticipantCount = ({
       size="lg"
       leftSection={
         <Center>
-          <IconUsers size={18} />
+          <IconUsers size={16} />
         </Center>
       }
-      radius="sm"
+      radius="xs"
       variant={highlighted ? 'gradient' : 'filled'}
       gradient={Gradient.dtPink}
       className={classes.areaParticipantCount}

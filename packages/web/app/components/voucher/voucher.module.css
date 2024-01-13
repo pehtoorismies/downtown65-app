@@ -2,8 +2,6 @@
     display: grid;
     grid-template-columns: 100px auto 100px;
     grid-template-rows: 30px 80px 30px;
-    /*grid-template-rows: auto;*/
-    /*grid-template-rows: 1fr 4fr 1fr;*/
     gap: 15px 15px;
     grid-template-areas:
             "topLeft . topRight"
@@ -33,11 +31,11 @@
     );
 }
 
-.gridMeIn {
+.type {
     grid-area: bottomLeft;
     justify-self: start;
     align-self: end;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
+    border-radius: var(--mantine-radius-xs);
 }
 
 .areaParticipantCount {
@@ -53,8 +51,10 @@
 
 .areaCreator {
     grid-area: bottomRight;
-    opacity: 0.8;
     justify-self: end;
     align-self: end;
+    border-radius: var(--mantine-radius-xs);
+    margin: 0;
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-xs);
     background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
 }
