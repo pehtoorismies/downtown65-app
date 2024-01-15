@@ -25,7 +25,7 @@ const shuffled = shuffleArray(Object.values(EventType))
 
 const minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]
 
-export const getRandomEventTypes = () => {
+export const getRandomEventTypes = (): EventType[] => {
   return shuffleArray(Object.values(EventType))
 }
 
