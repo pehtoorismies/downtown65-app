@@ -7,12 +7,7 @@ import type { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import { chunk } from 'remeda'
 import { getAuth0Management } from '~/gql/support/auth0'
 
-const TEST_RECIPIENTS = [
-  'dt65eventstest@mailinator.com',
-  'dt65eventstest2@mailinator.com',
-  'dt65eventstest3@mailinator.com',
-  'dt65eventstest4@mailinator.com',
-]
+const TEST_RECIPIENTS = ['dt65eventstest@mailinator.com']
 
 const fetchCreateEventSubscribers = async (): Promise<string[]> => {
   const management = await getAuth0Management()
