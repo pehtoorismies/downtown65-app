@@ -1,6 +1,6 @@
 import { test as base, expect } from '@playwright/test'
 import { format } from 'date-fns'
-import { NewEventPage } from './page-objects/new-event-page'
+import { EventPage } from './page-objects/event-page'
 import {
   getRandomEventInfo,
   getRandomEventType,
@@ -8,38 +8,37 @@ import {
 } from './support/random-event'
 import { testUser } from './test-user'
 
-const test = base.extend<{ newEventPage: NewEventPage }>({
-  newEventPage: async ({ page }, use) => {
-    const newEventPage = new NewEventPage(page)
-    await newEventPage.goto()
-    await newEventPage.headerVisible('Laji')
-    await use(newEventPage)
+const test = base.extend<{ eventPage: EventPage }>({
+  eventPage: async ({ page }, use) => {
+    const createEventPage = new EventPage(page)
+    await createEventPage.create.goto()
+    await createEventPage.wizard.headerVisible('Laji')
+    await use(createEventPage)
   },
 })
 
 test.describe('Create event', () => {
-  test('should cancel new event creation', async ({ page, newEventPage }) => {
-    await newEventPage.cancelClick()
-    await newEventPage.modalClick('closeWithX')
-    await expect(newEventPage.getCancelModalContent()).toBeHidden()
+  test('should cancel new event creation', async ({ eventPage }) => {
+    await eventPage.wizard.cancelClick()
+    await eventPage.wizard.modalClick('closeWithX')
+    await expect(eventPage.wizard.getCancelModalContent()).toBeHidden()
 
-    await newEventPage.eventTypeClick(getRandomEventType())
+    await eventPage.wizard.eventTypeClick(getRandomEventType())
 
-    await newEventPage.headerVisible('Perustiedot')
-    await newEventPage.cancelClick()
-    await expect(newEventPage.getCancelModalContent()).toBeVisible()
-    await newEventPage.modalClick('closeWithButton')
-    await expect(newEventPage.getCancelModalContent()).toBeHidden()
+    await eventPage.wizard.headerVisible('Perustiedot')
+    await eventPage.wizard.cancelClick()
+    await expect(eventPage.wizard.getCancelModalContent()).toBeVisible()
+    await eventPage.wizard.modalClick('closeWithButton')
+    await expect(eventPage.wizard.getCancelModalContent()).toBeHidden()
 
-    await newEventPage.cancelClick()
-    await expect(newEventPage.getCancelModalContent()).toBeVisible()
-    await newEventPage.modalClick('confirmCancel')
-    await page.waitForURL('**/events')
+    await eventPage.wizard.cancelClick()
+    await expect(eventPage.wizard.getCancelModalContent()).toBeVisible()
+    await eventPage.wizard.modalClick('confirmCancel')
+    await eventPage.page.waitForURL('**/events')
   })
 
   test('should navigate creation wizard and then create event', async ({
-    newEventPage,
-    page,
+    eventPage,
   }) => {
     const shuffled = getRandomEventTypes()
     const { title, subtitle, location, date, description } = getRandomEventInfo(
@@ -51,134 +50,150 @@ test.describe('Create event', () => {
     const selectedType = shuffled[1]
 
     // 1. step type
-    await newEventPage.headerVisible('Laji')
-    await newEventPage.stepBtnClick('preview')
-    await newEventPage.headerVisible('Laji')
-    await newEventPage.eventTypeClick(initType)
-    await newEventPage.headerVisible('Perustiedot')
-    await newEventPage.clickButton('Laji')
-    newEventPage.expectEventTypeSelected(initType)
-    await newEventPage.eventTypeClick(selectedType)
-    newEventPage.expectEventTypeSelected(selectedType)
-    await newEventPage.clickButton('Perustiedot')
-    await newEventPage.headerVisible('Perustiedot')
-    await newEventPage.clickButton('Laji')
-    await newEventPage.headerVisible('Laji')
-    newEventPage.expectEventTypeSelected(selectedType)
-    await newEventPage.clickButton('Perustiedot')
+    await eventPage.wizard.headerVisible('Laji')
+    await eventPage.wizard.stepBtnClick('preview')
+    await eventPage.wizard.headerVisible('Laji')
+    await eventPage.wizard.eventTypeClick(initType)
+    await eventPage.wizard.headerVisible('Perustiedot')
+    await eventPage.wizard.clickButton('Laji')
+    eventPage.wizard.expectEventTypeSelected(initType)
+    await eventPage.wizard.eventTypeClick(selectedType)
+    eventPage.wizard.expectEventTypeSelected(selectedType)
+    await eventPage.wizard.clickButton('Perustiedot')
+    await eventPage.wizard.headerVisible('Perustiedot')
+    await eventPage.wizard.clickButton('Laji')
+    await eventPage.wizard.headerVisible('Laji')
+    eventPage.wizard.expectEventTypeSelected(selectedType)
+    await eventPage.wizard.clickButton('Perustiedot')
 
     // 2. step basic info
-    await newEventPage.headerVisible('Perustiedot')
+    await eventPage.wizard.headerVisible('Perustiedot')
     // next steps disallowed
-    await newEventPage.stepBtnClick('description')
-    await newEventPage.headerVisible('Perustiedot')
+    await eventPage.wizard.stepBtnClick('description')
+    await eventPage.wizard.headerVisible('Perustiedot')
     // previous steps allowed
-    await newEventPage.stepBtnClick('type')
-    await newEventPage.headerVisible('Laji')
-    await newEventPage.clickButton('Perustiedot')
-    await newEventPage.headerVisible('Perustiedot')
+    await eventPage.wizard.stepBtnClick('type')
+    await eventPage.wizard.headerVisible('Laji')
+    await eventPage.wizard.clickButton('Perustiedot')
+    await eventPage.wizard.headerVisible('Perustiedot')
 
     // errors in fields
-    await newEventPage.clickButton('Päivämäärä')
-    await newEventPage.headerVisible('Perustiedot')
-
-    await expect(page.getByText('Nimi ei voi olla tyhjä')).toBeVisible()
-    await expect(page.getByText('Tarkenne ei voi olla tyhjä')).toBeVisible()
-    await expect(page.getByText('Sijainti ei voi olla tyhjä')).toBeVisible()
-
-    await newEventPage.fillTitle('   ')
-    await newEventPage.fillSubtitle('   ')
-    await newEventPage.fillLocation('Kerava')
-    await newEventPage.clickButton('Päivämäärä')
-
-    await expect(page.getByText('Nimi ei voi olla tyhjä')).toBeVisible()
-    await expect(page.getByText('Tarkenne ei voi olla tyhjä')).toBeVisible()
-    await expect(page.getByText('Sijainti ei voi olla tyhjä')).not.toBeVisible()
-
-    // clicking should not do anything
-    await newEventPage.stepBtnClick('description')
-    await newEventPage.headerVisible('Perustiedot')
-
-    await newEventPage.fillTitle(title)
-    await newEventPage.fillSubtitle(subtitle)
-    await newEventPage.fillLocation(location)
-    await newEventPage.raceSwitchClick()
-    await newEventPage.clickButton('Päivämäärä')
-
-    // 3. step date
-    await newEventPage.headerVisible(
-      `Päivämäärä: ${format(new Date(), 'd.M.yyyy')}`
-    )
-    await newEventPage.selectDate(new Date(), date)
-    await newEventPage.headerVisible(`Päivämäärä: ${format(date, 'd.M.yyyy')}`)
-
-    await newEventPage.headerVisible('Päivämäärä')
-    await newEventPage.clickButton('Kellonaika')
-
-    // 4. step time
-    await newEventPage.headerVisible('Kellonaika')
-    await newEventPage.clickButton('Kuvaus')
-    await newEventPage.headerVisible('Vapaa kuvaus')
-    await newEventPage.clickButton('Kellonaika')
-    await newEventPage.headerVisible('Kellonaika')
-    await newEventPage.hourClick(14)
-    await newEventPage.headerVisible('Kellonaika: 14:xx')
-    await newEventPage.clearTimeClick()
-    await newEventPage.headerVisible('Kellonaika')
-    await newEventPage.hourClick(14)
-    await newEventPage.minuteClick(55)
-    await newEventPage.headerVisible('Kellonaika: 14:55')
-    await newEventPage.clickButton('Kuvaus')
-
-    // 5. step description
-    await newEventPage.headerVisible('Vapaa kuvaus')
-    await newEventPage.fillDescription(description)
-
-    await newEventPage.clickButton('Esikatselu')
-
-    // step preview
-    await newEventPage.headerVisible('Esikatselu')
-
-    await expect(newEventPage.getTitle()).toHaveText(title)
-    await expect(newEventPage.getSubtitle()).toHaveText(subtitle)
-    await expect(newEventPage.getLocation()).toHaveText(location)
-    await expect(newEventPage.getRace()).toBeVisible()
-
-    // Date start and time
-    await expect(newEventPage.getDate()).toContainText(format(date, 'd.M.yyyy'))
-    await expect(newEventPage.getDate()).toHaveText(/14:55$/)
-
-    await newEventPage.expectParticipantCount(0)
-    await newEventPage.participateClick()
-    await newEventPage.expectParticipantCount(1)
+    await eventPage.wizard.clickButton('Päivämäärä')
+    await eventPage.wizard.headerVisible('Perustiedot')
 
     await expect(
-      newEventPage.getParticipants().getByText(userNick)
+      eventPage.page.getByText('Nimi ei voi olla tyhjä')
+    ).toBeVisible()
+    await expect(
+      eventPage.page.getByText('Tarkenne ei voi olla tyhjä')
+    ).toBeVisible()
+    await expect(
+      eventPage.page.getByText('Sijainti ei voi olla tyhjä')
     ).toBeVisible()
 
-    await newEventPage.leaveClick()
-    await newEventPage.expectParticipantCount(0)
-    await newEventPage.participateClick()
-    await expect(newEventPage.getCreatedBy()).toHaveText(
+    await eventPage.wizard.fillTitle('   ')
+    await eventPage.wizard.fillSubtitle('   ')
+    await eventPage.wizard.fillLocation('Kerava')
+    await eventPage.wizard.clickButton('Päivämäärä')
+
+    await expect(
+      eventPage.page.getByText('Nimi ei voi olla tyhjä')
+    ).toBeVisible()
+    await expect(
+      eventPage.page.getByText('Tarkenne ei voi olla tyhjä')
+    ).toBeVisible()
+    await expect(
+      eventPage.page.getByText('Sijainti ei voi olla tyhjä')
+    ).not.toBeVisible()
+
+    // clicking should not do anything
+    await eventPage.wizard.stepBtnClick('description')
+    await eventPage.wizard.headerVisible('Perustiedot')
+
+    await eventPage.wizard.fillTitle(title)
+    await eventPage.wizard.fillSubtitle(subtitle)
+    await eventPage.wizard.fillLocation(location)
+    await eventPage.wizard.raceSwitchClick()
+    await eventPage.wizard.clickButton('Päivämäärä')
+
+    // 3. step date
+    await eventPage.wizard.headerVisible(
+      `Päivämäärä: ${format(new Date(), 'd.M.yyyy')}`
+    )
+    await eventPage.wizard.selectDate(new Date(), date)
+    await eventPage.wizard.headerVisible(
+      `Päivämäärä: ${format(date, 'd.M.yyyy')}`
+    )
+
+    await eventPage.wizard.headerVisible('Päivämäärä')
+    await eventPage.wizard.clickButton('Kellonaika')
+
+    // 4. step time
+    await eventPage.wizard.headerVisible('Kellonaika')
+    await eventPage.wizard.clickButton('Kuvaus')
+    await eventPage.wizard.headerVisible('Vapaa kuvaus')
+    await eventPage.wizard.clickButton('Kellonaika')
+    await eventPage.wizard.headerVisible('Kellonaika')
+    await eventPage.wizard.hourClick(14)
+    await eventPage.wizard.headerVisible('Kellonaika: 14:xx')
+    await eventPage.wizard.clearTimeClick()
+    await eventPage.wizard.headerVisible('Kellonaika')
+    await eventPage.wizard.hourClick(14)
+    await eventPage.wizard.minuteClick(55)
+    await eventPage.wizard.headerVisible('Kellonaika: 14:55')
+    await eventPage.wizard.clickButton('Kuvaus')
+
+    // 5. step description
+    await eventPage.wizard.headerVisible('Vapaa kuvaus')
+    await eventPage.wizard.fillDescription(description)
+
+    await eventPage.wizard.clickButton('Esikatselu')
+
+    // step preview
+    await eventPage.wizard.headerVisible('Esikatselu')
+
+    await expect(eventPage.view.getTitle()).toHaveText(title)
+    await expect(eventPage.view.getSubtitle()).toHaveText(subtitle)
+    await expect(eventPage.view.getLocation()).toHaveText(location)
+    await expect(eventPage.view.getRace()).toBeVisible()
+
+    // Date start and time
+    await expect(eventPage.view.getDate()).toContainText(
+      format(date, 'd.M.yyyy')
+    )
+    await expect(eventPage.view.getDate()).toHaveText(/14:55$/)
+
+    await eventPage.view.expectParticipantCount(0)
+    await eventPage.view.participateClick()
+    await eventPage.view.expectParticipantCount(1)
+
+    await expect(
+      eventPage.view.getParticipants().getByText(userNick)
+    ).toBeVisible()
+
+    await eventPage.view.leaveClick()
+    await eventPage.view.expectParticipantCount(0)
+    await eventPage.view.participateClick()
+    await expect(eventPage.view.getCreatedBy()).toHaveText(
       new RegExp(`${userNick}$`)
     )
 
     // just click through steps
-    await newEventPage.stepBtnClick('type')
-    await newEventPage.headerVisible('Laji')
+    await eventPage.wizard.stepBtnClick('type')
+    await eventPage.wizard.headerVisible('Laji')
 
-    await newEventPage.stepBtnClick('basic-info')
-    await newEventPage.headerVisible('Laji')
-    await newEventPage.clickButton('Perustiedot')
+    await eventPage.wizard.stepBtnClick('basic-info')
+    await eventPage.wizard.headerVisible('Laji')
+    await eventPage.wizard.clickButton('Perustiedot')
 
-    await newEventPage.clickThroughStepsFromBasicInfo()
+    await eventPage.wizard.clickThroughStepsFromBasicInfo()
 
     // create new event
-    await newEventPage.clickButton('Luo tapahtuma')
+    await eventPage.wizard.clickButton('Luo tapahtuma')
 
     const idRegExp = /\/([\dA-Z]{26})$/
-    await page.waitForURL(idRegExp)
-    const m = page.url().match(/\/([\dA-Z]{26})$/)
+    await eventPage.page.waitForURL(idRegExp)
+    const m = eventPage.page.url().match(/\/([\dA-Z]{26})$/)
     if (!m || !m[1]) {
       throw new Error('Wrong url')
     }

@@ -3,69 +3,17 @@ import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { format } from 'date-fns'
 import { fi } from 'date-fns/locale'
-import type { EventInfo } from '../support/event-info'
-import { EventPage } from './event-page'
+import type { EventInfo } from '../../support/event-info'
 
-export class NewEventPage extends EventPage {
+export class EventWizard {
+  private readonly page: Page
+
   constructor(page: Page) {
-    super(page, 'not-found')
-  }
-
-  async goto() {
-    await this.page.goto('/events/new')
-  }
-
-  async cancelClick() {
-    await this.page.getByTestId('cancel-event-creation-button').click()
-    await expect(this.getCancelModalContent()).toBeVisible()
-  }
-
-  getCancelModalContent() {
-    return this.page.getByTestId('confirmation-modal-content')
-  }
-
-  getStepHeading() {
-    return this.page.getByRole('heading', { level: 2 })
-  }
-
-  async headerVisible(text: string) {
-    await expect(this.getStepHeading()).toContainText(text)
-  }
-
-  async modalClick(kind: 'closeWithX' | 'closeWithButton' | 'confirmCancel') {
-    switch (kind) {
-      case 'closeWithButton': {
-        await this.page.getByTestId('modal-close').click()
-        await expect(this.getCancelModalContent()).toBeHidden()
-        return
-      }
-      case 'closeWithX': {
-        await this.page.locator("button[aria-label='Close']").click()
-        await expect(this.getCancelModalContent()).toBeHidden()
-        return
-      }
-      case 'confirmCancel': {
-        await this.page.getByTestId('modal-cancel-event-creation').click()
-        return
-      }
-    }
+    this.page = page
   }
 
   async eventTypeClick(eventType: EventType) {
     await this.page.getByTestId(`button-${eventType}`).click()
-  }
-
-  expectEventTypeSelected(eventType: EventType) {
-    expect(this.page.getByTestId(`button-${eventType}-selected`)).toBeDefined()
-  }
-
-  async calendarNextMonthClick() {
-    await this.page
-      .getByRole('button')
-      .filter({
-        has: this.page.locator('[data-direction=next]'),
-      })
-      .click()
   }
 
   async stepBtnClick(
@@ -118,13 +66,25 @@ export class NewEventPage extends EventPage {
     await this.page.getByTestId('clear-time').click()
   }
 
-  getParticipants() {
-    return this.page.getByTestId('event-participant')
-  }
-
   async raceSwitchClick() {
     // cy.getByDataCy('race-switch').parent().click()
     await this.page.getByText('Onko kilpailu?').click()
+  }
+
+  expectEventTypeSelected(eventType: EventType) {
+    expect(this.page.getByTestId(`button-${eventType}-selected`)).toBeDefined()
+  }
+
+  getStepHeading() {
+    return this.page.getByRole('heading', { level: 2 })
+  }
+
+  async headerVisible(text: string) {
+    await expect(this.getStepHeading()).toContainText(text)
+  }
+
+  async clickButton(text: string) {
+    await this.page.getByRole('button', { name: text }).click()
   }
 
   async clickThroughStepsFromBasicInfo() {
@@ -141,29 +101,6 @@ export class NewEventPage extends EventPage {
 
     await this.clickButton('Esikatselu')
     await this.headerVisible('Esikatselu')
-  }
-
-  async selectDate(now: Date, date: Date) {
-    const currentMonthYearFi = format(now, 'LLLL yyyy', {
-      locale: fi,
-    }).toLowerCase()
-
-    await this.page
-      .getByRole('button', { name: currentMonthYearFi, exact: true })
-      .click()
-
-    const monthAbbreviatedFi = format(date, 'LLL', { locale: fi }).toLowerCase()
-    const dayMonthFi = format(date, 'd LLLL', { locale: fi }).toLowerCase()
-
-    if (date.getFullYear() !== now.getFullYear()) {
-      await this.page.getByRole('button', { name: format(now, 'yyyy') }).click()
-      await this.page
-        .getByRole('button', { name: format(date, 'yyyy') })
-        .click()
-    }
-
-    await this.page.getByRole('button', { name: monthAbbreviatedFi }).click()
-    await this.page.getByLabel(new RegExp(`^${dayMonthFi}`)).click()
   }
 
   async fillDescription(description: string) {
@@ -189,6 +126,57 @@ export class NewEventPage extends EventPage {
     await this.fillLocation(location)
   }
 
+  async selectDate(now: Date, date: Date) {
+    const currentMonthYearFi = format(now, 'LLLL yyyy', {
+      locale: fi,
+    }).toLowerCase()
+
+    await this.page
+      .getByRole('button', { name: currentMonthYearFi, exact: true })
+      .click()
+
+    const monthAbbreviatedFi = format(date, 'LLL', { locale: fi }).toLowerCase()
+    const dayMonthFi = format(date, 'd LLLL', { locale: fi }).toLowerCase()
+
+    if (date.getFullYear() !== now.getFullYear()) {
+      await this.page.getByRole('button', { name: format(now, 'yyyy') }).click()
+      await this.page
+        .getByRole('button', { name: format(date, 'yyyy') })
+        .click()
+    }
+
+    await this.page.getByRole('button', { name: monthAbbreviatedFi }).click()
+    await this.page.getByLabel(new RegExp(`^${dayMonthFi}`)).click()
+  }
+
+  getCancelModalContent() {
+    return this.page.getByTestId('confirmation-modal-content')
+  }
+
+  async cancelClick() {
+    await this.page.getByTestId('cancel-event-creation-button').click()
+    await expect(this.getCancelModalContent()).toBeVisible()
+  }
+
+  async modalClick(kind: 'closeWithX' | 'closeWithButton' | 'confirmCancel') {
+    switch (kind) {
+      case 'closeWithButton': {
+        await this.page.getByTestId('modal-close').click()
+        await expect(this.getCancelModalContent()).toBeHidden()
+        return
+      }
+      case 'closeWithX': {
+        await this.page.locator("button[aria-label='Close']").click()
+        await expect(this.getCancelModalContent()).toBeHidden()
+        return
+      }
+      case 'confirmCancel': {
+        await this.page.getByTestId('modal-cancel-event-creation').click()
+        return
+      }
+    }
+  }
+
   async actionCreateEvent(eventInfo: EventInfo): Promise<string> {
     await this.page.getByTestId(`button-${eventInfo.type}`).click()
     await this.headerVisible('Perustiedot')
@@ -208,9 +196,6 @@ export class NewEventPage extends EventPage {
     await this.fillDescription(eventInfo.description)
 
     await this.clickButton('Esikatselu')
-
-    // verify preview
-    await this.verifyEventInfo(eventInfo)
 
     // create
     await this.page.getByRole('button', { name: 'Luo tapahtuma' }).click()

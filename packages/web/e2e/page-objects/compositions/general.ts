@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 
-export class DtPage {
-  readonly page: Page
+export class General {
+  private readonly page: Page
 
   constructor(page: Page) {
     this.page = page
