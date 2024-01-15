@@ -7,6 +7,10 @@ const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
     text: 'Pyöräily',
     imageUrl: '/event-images/cycling.jpg',
   },
+  ICE_HOCKEY: {
+    text: 'Lätkä',
+    imageUrl: '/event-images/hockey.jpg',
+  },
   KARONKKA: {
     text: 'Karonkka',
     imageUrl: '/event-images/karonkka.jpg',

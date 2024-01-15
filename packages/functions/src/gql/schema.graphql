@@ -10,6 +10,7 @@ enum EventType {
     KARONKKA
     MEETING
     NORDIC_WALKING
+    ICE_HOCKEY
     ORIENTEERING
     OTHER
     RUNNING

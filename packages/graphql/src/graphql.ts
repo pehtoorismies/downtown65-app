@@ -14,7 +14,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 }
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never }
 export type Incremental<T> =
   | T
@@ -127,6 +127,7 @@ export type Event = {
 
 export enum EventType {
   Cycling = 'CYCLING',
+  IceHockey = 'ICE_HOCKEY',
   Karonkka = 'KARONKKA',
   Meeting = 'MEETING',
   NordicWalking = 'NORDIC_WALKING',
