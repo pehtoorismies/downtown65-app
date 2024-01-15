@@ -1,56 +1,49 @@
 import { test as base, expect } from '@playwright/test'
 import { EventPage } from './page-objects/event-page'
-import { NewEventPage } from './page-objects/new-event-page'
 import { getRandomEventInfo } from './support/random-event'
 import { testUser } from './test-user'
 
-const test = base.extend<{ newEventPage: NewEventPage }>({
-  newEventPage: async ({ page }, use) => {
-    const newEventPage = new NewEventPage(page)
-    await newEventPage.goto()
-    await newEventPage.headerVisible('Laji')
-    await use(newEventPage)
+const test = base.extend<{ eventPage: EventPage }>({
+  eventPage: async ({ page }, use) => {
+    const createEventPage = new EventPage(page)
+    await createEventPage.create.goto()
+    await createEventPage.wizard.headerVisible('Laji')
+    await use(createEventPage)
   },
 })
 
 test.describe('View event', () => {
-  test('should not have time or description', async ({
-    newEventPage,
-    page,
-  }) => {
+  test('should not have time or description', async ({ eventPage }) => {
     const eventInfo = getRandomEventInfo({ time: null, description: '' })
-    const id = await newEventPage.actionCreateEvent(eventInfo)
+    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
 
-    const eventPage = new EventPage(page, id)
-    await eventPage.goto()
-    await eventPage.verifyEventInfo(eventInfo)
+    await eventPage.view.goto(id)
+    await eventPage.view.verifyEventInfo(eventInfo)
 
-    await eventPage.actionDeleteEvent()
+    await eventPage.view.actionDeleteEvent()
   })
 
-  test('should have no description', async ({ newEventPage, page }) => {
+  test('should have no description', async ({ eventPage }) => {
     const eventInfo = getRandomEventInfo({ description: '' })
-    const id = await newEventPage.actionCreateEvent(eventInfo)
+    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+    await eventPage.view.goto(id)
+    await eventPage.view.verifyEventInfo(eventInfo)
 
-    const eventPage = new EventPage(page, id)
-    await eventPage.goto()
-    await eventPage.verifyEventInfo(eventInfo)
-
-    await eventPage.actionDeleteEvent()
+    await eventPage.view.actionDeleteEvent()
   })
 
-  test('should have all fields', async ({ newEventPage, page }) => {
+  test('should have all fields', async ({ page, eventPage }) => {
     const eventInfo = getRandomEventInfo({
       time: {
         hours: 12,
         minutes: 5,
       },
     })
-    const id = await newEventPage.actionCreateEvent(eventInfo)
+    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
 
-    const eventPage = new EventPage(page, id)
-    await eventPage.goto()
+    await eventPage.view.goto(id)
 
+    // TODO: put inside page object?
     const breadcrumbs = page
       .locator('div')
       .filter({ hasText: new RegExp(`^Tapahtumat\\/${eventInfo.title}$`) })
@@ -58,33 +51,31 @@ test.describe('View event', () => {
 
     await expect(breadcrumbs).toBeVisible()
     await expect(page.getByText(`Modification zone`)).toBeVisible()
-    await expect(eventPage.getModifyEventBtn()).toBeEnabled()
-    await expect(eventPage.getDeleteEventBtn()).toBeEnabled()
+    await expect(eventPage.view.getModifyEventBtn()).toBeEnabled()
+    await expect(eventPage.view.getDeleteEventBtn()).toBeEnabled()
 
-    await eventPage.actionDeleteEvent()
+    await eventPage.view.actionDeleteEvent()
   })
 
-  test('should join event', async ({ newEventPage, page }) => {
+  test('should join event', async ({ page, eventPage }) => {
     const eventInfo = getRandomEventInfo()
-    const id = await newEventPage.actionCreateEvent(eventInfo)
-
-    const eventPage = new EventPage(page, id)
-    await eventPage.goto()
+    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+    await eventPage.view.goto(id)
 
     const noParticipantsText = 'Tapahtumassa ei osallistujia'
 
     await expect(page.getByText(noParticipantsText)).toBeVisible()
-    await eventPage.clickButton('Osallistu')
-    await eventPage.expectParticipantCount(1)
+    await eventPage.general.clickButton('Osallistu')
+    await eventPage.view.expectParticipantCount(1)
     await expect(
-      newEventPage.getParticipants().getByText(testUser.nick)
+      eventPage.view.getParticipants().getByText(testUser.nick)
     ).toBeVisible()
     await expect(page.getByText(noParticipantsText)).not.toBeVisible()
 
-    await eventPage.clickButton('Poistu')
-    await eventPage.expectParticipantCount(0)
+    await eventPage.general.clickButton('Poistu')
+    await eventPage.view.expectParticipantCount(0)
     await expect(page.getByText(noParticipantsText)).toBeVisible()
 
-    await eventPage.actionDeleteEvent()
+    await eventPage.view.actionDeleteEvent()
   })
 })
