@@ -35,9 +35,17 @@ const isTestEmail = (stage: string, appMode: string): boolean => {
 export const handler: DynamoDBStreamHandler = async (
   event: DynamoDBStreamEvent
 ): Promise<void> => {
+  const createdRecord = event.Records[0]
+
+  if (!createdRecord) {
+    logger.error(event, 'Stream error, event not found (event.Records[0])')
+    return
+  }
+
   const stage = getEnvironmentVariable('APP_STAGE')
   const appMode = getEnvironmentVariable('APP_MODE')
   const domainName = getEnvironmentVariable('DOMAIN_NAME')
+  logger.info({ stage, appMode, domainName }, 'DynamoStream EventCreated')
 
   const imageOrigin =
     appMode === 'dev' ? 'https://downtown65.events' : `https://${domainName}`
@@ -49,12 +57,7 @@ export const handler: DynamoDBStreamHandler = async (
     ? TEST_RECIPIENTS
     : await fetchCreateEventSubscribers()
 
-  const createdRecord = event.Records[0]
-
-  if (!createdRecord) {
-    logger.error(event, 'Stream error, event not found (event.Records[0])')
-    return
-  }
+  logger.info(recipients, 'Will send to recipients')
 
   const result = EmailableEvent.safeParse(createdRecord)
   if (!result.success) {
@@ -73,13 +76,15 @@ export const handler: DynamoDBStreamHandler = async (
     facebookLogoUrl: `${imageOrigin}/logos/fb-logo.png`,
   })
 
+  logger.info(body.plain, 'Email as text')
+
   // SES limits recipients to 50
   // to: hello@downtown65.com
   // bcc: max 49 recipients
   const recipientChunks = chunk(recipients, 49)
 
   for (const bccRecipients of recipientChunks) {
-    await sendEmail({
+    const batchResult = await sendEmail({
       subject: `Uusi tapahtuma: ${params.title}`,
       body: {
         text: body.plain,
@@ -89,5 +94,6 @@ export const handler: DynamoDBStreamHandler = async (
       recipients: ['hello@downtown65.com'],
       bccRecipients,
     })
+    logger.info(batchResult, 'Batch send emails result')
   }
 }

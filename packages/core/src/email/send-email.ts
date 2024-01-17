@@ -1,3 +1,4 @@
+import { logger } from '@downtown65-app/core/logger/logger'
 import { SESV2 } from 'aws-sdk'
 
 const ses = new SESV2({ apiVersion: '2019-09-27' })
@@ -55,8 +56,7 @@ export const sendEmail = async ({
       success: true,
     }
   } catch (error) {
-    console.error('SES error')
-    console.error(error)
+    logger.error(error, 'SES error')
     return {
       success: false,
     }
