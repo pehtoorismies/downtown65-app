@@ -98,6 +98,10 @@ jobs:
       - name: Deploy infra
         run: |
           npx sst deploy
+      - name: Print url
+        run: |
+          echo "PR deployed to url" >> $GITHUB_STEP_SUMMARY
+          echo ":rocket: https://${{ env.STAGE_TO_USE }}.downtown65.events" >> $GITHUB_STEP_SUMMARY
   unit_test:
     needs: [ "deploy" ]
     runs-on: ubuntu-latest
