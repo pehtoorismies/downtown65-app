@@ -3,6 +3,7 @@ import { graphql } from '@downtown65-app/graphql/gql'
 import { RefreshTokenDocument } from '@downtown65-app/graphql/graphql'
 import type { Session } from '@remix-run/node'
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
+import { addDays, addMonths, isAfter, parseISO } from 'date-fns'
 import { jwtDecode } from 'jwt-decode'
 import { Config } from 'sst/node/config'
 import { z } from 'zod'
@@ -13,10 +14,12 @@ import {
   getMessageSession,
   setSuccessMessage,
 } from '~/message.server'
+import { logger } from '~/util/logger.server'
 
 const REFRESH_TOKEN_KEY = 'refreshToken'
 const USER_KEY = 'user'
 const ACCESS_TOKEN_KEY = 'accessToken'
+const COOKIE_EXPIRES = 'cookieExpires'
 
 const Tokens = z.object({
   refreshToken: z.string(),
@@ -29,9 +32,6 @@ type Tokens = z.infer<typeof Tokens>
 const Jwt = z.object({
   exp: z.number(),
 })
-
-const TWO_DAYS: number = 60 * 60 * 24 * 2
-const ONE_YEAR: number = 60 * 60 * 24 * 365
 
 const sessionStorage = createCookieSessionStorage({
   cookie: {
@@ -75,42 +75,58 @@ const _GglIgnored = graphql(`
   }
 `)
 
-type Values = {
-  user: User
-  accessToken: string
-  refreshToken: string
-}
+const SessionData = z
+  .object({
+    user: User,
+    accessToken: z.string(),
+    refreshToken: z.string(),
+    cookieExpires: z.string().datetime(),
+  })
+  .brand<'SessionData'>()
 
-const getValues = (session: Session): Values | undefined => {
+type SessionData = z.infer<typeof SessionData>
+
+const getSessionData = (session: Session): SessionData | undefined => {
   const user = session.get(USER_KEY)
   const accessToken = session.get(ACCESS_TOKEN_KEY)
   const refreshToken = session.get(REFRESH_TOKEN_KEY)
+  const cookieExpires = session.get(COOKIE_EXPIRES)
 
-  if (
-    user === undefined ||
-    accessToken === undefined ||
-    refreshToken === undefined
-  ) {
-    return
-  }
-
-  return {
-    user: JSON.parse(user),
+  const sessionData = SessionData.safeParse({
+    user: user == null ? undefined : JSON.parse(user),
     accessToken,
     refreshToken,
+    cookieExpires,
+  })
+
+  if (sessionData.success) {
+    return sessionData.data
   }
+}
+
+const setSessionData = (
+  session: Session,
+  { refreshToken, user, accessToken, cookieExpires }: SessionData
+) => {
+  session.set(REFRESH_TOKEN_KEY, refreshToken)
+  session.set(USER_KEY, JSON.stringify(user))
+  session.set(ACCESS_TOKEN_KEY, accessToken)
+  session.set(COOKIE_EXPIRES, cookieExpires)
 }
 
 const getUserFromJwt = (idTokenJWT: string): User => {
   const decoded = jwtDecode(idTokenJWT)
-  return User.parse(decoded)
+  return User.parse({
+    ...decoded,
+    id: decoded.sub,
+  })
 }
 
-const renewSession = async (refreshToken: string, session: Session) => {
+const renewSession = async (oldSessionData: SessionData, session: Session) => {
   const { refreshToken: result } = await gqlClient.request(
     RefreshTokenDocument,
     {
-      refreshToken,
+      refreshToken: oldSessionData.refreshToken,
     },
     PUBLIC_AUTH_HEADERS
   )
@@ -118,15 +134,26 @@ const renewSession = async (refreshToken: string, session: Session) => {
   switch (result.__typename) {
     case 'RefreshTokens': {
       const user = getUserFromJwt(result.idToken)
-      session.set(REFRESH_TOKEN_KEY, refreshToken)
-      session.set(USER_KEY, JSON.stringify(user))
-      session.set(ACCESS_TOKEN_KEY, result.accessToken)
+
+      const sessionData = SessionData.parse({
+        refreshToken: oldSessionData.refreshToken,
+        user,
+        accessToken: result.accessToken,
+        cookieExpires: oldSessionData.cookieExpires,
+      })
+
+      setSessionData(session, sessionData)
       const headers = new Headers()
-      headers.append('Set-Cookie', await sessionStorage.commitSession(session))
+      headers.append(
+        'Set-Cookie',
+        await sessionStorage.commitSession(session, {
+          expires: parseISO(oldSessionData.cookieExpires),
+        })
+      )
       return { headers, user, accessToken: result.accessToken }
     }
     case 'RefreshError': {
-      // TODO: test
+      logger.error(result.error, 'Error Refreshing token')
       throw redirect('/login')
     }
   }
@@ -147,25 +174,28 @@ const getAuthentication = async (
   | undefined
 > => {
   const session = await getSession(request)
-  const values = getValues(session)
-  if (!values) {
+  const sessionData = getSessionData(session)
+  if (!sessionData) {
     return
   }
 
-  const decoded = jwtDecode(values.accessToken)
+  const decoded = jwtDecode(sessionData.accessToken)
   const { exp } = Jwt.parse(decoded)
-  const isExpired = Date.now() >= exp * 1000
+
+  const expirationDate = new Date(exp * 1000)
+  const now = new Date()
+  const isExpired = isAfter(now, expirationDate)
 
   if (!isExpired) {
     return {
-      user: values.user,
-      accessToken: values.accessToken,
+      user: sessionData.user,
+      accessToken: sessionData.accessToken,
       headers: new Headers(),
     }
   }
 
   const { user, headers, accessToken } = await renewSession(
-    values.refreshToken,
+    sessionData,
     session
   )
 
@@ -212,12 +242,13 @@ export const actionAuthenticate = async (
 
 export const renewUserSession = async (request: Request) => {
   const session = await getSession(request)
-  const values = getValues(session)
-  if (!values) {
+  const sessionData = getSessionData(session)
+  if (!sessionData) {
+    logger.error({}, 'Error renewing session. No data in session')
     throw new Error('Error renewing session. No data in session')
   }
 
-  const { headers } = await renewSession(values.refreshToken, session)
+  const { headers } = await renewSession(sessionData, session)
 
   return headers
 }
@@ -230,16 +261,28 @@ export const createUserSession = async ({
 }: CreateUserSession) => {
   const session = await getSession(request)
   const user = getUserFromJwt(tokens.idToken)
+  const now = new Date()
+  const expires = rememberMe ? addMonths(now, 12) : addDays(now, 2)
 
-  session.set(REFRESH_TOKEN_KEY, tokens.refreshToken)
-  session.set(USER_KEY, JSON.stringify(user))
-  session.set(ACCESS_TOKEN_KEY, tokens.accessToken)
+  const sessionData = SessionData.safeParse({
+    refreshToken: tokens.refreshToken,
+    user,
+    accessToken: tokens.accessToken,
+    cookieExpires: expires.toISOString(),
+  })
+
+  if (!sessionData.success) {
+    logger.error(sessionData.error, 'Illegal session data')
+    throw new Error('Session data corrupted')
+  }
+
+  setSessionData(session, sessionData.data)
 
   const headers = new Headers()
   headers.append(
     'Set-Cookie',
     await sessionStorage.commitSession(session, {
-      maxAge: rememberMe ? ONE_YEAR : TWO_DAYS,
+      expires,
     })
   )
 
