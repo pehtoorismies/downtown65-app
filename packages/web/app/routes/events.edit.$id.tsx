@@ -37,7 +37,7 @@ import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
-  setSuccessMessage,
+  setMessage,
 } from '~/message.server'
 import { EditOrCreate } from '~/routes-common/events/components/edit-or-create'
 import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
@@ -129,7 +129,10 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
   )
 
   const messageSession = await getMessageSession(request.headers.get('cookie'))
-  setSuccessMessage(messageSession, 'Tapahtuman muokkaus onnistui')
+  setMessage(messageSession, {
+    message: 'Tapahtuman muokkaus onnistui',
+    type: 'success',
+  })
 
   const headers = userSession.headers
   headers.append('Set-Cookie', await commitMessageSession(messageSession))

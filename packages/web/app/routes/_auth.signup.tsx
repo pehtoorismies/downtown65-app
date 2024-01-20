@@ -20,7 +20,7 @@ import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
-  setSuccessMessage,
+  setMessage,
 } from '~/message.server'
 import { AuthTemplate } from '~/routes-common/auth/auth-template'
 
@@ -100,10 +100,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   switch (signup.__typename) {
     case 'SignupSuccess': {
       const session = await getMessageSession(request.headers.get('cookie'))
-      setSuccessMessage(
-        session,
-        `Vahvistus lähetetty osoitteeseen: ${signupForm.email}`
-      )
+      setMessage(session, {
+        message: `Vahvistus lähetetty osoitteeseen: ${signupForm.email}`,
+        type: 'success',
+      })
       return redirect('/login', {
         headers: { 'Set-Cookie': await commitMessageSession(session) },
       })

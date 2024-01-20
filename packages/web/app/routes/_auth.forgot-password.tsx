@@ -18,7 +18,7 @@ import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
-  setSuccessMessage,
+  setMessage,
 } from '~/message.server'
 import { AuthTemplate } from '~/routes-common/auth/auth-template'
 import { validateEmail } from '~/util/validation.server'
@@ -54,7 +54,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   )
 
   const session = await getMessageSession(request.headers.get('cookie'))
-  setSuccessMessage(session, `Ohjeet lähetetty osoitteeseen: ${email}`)
+  setMessage(session, {
+    message: `Ohjeet lähetetty osoitteeseen: ${email}`,
+    type: 'success',
+  })
   return redirect('/login', {
     headers: { 'Set-Cookie': await commitMessageSession(session) },
   })

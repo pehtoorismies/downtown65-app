@@ -16,13 +16,9 @@ const { commitSession, getSession } = createCookieSessionStorage({
   },
 })
 
-export const setSuccessMessage = (session: Session, message: string) => {
-  session.flash('toastMessage', { message, type: 'success' } as ToastMessage)
+export const setMessage = (session: Session, message: ToastMessage) => {
+  session.flash('toastMessage', message)
 }
-
-// export const setErrorMessage = (session: Session, message: string) => {
-//   session.flash('toastMessage', { message, type: 'error' } as ToastMessage)
-// }
 
 export {
   commitSession as commitMessageSession,

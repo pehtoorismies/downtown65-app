@@ -28,7 +28,7 @@ import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
-  setSuccessMessage,
+  setMessage,
 } from '~/message.server'
 import { EditOrCreate } from '~/routes-common/events/components/edit-or-create'
 import { ActiveStep, reducer } from '~/routes-common/events/components/reducer'
@@ -98,7 +98,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   )
 
   const messageSession = await getMessageSession(request.headers.get('cookie'))
-  setSuccessMessage(messageSession, 'Tapahtuman luonti onnistui')
+  setMessage(messageSession, {
+    message: 'Tapahtuman luonti onnistui',
+    type: 'success',
+  })
 
   headers.append('Set-Cookie', await commitMessageSession(messageSession))
 

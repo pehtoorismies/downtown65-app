@@ -57,7 +57,7 @@ import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
-  setSuccessMessage,
+  setMessage,
 } from '~/message.server'
 import {
   actionAuthenticate,
@@ -223,7 +223,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     }
   )
   const session = await getMessageSession(request.headers.get('cookie'))
-  setSuccessMessage(session, 'Tapahtuma on poistettu')
+  setMessage(session, { message: 'Tapahtuma on poistettu', type: 'success' })
 
   headers.append('Set-Cookie', await commitMessageSession(session))
 

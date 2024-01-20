@@ -29,7 +29,7 @@ import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
-  setSuccessMessage,
+  setMessage,
 } from '~/message.server'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 import { logger } from '~/util/logger.server'
@@ -99,7 +99,10 @@ export const action: ActionFunction = async ({ request }) => {
     }
   )
   const messageSession = await getMessageSession(request.headers.get('cookie'))
-  setSuccessMessage(messageSession, 'Asetukset on päivitetty')
+  setMessage(messageSession, {
+    message: 'Asetukset on päivitetty',
+    type: 'success',
+  })
 
   headers.append('Set-Cookie', await commitMessageSession(messageSession))
 
