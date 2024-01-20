@@ -33,7 +33,7 @@ import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,
   getMessageSession,
-  setSuccessMessage,
+  setMessage,
 } from '~/message.server'
 import {
   challengeReducer,
@@ -86,7 +86,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       const messageSession = await getMessageSession(
         request.headers.get('cookie')
       )
-      setSuccessMessage(messageSession, 'Haasteen luonti onnistui')
+      setMessage(messageSession, {
+        message: 'Haasteen luonti onnistui',
+        type: 'success',
+      })
       headers.append('Set-Cookie', await commitMessageSession(messageSession))
 
       return redirect(`/challenges/${createChallenge.id}`, {

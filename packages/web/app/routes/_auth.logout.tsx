@@ -1,11 +1,14 @@
 import type { ActionFunctionArgs } from '@remix-run/node'
 import { redirect } from '@remix-run/node'
-import { logout } from '~/session.server'
+import { getDestroySessionHeaders } from '~/session.server'
 
-export const action = ({ request }: ActionFunctionArgs) => {
-  return logout(request, 'Uloskirjautuminen onnistui')
-}
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const headers = await getDestroySessionHeaders(request, {
+    message: 'Uloskirjautuminen onnistui',
+    type: 'success',
+  })
 
-export const loader = () => {
-  return redirect('/login')
+  return redirect('/login', {
+    headers,
+  })
 }
