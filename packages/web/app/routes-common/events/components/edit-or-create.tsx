@@ -1,14 +1,6 @@
-import {
-  Button,
-  Center,
-  Container,
-  Group,
-  Loader,
-  Modal,
-  Stepper,
-} from '@mantine/core'
+import { Button, Container, Group, Modal, Stepper } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import { useFetcher, useNavigate, useNavigation } from '@remix-run/react'
+import { useFetcher, useNavigate } from '@remix-run/react'
 import {
   IconAlignLeft,
   IconCalendar,
@@ -62,7 +54,6 @@ export const EditOrCreate: FC<Props> = ({
   cancelRedirectPath,
 }): JSX.Element => {
   const [opened, setOpened] = useState(false)
-  const navigation = useNavigation()
   const navigate = useNavigate()
   const fetcher = useFetcher()
   const matches = useMediaQuery('(max-width: 48em)', true, {
@@ -70,14 +61,6 @@ export const EditOrCreate: FC<Props> = ({
   })
 
   const iconSize = matches ? 18 : 34
-
-  if (navigation.state === 'loading') {
-    return (
-      <Center py={100}>
-        <Loader />
-      </Center>
-    )
-  }
 
   const submit = () => {
     fetcher.submit(eventStateToSubmittable(state), {
@@ -154,6 +137,7 @@ export const EditOrCreate: FC<Props> = ({
                 me={me}
                 dispatch={dispatch}
                 submit={submit}
+                submitState={fetcher.state}
               />
             </ParticipatingContext.Provider>
           </Stepper.Step>

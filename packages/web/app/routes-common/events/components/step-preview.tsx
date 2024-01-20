@@ -17,6 +17,7 @@ import {
 interface Properties extends ReducerProps {
   me: User
   submit: () => void
+  submitState: 'idle' | 'submitting' | 'loading'
 }
 
 const getDate = (date: EventState['date']) => {
@@ -45,7 +46,13 @@ const getButtonProps = (
   }
 }
 
-export const StepPreview = ({ state, me, dispatch, submit }: Properties) => {
+export const StepPreview = ({
+  state,
+  me,
+  dispatch,
+  submit,
+  submitState,
+}: Properties) => {
   if (!state.eventType) {
     throw new Error('Illegal state, not eventType defined')
   }
@@ -64,6 +71,7 @@ export const StepPreview = ({ state, me, dispatch, submit }: Properties) => {
       rightSection={icon}
       gradient={Gradient.dtPink}
       variant="gradient"
+      loading={submitState !== 'idle'}
     >
       {text}
     </NextButton>
