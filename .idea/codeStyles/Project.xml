@@ -20,6 +20,20 @@
       <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
       <option name="SPACES_WITHIN_IMPORTS" value="true" />
     </TypeScriptCodeStyleSettings>
+    <codeStyleSettings language="CSS">
+      <arrangement>
+        <rules>
+          <section>
+            <rule>
+              <match>
+                <NAME>.*</NAME>
+              </match>
+              <order>BY_NAME</order>
+            </rule>
+          </section>
+        </rules>
+      </arrangement>
+    </codeStyleSettings>
     <codeStyleSettings language="HTML">
       <option name="SOFT_MARGINS" value="80" />
       <indentOptions>
