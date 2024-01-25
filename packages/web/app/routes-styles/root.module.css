@@ -16,6 +16,7 @@
     color: light-dark(var(--mantine-color-black), var(--mantine-color-blue-6));
     font-weight: 600;
     border-bottom: 2px solid light-dark(var(--mantine-color-blue-6), var(--mantine-color-blue-8));
+
     @mixin hover {
         border-bottom: 2px solid light-dark(var(--mantine-color-blue-3), var(--mantine-color-blue-7));
     }
@@ -37,8 +38,8 @@
     bottom: 0;
     right: 0;
     text-align: center;
-    zIndex: 19999;
-    userSelect: none;
+    z-index: 19999;
+    user-select: none;
     width: 150px;
     opacity: 0.8;
 }

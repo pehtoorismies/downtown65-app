@@ -1,7 +1,4 @@
 .mobileImage {
-    /*[theme.fn.largerThan('sm')]: {*/
-    /*  display: 'none',*/
-    /*},*/
     max-width: rem(300px);
     margin-left: auto;
     margin-right: auto;
@@ -14,5 +11,5 @@
 }
 
 .title {
-    font-family: Greycliff CF, var(--mantine-font-family)
+    font-family: "Greycliff CF", var(--mantine-font-family);
 }

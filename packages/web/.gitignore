@@ -10,3 +10,4 @@ cypress.env.json
 /playwright/.cache/
 storageState.json
 .idea/
+.stylelintcache
