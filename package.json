@@ -12,6 +12,7 @@
     "typecheck": "lerna run typecheck --no-sort",
     "test": "lerna run test",
     "lint": "lerna run lint --no-sort",
+    "stylelint": "lerna run stylelint --scope=@downtown65-app/web",
     "find-deadcode": "yarn workspaces run find-deadcode",
     "generate": "graphql-codegen"
   },
