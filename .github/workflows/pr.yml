@@ -71,6 +71,8 @@ jobs:
           key: ${{ github.sha }}
       - name: 'lint'
         run: yarn lint
+      - name: 'stylelint'
+        run: yarn stylelint
   typecheck:
     runs-on: ubuntu-latest
     environment: development
