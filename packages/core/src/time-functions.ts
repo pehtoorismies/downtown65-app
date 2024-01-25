@@ -114,6 +114,16 @@ export const toISODatetimeCompact = (date: ISODate | Date, time?: ISOTime) => {
   return iso.slice(0, 19)
 }
 
+export const plainToISO = <T extends { dateStart: string; timeStart?: string }>(
+  x: T
+) => {
+  return {
+    ...x,
+    dateStart: ISODate.parse(x.dateStart),
+    timeStart: x.timeStart ? ISOTime.parse(x.timeStart) : undefined,
+  }
+}
+
 const getTimeAsString = (time: TimeInput) => {
   if (typeof time === 'string') {
     return time
