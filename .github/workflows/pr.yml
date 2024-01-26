@@ -35,8 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'yarn'
@@ -54,7 +54,7 @@ jobs:
       - name: Build types
         run: |
           npx sst types
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -64,7 +64,7 @@ jobs:
     environment: development
     needs: [ "build" ]
     steps:
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -78,7 +78,7 @@ jobs:
     environment: development
     needs: [ "build" ]
     steps:
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -92,7 +92,7 @@ jobs:
     env:
       COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
     steps:
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -123,7 +123,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         id: restore-build
         with:
           path: ./*
@@ -132,7 +132,7 @@ jobs:
         id: playwright-version
         run: echo "PLAYWRIGHT_VERSION=$(yarn info --json @playwright/test version | jq -r '.data')" >> $GITHUB_ENV
       - name: Cache playwright binaries
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: playwright-cache
         with:
           path: |

@@ -22,7 +22,7 @@ jobs:
       AWS_REGION: eu-north-1
       PR_NAME: pr-${{ github.event.pull_request.id }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install
         run: |
           yarn install --immutable --immutable-cache --check-cache
