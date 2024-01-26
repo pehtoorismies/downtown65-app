@@ -43,6 +43,7 @@ export const RemixStack = ({ stack, app }: StackContext) => {
   const site = new RemixSite(stack, 'Downtown65-remix', {
     path: 'packages/web',
     bind: [COOKIE_SECRET],
+    warm: stage === 'production' ? 5 : undefined,
     environment: {
       API_URL: ApiUrl,
       API_KEY: ApiKey,
