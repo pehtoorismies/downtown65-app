@@ -2,7 +2,7 @@
   "extends": "@tsconfig/node18/tsconfig.json",
   "include": [
     "sst.config.ts",
-    "stacks/*.ts",
+    "codegen.ts",
     "stacks/*.ts"
   ],
   "compilerOptions": {
