@@ -55,6 +55,7 @@
   },
   "engines": {
     "npm": "please-use-yarn",
-    "yarn": ">= 1.22.1"
-  }
+    "yarn": ">= 4.1.0"
+  },
+  "packageManager": "yarn@4.1.0"
 }
