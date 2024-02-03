@@ -1,28 +1,18 @@
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   root: true,
-  parser: "@typescript-eslint/parser",
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
+    "plugin:import/typescript",
     "plugin:unicorn/recommended",
     "prettier"
   ],
-  plugins: ["import", "unicorn", "unused-imports", "prettier"],
-  ignorePatterns: ["**/*/*.gen.ts"],
+  plugins: ["import", "unicorn", "@typescript-eslint", "unused-imports", "prettier"],
   rules: {
     "@typescript-eslint/consistent-type-imports": "error",
-    "@typescript-eslint/no-unused-vars": [
-      "warn", // or "error"
-      {
-        "argsIgnorePattern": "^_",
-        "varsIgnorePattern": "^_",
-        "caughtErrorsIgnorePattern": "^_"
-      }
-    ],
-    "import/no-unresolved": "off",
-    "import/named": "off",
     "import/order": [
       "error",
       {
@@ -33,27 +23,21 @@ module.exports = {
         "newlines-between": "never"
       }
     ],
-    "no-console": ["error", { allow: ["error"] }],
     "prettier/prettier": ["error"],
-    "require-await": ["error"],
-    "sort-imports": ["error", { "ignoreDeclarationSort": true }],
-    "unicorn/no-null": "off",
-    "unicorn/prevent-abbreviations": [
-      "error",
-      {
-        replacements: {
-          db: {
-            database: false
-          },
-          res: false,
-          params: false,
-          env: false,
-          args: false,
-          props: false,
-          dir: false
-        }
+    "sort-imports": ["error", { ignoreDeclarationSort: true }]
+  },
+  env: {
+    node: true
+  },
+  settings: {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      typescript: true,
+      node: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"]
       }
-    ],
-    "unused-imports/no-unused-imports": "error",
+    }
   }
 };
