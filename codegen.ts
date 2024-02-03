@@ -16,7 +16,7 @@ const addPlugin = {
 }
 
 const config: CodegenConfig = {
-  schema: 'packages/functions/src/gql/schema.graphql',
+  schema: 'apps/backend/src/graphql-appsync/schema.graphql',
   documents: ['apps/web/app/**/*.tsx', 'apps/web/app/**/*.ts'],
   generates: {
     './packages/types/src/index.ts': {
