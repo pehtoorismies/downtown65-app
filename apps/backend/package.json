@@ -26,7 +26,7 @@
     "node-fetch": "3.3.0",
     "pino": "8.11.0",
     "pino-lambda": "4.4.0",
-    "remeda": "1.39.0",
+    "remeda": "1.40.0",
     "sst": "2.39.11",
     "superagent": "3.8.3",
     "superagent-proxy": "3.0.0",
