@@ -1,5 +1,5 @@
-import { logger } from '@downtown65-app/core/logger/logger'
 import type { MutationUpdateAvatarArgs } from '@downtown65-app/graphql/graphql'
+import { logger } from '@downtown65-app/logger'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { Config } from 'sst/node/config'

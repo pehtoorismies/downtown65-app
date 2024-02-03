@@ -1,43 +1,47 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
 
+const pluginConfig = {
+  useTypeImports: true,
+  nonOptionalTypename: true,
+  defaultScalarType: 'unknown',
+  scalars: {
+    AWSDate: 'ISODate',
+    AWSTime: 'ISOTime',
+    AWSEmail: 'string',
+  },
+}
+
+const addPlugin = {
+  content: "import type { ISODate, ISOTime } from '@downtown65-app/time'",
+}
+
 const config: CodegenConfig = {
   schema: 'packages/functions/src/gql/schema.graphql',
-  documents: ['packages/web/app/**/*.tsx', 'packages/web/app/**/*.ts'],
+  documents: ['apps/web/app/**/*.tsx', 'apps/web/app/**/*.ts'],
   generates: {
-    './packages/graphql/src/': {
+    './packages/types/index.d.ts': {
+      plugins: [
+        'typescript',
+        {
+          add: addPlugin,
+        },
+      ],
+      config: pluginConfig,
+    },
+    './apps/web/app/generated/': {
       preset: 'client',
       presetConfig: {
         fragmentMasking: false,
       },
       plugins: [
         {
-          add: {
-            content:
-              "import type { ISODate, ISOTime } from '@downtown65-app/core/time-functions'",
-          },
+          add: addPlugin,
         },
       ],
-      config: {
-        // dedupeFragments: false,
-        useTypeImports: true,
-        nonOptionalTypename: true,
-        defaultScalarType: 'unknown',
-        // avoidOptionals: true,
-        // avoidOptionals: {
-        //   field: true,
-        //   inputValue: false,
-        //   object: true,
-        //   defaultValue: true,
-        // },
-        // maybeValue: 'T | null | undefined',
-        scalars: {
-          AWSDate: 'ISODate',
-          AWSTime: 'ISOTime',
-          AWSEmail: 'string',
-        },
-      },
+      config: pluginConfig,
     },
   },
   hooks: { afterOneFileWrite: ['prettier --write'] },
 }
+
 export default config

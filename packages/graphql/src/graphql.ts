@@ -1,6 +1,7 @@
 /* eslint-disable */
-import type { ISODate, ISOTime } from '@downtown65-app/core/time-functions'
+import type { ISODate, ISOTime } from '@downtown65-app/time'
 import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {

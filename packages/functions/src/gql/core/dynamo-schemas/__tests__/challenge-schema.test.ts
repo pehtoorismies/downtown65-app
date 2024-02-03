@@ -1,4 +1,4 @@
-import { ISODate } from '@downtown65-app/core/time-functions'
+import { ISODate } from '@downtown65-app/time'
 import { describe, expect, it, test } from 'vitest'
 import { ChallengeCreateSchema } from '../challenge-schema'
 
