@@ -1,6 +1,6 @@
-import { logger } from '@downtown65-app/core/logger/logger'
-import { ISODate } from '@downtown65-app/core/time-functions'
 import type { MutationAddChallengeAccomplishmentArgs } from '@downtown65-app/graphql/graphql'
+import { logger } from '@downtown65-app/logger'
+import { ISODate } from '@downtown65-app/time'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import * as Challenge from '../core/challenge'

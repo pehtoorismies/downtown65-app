@@ -1,4 +1,4 @@
-import { ISODate } from '@downtown65-app/core/time-functions'
+import { ISODate } from '@downtown65-app/time'
 import { isBefore } from 'date-fns'
 import { z } from 'zod'
 import {

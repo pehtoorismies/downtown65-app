@@ -9,6 +9,8 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
+    "clean": "turbo run clean",
+    "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
     "lint": "turbo run lint",
@@ -42,7 +44,8 @@
     "vitest": "0.34.6"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "dependencies": {
     "date-fns": "3.2.0",
