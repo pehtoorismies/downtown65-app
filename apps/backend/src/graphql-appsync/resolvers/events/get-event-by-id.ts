@@ -3,7 +3,7 @@ import type {
   QueryEventArgs as QueryEventArguments,
 } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import * as Event from '../core/event'
+import * as Event from '../../core/event'
 
 export const getEventById: AppSyncResolverHandler<
   QueryEventArguments,
