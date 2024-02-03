@@ -13,12 +13,12 @@ import type {
 } from '@downtown65-app/types'
 import { assertUnreachable } from '@downtown65-app/util'
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
-import { forgotPassword } from './auth/forgot-password'
-import { login } from './auth/login'
-import { refreshToken } from './auth/refresh-token'
-import { signup } from './auth/signup'
-import { getEventById } from './events/get-event-by-id'
-import { getChallengeById } from '~/graphql-appsync/challenges/get-challenge-by-id'
+import { forgotPassword } from '~/graphql-appsync/resolvers/auth/forgot-password'
+import { login } from '~/graphql-appsync/resolvers/auth/login'
+import { refreshToken } from '~/graphql-appsync/resolvers/auth/refresh-token'
+import { signup } from '~/graphql-appsync/resolvers/auth/signup'
+import { getChallengeById } from '~/graphql-appsync/resolvers/challenges/get-challenge-by-id'
+import { getEventById } from '~/graphql-appsync/resolvers/events/get-event-by-id'
 
 export type Inputs =
   | MutationForgotPasswordArgs

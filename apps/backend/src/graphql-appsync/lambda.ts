@@ -1,9 +1,15 @@
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { lambdaRequestTracker } from 'pino-lambda'
-import type { Inputs as PrivateIn, Outputs as PrivateOut } from './private'
-import { isPrivateField, privateResolver } from './private'
-import type { Inputs as PublicIn, Outputs as PublicOut } from './public'
-import { isPublicField, publicResolver } from './public'
+import type {
+  Inputs as PrivateIn,
+  Outputs as PrivateOut,
+} from './resolvers/private'
+import { isPrivateField, privateResolver } from './resolvers/private'
+import type {
+  Inputs as PublicIn,
+  Outputs as PublicOut,
+} from './resolvers/public'
+import { isPublicField, publicResolver } from './resolvers/public'
 
 const withRequest = lambdaRequestTracker()
 

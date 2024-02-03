@@ -3,7 +3,7 @@ import type {
   MutationCreateChallengeArgs,
 } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import * as Challenge from '../core/challenge'
+import * as Challenge from '../../core/challenge'
 
 export const createChallenge: AppSyncResolverHandler<
   MutationCreateChallengeArgs,

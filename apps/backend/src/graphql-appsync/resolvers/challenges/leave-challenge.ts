@@ -1,8 +1,8 @@
 import type { MutationLeaveChallengeArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import * as Challenge from '../core/challenge'
-import type { Claims } from '~/graphql-appsync/jwt-claims'
+import * as Challenge from '../../core/challenge'
+import type { Claims } from '~/graphql-appsync/resolvers/jwt-claims'
 
 // TODO: duplicate of Event
 export const leaveChallenge: AppSyncResolverHandler<
