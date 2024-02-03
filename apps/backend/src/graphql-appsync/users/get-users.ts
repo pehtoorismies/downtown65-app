@@ -1,10 +1,10 @@
 import type { QueryUsersArgs, UsersResponse } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
-import { getAuth0Management } from '~/graphql-appsync/support/auth0'
 import {
   QUERY_USER_RETURNED_FIELDS,
   mapToOtherUser,
-} from '~/graphql-appsync/support/auth0-user'
+} from './support/auth0-user'
+import { getAuth0Management } from '~/common/auth0-clients'
 
 export const getUsers: AppSyncResolverHandler<
   QueryUsersArgs,
