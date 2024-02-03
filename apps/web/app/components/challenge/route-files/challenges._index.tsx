@@ -1,6 +1,4 @@
 import { toISODate } from '@downtown65-app/time'
-import { graphql } from '~/generated/gql'
-import { GetChallengesDocument } from '~/generated/graphql'
 import {
   Breadcrumbs,
   Button,
@@ -23,6 +21,8 @@ import {
   ParticipatingContext,
   useParticipationActions,
 } from '~/contexts/participating-context'
+import { graphql } from '~/generated/gql'
+import { GetChallengesDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 import type { ChallengeStatus } from '~/util/challenge-tools'

@@ -1,5 +1,3 @@
-import { graphql } from '~/generated/gql'
-import { CreateEventDocument } from '~/generated/graphql'
 import {
   Box,
   Button,
@@ -24,6 +22,8 @@ import {
 } from '@tabler/icons-react'
 import React, { useReducer } from 'react'
 import type { Context } from '~/contexts/participating-context'
+import { graphql } from '~/generated/gql'
+import { CreateEventDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,

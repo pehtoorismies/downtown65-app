@@ -1,5 +1,3 @@
-import { graphql } from '~/generated/gql'
-import { CreateChallengeDocument } from '~/generated/graphql'
 import {
   Box,
   Button,
@@ -29,6 +27,8 @@ import {
 } from '@tabler/icons-react'
 import { addMonths, parseISO } from 'date-fns'
 import React, { useReducer } from 'react'
+import { graphql } from '~/generated/gql'
+import { CreateChallengeDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,

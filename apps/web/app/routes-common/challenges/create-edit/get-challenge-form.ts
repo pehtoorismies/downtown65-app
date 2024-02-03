@@ -1,9 +1,9 @@
 import { ISODate, toDate } from '@downtown65-app/time'
-import type { CreateChallengeInput } from '~/generated/graphql'
 import { endOfMonth, startOfMonth } from 'date-fns'
 import type { ZodError } from 'zod'
 import { z } from 'zod'
 import type { User } from '~/domain/user'
+import type { CreateChallengeInput } from '~/generated/graphql'
 
 const ChallengeInputForm = z.object({
   date: ISODate,

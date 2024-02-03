@@ -1,8 +1,8 @@
-import type { Challenge } from '~/generated/graphql'
 import { Button } from '@mantine/core'
 import React from 'react'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 import type { User } from '~/domain/user'
+import type { Challenge } from '~/generated/graphql'
 import type { ChallengeStatus } from '~/util/challenge-tools'
 
 interface Props {

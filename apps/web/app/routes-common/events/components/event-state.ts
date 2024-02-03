@@ -1,6 +1,6 @@
-import type { EventType } from '~/generated/graphql'
 import type { StepNumber } from './reducer'
 import type { User } from '~/domain/user'
+import type { EventType } from '~/generated/graphql'
 
 export interface EventState {
   eventType?: EventType

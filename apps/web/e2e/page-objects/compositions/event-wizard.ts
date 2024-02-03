@@ -1,9 +1,9 @@
-import type { EventType } from '~/generated/graphql'
 import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 import { format } from 'date-fns'
 import { fi } from 'date-fns/locale'
 import type { EventInfo } from '../../support/event-info'
+import type { EventType } from '~/generated/graphql'
 
 export class EventWizard {
   private readonly page: Page

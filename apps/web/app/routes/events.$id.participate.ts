@@ -1,8 +1,8 @@
-import { graphql } from '~/generated/gql'
-import { ParticipateEventDocument } from '~/generated/graphql'
 import type { ActionFunctionArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import invariant from 'tiny-invariant'
+import { graphql } from '~/generated/gql'
+import { ParticipateEventDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { actionAuthenticate } from '~/session.server'
 

@@ -1,4 +1,3 @@
-import type { EventType } from '~/generated/graphql'
 import {
   Divider,
   Grid,
@@ -11,6 +10,7 @@ import React from 'react'
 import { Participants } from '~/components/participants'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 import { Voucher } from '~/components/voucher/voucher'
+import type { EventType } from '~/generated/graphql'
 import { useParticipantsCount } from '~/hooks/use-participants-count'
 import { mapToData } from '~/util/event-type'
 

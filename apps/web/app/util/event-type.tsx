@@ -1,4 +1,3 @@
-import type { EventType } from '~/generated/graphql'
 import {
   IconArmchair,
   IconBike,
@@ -17,6 +16,7 @@ import {
   IconTriangleInverted,
 } from '@tabler/icons-react'
 import React from 'react'
+import type { EventType } from '~/generated/graphql'
 
 const SIZE = 16
 

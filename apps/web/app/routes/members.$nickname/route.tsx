@@ -1,5 +1,3 @@
-import { graphql } from '~/generated/gql'
-import { GetUserByNickDocument } from '~/generated/graphql'
 import {
   Anchor,
   Breadcrumbs,
@@ -25,6 +23,8 @@ import React from 'react'
 import invariant from 'tiny-invariant'
 import notFoundProfileImage from './not-found.jpg'
 import { ProfileBox } from '~/components/profile-box'
+import { graphql } from '~/generated/gql'
+import { GetUserByNickDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 

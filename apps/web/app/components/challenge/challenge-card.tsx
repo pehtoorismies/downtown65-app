@@ -1,4 +1,3 @@
-import type { Challenge } from '~/generated/graphql'
 import {
   Alert,
   Box,
@@ -16,6 +15,7 @@ import { DoneButtons } from '~/components/challenge/done-buttons'
 import { LeaderboardRow } from '~/components/challenge/leaderboard-row'
 import { Participants } from '~/components/participants'
 import type { User } from '~/domain/user'
+import type { Challenge } from '~/generated/graphql'
 import type { DoneDate } from '~/util/challenge-date'
 import type { ChallengeStatus } from '~/util/challenge-tools'
 

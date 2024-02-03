@@ -1,5 +1,3 @@
-import { graphql } from '~/generated/gql'
-import { UpdateAvatarDocument } from '~/generated/graphql'
 import {
   Alert,
   Anchor,
@@ -31,6 +29,8 @@ import {
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { createProfileUploadHandler } from './s3-upload.server'
+import { graphql } from '~/generated/gql'
+import { UpdateAvatarDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   actionAuthenticate,

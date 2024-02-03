@@ -4,8 +4,6 @@ import {
   toDate,
   toTimeComponents,
 } from '@downtown65-app/time'
-import { graphql } from '~/generated/gql'
-import { GetEventDocument, UpdateEventDocument } from '~/generated/graphql'
 import {
   Anchor,
   Breadcrumbs,
@@ -30,6 +28,8 @@ import { IconCircleOff, IconCircleX } from '@tabler/icons-react'
 import React, { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import type { Context } from '~/contexts/participating-context'
+import { graphql } from '~/generated/gql'
+import { GetEventDocument, UpdateEventDocument } from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,

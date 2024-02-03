@@ -1,10 +1,4 @@
 import { ISODate, toFormattedDate } from '@downtown65-app/time'
-import { graphql } from '~/generated/gql'
-import {
-  DeleteEventDocument,
-  EventType,
-  GetEventDocument,
-} from '~/generated/graphql'
 import {
   Anchor,
   Box,
@@ -53,6 +47,12 @@ import {
   ParticipatingContext,
   useParticipationActions,
 } from '~/contexts/participating-context'
+import { graphql } from '~/generated/gql'
+import {
+  DeleteEventDocument,
+  EventType,
+  GetEventDocument,
+} from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,

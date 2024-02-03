@@ -1,9 +1,3 @@
-import { graphql } from '~/generated/gql'
-import {
-  GetChallengeDocument,
-  LeaveChallengeDocument,
-  ParticipateChallengeDocument,
-} from '~/generated/graphql'
 import { Anchor, Breadcrumbs, Container, Text } from '@mantine/core'
 import type {
   ActionFunctionArgs,
@@ -20,6 +14,12 @@ import {
   ParticipatingContext,
   useParticipationActions,
 } from '~/contexts/participating-context'
+import { graphql } from '~/generated/gql'
+import {
+  GetChallengeDocument,
+  LeaveChallengeDocument,
+  ParticipateChallengeDocument,
+} from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import { actionAuthenticate, loaderAuthenticate } from '~/session.server'
 import { getChallengeDates } from '~/util/challenge-date'

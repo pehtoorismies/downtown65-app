@@ -1,5 +1,3 @@
-import { graphql } from '~/generated/gql'
-import { ForgotPasswordDocument } from '~/generated/graphql'
 import {
   Anchor,
   Box,
@@ -14,6 +12,8 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons-react'
+import { graphql } from '~/generated/gql'
+import { ForgotPasswordDocument } from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,

@@ -1,6 +1,4 @@
 import { assertUnreachable } from '@downtown65-app/util'
-import { graphql } from '~/generated/gql'
-import { SignupDocument } from '~/generated/graphql'
 import {
   Alert,
   Anchor,
@@ -16,6 +14,8 @@ import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconExclamationCircle } from '@tabler/icons-react'
 import { z } from 'zod'
+import { graphql } from '~/generated/gql'
+import { SignupDocument } from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,

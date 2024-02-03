@@ -1,6 +1,4 @@
 import { assertUnreachable } from '@downtown65-app/util'
-import { graphql } from '~/generated/gql'
-import { LoginDocument } from '~/generated/graphql'
 import {
   Alert,
   Anchor,
@@ -17,6 +15,8 @@ import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
 import * as R from 'remeda'
+import { graphql } from '~/generated/gql'
+import { LoginDocument } from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
 import { AuthTemplate } from '~/routes-common/auth/auth-template'
 import { createUserSession } from '~/session.server'

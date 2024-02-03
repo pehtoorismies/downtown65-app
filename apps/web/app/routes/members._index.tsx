@@ -1,5 +1,3 @@
-import { graphql } from '~/generated/gql'
-import { GetUsersDocument } from '~/generated/graphql'
 import {
   Anchor,
   Breadcrumbs,
@@ -13,6 +11,8 @@ import type { LoaderFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
 import React from 'react'
+import { graphql } from '~/generated/gql'
+import { GetUsersDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
 
