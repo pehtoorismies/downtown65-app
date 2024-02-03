@@ -9,6 +9,7 @@
     "deploy": "sst deploy",
     "remove": "sst remove",
     "console": "sst console",
+    "sst": "sst",
     "clean": "turbo run clean",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
