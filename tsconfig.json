@@ -1,14 +1,12 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
+  "include": [
+    "sst.config.ts",
+    "stacks/*.ts",
+    "stacks/*.ts"
+  ],
   "compilerOptions": {
-    "lib": [
-      "esnext"
-    ],
     "module": "esnext",
-    "moduleResolution": "node",
-    "noUnusedParameters": true
-  },
-  "exclude": [
-    "packages"
-  ]
+    "moduleResolution": "node"
+  }
 }
