@@ -1,6 +1,8 @@
-import { createEventAddedEmail } from '@downtown65-app/core/email/create-event-added-email'
-import { EmailableEvent } from '@downtown65-app/core/email/emailable-event'
-import { sendEmail } from '@downtown65-app/core/email/send-email'
+import {
+  EmailableEvent,
+  createEventAddedEmail,
+  sendEmail,
+} from '@downtown65-app/email'
 import { logger } from '@downtown65-app/logger'
 import { getEnvironmentVariable } from '@downtown65-app/util'
 import type { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'

@@ -1,4 +1,4 @@
-import type { MeUser, OtherUser } from '@downtown65-app/graphql/graphql'
+import type { MeUser, OtherUser } from '@downtown65-app/types'
 import type { GetUsers200ResponseOneOfInner } from 'auth0'
 import { z } from 'zod'
 

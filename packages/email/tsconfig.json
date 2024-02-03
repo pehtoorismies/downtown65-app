@@ -1,13 +1,5 @@
 {
   "extends": "@downtown65-app/config-ts/ts-packages.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "~/*": [
-        "./src/*"
-      ]
-    }
-  },
   "include": [
     "."
   ],

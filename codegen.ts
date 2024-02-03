@@ -19,7 +19,7 @@ const config: CodegenConfig = {
   schema: 'packages/functions/src/gql/schema.graphql',
   documents: ['apps/web/app/**/*.tsx', 'apps/web/app/**/*.ts'],
   generates: {
-    './packages/types/index.d.ts': {
+    './packages/types/src/index.ts': {
       plugins: [
         'typescript',
         {

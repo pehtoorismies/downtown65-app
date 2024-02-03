@@ -1,6 +1,6 @@
-import type { EventType } from '@downtown65-app/graphql/graphql'
+import { ISODate, toFormattedDate } from '@downtown65-app/time'
+import type { EventType } from '@downtown65-app/types'
 import { z } from 'zod'
-import { ISODate, toFormattedDate } from '../time-functions'
 
 const EVENT_DATA_MAP: Record<EventType, { imageUrl: string; text: string }> = {
   CYCLING: {

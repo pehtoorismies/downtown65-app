@@ -1,8 +1,8 @@
+import { ISODate, ISOTime } from '@downtown65-app/time'
 import type {
   Event as Dt65Event,
   MutationUpdateEventArgs,
-} from '@downtown65-app/graphql/graphql'
-import { ISODate, ISOTime } from '@downtown65-app/time'
+} from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as Event from '../core/event'
 

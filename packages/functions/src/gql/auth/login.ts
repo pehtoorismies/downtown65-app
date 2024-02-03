@@ -1,8 +1,5 @@
-import type {
-  LoginResponse,
-  MutationLoginArgs,
-} from '@downtown65-app/graphql/graphql'
 import { logger } from '@downtown65-app/logger'
+import type { LoginResponse, MutationLoginArgs } from '@downtown65-app/types'
 import type { TokenSet } from 'auth0'
 import { AuthApiError } from 'auth0'
 import type { AppSyncResolverHandler } from 'aws-lambda'

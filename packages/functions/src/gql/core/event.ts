@@ -1,10 +1,10 @@
+import { logger } from '@downtown65-app/logger'
+import { toISODate, toISODatetimeCompact } from '@downtown65-app/time'
 import type {
   CreateEventInput,
   Event,
   UpdateEventInput,
-} from '@downtown65-app/graphql/graphql'
-import { logger } from '@downtown65-app/logger'
-import { toISODate, toISODatetimeCompact } from '@downtown65-app/time'
+} from '@downtown65-app/types'
 import { format, startOfToday } from 'date-fns'
 import { ulid } from 'ulid'
 import type { EventUpdateSchemaInput } from './dynamo-schemas/event-schema'

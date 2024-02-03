@@ -1,5 +1,5 @@
-import { EventType } from '@downtown65-app/graphql/graphql'
 import { ISODate, ISOTime } from '@downtown65-app/time'
+import { EventType } from '@downtown65-app/types'
 import { describe, expect, it, test } from 'vitest'
 import type { EventUpdateSchemaInput } from '../event-schema'
 import { EventUpdateSchema } from '../event-schema'
