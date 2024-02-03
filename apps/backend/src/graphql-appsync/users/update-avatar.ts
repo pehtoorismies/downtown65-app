@@ -3,7 +3,7 @@ import type { MutationUpdateAvatarArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { Config } from 'sst/node/config'
-import { getAuth0Management } from '~/graphql-appsync/support/auth0'
+import { getAuth0Management } from '~/common/auth0-clients'
 
 export const updateAvatar: AppSyncResolverHandler<
   MutationUpdateAvatarArgs,

@@ -22,6 +22,7 @@ import type {
   QueryUsersArgs,
   UsersResponse,
 } from '@downtown65-app/types'
+import { assertUnreachable } from '@downtown65-app/util'
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'
@@ -29,7 +30,6 @@ import { getEvents } from './events/get-events'
 import { leaveEvent } from './events/leave-event'
 import { participateEvent } from './events/participate-event'
 import { updateEvent } from './events/update-event'
-import { assertUnreachable } from './support/assert-unreachable'
 import type { EmptyArgs } from './support/empty-args'
 import { verifyScope } from './support/verify-scope'
 import { getMe } from './users/get-me'
