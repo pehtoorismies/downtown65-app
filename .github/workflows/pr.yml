@@ -73,6 +73,8 @@ jobs:
         run: yarn lint
       - name: 'stylelint'
         run: yarn stylelint
+      - name: 'check package versions'
+        run: yarn constraints
   typecheck:
     runs-on: ubuntu-latest
     environment: development
