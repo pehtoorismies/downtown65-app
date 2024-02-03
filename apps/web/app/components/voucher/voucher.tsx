@@ -13,6 +13,11 @@ export const Voucher = ({ children }: PropsWithChildren) => {
 Voucher.displayName = 'VoucherComponent'
 
 Voucher.Header = VoucherHeader
-Voucher.Content = ({ children }: PropsWithChildren) => {
+
+const Content = ({ children }: PropsWithChildren) => {
   return <>{children}</>
 }
+
+Content.displayName = 'VoucherContent'
+
+Voucher.Content = Content

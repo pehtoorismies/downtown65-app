@@ -1,6 +1,6 @@
 import { ISODate, toISOTime } from '@downtown65-app/time'
-import { EventType } from '~/generated/graphql'
 import { z } from 'zod'
+import { EventType } from '~/generated/graphql'
 
 const isEventType = (eventType: unknown): eventType is EventType => {
   if (typeof eventType !== 'string') {

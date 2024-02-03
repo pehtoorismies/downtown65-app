@@ -27,7 +27,7 @@ export const VoucherHeader = ({
 
 VoucherHeader.displayName = 'VoucherHeader'
 
-VoucherHeader.Title = ({ children }: PropsWithChildren) => {
+const Title = ({ children }: PropsWithChildren) => {
   return (
     <Box className={classes.areaTitle}>
       <Text className={classes.title} data-testid="event-title">
@@ -36,8 +36,9 @@ VoucherHeader.Title = ({ children }: PropsWithChildren) => {
     </Box>
   )
 }
+Title.displayName = 'VoucherTitle'
 
-VoucherHeader.Type = ({ type }: { type: string }) => {
+const Type = ({ type }: { type: string }) => {
   return (
     <Badge
       className={classes.type}
@@ -50,8 +51,9 @@ VoucherHeader.Type = ({ type }: { type: string }) => {
     </Badge>
   )
 }
+Type.displayName = 'VoucherType'
 
-VoucherHeader.Creator = ({ nick }: { nick: string }) => {
+const Creator = ({ nick }: { nick: string }) => {
   return (
     <Badge
       className={classes.areaCreator}
@@ -64,7 +66,9 @@ VoucherHeader.Creator = ({ nick }: { nick: string }) => {
     </Badge>
   )
 }
-VoucherHeader.Icon = ({ icon }: { icon: React.ReactNode }) => {
+Creator.displayName = 'VoucherCreator'
+
+const Icon = ({ icon }: { icon: React.ReactNode }) => {
   return (
     <ThemeIcon
       data-testid="event-race"
@@ -81,6 +85,7 @@ VoucherHeader.Icon = ({ icon }: { icon: React.ReactNode }) => {
     </ThemeIcon>
   )
 }
+Icon.displayName = 'VoucherIcon'
 
 const ParticipantCount = ({
   count,
@@ -108,5 +113,10 @@ const ParticipantCount = ({
     </Badge>
   )
 }
+ParticipantCount.displayName = 'VoucherParticipantCount'
 
 VoucherHeader.ParticipantCount = ParticipantCount
+VoucherHeader.Title = Title
+VoucherHeader.Type = Type
+VoucherHeader.Creator = Creator
+VoucherHeader.Icon = Icon

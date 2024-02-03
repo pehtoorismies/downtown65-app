@@ -1,5 +1,5 @@
-import type { EventType } from '~/generated/graphql'
 import type { User } from '~/domain/user'
+import type { EventType } from '~/generated/graphql'
 
 export interface EventLoaderData {
   createdBy: User

@@ -1,5 +1,3 @@
-import { graphql } from '~/generated/gql'
-import { GetProfileDocument, UpdateMeDocument } from '~/generated/graphql'
 import {
   Breadcrumbs,
   Button,
@@ -22,6 +20,8 @@ import { IconLogout } from '@tabler/icons-react'
 import type { ChangeEventHandler } from 'react'
 import React, { useState } from 'react'
 import { ProfileBox } from '~/components/profile-box'
+import { graphql } from '~/generated/gql'
+import { GetProfileDocument, UpdateMeDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import {
   commitMessageSession,

@@ -1,4 +1,3 @@
-import type { Challenge } from '~/generated/graphql'
 import { Button } from '@mantine/core'
 import { Link } from '@remix-run/react'
 import { IconArrowNarrowRight } from '@tabler/icons-react'
@@ -6,6 +5,7 @@ import React from 'react'
 import { ChallengeButton } from '~/components/challenge/challenge-button'
 import { ChallengeRoot } from '~/components/challenge/challenge-root'
 import type { User } from '~/domain/user'
+import type { Challenge } from '~/generated/graphql'
 import type { ChallengeStatus } from '~/util/challenge-tools'
 
 interface Props {

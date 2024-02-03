@@ -1,8 +1,8 @@
-import { EventType } from '~/generated/graphql'
 import { Button, SimpleGrid } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
+import { EventType } from '~/generated/graphql'
 import {
   NextButton,
   StepLayout,
