@@ -1,7 +1,4 @@
-import type {
-  QueryUsersArgs,
-  UsersResponse,
-} from '@downtown65-app/graphql/graphql'
+import type { QueryUsersArgs, UsersResponse } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { getAuth0Management } from '~/gql/support/auth0'
 import {

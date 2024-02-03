@@ -1,11 +1,16 @@
-import { defineConfig, mergeConfig } from 'vitest/config'
-import viteTestConfig from '../../vitest.config'
+/// <reference types="vitest" />
 
-export default mergeConfig(
-  viteTestConfig,
-  defineConfig({
-    test: {
-      exclude: ['e2e/**/*.ts'],
-    },
-  })
-)
+import tsconfigPaths from 'vite-tsconfig-paths'
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  test: {
+    testTimeout: 90_000,
+    exclude: ['e2e/**/*.ts'],
+  },
+  logLevel: 'info',
+  esbuild: {
+    sourcemap: 'both',
+  },
+  plugins: [tsconfigPaths()],
+})

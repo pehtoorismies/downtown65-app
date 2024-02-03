@@ -1,7 +1,7 @@
 import type {
   IdPayload,
   MutationCreateChallengeArgs,
-} from '@downtown65-app/graphql/graphql'
+} from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as Challenge from '../core/challenge'
 

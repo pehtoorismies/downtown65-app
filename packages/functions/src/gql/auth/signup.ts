@@ -1,11 +1,11 @@
-import { SignupField } from '@downtown65-app/graphql/graphql'
+import { logger } from '@downtown65-app/logger'
+import { SignupField } from '@downtown65-app/types'
 import type {
   FieldError,
   MutationSignupArgs,
   SignupInput,
   SignupResponse,
-} from '@downtown65-app/graphql/graphql'
-import { logger } from '@downtown65-app/logger'
+} from '@downtown65-app/types'
 import { AuthApiError } from 'auth0'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'

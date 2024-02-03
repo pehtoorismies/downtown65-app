@@ -21,7 +21,7 @@ import type {
   QueryUserArgs,
   QueryUsersArgs,
   UsersResponse,
-} from '@downtown65-app/graphql/graphql'
+} from '@downtown65-app/types'
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import { createEvent } from './events/create-event'
 import { deleteEvent } from './events/delete-event'

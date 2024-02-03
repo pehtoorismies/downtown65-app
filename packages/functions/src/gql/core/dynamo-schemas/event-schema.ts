@@ -1,5 +1,5 @@
-import { EventType } from '@downtown65-app/graphql/graphql'
 import { ISODate, ISOTime } from '@downtown65-app/time'
+import { EventType } from '@downtown65-app/types'
 import { z } from 'zod'
 import {
   Auth0UserSchema,

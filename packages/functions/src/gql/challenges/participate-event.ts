@@ -1,4 +1,4 @@
-import type { MutationParticipateChallengeArgs } from '@downtown65-app/graphql/graphql'
+import type { MutationParticipateChallengeArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import * as Challenge from '../core/challenge'

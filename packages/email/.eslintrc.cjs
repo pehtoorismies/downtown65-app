@@ -8,7 +8,6 @@ module.exports = {
     project: true
   },
   rules: {
-    "unicorn/text-encoding-identifier-case": 0,
-    "unicorn/no-null": 0
+    "unicorn/text-encoding-identifier-case": 0
   }
 };
