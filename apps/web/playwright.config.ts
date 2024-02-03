@@ -1,8 +1,26 @@
+import { access, constants } from 'node:fs'
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
 import dotenv from 'dotenv'
 
-dotenv.config()
+if (!process.env.CI) {
+  const file = '.env'
+
+  // Check if the file is readable.
+  access(file, constants.F_OK, (error) => {
+    if (error) {
+      console.warn(
+        `'${file}' does not exist. Add user details to .env for local testing
+      TEST_USER_EMAIL=...
+      TEST_USER_PASSWORD=...
+      TEST_USER_NICK=...
+      REGISTER_SECRET=...`
+      )
+    } else {
+      dotenv.config()
+    }
+  })
+}
 
 /**
  * See https://playwright.dev/docs/test-configuration.
