@@ -24,8 +24,8 @@ jobs:
     steps:
       - name: Print stage
         run: |
-          echo Stage is $STAGE_TO_USE
-          echo to remove: sst remove --stage $STAGE_TO_USE
+          echo "Stage is $STAGE_TO_USE" >> $GITHUB_STEP_SUMMARY
+          echo "to remove: sst remove --stage $STAGE_TO_USE" >> $GITHUB_STEP_SUMMARY
   #  - name: restore lerna
   #    uses: actions/cache@v3
   #    with:
