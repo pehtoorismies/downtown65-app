@@ -37,6 +37,7 @@
     "sst": "2.39.11",
     "ts-node": "10.9.1",
     "ts-prune": "^0.10.3",
+    "turbo": "^1.12.2",
     "typescript": "5.2.2",
     "vite-tsconfig-paths": "4.2.1",
     "vitest": "0.34.6"
