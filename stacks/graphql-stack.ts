@@ -20,7 +20,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
   } = use(ConfigStack)
 
   const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
-    handler: 'packages/functions/src/gql/lambda.handler',
+    handler: 'apps/backend/src/graphql-appsync/lambda.handler',
     bind: [
       AUTH_CLIENT_ID,
       AUTH_CLIENT_SECRET,
@@ -37,7 +37,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
 
   //  Create the AppSync GraphQL API
   const gqlApi = new AppSyncApi(stack, 'AppSyncApi', {
-    schema: 'packages/functions/src/gql/schema.graphql',
+    schema: 'apps/backend/src/graphql-appsync/schema.graphql',
     cdk: {
       graphqlApi: {
         logConfig: {
