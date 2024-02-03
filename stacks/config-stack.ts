@@ -1,5 +1,5 @@
-import type { StackContext } from 'sst/constructs'
 import { Config } from 'sst/constructs'
+import type { StackContext } from 'sst/constructs'
 
 type ConfigKey = 'AUTH_CLIENT_ID' | 'AUTH_DOMAIN' | 'JWT_AUDIENCE'
 type AuthConfig = Record<ConfigKey, string>

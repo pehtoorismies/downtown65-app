@@ -1,5 +1,5 @@
 import * as lambda from 'aws-cdk-lib/aws-lambda'
-import { StackContext } from 'sst/constructs'
+import type { StackContext } from 'sst/constructs'
 
 export const LayerStack = ({ stack }: StackContext) => {
   const sharpLayer = new lambda.LayerVersion(stack, 'AppLayer', {

@@ -10,7 +10,7 @@ import { MediaBucketStack } from './stacks/media-bucket-stack'
 import { RemixStack } from './stacks/remix-stack'
 
 export default {
-  config(_input) {
+  config() {
     return {
       name: 'downtown65-app',
       region: 'eu-north-1',
