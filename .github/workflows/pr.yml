@@ -39,21 +39,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'yarn'
+      - run: corepack enable
       - name: Install
         run: |
-          yarn install --immutable --immutable-cache
+          yarn install --immutable
       - name: Set default common sst secrets
         run: |
-          npx sst secrets --stage $STAGE_TO_USE set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
-          npx sst secrets --stage $STAGE_TO_USE set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
-          npx sst secrets --stage $STAGE_TO_USE set COOKIE_SECRET ${{ secrets.COOKIE_SECRET }}
+          yarn sst secrets --stage $STAGE_TO_USE set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
+          yarn sst secrets --stage $STAGE_TO_USE set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+          yarn sst secrets --stage $STAGE_TO_USE set COOKIE_SECRET ${{ secrets.COOKIE_SECRET }}
       - name: Write stage to .sst/stage
         run: |
           echo $STAGE_TO_USE > .sst/stage
       - name: Build types
         run: |
-          npx sst types
+          yarn sst types
+      - name: Build monorepo
+        run: |
+          yarn build
       - uses: actions/cache@v4
         id: restore-build
         with:
@@ -69,6 +72,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - run: corepack enable
       - name: 'lint'
         run: yarn lint
       - name: 'stylelint'
@@ -85,6 +89,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - run: corepack enable
       - name: 'typecheck'
         run: yarn typecheck
   deploy:
