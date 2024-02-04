@@ -1,59 +1,134 @@
 # Downtown 65 App
 
-An example serverless app created with SST.
+App is live in https://downtown65.events
 
-## Infra
+## App structure
 
-[**Infra is deployed with Serverless Stack**](https://sst.dev/)
+Monorepo structure is same as Turborepo recommends:
 
-## Dynamo single table design
+* `apps/web` host Remix frontend
+* `apps/backend` (graphql etc)
+* `packages/` common packages
+* `stack/` sst AWS infrastucture
+* `sst.config.ts` main entry point for infra
 
+SST does not allow infra to be it's own workspace/package as it should. See
+details https://docs.sst.dev/configuring-sst.
 
-### Getting started
+## Local development
 
+### AWS
 
-```bash
-$ yarn
-$ yarn start  
+Request a new AWS account for development.
+
+#### AWS profile
+
+Use `direnv` to load aws _downtown65-app_ profile (`.envrc`)
+
+```
+# ~/.aws/config
+[downtown65-app]
+region = eu-north-1
+output = json
+
+# ~/.aws/credentials
+[downtown65-app]
+aws_access_key_id = ...
+aws_secret_access_key = ...
 ```
 
-Give your local dev environment some name like: `downtown65-app-yourusername`. This will be your default stage. All the AWS resources will be named after
+#### SST config
 
-This name can be changed in `.sst/stage` 
+Give your local dev environment some name like: `downtown65-app-yourusername`. This will be your default stage. All the
+AWS resources will be named after
+
+This name can be changed in `.sst/stage`
+
+```
+# should contain your development stage
+.sst/stage
+```
+
+### Yarn modern
+
+Use yarn > 4
+
+```bash
+$ corepack enable
+$ yarn --version 
+```
+
+### Monorepo
+
+Monorepo is using Turborepo (https://turbo.build)
+
+```bash
+$ yarn 
+$ yarn sst types
+$ yarn build 
+```
+
+### Development
+
+```bash
+$ yarn dev
+$ cd apps/web
+$ yarn dev 
+```
 
 ### Add secrets
 
 [https://docs.sst.dev/environment-variables#sst-secrets](https://docs.sst.dev/environment-variables#sst-secrets)
 
+Add your own development secrets to AWS parameter store.
+
 ```bash
 # secret value used in registration form
-$ npx sst secrets set REGISTER_SECRET <secret_here>
+$ yarn sst secrets set REGISTER_SECRET <secret_here>
 # secret value to use with Auth0 Client
-$ npx sst secrets set AUTH_CLIENT_SECRET <secret_here>
+$ yarn sst secrets set AUTH_CLIENT_SECRET <secret_here>
+# secret value to use with Auth0 Client
+$ yarn sst secrets set COOKIE_SECRET <secret_here>
 ```
 
-## Commands
+### Keep consistent dependencies
 
-### `npm run start`
+Update/add packages in `installed-dependencies.json` if you want to keep same package versions across monorepo.
 
-Starts the Live Lambda Development environment.
+```bash
+$ yarn constraints
+$ yarn constraints --fix
+```
 
-### `npm run build`
+### Generate typescript types from graphql schema
 
-Build your app and synthesize your stacks.
+```bash
+$ yarn generate
+```
 
-### `npm run deploy [stack]`
+## Unit testing
 
-Deploy all your stacks to AWS. Or optionally deploy, a specific stack.
+Backend should be up and running
 
-### `npm run remove [stack]`
+```bash
+$ yarn dev
+```
 
-Remove all your stacks and all of their resources from AWS. Or optionally removes, a specific stack.
+Run unit tests. Backend contains tests that integrate to AWS DynamoDB.
 
-### `npm run test`
+```bash
+$ yarn test
+```
 
-Runs your tests using Jest. Takes all the [Jest CLI options](https://jestjs.io/docs/en/cli).
+## Backend
 
-## GraphQL API
+AWS lambdas for all the functionality
 
-Default authentication 
+### Graphql API
+
+Graphql API uses AWS Appsync. You can pickup url from `sst deploy`.
+
+### DynamoDB
+
+Single table design is used.
+Needs some documentation.
