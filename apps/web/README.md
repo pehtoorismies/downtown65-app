@@ -1,10 +1,14 @@
-# Remix frontend
+# Web
 
-- [Remix Docs](https://remix.run/docs)
+Main elements
+
+* Remix (https://remix.run/).
+* Mantine (https://mantine.dev/)
+* Graphql-generator for types and requests
 
 ## Development
 
-From your terminal:
+Make sure infra is deploy and running `yarn dev` from project root.
 
 ```sh
 yarn run dev
@@ -21,10 +25,11 @@ This starts your app in development mode, rebuilding assets on file changes.
 USER_EMAIL=<fill email>
 USER_PASSWORD=<fill password>
 USER_NICK=<fill nick>
+REGISTER_SECRET=<use sst secrets to reveal this>
 ```
 
 3. Credentials are read from `storageState.json`. Delete the file to renew credentials. With wrong tests will fail.
-4. `npx install playwright` to install browsers
+4. `yarn dlx install playwright` to install browsers
 
 Then run the app in production mode:
 
