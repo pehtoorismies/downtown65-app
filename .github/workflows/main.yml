@@ -26,11 +26,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: corepack enable
       - name: Install
-        run: yarn install --immutable --immutable-cache --check-cache
-      - name: Build
+        run: yarn install --immutable
+      - name: Build and deploy
         run: |
-          npx sst build --stage production
-      - name: Deploy infra
-        run: |
-          npx sst deploy --stage production
+          yarn sst types --stage production
+          yarn build
+          yarn sst deploy --stage production

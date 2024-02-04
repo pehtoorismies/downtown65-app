@@ -23,15 +23,19 @@ jobs:
       PR_NAME: pr-${{ github.event.pull_request.id }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: corepack enable
       - name: Install
         run: |
-          yarn install --immutable --immutable-cache --check-cache
-          npx sst types
+          yarn install --immutable
+          yarn sst types
       - name: Remove common sst secrets
         run: |
-          npx sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET
-          npx sst secrets --stage $PR_NAME remove REGISTER_SECRET
-          npx sst secrets --stage $PR_NAME remove COOKIE_SECRET
+          yarn sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET
+          yarn sst secrets --stage $PR_NAME remove REGISTER_SECRET
+          yarn sst secrets --stage $PR_NAME remove COOKIE_SECRET
       - name: Remove infra
         run: |
-          npx sst remove --stage $PR_NAME
+          yarn sst remove --stage $PR_NAME
