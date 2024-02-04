@@ -104,9 +104,10 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - run: corepack enable
       - name: Deploy infra
         run: |
-          npx sst deploy
+          yarn sst deploy
       - name: Print url
         run: |
           echo "PR deployed to url" >> $GITHUB_STEP_SUMMARY
@@ -121,6 +122,7 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - run: corepack enable
       - name: Unit test
         run: |
           yarn test
@@ -135,9 +137,11 @@ jobs:
         with:
           path: ./*
           key: ${{ github.sha }}
+      - run: corepack enable
       - name: Get installed Playwright version
         id: playwright-version
-        run: echo "PLAYWRIGHT_VERSION=$(yarn info --json @playwright/test version | jq -r '.data')" >> $GITHUB_ENV
+        working-directory: ./apps/web
+        run: echo "PLAYWRIGHT_VERSION=$(yarn info --json @playwright/test  | jq -r '.children.Version')" >> $GITHUB_ENV
       - name: Cache playwright binaries
         uses: actions/cache@v4
         id: playwright-cache
@@ -146,10 +150,10 @@ jobs:
             ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ env.PLAYWRIGHT_VERSION }}
       - name: Install Playwright Browsers
-        working-directory: ./packages/web
+        working-directory: ./apps/web
         run: yarn playwright install --with-deps
       - name: Run Playwright tests
-        working-directory: ./packages/web
+        working-directory: ./apps/web
         run: yarn playwright test
         env:
           BASE_URL: https://${{ env.STAGE_TO_USE }}.downtown65.events
