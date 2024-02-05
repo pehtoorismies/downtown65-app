@@ -32,3 +32,5 @@ cdk.context.json
 
 .turbo
 .cache
+
+.envrc
