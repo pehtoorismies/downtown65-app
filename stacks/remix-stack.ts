@@ -6,38 +6,71 @@ import { RemixSite, use } from 'sst/constructs'
 import { ConfigStack } from './config-stack'
 import { GraphqlStack } from './graphql-stack'
 import { MediaBucketStack } from './media-bucket-stack'
-import { getDomain } from './support/get-domain'
+import { getDomainStage } from './support/get-domain-stage'
 
-export const RemixStack = ({ stack, app }: StackContext) => {
+const getCustomDomain = ({ app, stack }: StackContext) => {
+  const { stage } = app
+
+  const domainStage = getDomainStage(stage)
+
+  switch (domainStage.accountType) {
+    case 'production': {
+      const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
+        domainName: 'downtown65.events',
+      })
+
+      return {
+        domainName: 'downtown65.events',
+        domainAlias: 'www.downtown65.events',
+        cdk: {
+          hostedZone,
+          certificate: new acm.DnsValidatedCertificate(stack, 'Certificate', {
+            domainName: 'downtown65.events',
+            hostedZone,
+            region: 'us-east-1',
+            subjectAlternativeNames: ['*.downtown65.events'],
+          }),
+        },
+      }
+    }
+    case 'staging': {
+      const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
+        domainName: 'staging.downtown65.events',
+      })
+      return {
+        domainName: domainStage.domainName,
+        cdk: {
+          hostedZone,
+          certificate: new acm.DnsValidatedCertificate(stack, 'Certificate', {
+            domainName: 'staging.downtown65.events',
+            hostedZone,
+            region: 'us-east-1',
+            subjectAlternativeNames: ['*.staging.downtown65.events'],
+          }),
+        },
+      }
+    }
+    case 'dev': {
+      return
+    }
+  }
+}
+
+export const RemixStack = (stackContext: StackContext) => {
+  const { stack, app } = stackContext
+  const { stage, mode } = app
+
   const { ApiUrl, ApiKey } = use(GraphqlStack)
+  const { COOKIE_SECRET } = use(ConfigStack)
   const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN, mediaBucket } =
     use(MediaBucketStack)
 
-  const sharpLayer = new lambda.LayerVersion(
-    stack,
-    `${app.stage}-SharpLayer'`,
-    {
-      code: lambda.Code.fromAsset('stacks/layers/sharp'),
-      compatibleArchitectures: [lambda.Architecture.ARM_64],
-    }
-  )
-
-  const hostedZone = route53.HostedZone.fromLookup(stack, 'HostedZone', {
-    domainName: 'downtown65.events',
+  const sharpLayer = new lambda.LayerVersion(stack, `${stage}-SharpLayer'`, {
+    code: lambda.Code.fromAsset('stacks/layers/sharp'),
+    compatibleArchitectures: [lambda.Architecture.ARM_64],
   })
 
-  const { stage, mode } = app
-
-  const domainName = getDomain(stage)
-
-  const { COOKIE_SECRET } = use(ConfigStack)
-
-  const certificate = new acm.DnsValidatedCertificate(stack, 'Certificate', {
-    domainName: `downtown65.events`,
-    hostedZone,
-    region: 'us-east-1',
-    subjectAlternativeNames: ['*.downtown65.events'],
-  })
+  const customDomain = getCustomDomain(stackContext)
 
   // Create the Remix site
   const site = new RemixSite(stack, 'Downtown65-remix', {
@@ -47,20 +80,14 @@ export const RemixStack = ({ stack, app }: StackContext) => {
     environment: {
       API_URL: ApiUrl,
       API_KEY: ApiKey,
-      DOMAIN_NAME: domainName,
+      // TODO: SMELL localhost
+      DOMAIN_NAME: customDomain?.domainName ?? 'localhost:3000',
       STORAGE_BUCKET: MEDIA_BUCKET_NAME.value,
       MEDIA_DOMAIN: MEDIA_BUCKET_DOMAIN.value,
       APP_MODE: mode,
       APP_STAGE: stage,
     },
-    customDomain: {
-      domainName,
-      domainAlias: stage === 'production' ? 'www.downtown65.events' : undefined,
-      cdk: {
-        hostedZone,
-        certificate,
-      },
-    },
+    customDomain,
     nodejs: {
       esbuild: {
         external: ['sharp'],
