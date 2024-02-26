@@ -2,9 +2,15 @@ import type { StackContext } from 'sst/constructs'
 import { Function, use } from 'sst/constructs'
 import { ConfigStack } from './config-stack'
 import { DynamoStack } from './dynamo-stack'
-import { getDomain } from './support/get-domain'
+import { getDomainStage } from './support/get-domain-stage'
 
 export const DynamoStreamStack = ({ app, stack }: StackContext) => {
+  const domainStage = getDomainStage(app.stage)
+
+  if (domainStage.accountType === 'dev') {
+    return
+  }
+
   const dynamo = use(DynamoStack)
   const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
 
@@ -13,7 +19,7 @@ export const DynamoStreamStack = ({ app, stack }: StackContext) => {
     bind: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
     permissions: ['ses:SendEmail', 'ses:SendRawEmail'],
     environment: {
-      DOMAIN_NAME: getDomain(app.stage),
+      DOMAIN_NAME: domainStage.domainName,
     },
     nodejs: {
       // needed for mjml library to work
