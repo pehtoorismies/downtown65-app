@@ -17,7 +17,8 @@
     "lint": "turbo run lint",
     "stylelint": "turbo run stylelint",
     "find-deadcode": "yarn workspaces run find-deadcode",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "login": "aws sso login --sso-session=downtown65"
   },
   "devDependencies": {
     "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",
