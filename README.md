@@ -17,41 +17,58 @@ details https://docs.sst.dev/configuring-sst.
 
 ## Local development
 
-### AWS
+### Setup AWS
+
+#### AWS Account
 
 Request a new AWS account for development.
 
 #### AWS profile
 
-Use `direnv` to load aws _downtown65-app_ profile (`.envrc`)
+Configure AWS profile for local development:
 
 ```
 # ~/.aws/config
-[downtown65-app]
+[profile downtown65-development]
+sso_session = downtown65
+sso_account_id = <AWS_account_id>
+sso_role_name = AdministratorAccess
 region = eu-north-1
 output = json
 
-# ~/.aws/credentials
-[downtown65-app]
-aws_access_key_id = ...
-aws_secret_access_key = ...
+[sso-session downtown65]
+sso_start_url = https://downtown65.awsapps.com/start#
+sso_region = eu-north-1
+sso_registration_scopes = sso:account:access
 ```
+
+Make sure that you have AWS client installed (https://aws.amazon.com/cli/)
+
+Use `direnv` to load AWS profile ie. add `.envrc` file which will load correct AWS profile automatically
+when in project directory.
+
+```
+# .envrc
+# Use profile from ~/.aws/config
+export AWS_PROFILE=downtown65-development
+```
+
+User `yarn login` to login to AWS.
 
 #### SST config
 
-Give your local dev environment some name like: `downtown65-app-yourusername`. This will be your default stage. All the
-AWS resources will be named after
+Define a local development stage in file `.sst/stage`. This will be your default stage. All the
+AWS resources will be named after.
 
-This name can be changed in `.sst/stage`
-
-```
+```sh
+# .sst/stage
 # should contain your development stage
-.sst/stage
+$ echo 'downtown65-app-your-username' > .sst/stage
 ```
 
-### Yarn modern
+### Yarn
 
-Use yarn > 4
+Use yarn > 4 (modern)
 
 ```bash
 $ corepack enable
@@ -71,7 +88,14 @@ $ yarn build
 ### Development
 
 ```bash
-$ yarn dev
+# Create AWS infra
+$ yarn dev 
+```
+
+Start frontend. NOTE! You need to set sst-secrets to allow Remix server to start (see step below).
+
+```bash
+# Start Remix client that connects to AWS.
 $ cd apps/web
 $ yarn dev 
 ```
@@ -85,7 +109,7 @@ Add your own development secrets to AWS parameter store.
 ```bash
 # secret value used in registration form
 $ yarn sst secrets set REGISTER_SECRET <secret_here>
-# secret value to use with Auth0 Client
+# secret value to use with Auth0 Client (get it from Auth0 dev tenant https://manage.auth0.com/dashboard/eu/dev-dt65)
 $ yarn sst secrets set AUTH_CLIENT_SECRET <secret_here>
 # secret value to use with Auth0 Client
 $ yarn sst secrets set COOKIE_SECRET <secret_here>
@@ -130,5 +154,4 @@ Graphql API uses AWS Appsync. You can pickup url from `sst deploy`.
 
 ### DynamoDB
 
-Single table design is used.
-Needs some documentation.
+Single table design is used. Documentation pending...
