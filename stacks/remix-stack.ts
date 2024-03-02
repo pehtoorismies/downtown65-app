@@ -105,8 +105,8 @@ export const RemixStack = (stackContext: StackContext) => {
 
   // Add the site's URL to stack output
   stack.addOutputs({
-    URL: site.url ?? 'localhost',
-    CUSTOM_DOMAIN_URL: site.customDomainUrl ?? 'no_custom_domain',
-    FUNC_ARN: site.cdk?.function?.functionArn ?? 'no_func_arn',
+    WebsiteUrl: site.url ?? 'localhost',
+    CustomDomainUrl: site.customDomainUrl ?? 'no_custom_domain',
+    FuncArn: site.cdk?.function?.functionArn ?? 'no_func_arn',
   })
 }
