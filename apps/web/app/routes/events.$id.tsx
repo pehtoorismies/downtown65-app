@@ -143,6 +143,7 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
 }
 
 const getOriginForMeta = (): string => {
+  // TODO: SMELL
   if (process.env.NODE_ENV === 'development') {
     return 'http://localhost:3000'
   }
