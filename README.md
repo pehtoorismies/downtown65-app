@@ -21,7 +21,7 @@ details https://docs.sst.dev/configuring-sst.
 
 #### AWS Account
 
-Request a new AWS account for development.
+Request a new AWS account for personal development.
 
 #### AWS profile
 
@@ -31,7 +31,7 @@ Configure AWS profile for local development:
 # ~/.aws/config
 [profile downtown65-development]
 sso_session = downtown65
-sso_account_id = <AWS_account_id>
+sso_account_id = <New_AWS_account_id>
 sso_role_name = AdministratorAccess
 region = eu-north-1
 output = json
@@ -42,23 +42,14 @@ sso_region = eu-north-1
 sso_registration_scopes = sso:account:access
 ```
 
-Make sure that you have AWS client installed (https://aws.amazon.com/cli/)
+**Make sure that you have [AWS client](https://aws.amazon.com/cli/) is installed**
 
-Use `direnv` to load AWS profile ie. add `.envrc` file which will load correct AWS profile automatically
-when in project directory.
-
-```
-# .envrc
-# Use profile from ~/.aws/config
-export AWS_PROFILE=downtown65-development
-```
-
-User `yarn login` to login to AWS.
+User `yarn login` to log in to AWS.
 
 #### SST config
 
 Define a local development stage in file `.sst/stage`. This will be your default stage. All the
-AWS resources will be named after.
+AWS resources will be named after this stage.
 
 ```sh
 # .sst/stage
@@ -155,3 +146,7 @@ Graphql API uses AWS Appsync. You can pickup url from `sst deploy`.
 ### DynamoDB
 
 Single table design is used. Documentation pending...
+
+# Trouble shooting
+
+If SST hangs, try to logout/login to AWS SSO again.
