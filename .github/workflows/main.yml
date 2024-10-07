@@ -36,6 +36,11 @@ jobs:
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/GitHubActionRole
           aws-region: us-east-1
           role-duration-seconds: 2500
+      - name: Set sst secrets
+        run: |
+          yarn sst secrets --stage production set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
+          yarn sst secrets --stage production set REGISTER_SECRET ${{ secrets.REGISTER_SECRET }}
+          yarn sst secrets --stage production set COOKIE_SECRET ${{ secrets.COOKIE_SECRET }}
       - name: Build and deploy
         run: |
           yarn sst types --stage production
