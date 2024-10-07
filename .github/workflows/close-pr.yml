@@ -13,6 +13,7 @@ jobs:
   merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - run: |
           echo The PR was merged
@@ -36,7 +37,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/GitHubActionRole
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/GitHubActionRole
           aws-region: us-east-1
           role-duration-seconds: 2500
       - name: Remove common sst secrets
