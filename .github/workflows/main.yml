@@ -19,8 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: eu-north-1
       AWS_REGION: eu-north-1
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -32,6 +30,12 @@ jobs:
       - run: corepack enable
       - name: Install
         run: yarn install --immutable
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT }}:role/GitHubActionRole
+          aws-region: us-east-1
+          role-duration-seconds: 2500
       - name: Build and deploy
         run: |
           yarn sst types --stage production
