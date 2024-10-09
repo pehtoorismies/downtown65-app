@@ -27,7 +27,7 @@ interface LoggedInProps {
   navigationOpened: boolean
 }
 
-export const LoggedIn = ({
+export const LoggedInNavigation = ({
   user,
   toggle,
   close,
@@ -133,7 +133,7 @@ export const LoggedIn = ({
   )
 }
 
-export const LoggedOut = () => {
+export const LoggedOutNavigation = () => {
   return (
     <Group h="100%" px="md">
       <Group justify="space-between" style={{ flex: 1 }}>

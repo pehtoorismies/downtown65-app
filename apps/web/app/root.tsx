@@ -32,7 +32,11 @@ import {
 } from '@remix-run/react'
 import { useEffect } from 'react'
 import classes from './routes-styles/root.module.css'
-import { LoggedIn, LoggedOut, Navbar } from '~/components/navigation/navigation'
+import {
+  LoggedInNavigation,
+  LoggedOutNavigation,
+  Navbar,
+} from '~/components/navigation/navigation'
 import { UserContext } from '~/contexts/user-context'
 import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
@@ -182,14 +186,14 @@ export default function App() {
                 <Text className={classes.stage}>{stage}</Text>
               )}
               {user && (
-                <LoggedIn
+                <LoggedInNavigation
                   user={user}
                   toggle={toggle}
                   close={close}
                   navigationOpened={navigationOpened}
                 />
               )}
-              {!user && <LoggedOut />}
+              {!user && <LoggedOutNavigation />}
             </AppShell.Header>
             <AppShell.Navbar py="md" p="sm">
               <Navbar close={close} />
