@@ -5,8 +5,6 @@ import cx from 'clsx'
 import type { User } from '~/domain/user'
 import classes from '~/routes-styles/root.module.css'
 
-const SIDE_COL_WIDTH = 130
-
 const navLinks = [
   { id: 10, title: 'Tapahtumat', to: '/events' },
   // { id: 20, title: 'Haasteet', to: '/challenges' },
@@ -44,7 +42,7 @@ export const LoggedInNavigation = ({
         size="sm"
       />
       <Group gap={0} style={{ flex: 1 }} justify="space-between" wrap="nowrap">
-        <Group style={{ width: SIDE_COL_WIDTH }}>
+        <Group style={{ width: 130 }}>
           <Text
             style={{
               userSelect: 'none',
@@ -83,30 +81,23 @@ export const LoggedInNavigation = ({
           width={160}
           position="bottom-end"
           transitionProps={{ transition: 'pop-top-right' }}
+          shadow="md"
         >
           <Menu.Target>
-            <Group
-              justify="flex-end"
-              style={{
-                width: SIDE_COL_WIDTH,
-              }}
+            <Button
+              variant="subtle"
+              leftSection={
+                <Avatar
+                  src={user.picture}
+                  alt={user.nickname}
+                  radius="xl"
+                  size={20}
+                />
+              }
+              rightSection={<IconChevronDown size={12} stroke={1.5} />}
             >
-              <Button
-                variant="subtle"
-                // color="black"
-                leftSection={
-                  <Avatar
-                    src={user.picture}
-                    alt={user.nickname}
-                    radius="xl"
-                    size={20}
-                  />
-                }
-                rightSection={<IconChevronDown size={12} stroke={1.5} />}
-              >
-                {user.nickname}
-              </Button>
-            </Group>
+              {user.nickname}
+            </Button>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item
