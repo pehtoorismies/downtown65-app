@@ -13,22 +13,22 @@
     },
     "typecheck": {
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "lint": {
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "test": {
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "stylelint": {
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "clean": {
