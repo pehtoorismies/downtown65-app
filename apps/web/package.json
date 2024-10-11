@@ -18,9 +18,9 @@
     "clean": "rm -rf .cache .turbo node_modules build"
   },
   "dependencies": {
-    "@downtown65-app/logger": "workspace:^",
-    "@downtown65-app/time": "workspace:^",
-    "@downtown65-app/util": "workspace:^",
+    "@downtown65-app/logger": "workspace:*",
+    "@downtown65-app/time": "workspace:*",
+    "@downtown65-app/util": "workspace:*",
     "@graphql-typed-document-node/core": "3.2.0",
     "@mantine/core": "7.4.1",
     "@mantine/dates": "7.4.1",

@@ -1,4 +1,4 @@
-import { logger } from '@downtown65-app/logger'
+import { logger } from '@downtown65-app/logger/logger'
 import type { MutationUpdateAvatarArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'

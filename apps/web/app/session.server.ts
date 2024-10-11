@@ -1,4 +1,4 @@
-import { assertUnreachable } from '@downtown65-app/util'
+import { assertUnreachable } from '@downtown65-app/util/assert-unreachable'
 import type { Session } from '@remix-run/node'
 import { createCookieSessionStorage, redirect } from '@remix-run/node'
 import { addDays, addMonths, isAfter, parseISO } from 'date-fns'

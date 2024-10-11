@@ -1,4 +1,4 @@
-import { getEnvironmentVariable } from '@downtown65-app/util'
+import { getEnvironmentVariable } from '@downtown65-app/util/get-environment-variable'
 
 export const testUser = {
   email: getEnvironmentVariable('TEST_USER_EMAIL'),

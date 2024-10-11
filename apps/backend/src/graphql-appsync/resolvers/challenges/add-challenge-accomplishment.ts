@@ -1,4 +1,4 @@
-import { logger } from '@downtown65-app/logger'
+import { logger } from '@downtown65-app/logger/logger'
 import { ISODate } from '@downtown65-app/time'
 import type { MutationAddChallengeAccomplishmentArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'

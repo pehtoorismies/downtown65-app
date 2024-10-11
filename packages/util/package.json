@@ -2,8 +2,21 @@
   "name": "@downtown65-app/util",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    "./assert-unreachable": {
+      "types": "./dist/assert-unreachable.d.ts",
+      "import": "./dist/assert-unreachable.js"
+    },
+    "./get-environment-variable": {
+      "types": "./dist/get-environment-variable.d.ts",
+      "import": "./dist/get-environment-variable.js"
+    }
+  },
   "license": "MIT",
   "scripts": {
     "clean": "rm -rf dist .turbo node_modules .cache",
@@ -26,8 +39,8 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@downtown65-app/config-eslint": "workspace:^",
-    "@downtown65-app/config-ts": "workspace:^",
+    "@downtown65-app/config-eslint": "workspace:*",
+    "@downtown65-app/config-ts": "workspace:*",
     "@types/mjml": "4.7.2",
     "@types/node": "20.11.10",
     "@typescript-eslint/eslint-plugin": "6.20.0",

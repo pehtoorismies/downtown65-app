@@ -1,4 +1,4 @@
-import { logger } from '@downtown65-app/logger'
+import { logger } from '@downtown65-app/logger/logger'
 import { SignupField } from '@downtown65-app/types'
 import type {
   FieldError,

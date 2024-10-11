@@ -1,4 +1,4 @@
-import { logger } from '@downtown65-app/logger'
+import { logger } from '@downtown65-app/logger/logger'
 import type { LoginResponse, MutationLoginArgs } from '@downtown65-app/types'
 import type { TokenSet } from 'auth0'
 import { AuthApiError } from 'auth0'

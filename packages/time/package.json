@@ -2,11 +2,17 @@
   "name": "@downtown65-app/time",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsup",
@@ -21,8 +27,8 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@downtown65-app/config-eslint": "workspace:^",
-    "@downtown65-app/config-ts": "workspace:^",
+    "@downtown65-app/config-eslint": "workspace:*",
+    "@downtown65-app/config-ts": "workspace:*",
     "@types/node": "20.11.10",
     "@typescript-eslint/eslint-plugin": "6.20.0",
     "@typescript-eslint/parser": "6.20.0",

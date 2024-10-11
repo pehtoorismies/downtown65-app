@@ -14,10 +14,10 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "3.465.0",
     "@aws-sdk/lib-dynamodb": "3.465.0",
-    "@downtown65-app/logger": "workspace:^",
-    "@downtown65-app/time": "workspace:^",
-    "@downtown65-app/types": "workspace:^",
-    "@downtown65-app/util": "workspace:^",
+    "@downtown65-app/logger": "workspace:*",
+    "@downtown65-app/time": "workspace:*",
+    "@downtown65-app/types": "workspace:*",
+    "@downtown65-app/util": "workspace:*",
     "auth0": "4.0.1",
     "aws-lambda": "1.0.7",
     "date-fns": "3.3.1",
@@ -36,8 +36,8 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@downtown65-app/config-eslint": "workspace:^",
-    "@downtown65-app/config-ts": "workspace:^",
+    "@downtown65-app/config-eslint": "workspace:*",
+    "@downtown65-app/config-ts": "workspace:*",
     "@types/aws-lambda": "8.10.119",
     "@types/node": "18.15.3",
     "@types/react": "18.2.52",

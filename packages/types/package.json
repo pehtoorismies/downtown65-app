@@ -2,19 +2,23 @@
   "name": "@downtown65-app/types",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.generated.ts"
+    }
+  },
   "license": "MIT",
   "scripts": {
-    "build": "tsup",
     "clean": "rm -rf dist .turbo node_modules .cache"
   },
   "dependencies": {
-    "@downtown65-app/config-eslint": "workspace:^",
-    "@downtown65-app/config-ts": "workspace:^",
-    "@downtown65-app/time": "workspace:^"
+    "@downtown65-app/time": "workspace:*"
   },
   "devDependencies": {
+    "@downtown65-app/config-eslint": "workspace:*",
+    "@downtown65-app/config-ts": "workspace:*",
     "@types/eslint": "^8",
     "@types/node": "20.11.10",
     "@typescript-eslint/eslint-plugin": "6.20.0",
