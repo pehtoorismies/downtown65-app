@@ -1,9 +1,9 @@
+import type { AppSyncResolverHandler } from 'aws-lambda'
+import * as Challenge from '../../core/challenge'
 import type {
   IdPayload,
   MutationCreateChallengeArgs,
-} from '@downtown65-app/types'
-import type { AppSyncResolverHandler } from 'aws-lambda'
-import * as Challenge from '../../core/challenge'
+} from '~/generated-types/graphql-types'
 
 export const createChallenge: AppSyncResolverHandler<
   MutationCreateChallengeArgs,

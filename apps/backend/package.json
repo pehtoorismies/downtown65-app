@@ -16,7 +16,6 @@
     "@aws-sdk/lib-dynamodb": "3.465.0",
     "@downtown65-app/logger": "workspace:*",
     "@downtown65-app/time": "workspace:*",
-    "@downtown65-app/types": "workspace:*",
     "@downtown65-app/util": "workspace:*",
     "auth0": "4.0.1",
     "aws-lambda": "1.0.7",

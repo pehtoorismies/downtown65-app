@@ -1,3 +1,5 @@
+import { assertUnreachable } from '@downtown65-app/util/assert-unreachable'
+import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import type {
   Challenge,
   Event as Dt65Event,
@@ -10,9 +12,7 @@ import type {
   QueryEventArgs,
   RefreshResponse,
   SignupResponse,
-} from '@downtown65-app/types'
-import { assertUnreachable } from '@downtown65-app/util/assert-unreachable'
-import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
+} from '~/generated-types/graphql-types'
 import { forgotPassword } from '~/graphql-appsync/resolvers/auth/forgot-password'
 import { login } from '~/graphql-appsync/resolvers/auth/login'
 import { refreshToken } from '~/graphql-appsync/resolvers/auth/refresh-token'

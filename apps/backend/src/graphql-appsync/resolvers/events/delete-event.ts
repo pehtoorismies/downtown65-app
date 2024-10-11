@@ -1,6 +1,9 @@
-import type { IdPayload, MutationDeleteEventArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as Event from '../../core/event'
+import type {
+  IdPayload,
+  MutationDeleteEventArgs,
+} from '~/generated-types/graphql-types'
 
 export const deleteEvent: AppSyncResolverHandler<
   MutationDeleteEventArgs,

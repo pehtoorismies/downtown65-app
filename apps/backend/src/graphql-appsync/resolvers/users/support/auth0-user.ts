@@ -1,6 +1,6 @@
-import type { MeUser, OtherUser } from '@downtown65-app/types'
 import type { GetUsers200ResponseOneOfInner } from 'auth0'
 import { z } from 'zod'
+import type { MeUser, OtherUser } from '~/generated-types/graphql-types'
 
 const ROLES = ['USER', 'ADMIN'] as const
 

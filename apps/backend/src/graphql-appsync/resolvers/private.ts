@@ -1,3 +1,5 @@
+import { assertUnreachable } from '@downtown65-app/util/assert-unreachable'
+import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
 import type {
   Challenge,
   Event as Dt65Event,
@@ -21,9 +23,7 @@ import type {
   QueryUserArgs,
   QueryUsersArgs,
   UsersResponse,
-} from '@downtown65-app/types'
-import { assertUnreachable } from '@downtown65-app/util/assert-unreachable'
-import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
+} from '~/generated-types/graphql-types'
 import { addChallengeAccomplishment } from '~/graphql-appsync/resolvers/challenges/add-challenge-accomplishment'
 import { createChallenge } from '~/graphql-appsync/resolvers/challenges/create-challenge'
 import { getChallenges } from '~/graphql-appsync/resolvers/challenges/get-challenges'

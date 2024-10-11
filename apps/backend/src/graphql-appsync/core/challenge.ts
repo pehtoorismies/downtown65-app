@@ -1,12 +1,12 @@
 import { logger } from '@downtown65-app/logger/logger'
 import { ISODate, toISODatetimeCompact } from '@downtown65-app/time'
+import * as R from 'remeda'
+import { ulid } from 'ulid'
 import type {
   Challenge,
   CreateChallengeInput,
   QueryChallengesArgs,
-} from '@downtown65-app/types'
-import * as R from 'remeda'
-import { ulid } from 'ulid'
+} from '~/generated-types/graphql-types'
 import {
   getParticipationFunctions,
   participantHashMapToList,

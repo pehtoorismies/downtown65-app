@@ -1,16 +1,16 @@
 import { logger } from '@downtown65-app/logger/logger'
-import { SignupField } from '@downtown65-app/types'
-import type {
-  FieldError,
-  MutationSignupArgs,
-  SignupInput,
-  SignupResponse,
-} from '@downtown65-app/types'
 import { AuthApiError } from 'auth0'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as EmailValidator from 'email-validator'
 import { Config } from 'sst/node/config'
 import { getAuth0Management } from '~/common/auth0-clients'
+import type {
+  FieldError,
+  MutationSignupArgs,
+  SignupInput,
+  SignupResponse,
+} from '~/generated-types/graphql-types'
+import { SignupField } from '~/generated-types/graphql-types'
 
 const hasWhiteSpace = (s: string) => {
   return /\s/.test(s)

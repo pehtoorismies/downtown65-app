@@ -1,10 +1,5 @@
 import { logger } from '@downtown65-app/logger/logger'
 import { toISODate, toISODatetimeCompact } from '@downtown65-app/time'
-import type {
-  CreateEventInput,
-  Event,
-  UpdateEventInput,
-} from '@downtown65-app/types'
 import { format, startOfToday } from 'date-fns'
 import { ulid } from 'ulid'
 import type { EventUpdateSchemaInput } from './dynamo-schemas/event-schema'
@@ -14,6 +9,11 @@ import {
   EventUpdateSchema,
 } from './dynamo-schemas/event-schema'
 import { Dt65EventEntity } from './dynamo-table'
+import type {
+  CreateEventInput,
+  Event,
+  UpdateEventInput,
+} from '~/generated-types/graphql-types'
 import {
   getParticipationFunctions,
   participantHashMapToList,

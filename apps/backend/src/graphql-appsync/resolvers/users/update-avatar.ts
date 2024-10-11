@@ -1,9 +1,9 @@
 import { logger } from '@downtown65-app/logger/logger'
-import type { MutationUpdateAvatarArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import { Config } from 'sst/node/config'
 import { getAuth0Management } from '~/common/auth0-clients'
+import type { MutationUpdateAvatarArgs } from '~/generated-types/graphql-types'
 
 export const updateAvatar: AppSyncResolverHandler<
   MutationUpdateAvatarArgs,

@@ -1,10 +1,10 @@
-import type { OtherUser, QueryUserArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import {
   QUERY_USER_RETURNED_FIELDS,
   mapToOtherUser,
 } from './support/auth0-user'
 import { getAuth0Management } from '~/common/auth0-clients'
+import type { OtherUser, QueryUserArgs } from '~/generated-types/graphql-types'
 
 export const getUser: AppSyncResolverHandler<
   QueryUserArgs,
