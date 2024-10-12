@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
+  "ui": "stream",
   "tasks": {
     "build": {
       "dependsOn": [
@@ -22,6 +22,9 @@
       ]
     },
     "test": {
+      "outputs": [
+        "coverage/**"
+      ],
       "dependsOn": [
         "build"
       ]
