@@ -10,11 +10,14 @@ dotenv.config({ path: envFile })
 export default defineConfig({
   test: {
     testTimeout: 90_000,
+    watch: false,
     exclude: [...configDefaults.exclude],
   },
+  cacheDir: '.cache/vitest',
   logLevel: 'info',
   esbuild: {
     sourcemap: 'both',
   },
+
   plugins: [tsconfigPaths()],
 })
