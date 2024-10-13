@@ -1,8 +1,8 @@
 import { ISODate, ISOTime } from '@downtown65-app/time'
-import { EventType } from '@downtown65-app/types'
 import { describe, expect, it, test } from 'vitest'
 import type { EventUpdateSchemaInput } from '../event-schema'
 import { EventUpdateSchema } from '../event-schema'
+import { EventType } from '~/generated-types/graphql-types'
 
 const updateSchema: EventUpdateSchemaInput = {
   PK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',

@@ -2,11 +2,21 @@
   "name": "@downtown65-app/logger",
   "version": "0.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist/**"
   ],
+  "sideEffects": true,
+  "type": "module",
+  "exports": {
+    "./logger": {
+      "types": "./dist/logger.d.ts",
+      "import": "./dist/logger.js"
+    },
+    "./get-environment-variable": {
+      "types": "./src/get-environment-variable.ts",
+      "import": "./dist/get-environment-variable.cjs"
+    }
+  },
   "license": "MIT",
   "scripts": {
     "build": "tsup",
@@ -15,14 +25,14 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@downtown65-app/util": "workspace:^",
+    "@downtown65-app/util": "workspace:*",
     "pino": "8.11.0",
     "pino-lambda": "4.4.0",
     "pino-pretty": "10.3.1"
   },
   "devDependencies": {
-    "@downtown65-app/config-eslint": "workspace:^",
-    "@downtown65-app/config-ts": "workspace:^",
+    "@downtown65-app/config-eslint": "workspace:*",
+    "@downtown65-app/config-ts": "workspace:*",
     "@typescript-eslint/eslint-plugin": "6.20.0",
     "@typescript-eslint/parser": "6.20.0",
     "eslint": "8.56.0",

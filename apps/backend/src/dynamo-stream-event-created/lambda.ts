@@ -1,5 +1,5 @@
-import { logger } from '@downtown65-app/logger'
-import { getEnvironmentVariable } from '@downtown65-app/util'
+import { logger } from '@downtown65-app/logger/logger'
+import { getEnvironmentVariable } from '@downtown65-app/util/get-environment-variable'
 import type { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import { chunk } from 'remeda'
 import { EmailableEvent, createEventAddedEmail, sendEmail } from './email'

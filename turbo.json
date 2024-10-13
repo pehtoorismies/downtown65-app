@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "ui": "stream",
+  "tasks": {
     "build": {
       "dependsOn": [
         "^build"
@@ -12,22 +13,25 @@
     },
     "typecheck": {
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "lint": {
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "test": {
+      "outputs": [
+        "coverage/**"
+      ],
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "stylelint": {
       "dependsOn": [
-        "^build"
+        "build"
       ]
     },
     "clean": {

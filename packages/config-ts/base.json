@@ -4,9 +4,10 @@
     "lib": [
       "esnext"
     ],
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "es2022",
+    "moduleResolution": "Bundler",
     "noUnusedParameters": true,
+    "verbatimModuleSyntax": true,
     "baseUrl": "."
   }
 }

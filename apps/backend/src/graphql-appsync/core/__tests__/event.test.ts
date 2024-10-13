@@ -1,7 +1,7 @@
 import { ISODate, ISOTime } from '@downtown65-app/time'
-import { EventType } from '@downtown65-app/types'
 import { describe, expect, test } from 'vitest'
 import * as Event from '../event'
+import { EventType } from '~/generated-types/graphql-types'
 
 const userId = 'auth0|123'
 

@@ -1,6 +1,6 @@
-import type { MutationForgotPasswordArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { getClient } from '~/common/auth0-clients'
+import type { MutationForgotPasswordArgs } from '~/generated-types/graphql-types'
 
 const auth0 = getClient()
 

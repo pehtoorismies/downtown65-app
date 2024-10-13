@@ -1,4 +1,4 @@
-import { getEnvironmentVariable } from '@downtown65-app/util'
+import { getEnvironmentVariable } from '@downtown65-app/util/get-environment-variable'
 
 export const Config = {
   API_URL: getEnvironmentVariable('API_URL'),

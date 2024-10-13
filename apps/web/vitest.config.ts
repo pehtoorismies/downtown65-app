@@ -8,6 +8,7 @@ export default defineConfig({
     testTimeout: 90_000,
     exclude: [...configDefaults.exclude, 'e2e/**/*.ts'],
   },
+  cacheDir: '.cache/vitest',
   logLevel: 'info',
   esbuild: {
     sourcemap: 'both',

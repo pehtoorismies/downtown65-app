@@ -18,9 +18,9 @@
     "clean": "rm -rf .cache .turbo node_modules build"
   },
   "dependencies": {
-    "@downtown65-app/logger": "workspace:^",
-    "@downtown65-app/time": "workspace:^",
-    "@downtown65-app/util": "workspace:^",
+    "@downtown65-app/logger": "workspace:*",
+    "@downtown65-app/time": "workspace:*",
+    "@downtown65-app/util": "workspace:*",
     "@graphql-typed-document-node/core": "3.2.0",
     "@mantine/core": "7.4.1",
     "@mantine/dates": "7.4.1",
@@ -83,7 +83,7 @@
     "stylelint": "16.2.0",
     "stylelint-config-standard-scss": "13.0.0",
     "typescript": "5.2.2",
-    "vitest": "1.2.2"
+    "vitest": "2.1.2"
   },
   "engines": {
     "node": ">=18"

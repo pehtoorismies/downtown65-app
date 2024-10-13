@@ -1,6 +1,9 @@
-import type { Challenge, QueryChallengeArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import * as Core from '../../core/challenge'
+import type {
+  Challenge,
+  QueryChallengeArgs,
+} from '~/generated-types/graphql-types'
 
 export const getChallengeById: AppSyncResolverHandler<
   QueryChallengeArgs,

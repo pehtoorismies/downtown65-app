@@ -1,4 +1,4 @@
-import { logger } from '@downtown65-app/logger'
+import { logger } from '@downtown65-app/logger/logger'
 import { SESV2 } from 'aws-sdk'
 
 const ses = new SESV2({ apiVersion: '2019-09-27' })

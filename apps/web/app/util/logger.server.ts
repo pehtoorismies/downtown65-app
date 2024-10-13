@@ -1,1 +1,1 @@
-export { logger } from '@downtown65-app/logger'
+export { logger } from '@downtown65-app/logger/logger'

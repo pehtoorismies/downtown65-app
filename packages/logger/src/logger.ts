@@ -1,4 +1,4 @@
-import { getEnvironmentVariable } from '@downtown65-app/util'
+import { getEnvironmentVariable } from '@downtown65-app/util/get-environment-variable'
 import pino from 'pino'
 import { pinoLambdaDestination } from 'pino-lambda'
 import pretty from 'pino-pretty'

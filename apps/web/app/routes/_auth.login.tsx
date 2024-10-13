@@ -1,4 +1,4 @@
-import { assertUnreachable } from '@downtown65-app/util'
+import { assertUnreachable } from '@downtown65-app/util/assert-unreachable'
 import {
   Alert,
   Anchor,

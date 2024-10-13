@@ -1,7 +1,7 @@
-import type { MutationParticipateEventArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
 import * as Event from '../../core/event'
+import type { MutationParticipateEventArgs } from '~/generated-types/graphql-types'
 import type { Claims } from '~/graphql-appsync/resolvers/jwt-claims'
 
 export const participateEvent: AppSyncResolverHandler<
