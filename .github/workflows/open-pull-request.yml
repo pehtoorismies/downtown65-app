@@ -150,6 +150,9 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     environment: staging
+    env:
+      AWS_DEFAULT_REGION: eu-north-1
+      AWS_REGION: eu-north-1
     steps:
       - uses: actions/cache@v4
         id: restore-build
