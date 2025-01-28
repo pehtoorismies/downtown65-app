@@ -147,6 +147,6 @@ Graphql API uses AWS Appsync. You can pickup url from `sst deploy`.
 
 Single table design is used. Documentation pending...
 
-# Trouble shooting
+# Troubleshooting
 
 If SST hangs, try to logout/login to AWS SSO again.
