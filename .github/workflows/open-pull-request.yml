@@ -190,9 +190,10 @@ jobs:
           TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
           TEST_USER_NICK: ${{ vars.TEST_USER_NICK }}
           REGISTER_SECRET: ${{ secrets.REGISTER_SECRET }}
-  #      - uses: actions/upload-artifact@v3
-  #        if: always()
-  #        with:
-  #          name: playwright-report
-  #          path: playwright-report/
-  #          retention-days: 30
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: ./apps/web/playwright-report/
+          retention-days: 30
