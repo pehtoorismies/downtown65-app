@@ -17,13 +17,10 @@ test.describe('Members page', () => {
     const nickname = await memberNick.textContent()
     const name = await memberName.textContent()
 
-    expect(nickname).toBeDefined()
-    expect(name).toBeDefined()
-
     invariant(nickname, 'Fail')
     invariant(name, 'Fail')
 
-    await memberNick.click()
+    await page.getByTestId('member-nick').first().click()
 
     await expect(
       page.getByRole('heading', { name: 'Jäsenprofiili' })
