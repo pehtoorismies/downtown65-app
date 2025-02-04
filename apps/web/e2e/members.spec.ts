@@ -20,7 +20,8 @@ test.describe('Members page', () => {
     invariant(nickname, 'Fail')
     invariant(name, 'Fail')
 
-    await page.getByRole('link', { name: nickname }).click()
+    await page.getByRole('link', { name: nickname }).click({ force: true })
+    await page.waitForURL(`**/members/${nickname}`)
 
     await expect(
       page.getByRole('heading', { name: 'Jäsenprofiili' })
