@@ -11,3 +11,4 @@ cypress.env.json
 storageState.json
 .idea/
 .stylelintcache
+.sst.config*
