@@ -12,7 +12,7 @@
     "stylelint": "stylelint 'app/**/*.css'",
     "typecheck": "tsc --noEmit",
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx|app/gql/types.gen.ts|remix.env.d.ts'",
-    "e2e": "sst bind playwright test",
+    "e2e": "sst bind playwright",
     "e2e-ui": "playwright test --ui",
     "test": "vitest run",
     "clean": "rm -rf .cache .turbo node_modules build"
