@@ -10,32 +10,43 @@ test.describe('Members page', () => {
   })
 
   test('should navigate to member profile', async ({ page }) => {
-    await page.goto('/members')
-    await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
-    const memberNick = page.getByTestId('member-nick').first()
-    const memberName = page.getByTestId('member-name').first()
-    const nickname = await memberNick.textContent()
-    const name = await memberName.textContent()
+    await test.step('Navigate to members', async () => {
+      await page.goto('/members')
+    })
 
-    invariant(nickname, 'Fail')
-    invariant(name, 'Fail')
+    const [nickname, name] = await test.step('Verify member list', async () => {
+      await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
+      const memberNick = page.getByTestId('member-nick').first()
+      const memberName = page.getByTestId('member-name').first()
+      const nickname = await memberNick.textContent()
+      const name = await memberName.textContent()
+      invariant(nickname, 'Fail')
+      invariant(name, 'Fail')
 
-    await page.getByRole('link', { name: nickname }).click({ force: true })
-    await page.waitForURL(`**/members/${nickname}`)
+      return [nickname, name]
+    })
 
-    await expect(
-      page.getByRole('heading', { name: 'Jäsenprofiili' })
-    ).toBeVisible()
+    await test.step('Navigate to member profile', async () => {
+      await page.getByRole('link', { name: nickname }).click({ force: true })
+      await page.waitForURL(`**/members/${nickname}`)
+    })
 
-    await expect(page.getByTestId('profile-nick')).toHaveText(nickname)
-    await expect(page.getByTestId('profile-name')).toHaveText(name)
-    await expect(page.getByTestId('member-created-at')).toHaveText(
-      /.*(?:\d{1,2}\.){2}\d{4}$/
-    )
+    await test.step('Verify member profile', async () => {
+      await expect(
+        page.getByRole('heading', { name: 'Jäsenprofiili' })
+      ).toBeVisible()
 
-    await page.getByTestId('to-members-link').click()
+      await expect(page.getByTestId('profile-nick')).toHaveText(nickname)
+      await expect(page.getByTestId('profile-name')).toHaveText(name)
+      await expect(page.getByTestId('member-created-at')).toHaveText(
+        /.*(?:\d{1,2}\.){2}\d{4}$/
+      )
+    })
 
-    await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
+    await test.step('Navigate to members', async () => {
+      await page.getByTestId('to-members-link').click()
+      await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
+    })
   })
 
   test('should use breadcrumbs to navigate', async ({ page }) => {
