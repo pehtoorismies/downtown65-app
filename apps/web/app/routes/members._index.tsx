@@ -101,18 +101,18 @@ export default function Users() {
   const navigate = useNavigate()
   const hasPagination = userCount > perPage
 
-  const rows = users.map((u) => (
+  const rows = users.map((u, index) => (
     <Table.Tr key={u.id}>
       <Table.Td>
         <Anchor
           component={Link}
           to={`/members/${u.nickname}`}
-          data-testid="member-nick"
+          data-testid={`member-nick-${index}`}
         >
           {u.nickname}
         </Anchor>
       </Table.Td>
-      <Table.Td data-testid="member-name">{u.name}</Table.Td>
+      <Table.Td data-testid={`member-name-${index}`}>{u.name}</Table.Td>
     </Table.Tr>
   ))
 

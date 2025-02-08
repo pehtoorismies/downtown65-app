@@ -16,8 +16,8 @@ test.describe('Members page', () => {
 
     const [nickname, name] = await test.step('Verify member list', async () => {
       await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
-      const memberNick = page.getByTestId('member-nick').first()
-      const memberName = page.getByTestId('member-name').first()
+      const memberNick = page.getByTestId('member-nick-0')
+      const memberName = page.getByTestId('member-name-0')
       const nickname = await memberNick.textContent()
       const name = await memberName.textContent()
       invariant(nickname, 'Fail')
@@ -27,7 +27,7 @@ test.describe('Members page', () => {
     })
 
     await test.step('Navigate to member profile', async () => {
-      await page.getByRole('link', { name: nickname }).click({ force: true })
+      await page.getByRole('link', { name: nickname }).click()
       await page.waitForURL(`**/members/${nickname}`)
     })
 
@@ -52,7 +52,7 @@ test.describe('Members page', () => {
   test('should use breadcrumbs to navigate', async ({ page }) => {
     await page.goto('/members')
     await expect(page.getByTestId('breadcrumbs-current')).toHaveText('Jäsenet')
-    const memberNick = await page.getByTestId('member-nick').first()
+    const memberNick = page.getByTestId('member-nick-0')
     const nickname = await memberNick.textContent()
 
     expect(nickname).toBeDefined()
