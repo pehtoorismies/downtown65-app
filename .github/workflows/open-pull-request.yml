@@ -180,7 +180,7 @@ jobs:
       - name: Install Playwright Browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         working-directory: ./apps/web
-        run: yarn playwright install --with-deps
+        run: yarn playwright install --with-deps firefox chromium webkit chrome
       - name: Run Playwright tests
         working-directory: ./apps/web
         run: |
