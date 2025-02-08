@@ -23,7 +23,7 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   logging:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     steps:
       - name: Information
@@ -32,7 +32,7 @@ jobs:
           echo "To remove application: sst remove --stage $STAGE_TO_USE" >> $GITHUB_STEP_SUMMARY
           echo "To visit site: $WEBSITE_URL" >> $GITHUB_STEP_SUMMARY
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     steps:
       - uses: actions/checkout@v4
@@ -69,7 +69,7 @@ jobs:
           path: ./*
           key: ${{ github.sha }}
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     needs: [ "build" ]
     steps:
@@ -86,7 +86,7 @@ jobs:
       - name: 'check package versions'
         run: yarn constraints
   typecheck:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     needs: [ "build" ]
     steps:
@@ -100,7 +100,7 @@ jobs:
         run: yarn typecheck
   deploy:
     needs: [ "lint", "typecheck" ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     env:
       COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
@@ -127,7 +127,7 @@ jobs:
           echo ":rocket: Parsed website from deploy: $varWebsiteUrl" >> $GITHUB_STEP_SUMMARY
   unit_test:
     needs: [ "deploy" ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     steps:
       - uses: actions/cache@v4
@@ -148,7 +148,7 @@ jobs:
   playwright:
     needs: [ "deploy" ]
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     env:
       AWS_DEFAULT_REGION: eu-north-1
