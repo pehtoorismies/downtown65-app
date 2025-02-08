@@ -50,19 +50,33 @@ test.describe('Members page', () => {
   })
 
   test('should use breadcrumbs to navigate', async ({ page }) => {
-    await page.goto('/members')
-    await expect(page.getByTestId('breadcrumbs-current')).toHaveText('Jäsenet')
-    const memberNick = page.getByTestId('member-nick-0')
-    const nickname = await memberNick.textContent()
+    await test.step('Navigate to members', async () => {
+      await page.goto('/members')
+    })
 
-    expect(nickname).toBeDefined()
-    invariant(nickname, 'Fail')
-    await memberNick.click()
+    const nickname = await test.step('Verify members', async () => {
+      await expect(page.getByTestId('breadcrumbs-current')).toHaveText(
+        'Jäsenet'
+      )
+      const memberNick = page.getByTestId('member-nick-0')
+      const nickname = await memberNick.textContent()
 
-    await expect(page.getByTestId('breadcrumbs-current')).toHaveText(nickname)
-    const parentPage = page.getByTestId('breadcrumbs-parent')
-    await expect(parentPage).toHaveText('Jäsenet')
-    await parentPage.click()
-    await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
+      expect(nickname).toBeDefined()
+      invariant(nickname, 'Fail')
+      return nickname
+    })
+
+    await test.step('Navigate to member profile', async () => {
+      await page.getByRole('link', { name: nickname }).click()
+      await page.waitForURL(`**/members/${nickname}`)
+    })
+
+    await test.step('Verify to member profile', async () => {
+      await expect(page.getByTestId('breadcrumbs-current')).toHaveText(nickname)
+      const parentPage = page.getByTestId('breadcrumbs-parent')
+      await expect(parentPage).toHaveText('Jäsenet')
+      await parentPage.click()
+      await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
+    })
   })
 })
