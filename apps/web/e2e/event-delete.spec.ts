@@ -12,52 +12,65 @@ const test = base.extend<{ eventPage: EventPage }>({
 })
 
 test.describe('Delete event', () => {
-  test('should edit event page', async ({ eventPage }) => {
-    const eventInfo = getRandomEventInfo()
-    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
-    await eventPage.view.goto(id)
+  test('should delete event', async ({ eventPage }) => {
+    const [eventInfo, id] =
+      await test.step('Create a new event for deletion', async () => {
+        const eventInfo = getRandomEventInfo()
+        const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+        await eventPage.view.goto(id)
+        return [eventInfo, id]
+      })
 
     await expect(eventPage.view.getTitle()).toHaveText(eventInfo.title)
 
-    await eventPage.view.getDeleteEventBtn().click()
-    await expect(
-      eventPage.view.getDeleteConfirmationModalContent()
-    ).toBeVisible()
-    await eventPage.view.deleteModalClick('closeWithX')
-    await expect(
-      eventPage.view.getDeleteConfirmationModalContent()
-    ).toBeHidden()
+    await test.step('Close delete confirmation modal with X', async () => {
+      await eventPage.view.getDeleteEventBtn().click()
+      await expect(
+        eventPage.view.getDeleteConfirmationModalContent()
+      ).toBeVisible()
+      await eventPage.view.deleteModalClick('closeWithX')
+      await expect(
+        eventPage.view.getDeleteConfirmationModalContent()
+      ).toBeHidden()
 
-    await eventPage.view.getDeleteEventBtn().click()
-    await expect(
-      eventPage.view.getDeleteConfirmationModalContent()
-    ).toBeVisible()
-    await eventPage.view.deleteModalClick('closeWithButton')
-    await expect(
-      eventPage.view.getDeleteConfirmationModalContent()
-    ).toBeHidden()
+      await test.step('Close delete confirmation modal with close button', async () => {
+        await eventPage.view.getDeleteEventBtn().click()
+        await expect(
+          eventPage.view.getDeleteConfirmationModalContent()
+        ).toBeVisible()
+        await eventPage.view.deleteModalClick('closeWithButton')
+        await expect(
+          eventPage.view.getDeleteConfirmationModalContent()
+        ).toBeHidden()
+      })
 
-    await eventPage.view.getDeleteEventBtn().click()
-    await expect(eventPage.view.getDeleteConfirmationBtn()).toBeDisabled()
-    await eventPage.view.getDeleteConfirmationInput().fill('wrong text')
-    await expect(eventPage.view.getDeleteConfirmationBtn()).toBeDisabled()
+      await test.step('Delete event', async () => {
+        await eventPage.view.getDeleteEventBtn().click()
+        await expect(eventPage.view.getDeleteConfirmationBtn()).toBeDisabled()
+        await eventPage.view.getDeleteConfirmationInput().fill('wrong text')
+        await expect(eventPage.view.getDeleteConfirmationBtn()).toBeDisabled()
+        await eventPage.view.getDeleteConfirmationInput().fill('poista')
+        await expect(eventPage.view.getDeleteConfirmationBtn()).toBeEnabled()
+        await eventPage.view.getDeleteConfirmationBtn().click()
+      })
 
-    await eventPage.view.getDeleteConfirmationInput().fill('poista')
-    await expect(eventPage.view.getDeleteConfirmationBtn()).toBeEnabled()
+      await test.step('Verify return from deletion', async () => {
+        await eventPage.page.waitForURL('**/events')
+        await expect(eventPage.page.getByTestId('events')).toBeVisible()
+        await expect(
+          eventPage.page.locator('header').getByText('Tapahtumat')
+        ).toHaveAttribute('aria-current', 'page')
+      })
 
-    await eventPage.view.getDeleteConfirmationBtn().click()
-    await eventPage.page.waitForURL('**/events')
-    await expect(eventPage.page.getByTestId('events')).toBeVisible()
-    await expect(
-      eventPage.page.locator('header').getByText('Tapahtumat')
-    ).toHaveAttribute('aria-current', 'page')
-
-    await eventPage.page.goto(`events/${id}`)
-    await expect(
-      eventPage.page.getByRole('heading', { name: '404' })
-    ).toBeVisible()
-    await eventPage.page.getByTestId('to-frontpage-button').click()
-    await eventPage.page.waitForURL('**/events')
-    await expect(eventPage.page.getByTestId('events')).toBeVisible()
+      await test.step('Verify that event has disappeared', async () => {
+        await eventPage.page.goto(`events/${id}`)
+        await expect(
+          eventPage.page.getByRole('heading', { name: '404' })
+        ).toBeVisible()
+        await eventPage.page.getByTestId('to-frontpage-button').click()
+        await eventPage.page.waitForURL('**/events')
+        await expect(eventPage.page.getByTestId('events')).toBeVisible()
+      })
+    })
   })
 })
