@@ -56,7 +56,9 @@ test.describe('Delete event', () => {
 
       await test.step('Verify return from deletion', async () => {
         await eventPage.page.waitForURL('**/events')
-        await expect(eventPage.page.getByTestId('events')).toBeVisible()
+        const eventsDiv = eventPage.page.getByTestId('events')
+        await eventsDiv.waitFor({ state: 'attached' })
+        // check navigation
         await expect(
           eventPage.page.locator('header').getByText('Tapahtumat')
         ).toHaveAttribute('aria-current', 'page')
@@ -69,7 +71,8 @@ test.describe('Delete event', () => {
         ).toBeVisible()
         await eventPage.page.getByTestId('to-frontpage-button').click()
         await eventPage.page.waitForURL('**/events')
-        await expect(eventPage.page.getByTestId('events')).toBeVisible()
+        const eventsDiv = eventPage.page.getByTestId('events')
+        await eventsDiv.waitFor({ state: 'attached' })
       })
     })
   })
