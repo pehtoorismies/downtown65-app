@@ -8,7 +8,7 @@ Main elements
 
 ## Development
 
-Make sure infra is deploy and running `yarn dev` from project root.
+Make sure infra is deployed and running `yarn dev` from project root.
 
 ```sh
 yarn run dev
@@ -18,8 +18,11 @@ This starts your app in development mode, rebuilding assets on file changes.
 
 ## Local Playwright testing
 
-Note! Delete `storageState.json` to renew credentials. Otherwise tests will fail. 
-storageState.json is created after first login and is used as a credential cache.
+Note! To speed up tests authentication is stored in `playwright/.auth/user.json`.
+If using UI mode, you have to run `auth.setup` separately.
+
+> UI mode will not run the setup project by default to improve testing speed. We recommend to authenticate by manually running the auth.setup.ts from time to time, whenever existing authentication expires.
+
 
 ```sh
 
@@ -34,6 +37,9 @@ USER_PASSWORD=<fill password>
 USER_NICK=<fill nick>
 REGISTER_SECRET=<use sst secrets to reveal this>
 ```
+
+
+
 
 Then run the app in production mode:
 
