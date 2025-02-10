@@ -26,7 +26,6 @@ if (!process.env.CI) {
  * See https://playwright.dev/docs/test-configuration.
  */
 const config: PlaywrightTestConfig = {
-  globalSetup: './e2e/global-setup',
   testDir: './e2e',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
@@ -59,30 +58,35 @@ const config: PlaywrightTestConfig = {
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     headless: process.env.CI ? true : false,
-    storageState: 'storageState.json',
   },
 
   /* Configure projects for major browsers */
   projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json',
       },
+      dependencies: ['setup'],
     },
 
     {
       name: 'firefox',
       use: {
         ...devices['Desktop Firefox'],
+        storageState: 'playwright/.auth/user.json',
       },
+      dependencies: ['setup'],
     },
-
     {
       name: 'webkit',
       use: {
         ...devices['Desktop Safari'],
+        storageState: 'playwright/.auth/user.json',
       },
+      dependencies: ['setup'],
     },
 
     /* Test against mobile viewports. */
