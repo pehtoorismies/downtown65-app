@@ -15,7 +15,10 @@ const test = base.extend<{ eventPage: EventPage }>({
 test.describe('View event', () => {
   test('should not have time or description', async ({ eventPage }) => {
     const eventInfo = getRandomEventInfo({ time: null, description: '' })
-    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+
+    const id = await test.step('Create event', async () => {
+      return await eventPage.wizard.actionCreateEvent(eventInfo)
+    })
 
     await eventPage.view.goto(id)
     await eventPage.view.verifyEventInfo(eventInfo)
@@ -25,7 +28,9 @@ test.describe('View event', () => {
 
   test('should have no description', async ({ eventPage }) => {
     const eventInfo = getRandomEventInfo({ description: '' })
-    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+    const id = await test.step('Create event', async () => {
+      return await eventPage.wizard.actionCreateEvent(eventInfo)
+    })
     await eventPage.view.goto(id)
     await eventPage.view.verifyEventInfo(eventInfo)
 
@@ -39,7 +44,9 @@ test.describe('View event', () => {
         minutes: 5,
       },
     })
-    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+    const id = await test.step('Create event', async () => {
+      return await eventPage.wizard.actionCreateEvent(eventInfo)
+    })
 
     await eventPage.view.goto(id)
 
@@ -59,7 +66,9 @@ test.describe('View event', () => {
 
   test('should join event', async ({ page, eventPage }) => {
     const eventInfo = getRandomEventInfo()
-    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+    const id = await test.step('Create event', async () => {
+      return await eventPage.wizard.actionCreateEvent(eventInfo)
+    })
     await eventPage.view.goto(id)
 
     const noParticipantsText = 'Tapahtumassa ei osallistujia'

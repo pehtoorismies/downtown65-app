@@ -199,7 +199,7 @@ export class EventWizard {
 
     // create
     await this.page.getByRole('button', { name: 'Luo tapahtuma' }).click()
-
+    await this.page.waitForURL(/events\/([\dA-Z]{26})$/)
     await expect(
       this.page.getByRole('button', { name: 'Poista tapahtuma' })
     ).toBeVisible()

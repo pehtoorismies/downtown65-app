@@ -17,7 +17,9 @@ test.describe('Edit event', () => {
   test('should cancel event creation', async ({ page, eventPage }) => {
     const eventInfo = getRandomEventInfo()
 
-    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+    const id = await test.step('Create event', async () => {
+      return await eventPage.wizard.actionCreateEvent(eventInfo)
+    })
     await eventPage.view.goto(id)
     await eventPage.view.getModifyEventBtn().click()
 
@@ -40,7 +42,9 @@ test.describe('Edit event', () => {
       location: updatedLocation,
       date: updatedDate,
     } = getRandomEventInfo()
-    const id = await eventPage.wizard.actionCreateEvent(eventInfo)
+    const id = await test.step('Create event', async () => {
+      return await eventPage.wizard.actionCreateEvent(eventInfo)
+    })
     await eventPage.view.goto(id)
 
     // TODO: edit page / new page
