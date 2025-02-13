@@ -43,7 +43,7 @@ const Type = ({ type }: { type: string }) => {
     <Badge
       className={classes.type}
       styles={{ label: { textTransform: 'none' } }}
-      size="md"
+      radius="xs"
       color="violet"
       data-testid="event-type"
     >
@@ -58,11 +58,12 @@ const Creator = ({ nick }: { nick: string }) => {
     <Badge
       className={classes.areaCreator}
       styles={{ label: { textTransform: 'none' } }}
-      size="sm"
-      color="blue.0"
+      radius="xs"
+      color="dark.2"
+      variant="filled"
       data-testid="event-created-by"
     >
-      created by #{nick}
+      by #{nick}
     </Badge>
   )
 }
@@ -73,7 +74,6 @@ const Icon = ({ icon }: { icon: React.ReactNode }) => {
     <ThemeIcon
       data-testid="event-race"
       className={classes.areaCompetition}
-      size="md"
       radius="xs"
       variant="filled"
       color="grape"
