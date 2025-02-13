@@ -76,7 +76,7 @@ const Icon = ({ icon }: { icon: React.ReactNode }) => {
       size="md"
       radius="xs"
       variant="filled"
-      color="gray"
+      color="grape"
     >
       {icon}
     </ThemeIcon>
