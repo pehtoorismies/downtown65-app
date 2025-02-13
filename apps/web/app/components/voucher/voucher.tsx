@@ -4,7 +4,7 @@ import { VoucherHeader } from './voucher-header'
 
 export const Voucher = ({ children }: PropsWithChildren) => {
   return (
-    <Card withBorder radius="md" shadow="xs" py={0}>
+    <Card withBorder radius="md" shadow="xs">
       {children}
     </Card>
   )

@@ -72,14 +72,11 @@ const Icon = ({ icon }: { icon: React.ReactNode }) => {
   return (
     <ThemeIcon
       data-testid="event-race"
-      m={0}
-      py="xs"
-      px={4}
       className={classes.areaCompetition}
       size="md"
       radius="xs"
-      variant="outline"
-      color="blue.0"
+      variant="filled"
+      color="gray"
     >
       {icon}
     </ThemeIcon>
