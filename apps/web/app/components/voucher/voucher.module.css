@@ -1,6 +1,5 @@
 .header {
     display: grid;
-    grid-template-columns: 100px auto 100px;
     grid-template-rows: 30px 80px 30px;
     gap: 15px 15px;
     grid-template-areas:
@@ -35,7 +34,7 @@
     grid-area: bottomLeft;
     justify-self: start;
     align-self: end;
-    border-radius: var(--mantine-radius-xs);
+
 }
 
 .areaParticipantCount {
@@ -52,8 +51,4 @@
     grid-area: bottomRight;
     justify-self: end;
     align-self: end;
-    border-radius: var(--mantine-radius-xs);
-    margin: 0;
-    padding: var(--mantine-spacing-xs) var(--mantine-spacing-xs);
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
 }
