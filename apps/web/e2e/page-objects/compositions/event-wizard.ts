@@ -83,7 +83,7 @@ export class EventWizard {
     await expect(this.getStepHeading()).toContainText(text)
   }
 
-  async clickButton(text: string) {
+  async clickButton(text: string | RegExp) {
     await this.page.getByRole('button', { name: text }).click()
   }
 
@@ -198,7 +198,7 @@ export class EventWizard {
     await this.clickButton('Esikatselu')
 
     // create
-    await this.page.getByRole('button', { name: 'Luo tapahtuma' }).click()
+    await this.page.getByRole('button', { name: /Luo tapahtuma/ }).click()
     await this.page.waitForURL(/events\/([\dA-Z]{26})$/)
     await expect(
       this.page.getByRole('button', { name: 'Poista tapahtuma' })
