@@ -189,7 +189,7 @@ test.describe('Create event', () => {
     await eventPage.wizard.clickThroughStepsFromBasicInfo()
 
     // create new event
-    await eventPage.wizard.clickButton('Luo tapahtuma')
+    await eventPage.wizard.clickButton(/Luo tapahtuma/)
 
     const idRegExp = /\/([\dA-Z]{26})$/
     await eventPage.page.waitForURL(idRegExp)
