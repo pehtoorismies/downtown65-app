@@ -84,7 +84,10 @@ export class EventWizard {
   }
 
   async clickButton(text: string | RegExp) {
-    await this.page.getByRole('button', { name: text }).click()
+    const button = this.page.getByRole('button', { name: text })
+    await expect(button).toBeVisible()
+    await expect(button).toBeEnabled()
+    await button.click()
   }
 
   async clickThroughStepsFromBasicInfo() {

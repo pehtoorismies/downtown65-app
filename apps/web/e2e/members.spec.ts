@@ -27,6 +27,7 @@ test.describe('Members page', () => {
     })
 
     await test.step('Navigate to member profile', async () => {
+      await page.waitForTimeout(1000)
       await page.getByTestId('member-nick-0').click()
       await page.waitForURL(`**/members/${nickname}`)
     })
