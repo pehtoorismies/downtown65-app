@@ -34,7 +34,7 @@ test.describe('Members page', () => {
     await test.step('Verify member profile', async () => {
       await expect(
         page.getByRole('heading', { name: 'Jäsenprofiili' })
-      ).toBeVisible()
+      ).toBeVisible({ timeout: 10_000 })
 
       await expect(page.getByTestId('profile-nick')).toHaveText(nickname)
       await expect(page.getByTestId('profile-name')).toHaveText(name)

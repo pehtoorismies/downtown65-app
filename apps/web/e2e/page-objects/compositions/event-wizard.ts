@@ -196,6 +196,7 @@ export class EventWizard {
     await this.fillDescription(eventInfo.description)
 
     await this.clickButton('Esikatselu')
+    await this.headerVisible('Esikatselu')
 
     // create
     await this.page.getByRole('button', { name: /Luo tapahtuma/ }).click()
