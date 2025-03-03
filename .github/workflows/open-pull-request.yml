@@ -49,6 +49,8 @@ jobs:
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/GitHubActionRole
           aws-region: us-east-1
           role-duration-seconds: 2500
+      - name: Yarn version
+        run: yarn --version
       - name: Set default common sst secrets
         run: |
           yarn sst secrets --stage $STAGE_TO_USE set AUTH_CLIENT_SECRET ${{ secrets.AUTH_CLIENT_SECRET }}
