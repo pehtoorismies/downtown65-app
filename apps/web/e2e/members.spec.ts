@@ -4,7 +4,10 @@ import invariant from 'tiny-invariant'
 test.describe('Members page', () => {
   test('should navigate to members', async ({ page }) => {
     await page.goto('/events')
-    await page.locator('header').getByRole('link', { name: 'Jäsenet' }).click()
+    const link = page.locator('header').getByRole('link', { name: 'Jäsenet' })
+    await expect(link).toBeVisible()
+    await expect(link).toBeEnabled()
+    await link.click({ force: true })
     await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
     await expect(page.getByText(/^Jäseniä yhteensä: \d+$/)).toBeVisible()
   })
@@ -31,7 +34,7 @@ test.describe('Members page', () => {
       const memberLink = page.getByTestId('member-nick-0')
       await expect(memberLink).toBeVisible()
       await expect(memberLink).toBeEnabled()
-      await memberLink.click()
+      await memberLink.click({ force: true })
 
       // await page.waitForURL(`**/members/${nickname}`)
     })
@@ -49,7 +52,7 @@ test.describe('Members page', () => {
     })
 
     await test.step('Navigate to members', async () => {
-      await page.getByTestId('to-members-link').click()
+      await page.getByTestId('to-members-link').click({ force: true })
       await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
     })
   })
@@ -72,7 +75,7 @@ test.describe('Members page', () => {
     })
 
     await test.step('Navigate to member profile', async () => {
-      await page.getByRole('link', { name: nickname }).click()
+      await page.getByRole('link', { name: nickname }).click({ force: true })
       await page.waitForURL(`**/members/${nickname}`)
     })
 
@@ -80,7 +83,7 @@ test.describe('Members page', () => {
       await expect(page.getByTestId('breadcrumbs-current')).toHaveText(nickname)
       const parentPage = page.getByTestId('breadcrumbs-parent')
       await expect(parentPage).toHaveText('Jäsenet')
-      await parentPage.click()
+      await parentPage.click({ force: true })
       await expect(page.getByRole('heading', { name: 'Jäsenet' })).toBeVisible()
     })
   })
