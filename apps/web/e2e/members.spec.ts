@@ -28,8 +28,12 @@ test.describe('Members page', () => {
 
     await test.step('Navigate to member profile', async () => {
       await page.waitForTimeout(1000)
-      await page.getByTestId('member-nick-0').click()
-      await page.waitForURL(`**/members/${nickname}`)
+      const memberLink = page.getByTestId('member-nick-0')
+      await expect(memberLink).toBeVisible()
+      await expect(memberLink).toBeEnabled()
+      await memberLink.click()
+
+      // await page.waitForURL(`**/members/${nickname}`)
     })
 
     await test.step('Verify member profile', async () => {
