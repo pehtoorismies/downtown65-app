@@ -12,13 +12,13 @@ permissions:
 jobs:
   merged:
     if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     steps:
       - run: |
           echo The PR was merged
   remove:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment: staging
     env:
       AWS_DEFAULT_REGION: eu-north-1
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
       - run: corepack enable
       - name: Install
         run: |
