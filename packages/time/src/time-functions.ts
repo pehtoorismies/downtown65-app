@@ -44,7 +44,7 @@ export type ISODate = z.infer<typeof ISODate>
 export type ISOTime = z.infer<typeof ISOTime>
 
 const isoDateParser = parse(new Date(), 'yyyy-MM-dd')
-const formatFinnish = formatWithOptions({ locale: fi }, `d.M.yyyy (EEEEEE)`)
+const formatFinnish = formatWithOptions({ locale: fi }, 'd.M.yyyy (EEEEEE)')
 const timeParser = parse(new Date(), 'HH:mm')
 
 type TimeInput = string | { hours: number; minutes: number }
@@ -108,14 +108,14 @@ export const toISODatetimeCompact = (date: ISODate | Date, time?: ISOTime) => {
     isoDateParser,
     setHours(hours),
     setMinutes(minutes),
-    formatISO
+    formatISO,
   )
 
   return iso.slice(0, 19)
 }
 
 export const plainToISO = <T extends { dateStart: string; timeStart?: string }>(
-  x: T
+  x: T,
 ) => {
   return {
     ...x,
@@ -142,7 +142,7 @@ export const toDate = (date: ISODate, time?: ISOTime) => {
     setHours(hours),
     setMinutes(minutes),
     setSeconds(0),
-    setMilliseconds(0)
+    setMilliseconds(0),
   )
 }
 

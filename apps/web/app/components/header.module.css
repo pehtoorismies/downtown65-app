@@ -1,36 +1,35 @@
 .link {
-    padding: em(3px) var(--mantine-spacing-sm);
-    text-decoration: none;
-    color: var(--mantine-color-black);
-    font-weight: 500;
-    font-size: var(--mantine-font-size-sm);
+  /* biome-ignore lint/correctness/noUnknownFunction: FIXME */
+  padding: em(3px) var(--mantine-spacing-sm);
+  text-decoration: none;
+  color: var(--mantine-color-black);
+  font-weight: 500;
+  font-size: var(--mantine-font-size-sm);
 
-    @media (max-width: $mantine-breakpoint-sm) {
-        /** TODO: was 42 **/
-        height: rem(42px);
-        display: flex;
-        align-items: center;
-        width: 100%;
-    }
-
-
+  @media (max-width: var(--mantine-breakpoint-sm)) {
+    /** TODO: was 42 **/
+    height: rem(42px);
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
 }
 
 .linkActive {
-    color: red;
+  color: red;
 }
 
 .user {
-    color: var(--mantine-color-black);
-    padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
-    border-radius: var(--mantine-radius-sm);
-    transition: background-color 100ms ease;
+  color: var(--mantine-color-black);
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-sm);
+  transition: background-color 100ms ease;
 }
 
 .user:hover {
-    background-color: var(--mantine-color-blue-1);
+  background-color: var(--mantine-color-blue-1);
 }
 
 .userActive {
-    background-color: var(--mantine-color-blue-1);
+  background-color: var(--mantine-color-blue-1);
 }

@@ -41,7 +41,7 @@ export const meta: MetaFunction = () => {
 }
 
 const defaultTo = (defaultValue: number, value: string | null): number => {
-  if (value == undefined || value.length === 0) {
+  if (value === null || value.length === 0) {
     return defaultValue
   }
   if (Number.isNaN(value)) {
@@ -65,7 +65,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
 
   const {

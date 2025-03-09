@@ -31,7 +31,7 @@ const getChallengePrimaryKey = (id: string) => {
 }
 
 export const create = async (
-  creatable: CreateChallengeInput
+  creatable: CreateChallengeInput,
 ): Promise<string> => {
   const { createdBy, dateStart, dateEnd, description, subtitle, title } =
     creatable
@@ -39,13 +39,11 @@ export const create = async (
   const id = ulid()
   const gsi1sk = toISODatetimeCompact(dateEnd)
 
-  const sika = 'kissa'
-
   await ChallengeEntity.put(
     ChallengeCreateSchema.parse({
       // add keys
       ...getChallengePrimaryKey(id),
-      GSI1PK: `CHALLENGE#CHALLENGE`,
+      GSI1PK: 'CHALLENGE#CHALLENGE',
       GSI1SK: `DATE#${gsi1sk}#${id.slice(0, 8)}`,
       // add props
       createdBy,
@@ -58,7 +56,7 @@ export const create = async (
       subtitle,
       title,
     }),
-    { returnValues: 'NONE' }
+    { returnValues: 'NONE' },
   )
 
   return id
@@ -77,7 +75,7 @@ export const getById = async (id: string): Promise<Challenge | null> => {
   if (!dynamoChallenge) {
     logger.error(
       { challengeId: id },
-      'Challenge found, but entity type Challenge is missing'
+      'Challenge found, but entity type Challenge is missing',
     )
     return null
   }
@@ -97,7 +95,7 @@ export const getById = async (id: string): Promise<Challenge | null> => {
         ...p,
         accomplishedDates: match ? match.challengeAccomplishments : [],
       }
-    }
+    },
   )
 
   return {
@@ -132,7 +130,7 @@ export const removeMany = async (ids: string[]) => {
   await ChallengeEntity.table?.batchWrite(
     ids.map((id) => {
       return ChallengeEntity.deleteBatch(getChallengePrimaryKey(id))
-    })
+    }),
   )
 }
 
@@ -167,11 +165,11 @@ const getOptions = (filter: QueryChallengesArgs['filter']) => {
 }
 
 export const getAll = async (
-  filter: QueryChallengesArgs['filter']
+  filter: QueryChallengesArgs['filter'],
 ): Promise<Challenge[]> => {
   const options = getOptions(filter)
 
-  const results = await ChallengeEntity.query(`CHALLENGE#CHALLENGE`, options)
+  const results = await ChallengeEntity.query('CHALLENGE#CHALLENGE', options)
 
   if (!results.Items) {
     return []
@@ -206,7 +204,7 @@ export const leave = participationFunctions.leave
 
 const getChallengeAccomplishmentPrimaryKey = (
   challengeId: string,
-  userId: string
+  userId: string,
 ) => {
   return {
     PK: `CHALLENGE#${challengeId}`,
@@ -223,7 +221,7 @@ interface AccomplishmentInput {
 const isBetweenISODate = (
   start: ISODate,
   end: ISODate,
-  date: ISODate
+  date: ISODate,
 ): boolean => {
   if (date < start) {
     return false
@@ -274,7 +272,7 @@ export const addAccomplishment = async ({
       userId,
       challengeAccomplishments: { $add: [date] },
     },
-    { returnValues: 'NONE' }
+    { returnValues: 'NONE' },
   )
 }
 
@@ -295,6 +293,6 @@ export const removeAccomplishment = async ({
       ...getChallengeAccomplishmentPrimaryKey(id, userId),
       challengeAccomplishments: { $delete: [date] },
     },
-    { returnValues: 'NONE' }
+    { returnValues: 'NONE' },
   )
 }

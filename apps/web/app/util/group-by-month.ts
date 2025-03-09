@@ -7,7 +7,7 @@ import * as R from 'remeda'
 export const groupByMonth = <
   T extends { dateStart: ISODate; timeStart?: ISOTime },
 >(
-  x: T[]
+  x: T[],
 ) => {
   return R.pipe(
     x,
@@ -24,18 +24,18 @@ export const groupByMonth = <
       const k = R.pipe(
         key,
         parse(new Date(), 'yyyy-MM'),
-        formatWithOptions({ locale: fi }, `LLLL yyyy`)
+        formatWithOptions({ locale: fi }, 'LLLL yyyy'),
       )
 
       const sorted = R.pipe(
         events,
-        R.sortBy((x) => x.isoDate)
+        R.sortBy((x) => x.isoDate),
       )
 
       return {
         date: k,
         events: R.pipe(sorted, R.map(R.omit(['isoDate', 'yearMonth']))),
       }
-    })
+    }),
   )
 }

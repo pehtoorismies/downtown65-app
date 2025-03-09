@@ -1,7 +1,7 @@
 import { Group } from '@mantine/core'
 import { MonthPicker } from '@mantine/dates'
-import styles from './month-picker.module.css'
 import type { ChallengeReducerProps } from '~/routes-common/challenges/create-edit/challenge-reducer'
+import styles from './month-picker.module.css'
 
 export const ChallengeDate = ({ state, dispatch }: ChallengeReducerProps) => {
   return (
@@ -19,7 +19,7 @@ export const ChallengeDate = ({ state, dispatch }: ChallengeReducerProps) => {
         classNames={{
           monthsListControl: styles.selected,
         }}
-      ></MonthPicker>
+      />
     </Group>
   )
 }

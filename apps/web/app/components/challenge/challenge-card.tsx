@@ -37,6 +37,7 @@ export const ChallengeCard = (props: Props) => {
       <Divider my="xs" label="Lisätiedot" labelPosition="center" />
       {!!descriptionText && (
         <TypographyStylesProvider p={0} mt="sm">
+          {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Fix later */}
           <div dangerouslySetInnerHTML={{ __html: descriptionText }} />
         </TypographyStylesProvider>
       )}

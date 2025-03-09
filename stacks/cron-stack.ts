@@ -1,4 +1,4 @@
-import { Cron, Function, use } from 'sst/constructs'
+import { Cron, Function as SSTFunction, use } from 'sst/constructs'
 import type { StackContext } from 'sst/constructs'
 import { ConfigStack } from './config-stack'
 import { getDomainStage } from './support/get-domain-stage'
@@ -9,7 +9,7 @@ export const CronStack = ({ app, stack }: StackContext) => {
   const domainStage = getDomainStage(app.stage)
 
   if (domainStage.accountType === 'production') {
-    const weeklyEmailFun = new Function(stack, 'WeeklyEmail', {
+    const weeklyEmailFun = new SSTFunction(stack, 'WeeklyEmail', {
       handler: 'apps/backend/src/cron-send-weekly-email/lambda.handler',
       bind: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
       environment: {

@@ -57,7 +57,7 @@ test.describe('View event', () => {
       .getByRole('paragraph')
 
     await expect(breadcrumbs).toBeVisible()
-    await expect(page.getByText(`Modification zone`)).toBeVisible()
+    await expect(page.getByText('Modification zone')).toBeVisible()
     await expect(eventPage.view.getModifyEventBtn()).toBeEnabled()
     await expect(eventPage.view.getDeleteEventBtn()).toBeEnabled()
 
@@ -77,7 +77,7 @@ test.describe('View event', () => {
     await eventPage.general.clickButton('Osallistu')
     await eventPage.view.expectParticipantCount(1)
     await expect(
-      eventPage.view.getParticipants().getByText(testUser.nick)
+      eventPage.view.getParticipants().getByText(testUser.nick),
     ).toBeVisible()
     await expect(page.getByText(noParticipantsText)).not.toBeVisible()
 

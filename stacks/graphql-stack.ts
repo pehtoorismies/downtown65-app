@@ -1,7 +1,7 @@
 import * as appsync from '@aws-cdk/aws-appsync-alpha'
 import * as cdk from 'aws-cdk-lib'
 import { RetentionDays } from 'aws-cdk-lib/aws-logs'
-import { AppSyncApi, Function, use } from 'sst/constructs'
+import { AppSyncApi, Function as SSTFunction, use } from 'sst/constructs'
 import type { StackContext } from 'sst/constructs'
 import { ConfigStack } from './config-stack'
 import { DynamoStack } from './dynamo-stack'
@@ -19,7 +19,7 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
     REGISTER_SECRET,
   } = use(ConfigStack)
 
-  const gqlFunction = new Function(stack, 'AppSyncApiFunction', {
+  const gqlFunction = new SSTFunction(stack, 'AppSyncApiFunction', {
     handler: 'apps/backend/src/graphql-appsync/lambda.handler',
     bind: [
       AUTH_CLIENT_ID,

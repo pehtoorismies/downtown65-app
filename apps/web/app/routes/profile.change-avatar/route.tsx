@@ -28,7 +28,6 @@ import {
   IconX,
 } from '@tabler/icons-react'
 import React, { useState } from 'react'
-import { createProfileUploadHandler } from './s3-upload.server'
 import { graphql } from '~/generated/gql'
 import { UpdateAvatarDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
@@ -38,6 +37,7 @@ import {
   renewUserSession,
 } from '~/session.server'
 import { logger } from '~/util/logger.server'
+import { createProfileUploadHandler } from './s3-upload.server'
 
 const MEGA_BYTE = 1024 ** 2
 const MAX_IMAGE_SIZE = 2 * MEGA_BYTE
@@ -74,7 +74,7 @@ export const action: ActionFunction = async ({ request }) => {
     { uploadedFilename: file },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
 
   const headers = await renewUserSession(request)
@@ -101,7 +101,7 @@ function humanFileSize(bytes: number, si = true, dp = 1) {
   const thresh = si ? 1000 : 1024
 
   if (Math.abs(bytes) < thresh) {
-    return bytes + ' B'
+    return `${bytes} B`
   }
 
   const units = si
@@ -110,15 +110,16 @@ function humanFileSize(bytes: number, si = true, dp = 1) {
   let u = -1
   const r = 10 ** dp
 
+  let adjustedBytes = bytes
   do {
-    bytes /= thresh
+    adjustedBytes /= thresh
     ++u
   } while (
-    Math.round(Math.abs(bytes) * r) / r >= thresh &&
+    Math.round(Math.abs(adjustedBytes) * r) / r >= thresh &&
     u < units.length - 1
   )
 
-  return bytes.toFixed(dp) + ' ' + units[u]
+  return `${bytes.toFixed(dp)} ${units[u]}`
 }
 
 export default function ChangeAvatar() {
@@ -262,7 +263,7 @@ export default function ChangeAvatar() {
             </Anchor>
             ). Eventsiin hyväksyttävät profiilikuvaformaatit:&nbsp;
             {IMAGE_MIME_TYPE.map((mime) => mime.replace('image/', '.')).join(
-              ', '
+              ', ',
             )}
             . Jos uusi profiilikuvasi ei näy päivityksen jälkeen, loggaudu ulos
             ja kirjaudu uudelleen sisään.

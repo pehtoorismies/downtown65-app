@@ -11,7 +11,7 @@ export const StringDate = z.object({
 export const challengeStateToSubmittable = (state: ChallengeState) => {
   const result = toISODate(state.date)
   if (!result.success) {
-    throw new Error(`Illegal date in state`)
+    throw new Error('Illegal date in state')
   }
 
   return {
