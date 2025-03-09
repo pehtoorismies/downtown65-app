@@ -39,6 +39,8 @@ export const create = async (
   const id = ulid()
   const gsi1sk = toISODatetimeCompact(dateEnd)
 
+  const sika = 'kissa'
+
   await ChallengeEntity.put(
     ChallengeCreateSchema.parse({
       // add keys
