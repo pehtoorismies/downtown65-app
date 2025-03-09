@@ -83,7 +83,7 @@ const getNextState = (state: ChallengeState) => {
 
 export const challengeReducer = (
   state: ChallengeState,
-  action: ChallengeAction
+  action: ChallengeAction,
 ): ChallengeState => {
   switch (action.kind) {
     case 'title': {

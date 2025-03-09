@@ -4,21 +4,21 @@ test.describe('Logged in user should be redirected to events page when navigatin
   test('login', async ({ page }) => {
     await page.goto('/login')
     await expect(page.getByTestId('breadcrumbs-current')).toHaveText(
-      'Tapahtumat'
+      'Tapahtumat',
     )
   })
 
   test('forgot-password', async ({ page }) => {
     await page.goto('/forgot-password')
     await expect(page.getByTestId('breadcrumbs-current')).toHaveText(
-      'Tapahtumat'
+      'Tapahtumat',
     )
   })
 
   test('signup', async ({ page }) => {
     await page.goto('/signup')
     await expect(page.getByTestId('breadcrumbs-current')).toHaveText(
-      'Tapahtumat'
+      'Tapahtumat',
     )
   })
 })

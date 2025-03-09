@@ -1,46 +1,50 @@
 .control {
-    justify-content: center;
-    padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
-    font-weight: 500;
-    text-decoration: none;
-    border-bottom: 2px solid rgba(1, 1, 1, 0);
-    color: light-dark(var(--mantine-color-black), var(--mantine-gray-0));
-    font-size: var(--mantine-font-size-sm);
+  justify-content: center;
+  padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 2px solid rgba(1, 1, 1, 0);
+  color: light-dark(var(--mantine-color-black), var(--mantine-gray-0));
+  font-size: var(--mantine-font-size-sm);
 
-    @mixin hover {
-        border-bottom: light-dark(2px solid var(--mantine-color-blue-3), 2px solid var(--mantine-color-blue-8));
-    }
+  @mixin hover {
+    border-bottom: light-dark(
+      2px solid var(--mantine-color-blue-3),
+      2px solid var(--mantine-color-blue-8)
+    );
+  }
 }
 
 .active {
-    color: light-dark(var(--mantine-color-black), var(--mantine-color-blue-6));
-    font-weight: 600;
-    border-bottom: 2px solid light-dark(var(--mantine-color-blue-6), var(--mantine-color-blue-8));
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-blue-6));
+  font-weight: 600;
+  border-bottom: 2px solid
+    light-dark(var(--mantine-color-blue-6), var(--mantine-color-blue-8));
 
-    @mixin hover {
-        border-bottom: 2px solid light-dark(var(--mantine-color-blue-3), var(--mantine-color-blue-7));
-    }
+  @mixin hover {
+    border-bottom: 2px solid
+      light-dark(var(--mantine-color-blue-3), var(--mantine-color-blue-7));
+  }
 }
 
 .controlDesktop {
-    display: flex;
+  display: flex;
 }
 
 .controlMobile {
-    display: block;
+  display: block;
 }
 
 .stage {
-    background-color: var(--mantine-color-cyan-3);
-    position: fixed;
-    font-size: rem(12);
-    padding: 2px;
-    bottom: 0;
-    right: 0;
-    text-align: center;
-    z-index: 19999;
-    user-select: none;
-    width: 150px;
-    opacity: 0.8;
+  background-color: var(--mantine-color-cyan-3);
+  position: fixed;
+  font-size: rem(12);
+  padding: 2px;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+  z-index: 19999;
+  user-select: none;
+  width: 150px;
+  opacity: 0.8;
 }
-

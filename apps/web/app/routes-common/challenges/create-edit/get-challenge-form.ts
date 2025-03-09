@@ -36,7 +36,7 @@ type Error = {
 
 export const getChallengeInput = (
   body: FormData,
-  createdBy: User
+  createdBy: User,
 ): Success | Error => {
   const challengeInput = ChallengeInputForm.safeParse({
     date: body.get('date'),

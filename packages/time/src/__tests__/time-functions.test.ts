@@ -37,31 +37,31 @@ describe('Time functions', () => {
 
   test('isoDatetimeCompact', () => {
     expect(toISODatetimeCompact(ISODate.parse('2022-12-12'))).toBe(
-      '2022-12-12T00:00:00'
+      '2022-12-12T00:00:00',
     )
 
     expect(toISODatetimeCompact(parseISO('2014-02-11T11:30'))).toBe(
-      '2014-02-11T11:30:00'
+      '2014-02-11T11:30:00',
     )
 
     expect(
-      toISODatetimeCompact(ISODate.parse('2022-12-12'), ISOTime.parse('20:15'))
+      toISODatetimeCompact(ISODate.parse('2022-12-12'), ISOTime.parse('20:15')),
     ).toBe('2022-12-12T20:15:00')
 
     expect(toISODatetimeCompact(ISODate.parse('2014-02-11'))).toBe(
-      '2014-02-11T00:00:00'
+      '2014-02-11T00:00:00',
     )
 
     expect(() => toISODatetimeCompact(new Date('Kissa'))).toThrowError(
-      /Provided date object is not valid/
+      /Provided date object is not valid/,
     )
 
     expect(() =>
-      toISODatetimeCompact(parseISO('2014-13-11T11:30'))
+      toISODatetimeCompact(parseISO('2014-13-11T11:30')),
     ).toThrowError(/Provided date object is not valid/)
 
     expect(() =>
-      toISODatetimeCompact(parseISO('2014-01-01T45:30'))
+      toISODatetimeCompact(parseISO('2014-01-01T45:30')),
     ).toThrowError(/Provided date object is not valid/)
   })
 

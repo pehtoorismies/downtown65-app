@@ -34,10 +34,10 @@ export const MediaBucketStack = ({ app, stack }: StackContext) => {
         allowedMethods: AllowedMethods.ALLOW_GET_HEAD,
       },
       comment: `Serve from S3 media ${app.stage}`,
-    }
+    },
   )
   mediaCloudFront.applyRemovalPolicy(
-    app.stage === 'production' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY
+    app.stage === 'production' ? RemovalPolicy.RETAIN : RemovalPolicy.DESTROY,
   )
 
   stack.addOutputs({

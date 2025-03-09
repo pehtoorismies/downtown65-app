@@ -77,21 +77,21 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         ...emptyErrors,
         errorEmail: 'Väärän muotoinen sähköpostiosoite',
       },
-      { status: 400 }
+      { status: 400 },
     )
   }
 
   if (typeof password !== 'string' || password.length === 0) {
     return json(
       { ...emptyErrors, errorPassword: 'Salasana puuttuu' },
-      { status: 400 }
+      { status: 400 },
     )
   }
 
   const { login } = await gqlClient.request(
     LoginDocument,
     { email, password },
-    PUBLIC_AUTH_HEADERS
+    PUBLIC_AUTH_HEADERS,
   )
 
   switch (login.__typename) {
@@ -102,7 +102,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         {
           email,
         },
-        'Successful login'
+        'Successful login',
       )
 
       return createUserSession({
@@ -119,7 +119,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           ...emptyErrors,
           errorGeneral: error.message,
         },
-        { status: error.statusCode }
+        { status: error.statusCode },
       )
     }
   }

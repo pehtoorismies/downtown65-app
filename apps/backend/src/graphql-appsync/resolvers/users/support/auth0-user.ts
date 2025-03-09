@@ -44,7 +44,7 @@ export const toUser = (auth0User: Auth0UserResponse): MeUser => {
 }
 
 export const mapToOtherUser = (
-  user: GetUsers200ResponseOneOfInner
+  user: GetUsers200ResponseOneOfInner,
 ): OtherUser => {
   if (typeof user.created_at !== 'string') {
     throw new TypeError('Missing created_at property')

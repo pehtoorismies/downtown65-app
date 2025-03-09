@@ -12,7 +12,7 @@ const translateConfig = { marshallOptions }
 
 const DocumentClient = DynamoDBDocumentClient.from(
   new DynamoDBClient(),
-  translateConfig
+  translateConfig,
 )
 
 export const EntityNames = {

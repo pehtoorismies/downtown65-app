@@ -54,7 +54,7 @@ export const isPublicField = (s: string): s is PublicField => {
 }
 
 export const publicResolver = (
-  field: PublicField
+  field: PublicField,
 ): AppSyncResolverHandler<Inputs, Outputs> => {
   return (event, context, callback) => {
     switch (field) {
@@ -62,42 +62,42 @@ export const publicResolver = (
         return getEventById(
           event as AppSyncResolverEvent<QueryEventArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'challenge': {
         return getChallengeById(
           event as AppSyncResolverEvent<QueryChallengeArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'login': {
         return login(
           event as AppSyncResolverEvent<MutationLoginArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'signup': {
         return signup(
           event as AppSyncResolverEvent<MutationSignupArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'forgotPassword': {
         return forgotPassword(
           event as AppSyncResolverEvent<MutationForgotPasswordArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'refreshToken': {
         return refreshToken(
           event as AppSyncResolverEvent<MutationRefreshTokenArgs>,
           context,
-          callback
+          callback,
         )
       }
     }

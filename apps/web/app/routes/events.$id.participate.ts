@@ -28,7 +28,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
   return json({}, { headers })
 }

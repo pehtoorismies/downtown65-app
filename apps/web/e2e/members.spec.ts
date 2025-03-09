@@ -41,13 +41,13 @@ test.describe('Members page', () => {
 
     await test.step('Verify member profile', async () => {
       await expect(
-        page.getByRole('heading', { name: 'Jäsenprofiili' })
+        page.getByRole('heading', { name: 'Jäsenprofiili' }),
       ).toBeVisible({ timeout: 10_000 })
 
       await expect(page.getByTestId('profile-nick')).toHaveText(nickname)
       await expect(page.getByTestId('profile-name')).toHaveText(name)
       await expect(page.getByTestId('member-created-at')).toHaveText(
-        /.*(?:\d{1,2}\.){2}\d{4}$/
+        /.*(?:\d{1,2}\.){2}\d{4}$/,
       )
     })
 
@@ -64,7 +64,7 @@ test.describe('Members page', () => {
 
     const nickname = await test.step('Verify members', async () => {
       await expect(page.getByTestId('breadcrumbs-current')).toHaveText(
-        'Jäsenet'
+        'Jäsenet',
       )
       const memberNick = page.getByTestId('member-nick-0')
       const nickname = await memberNick.textContent()

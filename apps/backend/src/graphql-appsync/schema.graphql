@@ -6,301 +6,292 @@ directive @aws_api_key on OBJECT | FIELD_DEFINITION
 directive @aws_oidc on OBJECT
 
 enum EventType {
-    CYCLING
-    KARONKKA
-    MEETING
-    NORDIC_WALKING
-    ICE_HOCKEY
-    ORIENTEERING
-    OTHER
-    RUNNING
-    SKIING
-    SPINNING
-    SWIMMING
-    TRACK_RUNNING
-    TRAIL_RUNNING
-    TRIATHLON
-    ULTRAS
+  CYCLING
+  KARONKKA
+  MEETING
+  NORDIC_WALKING
+  ICE_HOCKEY
+  ORIENTEERING
+  OTHER
+  RUNNING
+  SKIING
+  SPINNING
+  SWIMMING
+  TRACK_RUNNING
+  TRAIL_RUNNING
+  TRIATHLON
+  ULTRAS
 }
 
 interface User {
-    id: ID!
-    nickname: String!
+  id: ID!
+  nickname: String!
 }
 
-interface DetailedUser  {
-    picture: String!
-    email: String!
-    name: String!
+interface DetailedUser {
+  picture: String!
+  email: String!
+  name: String!
 }
 
 type Participant implements User @aws_api_key @aws_oidc {
-    id: ID!
-    nickname: String!
-    joinedAt: String!
-    picture: String!
+  id: ID!
+  nickname: String!
+  joinedAt: String!
+  picture: String!
 }
 
 type ChallengeParticipant implements User @aws_api_key @aws_oidc {
-    id: ID!
-    nickname: String!
-    joinedAt: String!
-    picture: String!
-    # Note this is not always available
-    accomplishedDates: [AWSDate!]
+  id: ID!
+  nickname: String!
+  joinedAt: String!
+  picture: String!
+  # Note this is not always available
+  accomplishedDates: [AWSDate!]
 }
 
 type Creator implements User @aws_api_key @aws_oidc {
-    id: ID!
-    nickname: String!
-    picture: String!
+  id: ID!
+  nickname: String!
+  picture: String!
 }
 
 type Event @aws_api_key @aws_oidc {
-    createdBy: Creator!
-    dateStart: AWSDate!
-    description: String
-    id: ID!
-    location: String!
-    participants: [Participant!]!
-    race: Boolean!
-    timeStart: AWSTime
-    subtitle: String!
-    title: String!
-    type: EventType!
+  createdBy: Creator!
+  dateStart: AWSDate!
+  description: String
+  id: ID!
+  location: String!
+  participants: [Participant!]!
+  race: Boolean!
+  timeStart: AWSTime
+  subtitle: String!
+  title: String!
+  type: EventType!
 }
 
-
 type Challenge @aws_api_key @aws_oidc {
-    createdBy: Creator!
-    dateEnd: AWSDate!
-    dateStart: AWSDate!
-    description: String
-    id: ID!
-    participants: [ChallengeParticipant!]!
-    subtitle: String!
-    title: String!
+  createdBy: Creator!
+  dateEnd: AWSDate!
+  dateStart: AWSDate!
+  description: String
+  id: ID!
+  participants: [ChallengeParticipant!]!
+  subtitle: String!
+  title: String!
 }
 
 type MeUser implements User & DetailedUser @aws_api_key @aws_oidc {
-    email: String!
-    id: ID!
-    name: String!
-    nickname: String!
-    picture: String!
-    preferences: Preferences!
+  email: String!
+  id: ID!
+  name: String!
+  nickname: String!
+  picture: String!
+  preferences: Preferences!
 }
 
 type OtherUser implements User & DetailedUser {
-    email: String!
-    id: ID!
-    picture: String!
-    name: String!
-    nickname: String!
-    createdAt: String!
+  email: String!
+  id: ID!
+  picture: String!
+  name: String!
+  nickname: String!
+  createdAt: String!
 }
 
 input MeInput {
-    id: ID!
-    picture: String!
-    nickname: String!
+  id: ID!
+  picture: String!
+  nickname: String!
 }
 
 input CreateEventInput {
-    createdBy: MeInput!
-    dateStart: AWSDate!
-    description: String
-    location: String!
-    participants: [MeInput!]
-    race: Boolean!
-    subtitle: String!
-    title: String!
-    timeStart: AWSTime
-    type: EventType!
+  createdBy: MeInput!
+  dateStart: AWSDate!
+  description: String
+  location: String!
+  participants: [MeInput!]
+  race: Boolean!
+  subtitle: String!
+  title: String!
+  timeStart: AWSTime
+  type: EventType!
 }
 
 input CreateChallengeInput {
-    createdBy: MeInput!
-    dateStart: AWSDate!
-    dateEnd: AWSDate!
+  createdBy: MeInput!
+  dateStart: AWSDate!
+  dateEnd: AWSDate!
 
-    description: String
-    subtitle: String!
-    title: String!
+  description: String
+  subtitle: String!
+  title: String!
 }
 
 type Preferences {
-    subscribeEventCreationEmail: Boolean!
-    subscribeWeeklyEmail: Boolean!
+  subscribeEventCreationEmail: Boolean!
+  subscribeWeeklyEmail: Boolean!
 }
 
 type IDPayload {
-    id: ID!
+  id: ID!
 }
 
 input UpdateEventInput {
-    dateStart: AWSDate!
-    description: String
-    location: String!
-    race: Boolean!
-    subtitle: String!
-    title: String!
-    timeStart: AWSTime
-    type: EventType!
+  dateStart: AWSDate!
+  description: String
+  location: String!
+  race: Boolean!
+  subtitle: String!
+  title: String!
+  timeStart: AWSTime
+  type: EventType!
 }
 
 interface AuthError {
-    message: String!
-    error: String!
-    statusCode: Int!
+  message: String!
+  error: String!
+  statusCode: Int!
 }
 
 type Tokens @aws_api_key {
-    accessToken: String!
-    expiresIn: Int!
-    idToken: String!
-    refreshToken: String!
+  accessToken: String!
+  expiresIn: Int!
+  idToken: String!
+  refreshToken: String!
 }
 
 type LoginError implements AuthError @aws_api_key {
-    message: String!
-    error: String!
-    statusCode: Int!
+  message: String!
+  error: String!
+  statusCode: Int!
 }
 
 union LoginResponse = Tokens | LoginError
 
 type RefreshTokens @aws_api_key {
-    accessToken: String!
-    expiresIn: Int!
-    idToken: String!
+  accessToken: String!
+  expiresIn: Int!
+  idToken: String!
 }
 
 type RefreshError implements AuthError @aws_api_key {
-    message: String!
-    error: String!
-    statusCode: Int!
+  message: String!
+  error: String!
+  statusCode: Int!
 }
 
 union RefreshResponse = RefreshTokens | RefreshError
 
 input PreferencesInput {
-    subscribeEventCreationEmail: Boolean!
-    subscribeWeeklyEmail: Boolean!
+  subscribeEventCreationEmail: Boolean!
+  subscribeWeeklyEmail: Boolean!
 }
 
 input SignupInput {
-    email: AWSEmail!
-    nickname: String!
-    password: String!
-    name: String!
-    registerSecret: String!
+  email: AWSEmail!
+  nickname: String!
+  password: String!
+  name: String!
+  registerSecret: String!
 }
 
 interface UserError {
-    message: String!
-    path: String!
+  message: String!
+  path: String!
 }
 
 enum SignupField {
-    name
-    password
-    registerSecret
-    nickname
-    email
+  name
+  password
+  registerSecret
+  nickname
+  email
 }
 
 type FieldError @aws_api_key {
-    message: String!
-    path: SignupField!
+  message: String!
+  path: SignupField!
 }
 
 type SignupFieldError @aws_api_key {
-    errors: [FieldError!]!
+  errors: [FieldError!]!
 }
 
 type SignupError implements AuthError @aws_api_key {
-    message: String!
-    error: String!
-    statusCode: Int!
+  message: String!
+  error: String!
+  statusCode: Int!
 }
 
 type SignupSuccess @aws_api_key {
-    message: String!
+  message: String!
 }
 
 union SignupResponse = SignupSuccess | SignupFieldError | SignupError
 
 input UpdateMeInput {
-    preferences: PreferencesInput!
+  preferences: PreferencesInput!
 }
 
 input DateFilter {
-    before: AWSDate
-    after: AWSDate
+  before: AWSDate
+  after: AWSDate
 }
 
 input ChallengeFilter {
-    dateEnd: DateFilter!
+  dateEnd: DateFilter!
 }
 
 input AccomplishmentInput {
-    id: ID!
-    userId: ID!
-    date: AWSDate!
+  id: ID!
+  userId: ID!
+  date: AWSDate!
 }
 
 type UsersResponse {
-    length: Int!
-    limit: Int!
-    start: Int!
-    total: Int!
-    users: [OtherUser!]!
+  length: Int!
+  limit: Int!
+  start: Int!
+  total: Int!
+  users: [OtherUser!]!
 }
 
 type Query {
-    event(eventId: ID!): Event @aws_api_key
-    challenge(id: ID!): Challenge @aws_api_key
+  event(eventId: ID!): Event @aws_api_key
+  challenge(id: ID!): Challenge @aws_api_key
 
-    # Future events
-    events: [Event!]!
-    # Upcoming challenges
-    challenges(filter: ChallengeFilter): [Challenge!]!
-    me: MeUser!
-    users(page: Int!, perPage: Int!): UsersResponse!
-    user(nickname: String!): OtherUser
+  # Future events
+  events: [Event!]!
+  # Upcoming challenges
+  challenges(filter: ChallengeFilter): [Challenge!]!
+  me: MeUser!
+  users(page: Int!, perPage: Int!): UsersResponse!
+  user(nickname: String!): OtherUser
 }
 
 type Mutation {
-    createEvent(input: CreateEventInput!): IDPayload!
-    updateEvent(eventId: ID!, input: UpdateEventInput!): Event!
-    deleteEvent(eventId: ID!): IDPayload
-    leaveEvent(eventId: ID!): Boolean
-    participateEvent(eventId: ID!, me: MeInput!): Boolean
+  createEvent(input: CreateEventInput!): IDPayload!
+  updateEvent(eventId: ID!, input: UpdateEventInput!): Event!
+  deleteEvent(eventId: ID!): IDPayload
+  leaveEvent(eventId: ID!): Boolean
+  participateEvent(eventId: ID!, me: MeInput!): Boolean
 
-    createChallenge(input: CreateChallengeInput!): IDPayload!
-    leaveChallenge(id: ID!): Boolean!
-    participateChallenge(id: ID!, me: MeInput!): Boolean!
-    addChallengeAccomplishment(input: AccomplishmentInput!): Boolean
-    removeChallengeAccomplishment(input: AccomplishmentInput!): Boolean
+  createChallenge(input: CreateChallengeInput!): IDPayload!
+  leaveChallenge(id: ID!): Boolean!
+  participateChallenge(id: ID!, me: MeInput!): Boolean!
+  addChallengeAccomplishment(input: AccomplishmentInput!): Boolean
+  removeChallengeAccomplishment(input: AccomplishmentInput!): Boolean
 
-    updateMe(input: UpdateMeInput!): MeUser!
+  updateMe(input: UpdateMeInput!): MeUser!
 
-    updateAvatar(uploadedFilename: String!): Boolean!
+  updateAvatar(uploadedFilename: String!): Boolean!
 
-    login(
-        email: AWSEmail!
-        password: String!
-    ): LoginResponse! @aws_api_key
+  login(email: AWSEmail!, password: String!): LoginResponse! @aws_api_key
 
-    signup(input: SignupInput!): SignupResponse! @aws_api_key
+  signup(input: SignupInput!): SignupResponse! @aws_api_key
 
-    forgotPassword(
-        email: String!
-    ): Boolean! @aws_api_key
+  forgotPassword(email: String!): Boolean! @aws_api_key
 
-
-    refreshToken(
-        refreshToken: String!
-    ): RefreshResponse! @aws_api_key
+  refreshToken(refreshToken: String!): RefreshResponse! @aws_api_key
 }

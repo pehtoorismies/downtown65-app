@@ -11,6 +11,6 @@ export const logger =
         { level: 'trace' },
         pretty({
           colorize: true,
-        })
+        }),
       )
     : pino({ level: 'info' }, destination)

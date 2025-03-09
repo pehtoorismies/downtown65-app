@@ -75,7 +75,7 @@ const optionalStringObject = z
   .optional(
     z.object({
       S: z.string(),
-    })
+    }),
   )
   .transform((o) => o?.S)
 
@@ -122,7 +122,7 @@ export const EmailableEvent = z
         subtitle,
         title,
       }
-    }
+    },
   )
 
 export type EmailableEvent = z.infer<typeof EmailableEvent>

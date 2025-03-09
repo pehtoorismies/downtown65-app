@@ -28,8 +28,8 @@ export const verifyScope =
     if (!matchScopes(allowedScopes)(claims.scope)) {
       throw new Error(
         `Unauthorized request not enough scope. Needs: ${allowedScopes.join(
-          ','
-        )}`
+          ',',
+        )}`,
       )
     }
   }

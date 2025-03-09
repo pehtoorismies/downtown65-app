@@ -19,7 +19,7 @@ export const CookieSessionData = z
 export type CookieSessionData = z.infer<typeof CookieSessionData>
 
 export const getCookieSessionData = (
-  session: Session
+  session: Session,
 ): CookieSessionData | undefined => {
   const user = session.get(USER_KEY)
   const accessToken = session.get(ACCESS_TOKEN_KEY)
@@ -40,7 +40,7 @@ export const getCookieSessionData = (
 
 export const setCookieSessionData = (
   session: Session,
-  { refreshToken, user, accessToken, cookieExpires }: CookieSessionData
+  { refreshToken, user, accessToken, cookieExpires }: CookieSessionData,
 ) => {
   session.set(REFRESH_TOKEN_KEY, refreshToken)
   session.set(USER_KEY, JSON.stringify(user))

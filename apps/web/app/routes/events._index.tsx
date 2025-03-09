@@ -67,7 +67,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     {},
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
 
   const eventItems = events.map((event) => {

@@ -19,7 +19,7 @@ type Outputs = PrivateOut | PublicOut
 export const handler: AppSyncResolverHandler<Inputs, Outputs> = (
   event,
   context,
-  callback
+  callback,
 ) => {
   withRequest(event, context)
 

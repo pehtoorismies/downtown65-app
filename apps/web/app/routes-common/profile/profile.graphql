@@ -1,36 +1,39 @@
 query GetProfile {
-    me {
-        id
-        email
-        name
-        nickname
-        picture
-        preferences {
-            subscribeEventCreationEmail
-            subscribeWeeklyEmail
-        }
+  me {
+    id
+    email
+    name
+    nickname
+    picture
+    preferences {
+      subscribeEventCreationEmail
+      subscribeWeeklyEmail
     }
+  }
 }
 
-mutation UpdateMe($subscribeWeeklyEmail: Boolean!, $subscribeEventCreationEmail: Boolean!) {
-    updateMe(
-        input: {
-            preferences: {
-                subscribeWeeklyEmail: $subscribeWeeklyEmail,
-                subscribeEventCreationEmail: $subscribeEventCreationEmail
-            }
-        }
-    ) {
-        id
-        nickname
-        name
-        preferences {
-            subscribeWeeklyEmail
-            subscribeEventCreationEmail
-        }
+mutation UpdateMe(
+  $subscribeWeeklyEmail: Boolean!
+  $subscribeEventCreationEmail: Boolean!
+) {
+  updateMe(
+    input: {
+      preferences: {
+        subscribeWeeklyEmail: $subscribeWeeklyEmail
+        subscribeEventCreationEmail: $subscribeEventCreationEmail
+      }
     }
+  ) {
+    id
+    nickname
+    name
+    preferences {
+      subscribeWeeklyEmail
+      subscribeEventCreationEmail
+    }
+  }
 }
 
 mutation UpdateAvatar($uploadedFilename: String!) {
-    updateAvatar(uploadedFilename: $uploadedFilename)
+  updateAvatar(uploadedFilename: $uploadedFilename)
 }

@@ -18,7 +18,7 @@ export const removeChallengeAccomplishment: AppSyncResolverHandler<
 
   if (claims.sub !== userId) {
     throw new Error(
-      'Trying to insert somebody else. You can only add execution to yourself.'
+      'Trying to insert somebody else. You can only add execution to yourself.',
     )
   }
 

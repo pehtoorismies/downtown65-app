@@ -94,7 +94,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
 
   const messageSession = await getMessageSession(request.headers.get('cookie'))

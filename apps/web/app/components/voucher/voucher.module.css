@@ -1,54 +1,53 @@
 .header {
-    display: grid;
-    grid-template-rows: 30px 80px 30px;
-    gap: 15px 15px;
-    grid-template-areas:
-            "topLeft . topRight"
-            "title title title"
-            "bottomLeft . bottomRight";
+  display: grid;
+  grid-template-rows: 30px 80px 30px;
+  gap: 15px 15px;
+  grid-template-areas:
+    "topLeft . topRight"
+    "title title title"
+    "bottomLeft . bottomRight";
 }
 
 .areaTitle {
-    grid-area: title;
-    align-self: center;
-    justify-self: center;
+  grid-area: title;
+  align-self: center;
+  justify-self: center;
 }
 
 .title {
-    text-align: center;
-    text-shadow: black 2px 2px 10px;
-    font-weight: 700;
-    letter-spacing: 4px;
-    font-size: rem(23);
-    color: var(--mantine-color-white);
-    background: linear-gradient(
-            0deg,
-            rgba(134, 142, 150, 0.1) 0%,
-            rgba(134, 142, 150, 0.3) 25%,
-            rgba(134, 142, 150, 0.3) 75%,
-            rgba(134, 142, 150, 0.1) 100%
-    );
+  text-align: center;
+  text-shadow: black 2px 2px 10px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  font-size: rem(23);
+  color: var(--mantine-color-white);
+  background: linear-gradient(
+    0deg,
+    rgba(134, 142, 150, 0.1) 0%,
+    rgba(134, 142, 150, 0.3) 25%,
+    rgba(134, 142, 150, 0.3) 75%,
+    rgba(134, 142, 150, 0.1) 100%
+  );
 }
 
 .type {
-    grid-area: bottomLeft;
-    justify-self: start;
-    align-self: end;
-
+  grid-area: bottomLeft;
+  justify-self: start;
+  align-self: end;
 }
 
 .areaParticipantCount {
-    grid-area: topRight;
-    pointer-events: none;
-    justify-self: end;
+  grid-area: topRight;
+  pointer-events: none;
+  justify-self: end;
 }
 
 .areaCompetition {
-    grid-area: topLeft;
+  grid-area: topLeft;
 }
 
 .areaCreator {
-    grid-area: bottomRight;
-    justify-self: end;
-    align-self: end;
+  grid-area: bottomRight;
+  justify-self: end;
+  align-self: end;
 }

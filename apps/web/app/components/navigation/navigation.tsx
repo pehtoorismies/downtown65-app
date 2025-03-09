@@ -66,7 +66,7 @@ export const LoggedInNavigation = ({
                 return cx(
                   classes.control,
                   classes.controlDesktop,
-                  isActive && classes.active
+                  isActive && classes.active,
                 )
               }}
               to={to}
@@ -162,7 +162,7 @@ export const Navbar = ({ close }: NavbarProps) => {
               return cx(
                 classes.control,
                 classes.controlMobile,
-                isActive && classes.active
+                isActive && classes.active,
               )
             }}
             to={to}

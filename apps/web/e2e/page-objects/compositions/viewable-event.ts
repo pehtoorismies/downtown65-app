@@ -46,7 +46,7 @@ export class ViewableEvent {
 
   async expectParticipantCount(count: number) {
     await expect(this.page.getByTestId('event-participant-count')).toHaveText(
-      String(count)
+      String(count),
     )
   }
 
@@ -125,7 +125,7 @@ export class ViewableEvent {
       const isoTime = toISOTime(eventInfo.time)
       invariant(isoTime.success)
       expect(dateText).toBe(
-        `${toFormattedDate(isoDate.data)} klo ${isoTime.data}`
+        `${toFormattedDate(isoDate.data)} klo ${isoTime.data}`,
       )
     } else {
       expect(dateText).toBe(toFormattedDate(isoDate.data))
@@ -133,7 +133,7 @@ export class ViewableEvent {
 
     await (eventInfo.description.trim().length === 0
       ? expect(
-          this.page.getByText('ei tarkempaa tapahtuman kuvausta')
+          this.page.getByText('ei tarkempaa tapahtuman kuvausta'),
         ).toBeVisible()
       : expect(this.page.getByText(eventInfo.description)).toBeVisible())
   }

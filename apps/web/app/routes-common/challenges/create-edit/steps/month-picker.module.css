@@ -1,6 +1,5 @@
 .selected {
-    &[data-selected] {
-        background-color: var(--mantine-color-yellow-7);
-    }
+  &[data-selected] {
+    background-color: var(--mantine-color-yellow-7);
+  }
 }
-

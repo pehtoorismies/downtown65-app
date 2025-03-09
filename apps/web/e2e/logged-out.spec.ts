@@ -16,7 +16,7 @@ test.describe('Logged out users', () => {
 
     await page.getByTestId('to-signup').click()
     await expect(
-      page.getByRole('heading', { name: 'Rekisteröidy' })
+      page.getByRole('heading', { name: 'Rekisteröidy' }),
     ).toBeVisible()
     await expect(page).toHaveTitle('Dt65 - signup')
 
@@ -25,7 +25,7 @@ test.describe('Logged out users', () => {
 
     await page.getByTestId('to-forgot-password').click()
     await expect(
-      page.getByRole('heading', { name: 'Salasana unohtunut' })
+      page.getByRole('heading', { name: 'Salasana unohtunut' }),
     ).toBeVisible()
     await expect(page).toHaveTitle('Dt65 - forgot password')
 
@@ -34,7 +34,7 @@ test.describe('Logged out users', () => {
 
     await page.getByTestId('button-to-signup').click()
     await expect(
-      page.getByRole('heading', { name: 'Rekisteröidy' })
+      page.getByRole('heading', { name: 'Rekisteröidy' }),
     ).toBeVisible()
 
     await page.getByTestId('button-to-login').click()
@@ -103,14 +103,14 @@ test.describe('Logged out users', () => {
     await eventPage.view.expectParticipantCount(0)
 
     await expect(
-      eventPage.general.getMeta('property', 'og:title')
+      eventPage.general.getMeta('property', 'og:title'),
     ).toHaveAttribute('content', eventInfo.title)
 
     const today = format(eventInfo.date, 'd.M.yyyy')
     const startsWithToday = new RegExp(`^${today}`)
 
     await expect(
-      eventPage.general.getMeta('property', 'og:description')
+      eventPage.general.getMeta('property', 'og:description'),
     ).toHaveAttribute('content', startsWithToday)
 
     await expect(eventPage.view.getLeaveButton()).toBeHidden()
