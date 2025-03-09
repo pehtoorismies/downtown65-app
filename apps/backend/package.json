@@ -7,7 +7,6 @@
   "scripts": {
     "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext .ts",
     "test": "sst bind vitest run",
     "clean": "rm -rf dist .turbo node_modules"
   },
@@ -40,8 +39,6 @@
     "@types/aws-lambda": "8.10.119",
     "@types/node": "18.15.3",
     "@types/react": "18.2.52",
-    "@typescript-eslint/eslint-plugin": "6.20.0",
-    "@typescript-eslint/parser": "6.20.0",
     "typescript": "5.2.2",
     "vitest": "1.2.2"
   }

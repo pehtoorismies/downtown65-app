@@ -4,14 +4,11 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": [
-    "dist/**"
-  ],
+  "files": ["dist/**"],
   "license": "MIT",
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf dist .turbo node_modules .cache",
-    "lint": "eslint . --ext .ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

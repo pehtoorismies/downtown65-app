@@ -8,8 +8,6 @@
     "build": "remix build",
     "dev": "sst bind remix dev",
     "start": "remix-serve build",
-    "lint": "eslint . --ext .ts,.tsx",
-    "stylelint": "stylelint 'app/**/*.css'",
     "typecheck": "tsc --noEmit",
     "find-deadcode": "ts-prune --ignore 'app/routes|app/root.tsx|app/entry.server.tsx|app/gql/types.gen.ts|remix.env.d.ts'",
     "e2e": "sst bind e2e/playwright",
@@ -79,9 +77,6 @@
     "postcss": "8.4.31",
     "postcss-preset-mantine": "1.17.0",
     "postcss-simple-vars": "7.0.1",
-    "prettier": "3.2.4",
-    "stylelint": "16.2.0",
-    "stylelint-config-standard-scss": "13.0.0",
     "typescript": "5.2.2",
     "vitest": "1.2.2"
   },
