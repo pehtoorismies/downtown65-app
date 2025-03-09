@@ -10,7 +10,6 @@
     "clean": "rm -rf dist .turbo node_modules .cache"
   },
   "dependencies": {
-    "@downtown65-app/config-eslint": "workspace:^",
     "@downtown65-app/config-ts": "workspace:^",
     "@downtown65-app/time": "workspace:^"
   },
