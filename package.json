@@ -18,10 +18,13 @@
     "stylelint": "turbo run stylelint",
     "find-deadcode": "yarn workspaces run find-deadcode",
     "generate": "graphql-codegen",
-    "login": "aws sso login --sso-session=downtown65"
+    "login": "aws sso login --sso-session=downtown65",
+    "format-and-lint": "biome check .",
+    "format-and-lint:fix": "biome check . --write"
   },
   "devDependencies": {
     "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",
+    "@biomejs/biome": "1.9.4",
     "@downtown65-app/config-eslint": "workspace:^",
     "@graphql-codegen/add": "5.0.0",
     "@graphql-codegen/cli": "5.0.0",

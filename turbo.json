@@ -15,6 +15,13 @@
         "^build"
       ]
     },
+    "//#format-and-lint": {},
+    "//#format-and-lint:fix": {
+      "cache": false,
+      "dependsOn": [
+        "^build"
+      ]
+    },
     "lint": {
       "dependsOn": [
         "^build"
