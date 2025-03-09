@@ -24,7 +24,7 @@ const EventForm = z.object({
       id: z.string(),
       nickname: z.string(),
       picture: z.string(),
-    })
+    }),
   ),
   subtitle: z.string(),
   time: z.string().transform((x) => {

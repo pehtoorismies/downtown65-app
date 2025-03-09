@@ -14,7 +14,7 @@ export const participateEvent: AppSyncResolverHandler<
 
   if (claims.sub !== me.id) {
     throw new Error(
-      'Trying to insert somebody else. You can only participate yourself.'
+      'Trying to insert somebody else. You can only participate yourself.',
     )
   }
 

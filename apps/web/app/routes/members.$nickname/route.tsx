@@ -60,7 +60,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
 
   if (!response.user) {

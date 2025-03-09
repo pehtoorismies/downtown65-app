@@ -3,10 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "main": "index.js",
-  "files": [
-    "base.json",
-    "ts-packages.json"
-  ],
+  "files": ["base.json", "ts-packages.json"],
   "devDependencies": {
     "@tsconfig/node18": "18.2.2"
   }

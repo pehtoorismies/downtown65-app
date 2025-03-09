@@ -100,7 +100,7 @@ export const isPrivateField = (s: string): s is PrivateField => {
 }
 
 export const privateResolver = (
-  field: PrivateField
+  field: PrivateField,
 ): AppSyncResolverHandler<Inputs, Outputs> => {
   return (event, context, callback) => {
     const allowScopes = verifyScope(event.identity)
@@ -111,7 +111,7 @@ export const privateResolver = (
         return getEvents(
           event as AppSyncResolverEvent<Record<string, never>>,
           context,
-          callback
+          callback,
         )
       }
       case 'createEvent': {
@@ -119,7 +119,7 @@ export const privateResolver = (
         return createEvent(
           event as AppSyncResolverEvent<MutationCreateEventArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'updateEvent': {
@@ -127,7 +127,7 @@ export const privateResolver = (
         return updateEvent(
           event as AppSyncResolverEvent<MutationUpdateEventArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'deleteEvent': {
@@ -135,7 +135,7 @@ export const privateResolver = (
         return deleteEvent(
           event as AppSyncResolverEvent<MutationDeleteEventArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'leaveEvent': {
@@ -143,7 +143,7 @@ export const privateResolver = (
         return leaveEvent(
           event as AppSyncResolverEvent<MutationLeaveEventArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'participateEvent': {
@@ -151,7 +151,7 @@ export const privateResolver = (
         return participateEvent(
           event as AppSyncResolverEvent<MutationParticipateEventArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'me': {
@@ -159,7 +159,7 @@ export const privateResolver = (
         return getMe(
           event as AppSyncResolverEvent<EmptyArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'user': {
@@ -167,7 +167,7 @@ export const privateResolver = (
         return getUser(
           event as AppSyncResolverEvent<QueryUserArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'users': {
@@ -175,7 +175,7 @@ export const privateResolver = (
         return getUsers(
           event as AppSyncResolverEvent<QueryUsersArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'updateMe': {
@@ -183,7 +183,7 @@ export const privateResolver = (
         return updateMe(
           event as AppSyncResolverEvent<MutationUpdateMeArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'updateAvatar': {
@@ -191,7 +191,7 @@ export const privateResolver = (
         return updateAvatar(
           event as AppSyncResolverEvent<MutationUpdateAvatarArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'createChallenge': {
@@ -199,7 +199,7 @@ export const privateResolver = (
         return createChallenge(
           event as AppSyncResolverEvent<MutationCreateChallengeArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'leaveChallenge': {
@@ -207,7 +207,7 @@ export const privateResolver = (
         return leaveChallenge(
           event as AppSyncResolverEvent<MutationLeaveChallengeArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'participateChallenge': {
@@ -215,7 +215,7 @@ export const privateResolver = (
         return participateChallenge(
           event as AppSyncResolverEvent<MutationParticipateChallengeArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'challenges': {
@@ -223,7 +223,7 @@ export const privateResolver = (
         return getChallenges(
           event as AppSyncResolverEvent<QueryChallengesArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'addChallengeAccomplishment': {
@@ -231,7 +231,7 @@ export const privateResolver = (
         return addChallengeAccomplishment(
           event as AppSyncResolverEvent<MutationAddChallengeAccomplishmentArgs>,
           context,
-          callback
+          callback,
         )
       }
       case 'removeChallengeAccomplishment': {
@@ -239,7 +239,7 @@ export const privateResolver = (
         return removeChallengeAccomplishment(
           event as AppSyncResolverEvent<MutationRemoveChallengeAccomplishmentArgs>,
           context,
-          callback
+          callback,
         )
       }
     }

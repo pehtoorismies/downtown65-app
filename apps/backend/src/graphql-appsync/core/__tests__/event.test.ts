@@ -100,7 +100,7 @@ describe('Events', () => {
 
   test('remove should throw error if event is not found', async () => {
     await expect(Event.remove('non existing')).rejects.toThrow(
-      /^Event not found$/
+      /^Event not found$/,
     )
   })
 })

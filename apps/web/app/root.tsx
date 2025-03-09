@@ -75,7 +75,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
           expires: new Date(Date.now() + ONE_YEAR),
         }),
       },
-    }
+    },
   )
 }
 

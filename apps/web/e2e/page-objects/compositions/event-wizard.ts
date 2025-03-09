@@ -17,7 +17,7 @@ export class EventWizard {
   }
 
   async stepBtnClick(
-    step: 'type' | 'basic-info' | 'date' | 'time' | 'description' | 'preview'
+    step: 'type' | 'basic-info' | 'date' | 'time' | 'description' | 'preview',
   ) {
     await this.page.getByTestId(`step-${step}`).click()
   }
@@ -205,7 +205,7 @@ export class EventWizard {
     await this.page.getByRole('button', { name: /Luo tapahtuma/ }).click()
     await this.page.waitForURL(/events\/([\dA-Z]{26})$/)
     await expect(
-      this.page.getByRole('button', { name: 'Poista tapahtuma' })
+      this.page.getByRole('button', { name: 'Poista tapahtuma' }),
     ).toBeVisible()
 
     await expect(this.page.getByRole('link', { name: 'Muokkaa' })).toBeVisible()

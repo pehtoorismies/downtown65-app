@@ -27,7 +27,7 @@ export const getParticipationFunctions = ({
   return {
     participate: async (
       id: string,
-      user: { nickname: string; id: string; picture: string }
+      user: { nickname: string; id: string; picture: string },
     ) => {
       const participatingUser: ParticipatingUserSchema = {
         joinedAt: formatISO(new Date()).slice(0, 19),
@@ -90,8 +90,8 @@ export const participantHashMapToList = (participantsHashMap: unknown) => {
   if (!parsed.success) {
     throw new Error(
       `Error in dynamo item participants: ${JSON.stringify(
-        participantsHashMap
-      )}. Error: ${parsed.error}`
+        participantsHashMap,
+      )}. Error: ${parsed.error}`,
     )
   }
 

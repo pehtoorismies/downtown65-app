@@ -8,7 +8,7 @@ export const getKeySchema = (key: 'EVENT' | 'CHALLENGE') => {
     (value) => re.test(value),
     (value) => ({
       message: `${value} is not in correct for PK. Use: ${key}#<ulid>`,
-    })
+    }),
   )
 }
 
@@ -33,7 +33,7 @@ export const ParticipatingUserSchema = z.object({
     },
     (value) => ({
       message: `${value} is not in correct format. Use: 2020-01-01T00:00:00`,
-    })
+    }),
   ),
   nickname: z.string(),
   picture: UrlString,
@@ -44,5 +44,5 @@ export type ParticipatingUserSchema = z.infer<typeof ParticipatingUserSchema>
 
 export const ParticipantsSchema = z.record(
   Auth0IDString,
-  ParticipatingUserSchema
+  ParticipatingUserSchema,
 )

@@ -48,7 +48,7 @@ interface ProgressButtonProps {
 }
 
 export const NextButton = (
-  props: PropsWithChildren<ProgressButtonProps & ButtonProps>
+  props: PropsWithChildren<ProgressButtonProps & ButtonProps>,
 ) => {
   const { children, ...rest } = props
 
@@ -71,7 +71,7 @@ export const NextButton = (
 }
 
 export const PreviousButton = (
-  props: PropsWithChildren<ProgressButtonProps & ButtonProps>
+  props: PropsWithChildren<ProgressButtonProps & ButtonProps>,
 ) => {
   const { children, ...rest } = props
 

@@ -35,7 +35,7 @@ export const getRandomEventType = () => {
 }
 
 export const getRandomEventInfo = (
-  overrides?: Partial<EventInfo>
+  overrides?: Partial<EventInfo>,
 ): EventInfo => {
   const time =
     overrides?.time === undefined

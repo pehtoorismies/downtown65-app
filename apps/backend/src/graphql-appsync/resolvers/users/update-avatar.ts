@@ -25,7 +25,7 @@ export const updateAvatar: AppSyncResolverHandler<
     {
       picture,
     },
-    'Update user avatar'
+    'Update user avatar',
   )
 
   await management.users.update({ id: auth0serId }, { picture })

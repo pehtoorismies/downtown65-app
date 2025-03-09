@@ -10,7 +10,7 @@ export interface Context {
 }
 
 export const ParticipatingContext = createContext<Context | undefined>(
-  undefined
+  undefined,
 )
 
 export const useParticipatingContext = (): Context => {
@@ -47,7 +47,7 @@ export const useParticipationActions = (eventType: 'event' | 'challenge') => {
         {
           action: `${actionPath}/${id}/participate`,
           method: 'put',
-        }
+        },
       )
     },
     onLeave: (id: string) => {
@@ -57,7 +57,7 @@ export const useParticipationActions = (eventType: 'event' | 'challenge') => {
         {
           action: `${actionPath}/${id}/leave`,
           method: 'put',
-        }
+        },
       )
     },
     state: fetcher.state,

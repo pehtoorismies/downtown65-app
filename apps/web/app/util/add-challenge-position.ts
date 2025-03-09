@@ -15,7 +15,7 @@ export const addChallengePosition = <T extends Count>(xs: T[]) => {
       const addToPosition = value.length % 0 ? value.length + 1 : value.length
       position -= addToPosition
       return R.pipe(value, R.map(R.addProp('position', position)))
-    })
+    }),
   )
 
   return r.reverse() // R.reverse loose types

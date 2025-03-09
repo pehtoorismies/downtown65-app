@@ -26,21 +26,21 @@ test.describe('Delete event', () => {
     await test.step('Close delete confirmation modal with X', async () => {
       await eventPage.view.getDeleteEventBtn().click()
       await expect(
-        eventPage.view.getDeleteConfirmationModalContent()
+        eventPage.view.getDeleteConfirmationModalContent(),
       ).toBeVisible()
       await eventPage.view.deleteModalClick('closeWithX')
       await expect(
-        eventPage.view.getDeleteConfirmationModalContent()
+        eventPage.view.getDeleteConfirmationModalContent(),
       ).toBeHidden()
 
       await test.step('Close delete confirmation modal with close button', async () => {
         await eventPage.view.getDeleteEventBtn().click()
         await expect(
-          eventPage.view.getDeleteConfirmationModalContent()
+          eventPage.view.getDeleteConfirmationModalContent(),
         ).toBeVisible()
         await eventPage.view.deleteModalClick('closeWithButton')
         await expect(
-          eventPage.view.getDeleteConfirmationModalContent()
+          eventPage.view.getDeleteConfirmationModalContent(),
         ).toBeHidden()
       })
 
@@ -60,14 +60,14 @@ test.describe('Delete event', () => {
         await eventsDiv.waitFor({ state: 'attached' })
         // check navigation
         await expect(
-          eventPage.page.locator('header').getByText('Tapahtumat')
+          eventPage.page.locator('header').getByText('Tapahtumat'),
         ).toHaveAttribute('aria-current', 'page')
       })
 
       await test.step('Verify that event has disappeared', async () => {
         await eventPage.page.goto(`events/${id}`)
         await expect(
-          eventPage.page.getByRole('heading', { name: '404' })
+          eventPage.page.getByRole('heading', { name: '404' }),
         ).toBeVisible()
         await eventPage.page.getByTestId('to-frontpage-button').click()
         await eventPage.page.waitForURL('**/events')

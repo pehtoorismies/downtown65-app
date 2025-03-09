@@ -50,7 +50,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   await gqlClient.request(
     ForgotPasswordDocument,
     { email },
-    PUBLIC_AUTH_HEADERS
+    PUBLIC_AUTH_HEADERS,
   )
 
   const session = await getMessageSession(request.headers.get('cookie'))

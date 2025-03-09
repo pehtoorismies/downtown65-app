@@ -1,11 +1,5 @@
 {
   "extends": "@downtown65-app/config-ts/ts-packages.json",
-  "include": [
-    "."
-  ],
-  "exclude": [
-    "build",
-    "node_modules",
-    "dist"
-  ]
+  "include": ["."],
+  "exclude": ["build", "node_modules", "dist"]
 }

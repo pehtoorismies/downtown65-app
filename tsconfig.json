@@ -1,10 +1,6 @@
 {
   "extends": "@tsconfig/node18/tsconfig.json",
-  "include": [
-    "sst.config.ts",
-    "codegen.ts",
-    "stacks/*.ts"
-  ],
+  "include": ["sst.config.ts", "codegen.ts", "stacks/*.ts"],
   "compilerOptions": {
     "module": "esnext",
     "moduleResolution": "node"

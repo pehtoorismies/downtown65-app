@@ -86,7 +86,7 @@ const getUserFromJwt = (idTokenJWT: string): User => {
 
 export const getDestroySessionHeaders = async (
   request: Request,
-  message: ToastMessage
+  message: ToastMessage,
 ) => {
   const headers = new Headers()
   const messageSession = await getMessageSession(request.headers.get('cookie'))
@@ -101,14 +101,14 @@ export const getDestroySessionHeaders = async (
 const renewSession = async (
   oldSessionData: CookieSessionData,
   session: Session,
-  request: Request
+  request: Request,
 ) => {
   const { refreshToken: result } = await gqlClient.request(
     RefreshTokenDocument,
     {
       refreshToken: oldSessionData.refreshToken,
     },
-    PUBLIC_AUTH_HEADERS
+    PUBLIC_AUTH_HEADERS,
   )
 
   switch (result.__typename) {
@@ -128,7 +128,7 @@ const renewSession = async (
         'Set-Cookie',
         await sessionStorage.commitSession(session, {
           expires: parseISO(oldSessionData.cookieExpires),
-        })
+        }),
       )
       return { headers, user, accessToken: result.accessToken }
     }
@@ -154,7 +154,7 @@ interface AuthenticationResponse {
 }
 
 const getAuthentication = async (
-  request: Request
+  request: Request,
 ): Promise<AuthenticationResponse | undefined> => {
   const session = await getSession(request)
   const sessionData = getCookieSessionData(session)
@@ -180,7 +180,7 @@ const getAuthentication = async (
   const { user, headers, accessToken } = await renewSession(
     sessionData,
     session,
-    request
+    request,
   )
 
   if (request.method === 'GET') {
@@ -191,14 +191,14 @@ const getAuthentication = async (
 }
 
 export const getAuthenticatedUser = async (
-  request: Request
+  request: Request,
 ): Promise<User | undefined> => {
   const result = await getAuthentication(request)
   return result ? result.user : undefined
 }
 
 export const loaderAuthenticate = async (
-  request: Request
+  request: Request,
 ): Promise<{
   user: User
   accessToken: string
@@ -215,7 +215,7 @@ export const loaderAuthenticate = async (
 }
 
 export const actionAuthenticate = async (
-  request: Request
+  request: Request,
 ): Promise<AuthenticationResponse> => {
   const result = await getAuthentication(request)
   if (!result) {
@@ -272,7 +272,7 @@ export const createUserSession = async ({
     'Set-Cookie',
     await sessionStorage.commitSession(session, {
       expires,
-    })
+    }),
   )
 
   const messageSession = await getMessageSession(request.headers.get('cookie'))

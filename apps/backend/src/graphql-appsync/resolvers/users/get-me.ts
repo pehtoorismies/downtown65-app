@@ -6,7 +6,7 @@ import { getAuth0Management } from '~/common/auth0-clients'
 import type { EmptyArgs } from '~/graphql-appsync/resolvers/empty-args'
 
 export const getMe: AppSyncResolverHandler<EmptyArgs, MeUser> = async (
-  event
+  event,
 ) => {
   const identity = event.identity as AppSyncIdentityOIDC
 

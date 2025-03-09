@@ -20,7 +20,7 @@ export const updateMe: AppSyncResolverHandler<
         subscribeEventCreationEmail:
           event.arguments.input.preferences.subscribeEventCreationEmail,
       },
-    }
+    },
   )
   const auth0User = parseAuth0UserResponse(data)
   return toUser(auth0User)

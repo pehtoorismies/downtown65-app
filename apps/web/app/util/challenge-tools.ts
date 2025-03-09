@@ -29,7 +29,7 @@ export type ChallengeStatus = Ended | Running | NotStarted
 export const challengeStatus = (
   start: Date,
   end: Date,
-  now: Date
+  now: Date,
 ): ChallengeStatus => {
   if (isBefore(end, start)) {
     throw new Error('End date is before start date')
@@ -53,7 +53,7 @@ export const challengeStatus = (
 
 export const getChallengeStatusFromMonth = (
   month: Date,
-  now: Date
+  now: Date,
 ): ChallengeStatus => {
   return challengeStatus(startOfMonth(month), endOfMonth(month), now)
 }

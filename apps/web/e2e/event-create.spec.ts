@@ -42,7 +42,7 @@ test.describe('Create event', () => {
   }) => {
     const shuffled = getRandomEventTypes()
     const { title, subtitle, location, date, description } = getRandomEventInfo(
-      {}
+      {},
     )
 
     const userNick = testUser.nick
@@ -82,13 +82,13 @@ test.describe('Create event', () => {
     await eventPage.wizard.headerVisible('Perustiedot')
 
     await expect(
-      eventPage.page.getByText('Nimi ei voi olla tyhjä')
+      eventPage.page.getByText('Nimi ei voi olla tyhjä'),
     ).toBeVisible()
     await expect(
-      eventPage.page.getByText('Tarkenne ei voi olla tyhjä')
+      eventPage.page.getByText('Tarkenne ei voi olla tyhjä'),
     ).toBeVisible()
     await expect(
-      eventPage.page.getByText('Sijainti ei voi olla tyhjä')
+      eventPage.page.getByText('Sijainti ei voi olla tyhjä'),
     ).toBeVisible()
 
     await eventPage.wizard.fillTitle('   ')
@@ -97,13 +97,13 @@ test.describe('Create event', () => {
     await eventPage.wizard.clickButton('Päivämäärä')
 
     await expect(
-      eventPage.page.getByText('Nimi ei voi olla tyhjä')
+      eventPage.page.getByText('Nimi ei voi olla tyhjä'),
     ).toBeVisible()
     await expect(
-      eventPage.page.getByText('Tarkenne ei voi olla tyhjä')
+      eventPage.page.getByText('Tarkenne ei voi olla tyhjä'),
     ).toBeVisible()
     await expect(
-      eventPage.page.getByText('Sijainti ei voi olla tyhjä')
+      eventPage.page.getByText('Sijainti ei voi olla tyhjä'),
     ).not.toBeVisible()
 
     // clicking should not do anything
@@ -118,11 +118,11 @@ test.describe('Create event', () => {
 
     // 3. step date
     await eventPage.wizard.headerVisible(
-      `Päivämäärä: ${format(new Date(), 'd.M.yyyy')}`
+      `Päivämäärä: ${format(new Date(), 'd.M.yyyy')}`,
     )
     await eventPage.wizard.selectDate(new Date(), date)
     await eventPage.wizard.headerVisible(
-      `Päivämäärä: ${format(date, 'd.M.yyyy')}`
+      `Päivämäärä: ${format(date, 'd.M.yyyy')}`,
     )
 
     await eventPage.wizard.headerVisible('Päivämäärä')
@@ -159,7 +159,7 @@ test.describe('Create event', () => {
 
     // Date start and time
     await expect(eventPage.view.getDate()).toContainText(
-      format(date, 'd.M.yyyy')
+      format(date, 'd.M.yyyy'),
     )
     await expect(eventPage.view.getDate()).toHaveText(/14:55$/)
 
@@ -168,14 +168,14 @@ test.describe('Create event', () => {
     await eventPage.view.expectParticipantCount(1)
 
     await expect(
-      eventPage.view.getParticipants().getByText(userNick)
+      eventPage.view.getParticipants().getByText(userNick),
     ).toBeVisible()
 
     await eventPage.view.leaveClick()
     await eventPage.view.expectParticipantCount(0)
     await eventPage.view.participateClick()
     await expect(eventPage.view.getCreatedBy()).toHaveText(
-      new RegExp(`${userNick}$`)
+      new RegExp(`${userNick}$`),
     )
 
     // just click through steps

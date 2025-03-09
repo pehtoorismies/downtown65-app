@@ -116,10 +116,10 @@ export const signup: AppSyncResolverHandler<
     if (errors.length === 0) {
       logger.error(
         matchingUsers,
-        `No matching users found. Illegal state in signup. With query: ${query}`
+        `No matching users found. Illegal state in signup. With query: ${query}`,
       )
       throw new Error(
-        'Illegal state. Auth0 query returned matching users but they are not found.'
+        'Illegal state. Auth0 query returned matching users but they are not found.',
       )
     }
 

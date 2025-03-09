@@ -31,11 +31,11 @@ export const DynamoStack = ({ app, stack }: StackContext) => {
     const productionTable = dynamodb.Table.fromTableName(
       stack,
       'dt65Table-prod-table',
-      table.tableName
+      table.tableName,
     )
     const plan = backup.BackupPlan.dailyMonthly1YearRetention(
       stack,
-      'Production-Plan'
+      'Production-Plan',
     )
     plan.addSelection('Selection', {
       resources: [backup.BackupResource.fromDynamoDbTable(productionTable)],

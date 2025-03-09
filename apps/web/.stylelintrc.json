@@ -1,7 +1,5 @@
 {
-  "extends": [
-    "stylelint-config-standard-scss"
-  ],
+  "extends": ["stylelint-config-standard-scss"],
   "rules": {
     "custom-property-pattern": null,
     "selector-class-pattern": null,
@@ -23,9 +21,7 @@
     "selector-pseudo-class-no-unknown": [
       true,
       {
-        "ignorePseudoClasses": [
-          "global"
-        ]
+        "ignorePseudoClasses": ["global"]
       }
     ]
   }

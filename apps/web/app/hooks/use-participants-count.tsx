@@ -3,7 +3,7 @@ import { useUserContext } from '~/contexts/user-context'
 export const useParticipantsCount = (
   participants: {
     id: string
-  }[]
+  }[],
 ) => {
   const { user } = useUserContext()
   const meAttending =

@@ -94,7 +94,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const { signup } = await gqlClient.request(
     SignupDocument,
     signupForm,
-    PUBLIC_AUTH_HEADERS
+    PUBLIC_AUTH_HEADERS,
   )
 
   switch (signup.__typename) {
@@ -113,10 +113,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         {
           serverError: null,
           fieldErrors: Object.fromEntries(
-            signup.errors.map((t) => [t.path, t.message])
+            signup.errors.map((t) => [t.path, t.message]),
           ),
         },
-        { status: 400 }
+        { status: 400 },
       )
     }
     case 'SignupError': {
@@ -128,7 +128,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
           },
           fieldErrors: null,
         },
-        { status: signup.statusCode }
+        { status: signup.statusCode },
       )
     }
   }
