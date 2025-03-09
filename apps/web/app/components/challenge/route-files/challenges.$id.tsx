@@ -74,7 +74,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     {
       id: params.id,
     },
-    PUBLIC_AUTH_HEADERS
+    PUBLIC_AUTH_HEADERS,
   )
 
   if (!challenge) {
@@ -98,7 +98,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
   const challengeStatus: ChallengeStatus = getChallengeStatusFromMonth(
     start,
-    new Date()
+    new Date(),
   )
 
   return json({
@@ -125,7 +125,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
         {
           Authorization: `Bearer ${accessToken}`,
-        }
+        },
       )
       return json({}, { headers })
     }
@@ -137,13 +137,13 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
         },
         {
           Authorization: `Bearer ${accessToken}`,
-        }
+        },
       )
       return json({}, { headers })
     }
     default: {
       throw new Error(
-        `Incorrect action provided: '${action}'. Use 'leave' or 'participate'`
+        `Incorrect action provided: '${action}'. Use 'leave' or 'participate'`,
       )
     }
   }
@@ -158,13 +158,14 @@ export default function GetChallenge() {
   const items = [
     { title: 'Haasteet', href: '/challenges' },
     { title: challenge.title },
-  ].map((item, index) => {
+  ].map((item) => {
+    const key = item.href || item.title
     return item.href ? (
-      <Anchor component={Link} to={item.href} key={index}>
+      <Anchor component={Link} to={item.href} key={key}>
         {item.title}
       </Anchor>
     ) : (
-      <Text key={index}>{item.title}</Text>
+      <Text key={key}>{item.title}</Text>
     )
   })
 

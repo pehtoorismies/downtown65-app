@@ -7,6 +7,10 @@ import type {
 } from '@downtown65-app/types'
 import { format, startOfToday } from 'date-fns'
 import { ulid } from 'ulid'
+import {
+  getParticipationFunctions,
+  participantHashMapToList,
+} from '~/graphql-appsync/core/common'
 import type { EventUpdateSchemaInput } from './dynamo-schemas/event-schema'
 import {
   EventCreateSchema,
@@ -14,15 +18,11 @@ import {
   EventUpdateSchema,
 } from './dynamo-schemas/event-schema'
 import { Dt65EventEntity } from './dynamo-table'
-import {
-  getParticipationFunctions,
-  participantHashMapToList,
-} from '~/graphql-appsync/core/common'
 
 const getExpression = (d: Date) => {
   const lt = format(
     new Date(d.getFullYear(), d.getMonth(), d.getDate()),
-    'yyyy-MM-dd'
+    'yyyy-MM-dd',
   )
   return `DATE#${lt}`
 }
@@ -41,7 +41,7 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
     throw new Error(
       `Error in dynamo item: ${JSON.stringify(persistedDynamoItem)}. Error: ${
         result.error
-      }`
+      }`,
     )
   }
   const parsed = result.data
@@ -56,13 +56,13 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
       (p) => ({
         ...p,
         __typename: 'Participant',
-      })
+      }),
     ),
   }
 }
 
 export const create = async (
-  creatableEvent: CreateEventInput
+  creatableEvent: CreateEventInput,
 ): Promise<string> => {
   const {
     createdBy,
@@ -103,7 +103,7 @@ export const create = async (
     EventCreateSchema.parse({
       // add keys
       ...getPrimaryKey(eventId),
-      GSI1PK: `EVENT#FUTURE`,
+      GSI1PK: 'EVENT#FUTURE',
       GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
       // add props
       createdBy,
@@ -118,7 +118,7 @@ export const create = async (
       title,
       type,
     }),
-    { returnValues: 'NONE' }
+    { returnValues: 'NONE' },
   )
 
   return eventId
@@ -126,7 +126,7 @@ export const create = async (
 
 export const update = async (
   eventId: string,
-  updateEventInput: UpdateEventInput
+  updateEventInput: UpdateEventInput,
 ): Promise<Event> => {
   const { dateStart, description, timeStart, type, ...rest } = updateEventInput
 
@@ -172,14 +172,14 @@ export const getById = async (id: string): Promise<Event | null> => {
 export const getFutureEvents = async () => {
   const query = getExpression(startOfToday())
 
-  const results = await Dt65EventEntity.query(`EVENT#FUTURE`, {
+  const results = await Dt65EventEntity.query('EVENT#FUTURE', {
     index: 'GSI1',
     gt: query,
   })
 
   return (
     results.Items?.map((dynamoEvent: unknown) =>
-      mapDynamoToEvent(dynamoEvent)
+      mapDynamoToEvent(dynamoEvent),
     ) ?? []
   )
 }

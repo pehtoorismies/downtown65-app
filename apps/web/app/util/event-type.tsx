@@ -15,7 +15,7 @@ import {
   IconTrekking,
   IconTriangleInverted,
 } from '@tabler/icons-react'
-import React from 'react'
+import type React from 'react'
 import type { EventType } from '~/generated/graphql'
 
 const SIZE = 16
@@ -102,6 +102,6 @@ const EVENT_DATA_MAP: Record<
 }
 
 export const mapToData = (
-  type: EventType
+  type: EventType,
 ): { imageUrl: string; text: string; icon: React.ReactNode } =>
   EVENT_DATA_MAP[type]

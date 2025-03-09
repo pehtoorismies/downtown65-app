@@ -2,8 +2,8 @@ import { logger } from '@downtown65-app/logger'
 import { getEnvironmentVariable } from '@downtown65-app/util'
 import type { DynamoDBStreamEvent, DynamoDBStreamHandler } from 'aws-lambda'
 import { chunk } from 'remeda'
-import { EmailableEvent, createEventAddedEmail, sendEmail } from './email'
 import { getAuth0Management } from '~/common/auth0-clients'
+import { EmailableEvent, createEventAddedEmail, sendEmail } from './email'
 
 const TEST_RECIPIENTS = ['dt65eventstest@mailinator.com']
 
@@ -13,7 +13,7 @@ const fetchCreateEventSubscribers = async (): Promise<string[]> => {
     const users = await management.users.getAll({
       fields: 'email,name',
       search_engine: 'v3',
-      q: `user_metadata.subscribeEventCreationEmail:true`,
+      q: 'user_metadata.subscribeEventCreationEmail:true',
     })
 
     return users.data.map(({ email }) => email).filter(Boolean) as string[]
@@ -31,7 +31,7 @@ const isTestEmail = (stage: string, appMode: string): boolean => {
 }
 
 export const handler: DynamoDBStreamHandler = async (
-  event: DynamoDBStreamEvent
+  event: DynamoDBStreamEvent,
 ): Promise<void> => {
   const createdRecord = event.Records[0]
 

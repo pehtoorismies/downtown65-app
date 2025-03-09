@@ -93,7 +93,7 @@ export const action: ActionFunction = async ({ request }) => {
     },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
   const messageSession = await getMessageSession(request.headers.get('cookie'))
   setMessage(messageSession, {
@@ -103,11 +103,11 @@ export const action: ActionFunction = async ({ request }) => {
 
   headers.append('Set-Cookie', await commitMessageSession(messageSession))
 
-  return json<{}>(
+  return json<Record<string, never>>(
     {},
     {
       headers,
-    }
+    },
   )
 }
 
@@ -126,7 +126,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     {},
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
   // TODO: can user / loaded data be not in sync: yes
   return json({
@@ -182,7 +182,7 @@ export default function Profile() {
         eventCreated: event.currentTarget.checked ? 'on' : 'off',
         weekly: emailSettings.weekly ? 'on' : 'off',
       },
-      { method: 'post' }
+      { method: 'post' },
     )
   }
 
@@ -199,7 +199,7 @@ export default function Profile() {
           nickname={user.nickname}
           name={name}
           email={email}
-        ></ProfileBox>
+        />
         <Center mt="sm">
           <Form action="/profile/change-avatar">
             <Button

@@ -46,6 +46,7 @@ export const ChallengePreview = ({ state }: ChallengeReducerProps) => {
         <Paper bg="#FAFAF8" my="sm">
           {hasDescription ? (
             <TypographyStylesProvider p="xs" m={0}>
+              {/* biome-ignore lint/security/noDangerouslySetInnerHtml: Fix later */}
               <div dangerouslySetInnerHTML={{ __html: state.description }} />
             </TypographyStylesProvider>
           ) : (

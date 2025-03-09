@@ -1,5 +1,5 @@
 import type { StackContext } from 'sst/constructs'
-import { Function, use } from 'sst/constructs'
+import { Function as SSTFunction, use } from 'sst/constructs'
 import { ConfigStack } from './config-stack'
 import { DynamoStack } from './dynamo-stack'
 import { getDomainStage } from './support/get-domain-stage'
@@ -14,7 +14,7 @@ export const DynamoStreamStack = ({ app, stack }: StackContext) => {
   const dynamo = use(DynamoStack)
   const { AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN } = use(ConfigStack)
 
-  const eventCreatedFunction = new Function(stack, 'EventCreated', {
+  const eventCreatedFunction = new SSTFunction(stack, 'EventCreated', {
     handler: 'apps/backend/src/dynamo-stream-event-created/lambda.handler',
     bind: [AUTH_CLIENT_ID, AUTH_CLIENT_SECRET, AUTH_DOMAIN],
     permissions: ['ses:SendEmail', 'ses:SendRawEmail'],

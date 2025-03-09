@@ -66,7 +66,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     {
       eventId: params.id,
     },
-    PUBLIC_AUTH_HEADERS
+    PUBLIC_AUTH_HEADERS,
   )
 
   if (!event) {
@@ -122,7 +122,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     },
     {
       Authorization: `Bearer ${userSession.accessToken}`,
-    }
+    },
   )
 
   const messageSession = await getMessageSession(request.headers.get('cookie'))
@@ -196,13 +196,13 @@ export default function EditEvent() {
     { title: 'Tapahtumat', href: '/events' },
     { title: initState.title, href: `/events/${eventId}` },
     { title: 'edit' },
-  ].map((item, index) => {
+  ].map((item) => {
     return item.href ? (
-      <Anchor component={Link} to={item.href} key={index}>
+      <Anchor component={Link} to={item.href} key={item.title}>
         {item.title}
       </Anchor>
     ) : (
-      <Text key={index}>{item.title}</Text>
+      <Text key={item.title}>{item.title}</Text>
     )
   })
 

@@ -81,7 +81,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
 
   return json({
@@ -89,7 +89,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     challenges: challenges.map((c) => {
       const challengeStatus: ChallengeStatus = getChallengeStatusFromMonth(
         parseISO(c.dateStart),
-        new Date()
+        new Date(),
       )
       return {
         ...c,
@@ -167,7 +167,7 @@ export default function GetEvents() {
       <Group justify="flex-end">
         <Button
           component={Link}
-          to={`/old-challenges/`}
+          to={'/old-challenges/'}
           my="xs"
           color="yellow"
           rightSection={<IconArrowNarrowRight size={18} />}

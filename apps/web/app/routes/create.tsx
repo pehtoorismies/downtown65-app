@@ -35,7 +35,7 @@ export default function Create() {
       <Center>
         <Title my="md">Valitse tyyppi</Title>
       </Center>
-      <SimpleGrid cols={{ base: 1, sm: 2 }}></SimpleGrid>
+      <SimpleGrid cols={{ base: 1, sm: 2 }} />
 
       <SimpleGrid cols={{ base: 1, sm: 2 }}>
         <Card

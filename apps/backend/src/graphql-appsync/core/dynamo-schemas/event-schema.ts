@@ -37,7 +37,7 @@ const gs1SKErrorMessage = (value: {
   const id = value.PK.match(KeyPattern)?.groups?.id
   if (!id) {
     return {
-      message: `PK is incorrect can not form GSI1SK`,
+      message: 'PK is incorrect can not form GSI1SK',
       path: ['PK'],
     }
   }
@@ -56,7 +56,7 @@ const GS1SKSchema = z.string().refine(
     return {
       message: `GSI1SK: ${value} is not correct. Use: DATE#2023-03-22T14:55:00#01GW4MMH`,
     }
-  }
+  },
 )
 
 const gsi1skRefine = (value: {
@@ -105,7 +105,7 @@ export const EventCreateSchema = Dt65EventUpdateableFields.extend({
     ({ PK, SK }) => ({
       message: `PK (${PK}) and SK (${SK}) don't match`,
       path: ['PK'],
-    })
+    }),
   )
   .refine(gsi1skRefine, gs1SKErrorMessage)
 
@@ -146,7 +146,7 @@ export const EventUpdateSchema = Dt65EventUpdateableFields.extend({
     ({ PK, SK }) => ({
       message: `PK (${PK}) and SK (${SK}) don't match`,
       path: ['PK'],
-    })
+    }),
   )
   .refine(gsi1skRefine, gs1SKErrorMessage)
 

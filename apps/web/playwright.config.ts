@@ -1,4 +1,4 @@
-import { access, constants } from 'node:fs'
+import { constants, access } from 'node:fs'
 import type { PlaywrightTestConfig } from '@playwright/test'
 import { devices } from '@playwright/test'
 import dotenv from 'dotenv'
@@ -14,7 +14,7 @@ if (!process.env.CI) {
       TEST_USER_EMAIL=...
       TEST_USER_PASSWORD=...
       TEST_USER_NICK=...
-      REGISTER_SECRET=...`
+      REGISTER_SECRET=...`,
       )
     } else {
       dotenv.config()
@@ -57,7 +57,7 @@ const config: PlaywrightTestConfig = {
     baseURL: process.env.CI ? process.env.BASE_URL : 'http://localhost:3000',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
-    headless: process.env.CI ? true : false,
+    headless: !!process.env.CI,
   },
 
   /* Configure projects for major browsers */

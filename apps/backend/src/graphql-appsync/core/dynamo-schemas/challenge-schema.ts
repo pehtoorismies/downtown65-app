@@ -47,7 +47,7 @@ export const ChallengeCreateSchema = z
         return {
           message: `GSI1SK: ${value} is not correct. Use: DATE#2023-03-22#01GW4MMH`,
         }
-      }
+      },
     ),
     createdBy: Auth0UserSchema,
     id: UlidSchema, // TODO: fix this is eventId in Dynamo
@@ -63,7 +63,7 @@ export const ChallengeCreateSchema = z
     ({ PK, SK }) => ({
       message: `PK (${PK}) and SK (${SK}) don't match`,
       path: ['PK'],
-    })
+    }),
   )
   .refine(
     (value) => {
@@ -81,7 +81,7 @@ export const ChallengeCreateSchema = z
       const id = value.PK.match(KeyPattern)?.groups?.id
       if (!id) {
         return {
-          message: `PK is incorrect can not form GSI1SK`,
+          message: 'PK is incorrect can not form GSI1SK',
           path: ['PK'],
         }
       }
@@ -92,7 +92,7 @@ export const ChallengeCreateSchema = z
     Correct:  ${createGSI1SKVerifier(value)}`,
         path: ['GSI1SK'],
       }
-    }
+    },
   )
   .refine(
     ({ dateStart, dateEnd }) => {
@@ -101,7 +101,7 @@ export const ChallengeCreateSchema = z
     ({ dateStart, dateEnd }) => ({
       message: `dateEnd (${dateEnd}) is before dateStart  (${dateStart})`,
       path: ['dateStart'],
-    })
+    }),
   )
 
 export type ChallengeCreateSchema = z.infer<typeof ChallengeCreateSchema>

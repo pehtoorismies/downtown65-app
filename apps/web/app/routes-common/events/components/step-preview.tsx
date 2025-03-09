@@ -2,8 +2,7 @@ import { padTime } from '@downtown65-app/time'
 import { IconDeviceFloppy, IconRocket } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import { fi } from 'date-fns/locale'
-import React from 'react'
-import type { EventState } from './event-state'
+import type React from 'react'
 import { Gradient } from '~/components/colors'
 import { EventCard } from '~/components/event/event-card'
 import type { User } from '~/domain/user'
@@ -13,6 +12,7 @@ import {
   PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
+import type { EventState } from './event-state'
 
 interface Properties extends ReducerProps {
   me: User
@@ -34,7 +34,7 @@ const getTime = ({ hours, minutes }: EventState['time']) => {
 }
 
 const getButtonProps = (
-  kind: EventState['kind']
+  kind: EventState['kind'],
 ): { text: string; icon: React.ReactNode } => {
   switch (kind) {
     case 'create': {

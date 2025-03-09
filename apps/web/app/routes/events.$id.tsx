@@ -159,7 +159,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     {
       eventId: params.id,
     },
-    PUBLIC_AUTH_HEADERS
+    PUBLIC_AUTH_HEADERS,
   )
 
   if (!event) {
@@ -221,7 +221,7 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
     },
     {
       Authorization: `Bearer ${accessToken}`,
-    }
+    },
   )
   const session = await getMessageSession(request.headers.get('cookie'))
   setMessage(session, { message: 'Tapahtuma on poistettu', type: 'success' })
@@ -244,13 +244,13 @@ export default function GetEvent() {
   const items = [
     { title: 'Tapahtumat', href: '/events' },
     { title: eventItem.title },
-  ].map((item, index) => {
+  ].map((item) => {
     return item.href ? (
-      <Anchor component={Link} to={item.href} key={index}>
+      <Anchor component={Link} to={item.href} key={item.title}>
         {item.title}
       </Anchor>
     ) : (
-      <Text key={index}>{item.title}</Text>
+      <Text key={item.title}>{item.title}</Text>
     )
   })
 
