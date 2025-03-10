@@ -82,9 +82,7 @@ jobs:
           key: ${{ github.sha }}
       - run: corepack enable
       - name: 'lint'
-        run: yarn lint
-      - name: 'stylelint'
-        run: yarn stylelint
+        run: yarn run biome ci
       - name: 'check package versions'
         run: yarn constraints
   typecheck:
