@@ -9,8 +9,8 @@ import {
 } from '@mantine/core'
 import { IconUsers } from '@tabler/icons-react'
 import type { PropsWithChildren } from 'react'
-import classes from './voucher.module.css'
 import { Gradient } from '~/components/colors'
+import classes from './voucher.module.css'
 
 export const VoucherHeader = ({
   children,

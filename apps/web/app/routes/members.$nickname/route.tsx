@@ -21,12 +21,12 @@ import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import { format } from 'date-fns'
 import React from 'react'
 import invariant from 'tiny-invariant'
-import notFoundProfileImage from './not-found.jpg'
 import { ProfileBox } from '~/components/profile-box'
 import { graphql } from '~/generated/gql'
 import { GetUserByNickDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
 import { loaderAuthenticate } from '~/session.server'
+import notFoundProfileImage from './not-found.jpg'
 
 const _GqlIgnored = graphql(`
   query GetUserByNick($nickname: String!) {

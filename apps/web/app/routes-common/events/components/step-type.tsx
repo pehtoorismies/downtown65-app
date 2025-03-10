@@ -1,6 +1,5 @@
 import { Button, SimpleGrid } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
-import type { ReducerProps } from './reducer'
 import { Gradient } from '~/components/colors'
 import { EventType } from '~/generated/graphql'
 import {
@@ -8,6 +7,7 @@ import {
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
 import { mapToData } from '~/util/event-type'
+import type { ReducerProps } from './reducer'
 
 export const StepType = ({ state, dispatch }: ReducerProps) => {
   const matches = useMediaQuery('(max-width: 48em)', true, {

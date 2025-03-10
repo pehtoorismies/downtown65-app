@@ -6,8 +6,8 @@ import {
   randProductName,
   randSports,
 } from '@ngneat/falso'
-import type { EventInfo } from './event-info'
 import { EventType } from '~/generated/graphql'
+import type { EventInfo } from './event-info'
 
 const shuffleArray = <T>(array: T[]) => {
   const clonedArray = [...array]

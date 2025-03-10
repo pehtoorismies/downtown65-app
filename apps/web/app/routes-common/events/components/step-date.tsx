@@ -4,12 +4,12 @@ import type { DateValue } from '@mantine/dates'
 import { DatePicker } from '@mantine/dates'
 import { useMediaQuery } from '@mantine/hooks'
 import { format } from 'date-fns'
-import type { ReducerProps } from './reducer'
 import {
   NextButton,
   PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
+import type { ReducerProps } from './reducer'
 
 export const StepDate = ({ state, dispatch }: ReducerProps) => {
   const matches = useMediaQuery('(max-width: 48em)', true, {
