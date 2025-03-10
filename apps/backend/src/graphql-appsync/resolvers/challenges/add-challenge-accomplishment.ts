@@ -3,8 +3,8 @@ import { ISODate } from '@downtown65-app/time'
 import type { MutationAddChallengeAccomplishmentArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import * as Challenge from '../../core/challenge'
 import type { Claims } from '~/graphql-appsync/resolvers/jwt-claims'
+import * as Challenge from '../../core/challenge'
 
 export const addChallengeAccomplishment: AppSyncResolverHandler<
   MutationAddChallengeAccomplishmentArgs,
@@ -18,7 +18,7 @@ export const addChallengeAccomplishment: AppSyncResolverHandler<
 
   if (claims.sub !== userId) {
     throw new Error(
-      'Trying to insert somebody else. You can only add execution to yourself.'
+      'Trying to insert somebody else. You can only add execution to yourself.',
     )
   }
 

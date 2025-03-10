@@ -1,13 +1,13 @@
 import { Center, Switch, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useMediaQuery } from '@mantine/hooks'
-import type { ReducerProps } from './reducer'
-import { ActiveStep } from './reducer'
 import {
   NextButton,
   PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
+import type { ReducerProps } from './reducer'
+import { ActiveStep } from './reducer'
 
 const spacing = 'md'
 

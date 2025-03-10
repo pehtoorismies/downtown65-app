@@ -11,21 +11,21 @@ import {
   IconRocket,
   IconRun,
 } from '@tabler/icons-react'
-import type { Dispatch, FC } from 'react'
 import { useState } from 'react'
+import type { Dispatch, FC } from 'react'
+import { ParticipatingContext } from '~/contexts/participating-context'
+import type { Context } from '~/contexts/participating-context'
+import type { User } from '~/domain/user'
+import { eventStateToSubmittable } from '~/routes-common/events/event-state-to-submittable'
 import type { EventState } from './event-state'
-import type { EventAction } from './reducer'
 import { isStepNumber } from './reducer'
+import type { EventAction } from './reducer'
 import { StepDate } from './step-date'
 import { StepDescription } from './step-description'
 import { StepPreview } from './step-preview'
 import { StepTime } from './step-time'
 import { StepTitle } from './step-title'
 import { StepType } from './step-type'
-import { ParticipatingContext } from '~/contexts/participating-context'
-import type { Context } from '~/contexts/participating-context'
-import type { User } from '~/domain/user'
-import { eventStateToSubmittable } from '~/routes-common/events/event-state-to-submittable'
 
 const getModalTitle = (kind: EventState['kind']): string => {
   switch (kind) {

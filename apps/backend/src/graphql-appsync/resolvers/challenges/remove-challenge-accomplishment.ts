@@ -2,8 +2,8 @@ import { ISODate } from '@downtown65-app/time'
 import type { MutationRemoveChallengeAccomplishmentArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import type { AppSyncIdentityOIDC } from 'aws-lambda/trigger/appsync-resolver'
-import * as Challenge from '../../core/challenge'
 import type { Claims } from '~/graphql-appsync/resolvers/jwt-claims'
+import * as Challenge from '../../core/challenge'
 
 export const removeChallengeAccomplishment: AppSyncResolverHandler<
   MutationRemoveChallengeAccomplishmentArgs,

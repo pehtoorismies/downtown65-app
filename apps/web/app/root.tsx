@@ -31,7 +31,6 @@ import {
   useNavigation,
 } from '@remix-run/react'
 import { useEffect } from 'react'
-import classes from './routes-styles/root.module.css'
 import {
   LoggedInNavigation,
   LoggedOutNavigation,
@@ -42,6 +41,7 @@ import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
 import { theme } from '~/routes-styles/theme'
 import { getAuthenticatedUser } from '~/session.server'
+import classes from './routes-styles/root.module.css'
 
 const ONE_YEAR = 1000 * 60 * 60 * 24 * 36
 

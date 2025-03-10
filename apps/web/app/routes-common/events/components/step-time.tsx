@@ -3,14 +3,14 @@ import { Button, Center, Grid, Stack, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import type { PropsWithChildren } from 'react'
 import React from 'react'
-import type { EventState } from './event-state'
-import type { ReducerProps } from './reducer'
 import { Gradient, GradientInverse } from '~/components/colors'
 import {
   NextButton,
   PreviousButton,
   StepLayout,
 } from '~/routes-common/events/components/step-layout'
+import type { EventState } from './event-state'
+import type { ReducerProps } from './reducer'
 
 const HOURS = [
   [6, 9, 12, 15, 18, 21, 0, 3],
