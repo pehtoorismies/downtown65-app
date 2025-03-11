@@ -47,7 +47,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/GitHubActionRole
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
           role-duration-seconds: 2500
       - name: Yarn version
         run: yarn --version
@@ -115,12 +115,9 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/GitHubActionRole
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
           role-duration-seconds: 2500
       - name: Deploy infra
-        env:
-          AWS_DEFAULT_REGION: eu-north-1
-          AWS_REGION: eu-north-1
         run: |
           yarn sst deploy | tee sst-output.txt
           varWebsiteUrl=$(cat sst-output.txt |grep CustomDomainUrl: |awk '{ print $2 }')
@@ -129,9 +126,6 @@ jobs:
     needs: [ "deploy" ]
     runs-on: ubuntu-22.04
     environment: staging
-    env:
-      AWS_DEFAULT_REGION: eu-north-1
-      AWS_REGION: eu-north-1
     steps:
       - uses: actions/cache@v4
         id: restore-build
@@ -142,7 +136,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/GitHubActionRole
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
           role-duration-seconds: 2500
       - run: corepack enable
       - name: Unit test
@@ -153,9 +147,6 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-22.04
     environment: staging
-    env:
-      AWS_DEFAULT_REGION: eu-north-1
-      AWS_REGION: eu-north-1
     steps:
       - uses: actions/cache@v4
         id: restore-build
@@ -166,7 +157,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT }}:role/GitHubActionRole
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
           role-duration-seconds: 2500
       - run: corepack enable
       - name: Install Playwright Browsers
