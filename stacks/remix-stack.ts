@@ -97,7 +97,7 @@ export const RemixStack = (stackContext: StackContext) => {
 
   site.attachPermissions([mediaBucket])
 
-  const serverHandler = site.cdk?.function as lambda.Function
+  const serverHandler = site.cdk?.function as unknown as lambda.Function
 
   if (serverHandler) {
     serverHandler.addLayers(sharpLayer)
