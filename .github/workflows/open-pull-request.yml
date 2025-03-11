@@ -139,6 +139,10 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-duration-seconds: 2500
       - run: corepack enable
+      - name: Verify AWS credentials
+        run: |
+          aws sts get-caller-identity
+          echo "AWS credentials successfully configured"
       - name: Unit test
         run: |
           yarn test
