@@ -84,7 +84,7 @@ jobs:
       - name: 'lint'
         run: yarn run biome ci
       - name: 'check package versions'
-        run: yarn constraints
+        run: yarn dlx sherif@1.4.0
   typecheck:
     runs-on: ubuntu-22.04
     environment: staging
