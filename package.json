@@ -38,7 +38,10 @@
     "turbo": "2.4.4",
     "typescript": "5.2.2"
   },
-  "workspaces": ["packages/*", "apps/*"],
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "engines": {
     "npm": "please-use-yarn",
     "yarn": ">= 4.7.0"
