@@ -19,7 +19,8 @@
     "generate": "graphql-codegen",
     "login": "aws sso login --sso-session=downtown65",
     "format-and-lint": "biome check .",
-    "format-and-lint:fix": "biome check . --write"
+    "format-and-lint:fix": "biome check . --write",
+    "versions": "yarn dlx sherif@1.4.0"
   },
   "devDependencies": {
     "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",

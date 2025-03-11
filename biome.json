@@ -15,7 +15,8 @@
       "**/.eslintrc.*",
       "**/*.sst.config.*",
       "**/generated/**",
-      "**/build/**"
+      "**/build/**",
+      "**/.cache/**"
     ]
   },
   "formatter": {
