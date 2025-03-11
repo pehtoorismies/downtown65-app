@@ -27,7 +27,7 @@
   "devDependencies": {
     "@downtown65-app/config-ts": "workspace:^",
     "@types/mjml": "4.7.2",
-    "@types/node": "20.11.10",
+    "@types/node": "18.19.80",
     "tsup": "8.0.1",
     "typescript": "5.2.2"
   }

@@ -3468,7 +3468,7 @@ __metadata:
   resolution: "@downtown65-app/time@workspace:packages/time"
   dependencies:
     "@downtown65-app/config-ts": "workspace:^"
-    "@types/node": "npm:20.11.10"
+    "@types/node": "npm:18.19.80"
     date-fns: "npm:3.3.1"
     remeda: "npm:1.40.0"
     tiny-invariant: "npm:1.3.1"
@@ -3488,7 +3488,7 @@ __metadata:
     "@downtown65-app/config-ts": "workspace:^"
     "@downtown65-app/time": "workspace:^"
     "@types/eslint": "npm:^8"
-    "@types/node": "npm:20.11.10"
+    "@types/node": "npm:18.19.80"
     "@typescript-eslint/eslint-plugin": "npm:6.20.0"
     "@typescript-eslint/parser": "npm:6.20.0"
     eslint: "npm:8.56.0"
@@ -3512,7 +3512,7 @@ __metadata:
   dependencies:
     "@downtown65-app/config-ts": "workspace:^"
     "@types/mjml": "npm:4.7.2"
-    "@types/node": "npm:20.11.10"
+    "@types/node": "npm:18.19.80"
     aws-sdk: "npm:2.1545.0"
     date-fns: "npm:3.3.1"
     email-validator: "npm:2.0.4"
@@ -7681,28 +7681,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.15.3":
-  version: 18.15.3
-  resolution: "@types/node@npm:18.15.3"
-  checksum: 10c0/a985241adec48f5dd9328b8fbf52b2e3ae65986a6ced85fbfba4c4b5048152c894dfbbc31f17d6616104f445df915dc455f108b4e8138b7dd58490baab6a4b89
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:18.19.10":
-  version: 18.19.10
-  resolution: "@types/node@npm:18.19.10"
+"@types/node@npm:18.19.80":
+  version: 18.19.80
+  resolution: "@types/node@npm:18.19.80"
   dependencies:
     undici-types: "npm:~5.26.4"
-  checksum: 10c0/9a284a15b72bece09664d6505ccccd2cf5bd5898324ba427b910ab114f4dfdbf0085e6780680a000586dd13fcefc07848e6ed69f38ed00f285746fcd9a1b28aa
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:20.11.10":
-  version: 20.11.10
-  resolution: "@types/node@npm:20.11.10"
-  dependencies:
-    undici-types: "npm:~5.26.4"
-  checksum: 10c0/aced8595c2786d4e60471772659add1e2e0d1f2b73d119820b2e1815426d6e52c6a77f1c7fca8ea46490c36f7959cc46b0dc609fa2e80b7fd24f9a7d696c2210
+  checksum: 10c0/6a272d17b3057096ed49cc2780b9739b6f91ffb7f555926a2dc2bf59577b9ee2cf71832003927aa6db21939dca9eb9654a6cd55504fe957c0330b19ce628c8b7
   languageName: node
   linkType: hard
 
@@ -9182,7 +9166,7 @@ __metadata:
     "@downtown65-app/types": "workspace:^"
     "@downtown65-app/util": "workspace:^"
     "@types/aws-lambda": "npm:8.10.119"
-    "@types/node": "npm:18.15.3"
+    "@types/node": "npm:18.19.80"
     auth0: "npm:4.0.1"
     aws-lambda: "npm:1.0.7"
     date-fns: "npm:3.3.1"
@@ -22250,7 +22234,7 @@ __metadata:
     "@tiptap/react": "npm:2.1.16"
     "@tiptap/starter-kit": "npm:2.1.16"
     "@types/eslint": "npm:^8"
-    "@types/node": "npm:18.19.10"
+    "@types/node": "npm:18.19.80"
     "@types/react": "npm:18.2.48"
     "@types/react-dom": "npm:18.2.18"
     "@typescript-eslint/eslint-plugin": "npm:6.20.0"
