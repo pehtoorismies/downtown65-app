@@ -11,8 +11,8 @@
     "clean": "rm -rf dist .turbo node_modules"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "3.465.0",
-    "@aws-sdk/lib-dynamodb": "3.465.0",
+    "@aws-sdk/client-dynamodb": "3.758.0",
+    "@aws-sdk/lib-dynamodb": "3.758.0",
     "@downtown65-app/logger": "workspace:^",
     "@downtown65-app/time": "workspace:^",
     "@downtown65-app/types": "workspace:^",
