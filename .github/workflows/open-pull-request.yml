@@ -139,12 +139,10 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-duration-seconds: 2500
       - run: corepack enable
-      - name: Verify AWS credentials
-        run: |
-          aws sts get-caller-identity
-          echo "AWS credentials successfully configured"
       - name: Unit test
         run: |
+          yarn turbo run test --filter=./apps/* --filter=!./apps/backend --filter=./packages/*
+          cd apps/backend
           yarn test
   playwright:
     needs: [ "deploy" ]
