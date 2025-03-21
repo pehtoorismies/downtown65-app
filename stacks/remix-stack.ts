@@ -75,6 +75,7 @@ export const RemixStack = (stackContext: StackContext) => {
   // Create the Remix site
   const site = new RemixSite(stack, 'Downtown65-remix', {
     path: 'apps/web',
+    runtime: 'nodejs22.x',
     bind: [COOKIE_SECRET],
     warm: stage === 'production' ? 5 : undefined,
     environment: {
