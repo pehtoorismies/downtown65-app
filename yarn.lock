@@ -5731,7 +5731,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@downtown65-app/config-ts@workspace:packages/config-ts"
   dependencies:
-    "@tsconfig/node18": "npm:18.2.2"
+    "@tsconfig/node22": "npm:22.0.0"
   languageName: unknown
   linkType: soft
 
@@ -5754,7 +5754,7 @@ __metadata:
   resolution: "@downtown65-app/time@workspace:packages/time"
   dependencies:
     "@downtown65-app/config-ts": "workspace:^"
-    "@types/node": "npm:18.19.80"
+    "@types/node": "npm:22.13.11"
     date-fns: "npm:3.3.1"
     remeda: "npm:1.40.0"
     tiny-invariant: "npm:1.3.1"
@@ -5773,7 +5773,7 @@ __metadata:
   dependencies:
     "@downtown65-app/config-ts": "workspace:^"
     "@downtown65-app/time": "workspace:^"
-    "@types/node": "npm:18.19.80"
+    "@types/node": "npm:22.13.11"
     tsup: "npm:8.0.1"
     typescript: "npm:5.2.2"
     vitest: "npm:1.2.2"
@@ -5786,7 +5786,7 @@ __metadata:
   dependencies:
     "@downtown65-app/config-ts": "workspace:^"
     "@types/mjml": "npm:4.7.2"
-    "@types/node": "npm:18.19.80"
+    "@types/node": "npm:22.13.11"
     aws-sdk: "npm:2.1545.0"
     date-fns: "npm:3.3.1"
     email-validator: "npm:2.0.4"
@@ -10913,10 +10913,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node18@npm:18.2.2":
-  version: 18.2.2
-  resolution: "@tsconfig/node18@npm:18.2.2"
-  checksum: 10c0/71f2c65616125f3ec8c85704ea55100d2131e0c01cbf7a247e5f6f7d617dfaafd5ff4a09b4193bceface4b4f44e9aa909da8e9af3910c01a0661f202386e40af
+"@tsconfig/node22@npm:22.0.0":
+  version: 22.0.0
+  resolution: "@tsconfig/node22@npm:22.0.0"
+  checksum: 10c0/ccb736a008d33fb5ae0ac1254e83d7fa53cdbade02c645131eafcddd11f61982a4efe4c507487952202c240d2bd46c991561a4a0dfea52972947446d80de2081
   languageName: node
   linkType: hard
 
@@ -11171,7 +11171,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:18.19.80, @types/node@npm:^18.18.14":
+"@types/node@npm:22.13.11":
+  version: 22.13.11
+  resolution: "@types/node@npm:22.13.11"
+  dependencies:
+    undici-types: "npm:~6.20.0"
+  checksum: 10c0/f6ee33d36372242535c38640fe7550a6640d8a775ec19b55bfc11775b521cba072d892ca92a912332ce01b317293d645c1bf767f3f882ec719f2404a3d2a5b96
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.18.14":
   version: 18.19.80
   resolution: "@types/node@npm:18.19.80"
   dependencies:
@@ -12521,7 +12530,7 @@ __metadata:
     "@downtown65-app/types": "workspace:^"
     "@downtown65-app/util": "workspace:^"
     "@types/aws-lambda": "npm:8.10.119"
-    "@types/node": "npm:18.19.80"
+    "@types/node": "npm:22.13.11"
     auth0: "npm:4.0.1"
     aws-lambda: "npm:1.0.7"
     date-fns: "npm:3.3.1"
@@ -14685,7 +14694,7 @@ __metadata:
     "@graphql-codegen/add": "npm:5.0.0"
     "@graphql-codegen/cli": "npm:5.0.0"
     "@graphql-codegen/client-preset": "npm:4.1.0"
-    "@tsconfig/node18": "npm:18.2.2"
+    "@tsconfig/node22": "npm:22.0.0"
     "@yarnpkg/types": "npm:^4.0.0"
     aws-cdk-lib: "npm:2.171.1"
     constructs: "npm:10.3.0"
@@ -25268,6 +25277,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici-types@npm:~6.20.0":
+  version: 6.20.0
+  resolution: "undici-types@npm:6.20.0"
+  checksum: 10c0/68e659a98898d6a836a9a59e6adf14a5d799707f5ea629433e025ac90d239f75e408e2e5ff086afc3cace26f8b26ee52155293564593fbb4a2f666af57fc59bf
+  languageName: node
+  linkType: hard
+
 "undici@npm:^5.12.0":
   version: 5.13.0
   resolution: "undici@npm:5.13.0"
@@ -25999,7 +26015,7 @@ __metadata:
     "@tiptap/pm": "npm:2.1.16"
     "@tiptap/react": "npm:2.1.16"
     "@tiptap/starter-kit": "npm:2.1.16"
-    "@types/node": "npm:18.19.80"
+    "@types/node": "npm:22.13.11"
     "@types/react": "npm:18.2.48"
     "@types/react-dom": "npm:18.2.18"
     clsx: "npm:2.1.0"

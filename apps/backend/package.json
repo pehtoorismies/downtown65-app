@@ -37,7 +37,7 @@
   "devDependencies": {
     "@downtown65-app/config-ts": "workspace:^",
     "@types/aws-lambda": "8.10.119",
-    "@types/node": "18.19.80",
+    "@types/node": "22.13.11",
     "typescript": "5.2.2",
     "vitest": "1.2.2"
   }
