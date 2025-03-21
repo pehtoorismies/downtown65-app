@@ -28,7 +28,7 @@
     "@graphql-codegen/add": "5.0.0",
     "@graphql-codegen/cli": "5.0.0",
     "@graphql-codegen/client-preset": "4.1.0",
-    "@tsconfig/node18": "18.2.2",
+    "@tsconfig/node22": "22.0.0",
     "@yarnpkg/types": "^4.0.0",
     "aws-cdk-lib": "2.171.1",
     "constructs": "10.3.0",

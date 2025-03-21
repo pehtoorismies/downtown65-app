@@ -60,7 +60,7 @@
     "@playwright/test": "1.50.0",
     "@remix-run/dev": "2.1.0",
     "@serverless-stack/static-site-env": "1.18.4",
-    "@types/node": "18.19.80",
+    "@types/node": "22.13.11",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
     "dotenv": "16.4.1",
@@ -72,6 +72,6 @@
     "vitest": "1.2.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   }
 }

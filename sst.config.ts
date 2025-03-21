@@ -45,7 +45,7 @@ export default {
         APP_MODE: app.mode,
         APP_STAGE: app.stage,
       },
-      runtime: 'nodejs18.x',
+      runtime: 'nodejs22.x',
       logRetention: app.stage === 'production' ? 'two_months' : 'three_days',
     })
 
