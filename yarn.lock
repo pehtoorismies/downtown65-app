@@ -12534,7 +12534,7 @@ __metadata:
     auth0: "npm:4.0.1"
     aws-lambda: "npm:1.0.7"
     date-fns: "npm:3.3.1"
-    dynamodb-toolbox: "npm:1.16.3"
+    dynamodb-toolbox: "npm:2.0.0"
     email-validator: "npm:2.0.4"
     handlebars: "npm:4.7.7"
     node-fetch: "npm:3.3.0"
@@ -14739,15 +14739,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dynamodb-toolbox@npm:1.16.3":
-  version: 1.16.3
-  resolution: "dynamodb-toolbox@npm:1.16.3"
+"dynamodb-toolbox@npm:2.0.0":
+  version: 2.0.0
+  resolution: "dynamodb-toolbox@npm:2.0.0"
   dependencies:
     hotscript: "npm:^1.0.13"
   peerDependencies:
     "@aws-sdk/client-dynamodb": ^3.0.0
     "@aws-sdk/lib-dynamodb": ^3.0.0
-  checksum: 10c0/a4df8934ba8a4592cc1cf73e833ffaf22658ff9a2ec6b1c9fb30d4096b37e97ccc9cecdc7c9c00a15d86c094ed72b117020c97738e5067fd9a64624417f07429
+  checksum: 10c0/cd2c54b7fabd77b1d68d08627d8c55bb47d5ec3010144b4b9cef1bebf87a4ff6c2cae3963c0e54a62a2eece994e9aeec8d2e1be441d18f6f30922a712ce33a96
   languageName: node
   linkType: hard
 
