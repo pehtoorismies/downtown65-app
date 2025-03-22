@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as types from './graphql'
-import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
+import * as types from "./graphql";
+import type { TypedDocumentNode as DocumentNode } from "@graphql-typed-document-node/core";
 
 /**
  * Map of all GraphQL operations in the project.
@@ -13,41 +13,35 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n      participants {\n        id\n        picture\n        nickname\n        joinedAt\n      }\n    }\n  }\n  mutation ParticipateChallenge($id: ID!, $me: MeInput!) {\n    participateChallenge(id: $id, me: $me)\n  }\n  mutation LeaveChallenge($id: ID!) {\n    leaveChallenge(id: $id)\n  }\n':
-    types.GetChallengeDocument,
-  '\n  query GetChallenges($filter: ChallengeFilter) {\n    challenges(filter: $filter) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      dateEnd\n      description\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n\n      subtitle\n      title\n    }\n  }\n':
-    types.GetChallengesDocument,
-  '\n  mutation CreateChallenge($input: CreateChallengeInput!) {\n    createChallenge(input: $input) {\n      id\n    }\n  }\n':
-    types.CreateChallengeDocument,
-  '\n  mutation ForgotPassword($email: String!) {\n    forgotPassword(email: $email)\n  }\n':
+  "\n  mutation ForgotPassword($email: String!) {\n    forgotPassword(email: $email)\n  }\n":
     types.ForgotPasswordDocument,
-  '\n  mutation Login($email: AWSEmail!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    statusCode\n    error\n  }\n':
+  "\n  mutation Login($email: AWSEmail!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    statusCode\n    error\n  }\n":
     types.LoginDocument,
-  '\n  mutation Signup(\n    $name: String!\n    $email: AWSEmail!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n':
+  "\n  mutation Signup(\n    $name: String!\n    $email: AWSEmail!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n":
     types.SignupDocument,
-  '\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n':
+  "\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n":
     types.LeaveEventDocument,
-  '\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n':
+  "\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n":
     types.ParticipateEventDocument,
-  '\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n':
+  "\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n":
     types.GetEventDocument,
-  '\n  query GetEvents {\n    events {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n':
+  "\n  query GetEvents {\n    events {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n":
     types.GetEventsDocument,
-  '\n  mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {\n    updateEvent(eventId: $eventId, input: $input) {\n      id\n    }\n  }\n':
+  "\n  mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {\n    updateEvent(eventId: $eventId, input: $input) {\n      id\n    }\n  }\n":
     types.UpdateEventDocument,
-  '\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(input: $input) {\n      id\n    }\n  }\n':
+  "\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(input: $input) {\n      id\n    }\n  }\n":
     types.CreateEventDocument,
-  '\n  query GetUserByNick($nickname: String!) {\n    user(nickname: $nickname) {\n      id\n      name\n      nickname\n      email\n      picture\n      createdAt\n    }\n  }\n':
+  "\n  query GetUserByNick($nickname: String!) {\n    user(nickname: $nickname) {\n      id\n      name\n      nickname\n      email\n      picture\n      createdAt\n    }\n  }\n":
     types.GetUserByNickDocument,
-  '\n  query GetUsers($perPage: Int!, $page: Int!) {\n    users(page: $page, perPage: $perPage) {\n      users {\n        id\n        name\n        nickname\n      }\n      length\n      limit\n      start\n      total\n    }\n  }\n':
+  "\n  query GetUsers($perPage: Int!, $page: Int!) {\n    users(page: $page, perPage: $perPage) {\n      users {\n        id\n        name\n        nickname\n      }\n      length\n      limit\n      start\n      total\n    }\n  }\n":
     types.GetUsersDocument,
-  '\n  query GetProfile {\n    me {\n      id\n      email\n      name\n      nickname\n      picture\n      preferences {\n        subscribeEventCreationEmail\n        subscribeWeeklyEmail\n      }\n    }\n  }\n  mutation UpdateMe(\n    $subscribeWeeklyEmail: Boolean!\n    $subscribeEventCreationEmail: Boolean!\n  ) {\n    updateMe(\n      input: {\n        preferences: {\n          subscribeWeeklyEmail: $subscribeWeeklyEmail\n          subscribeEventCreationEmail: $subscribeEventCreationEmail\n        }\n      }\n    ) {\n      id\n      nickname\n      name\n      preferences {\n        subscribeWeeklyEmail\n        subscribeEventCreationEmail\n      }\n    }\n  }\n':
+  "\n  query GetProfile {\n    me {\n      id\n      email\n      name\n      nickname\n      picture\n      preferences {\n        subscribeEventCreationEmail\n        subscribeWeeklyEmail\n      }\n    }\n  }\n  mutation UpdateMe(\n    $subscribeWeeklyEmail: Boolean!\n    $subscribeEventCreationEmail: Boolean!\n  ) {\n    updateMe(\n      input: {\n        preferences: {\n          subscribeWeeklyEmail: $subscribeWeeklyEmail\n          subscribeEventCreationEmail: $subscribeEventCreationEmail\n        }\n      }\n    ) {\n      id\n      nickname\n      name\n      preferences {\n        subscribeWeeklyEmail\n        subscribeEventCreationEmail\n      }\n    }\n  }\n":
     types.GetProfileDocument,
-  '\n  mutation UpdateAvatar($uploadedFilename: String!) {\n    updateAvatar(uploadedFilename: $uploadedFilename)\n  }\n':
+  "\n  mutation UpdateAvatar($uploadedFilename: String!) {\n    updateAvatar(uploadedFilename: $uploadedFilename)\n  }\n":
     types.UpdateAvatarDocument,
-  '\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n':
+  "\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n":
     types.RefreshTokenDocument,
-}
+};
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -61,114 +55,96 @@ const documents = {
  * The query argument is unknown!
  * Please regenerate the types.
  */
-export function graphql(source: string): unknown
+export function graphql(source: string): unknown;
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n      participants {\n        id\n        picture\n        nickname\n        joinedAt\n      }\n    }\n  }\n  mutation ParticipateChallenge($id: ID!, $me: MeInput!) {\n    participateChallenge(id: $id, me: $me)\n  }\n  mutation LeaveChallenge($id: ID!) {\n    leaveChallenge(id: $id)\n  }\n'
-): (typeof documents)['\n  query GetChallenge($id: ID!) {\n    challenge(id: $id) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateEnd\n      dateStart\n      description\n      subtitle\n      title\n      participants {\n        id\n        picture\n        nickname\n        joinedAt\n      }\n    }\n  }\n  mutation ParticipateChallenge($id: ID!, $me: MeInput!) {\n    participateChallenge(id: $id, me: $me)\n  }\n  mutation LeaveChallenge($id: ID!) {\n    leaveChallenge(id: $id)\n  }\n']
+  source: "\n  mutation ForgotPassword($email: String!) {\n    forgotPassword(email: $email)\n  }\n"
+): (typeof documents)["\n  mutation ForgotPassword($email: String!) {\n    forgotPassword(email: $email)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetChallenges($filter: ChallengeFilter) {\n    challenges(filter: $filter) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      dateEnd\n      description\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n\n      subtitle\n      title\n    }\n  }\n'
-): (typeof documents)['\n  query GetChallenges($filter: ChallengeFilter) {\n    challenges(filter: $filter) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      dateEnd\n      description\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n\n      subtitle\n      title\n    }\n  }\n']
+  source: "\n  mutation Login($email: AWSEmail!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    statusCode\n    error\n  }\n"
+): (typeof documents)["\n  mutation Login($email: AWSEmail!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    statusCode\n    error\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation CreateChallenge($input: CreateChallengeInput!) {\n    createChallenge(input: $input) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  mutation CreateChallenge($input: CreateChallengeInput!) {\n    createChallenge(input: $input) {\n      id\n    }\n  }\n']
+  source: "\n  mutation Signup(\n    $name: String!\n    $email: AWSEmail!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n"
+): (typeof documents)["\n  mutation Signup(\n    $name: String!\n    $email: AWSEmail!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation ForgotPassword($email: String!) {\n    forgotPassword(email: $email)\n  }\n'
-): (typeof documents)['\n  mutation ForgotPassword($email: String!) {\n    forgotPassword(email: $email)\n  }\n']
+  source: "\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n"
+): (typeof documents)["\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation Login($email: AWSEmail!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    statusCode\n    error\n  }\n'
-): (typeof documents)['\n  mutation Login($email: AWSEmail!, $password: String!) {\n    login(email: $email, password: $password) {\n      __typename\n      ...TokensFragment\n      ...ErrorFragment\n    }\n  }\n  fragment TokensFragment on Tokens {\n    accessToken\n    idToken\n    refreshToken\n  }\n  fragment ErrorFragment on LoginError {\n    message\n    statusCode\n    error\n  }\n']
+  source: "\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n"
+): (typeof documents)["\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation Signup(\n    $name: String!\n    $email: AWSEmail!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n'
-): (typeof documents)['\n  mutation Signup(\n    $name: String!\n    $email: AWSEmail!\n    $password: String!\n    $nickname: String!\n    $registerSecret: String!\n  ) {\n    signup(\n      input: {\n        name: $name\n        email: $email\n        password: $password\n        nickname: $nickname\n        registerSecret: $registerSecret\n      }\n    ) {\n      __typename\n      ...SignupSuccessFragment\n      ...SignupFieldErrorFragment\n      ...SignupErrorFragment\n    }\n  }\n  fragment SignupSuccessFragment on SignupSuccess {\n    message\n  }\n  fragment SignupFieldErrorFragment on SignupFieldError {\n    errors {\n      message\n      path\n    }\n  }\n  fragment SignupErrorFragment on SignupError {\n    message\n    statusCode\n    error\n  }\n']
+  source: "\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n"
+): (typeof documents)["\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n'
-): (typeof documents)['\n  mutation LeaveEvent($eventId: ID!) {\n    leaveEvent(eventId: $eventId)\n  }\n']
+  source: "\n  query GetEvents {\n    events {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n"
+): (typeof documents)["\n  query GetEvents {\n    events {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n'
-): (typeof documents)['\n  mutation ParticipateEvent($eventId: ID!, $me: MeInput!) {\n    participateEvent(eventId: $eventId, me: $me)\n  }\n']
+  source: "\n  mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {\n    updateEvent(eventId: $eventId, input: $input) {\n      id\n    }\n  }\n"
+): (typeof documents)["\n  mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {\n    updateEvent(eventId: $eventId, input: $input) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  query GetEvent($eventId: ID!) {\n    event(eventId: $eventId) {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n\n  mutation DeleteEvent($eventId: ID!) {\n    deleteEvent(eventId: $eventId) {\n      id\n    }\n  }\n']
+  source: "\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(input: $input) {\n      id\n    }\n  }\n"
+): (typeof documents)["\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(input: $input) {\n      id\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetEvents {\n    events {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n'
-): (typeof documents)['\n  query GetEvents {\n    events {\n      id\n      createdBy {\n        id\n        nickname\n        picture\n      }\n      dateStart\n      description\n      location\n      participants {\n        id\n        joinedAt\n        nickname\n        picture\n      }\n      race\n      subtitle\n      title\n      timeStart\n      type\n    }\n  }\n']
+  source: "\n  query GetUserByNick($nickname: String!) {\n    user(nickname: $nickname) {\n      id\n      name\n      nickname\n      email\n      picture\n      createdAt\n    }\n  }\n"
+): (typeof documents)["\n  query GetUserByNick($nickname: String!) {\n    user(nickname: $nickname) {\n      id\n      name\n      nickname\n      email\n      picture\n      createdAt\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {\n    updateEvent(eventId: $eventId, input: $input) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  mutation UpdateEvent($eventId: ID!, $input: UpdateEventInput!) {\n    updateEvent(eventId: $eventId, input: $input) {\n      id\n    }\n  }\n']
+  source: "\n  query GetUsers($perPage: Int!, $page: Int!) {\n    users(page: $page, perPage: $perPage) {\n      users {\n        id\n        name\n        nickname\n      }\n      length\n      limit\n      start\n      total\n    }\n  }\n"
+): (typeof documents)["\n  query GetUsers($perPage: Int!, $page: Int!) {\n    users(page: $page, perPage: $perPage) {\n      users {\n        id\n        name\n        nickname\n      }\n      length\n      limit\n      start\n      total\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(input: $input) {\n      id\n    }\n  }\n'
-): (typeof documents)['\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(input: $input) {\n      id\n    }\n  }\n']
+  source: "\n  query GetProfile {\n    me {\n      id\n      email\n      name\n      nickname\n      picture\n      preferences {\n        subscribeEventCreationEmail\n        subscribeWeeklyEmail\n      }\n    }\n  }\n  mutation UpdateMe(\n    $subscribeWeeklyEmail: Boolean!\n    $subscribeEventCreationEmail: Boolean!\n  ) {\n    updateMe(\n      input: {\n        preferences: {\n          subscribeWeeklyEmail: $subscribeWeeklyEmail\n          subscribeEventCreationEmail: $subscribeEventCreationEmail\n        }\n      }\n    ) {\n      id\n      nickname\n      name\n      preferences {\n        subscribeWeeklyEmail\n        subscribeEventCreationEmail\n      }\n    }\n  }\n"
+): (typeof documents)["\n  query GetProfile {\n    me {\n      id\n      email\n      name\n      nickname\n      picture\n      preferences {\n        subscribeEventCreationEmail\n        subscribeWeeklyEmail\n      }\n    }\n  }\n  mutation UpdateMe(\n    $subscribeWeeklyEmail: Boolean!\n    $subscribeEventCreationEmail: Boolean!\n  ) {\n    updateMe(\n      input: {\n        preferences: {\n          subscribeWeeklyEmail: $subscribeWeeklyEmail\n          subscribeEventCreationEmail: $subscribeEventCreationEmail\n        }\n      }\n    ) {\n      id\n      nickname\n      name\n      preferences {\n        subscribeWeeklyEmail\n        subscribeEventCreationEmail\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetUserByNick($nickname: String!) {\n    user(nickname: $nickname) {\n      id\n      name\n      nickname\n      email\n      picture\n      createdAt\n    }\n  }\n'
-): (typeof documents)['\n  query GetUserByNick($nickname: String!) {\n    user(nickname: $nickname) {\n      id\n      name\n      nickname\n      email\n      picture\n      createdAt\n    }\n  }\n']
+  source: "\n  mutation UpdateAvatar($uploadedFilename: String!) {\n    updateAvatar(uploadedFilename: $uploadedFilename)\n  }\n"
+): (typeof documents)["\n  mutation UpdateAvatar($uploadedFilename: String!) {\n    updateAvatar(uploadedFilename: $uploadedFilename)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetUsers($perPage: Int!, $page: Int!) {\n    users(page: $page, perPage: $perPage) {\n      users {\n        id\n        name\n        nickname\n      }\n      length\n      limit\n      start\n      total\n    }\n  }\n'
-): (typeof documents)['\n  query GetUsers($perPage: Int!, $page: Int!) {\n    users(page: $page, perPage: $perPage) {\n      users {\n        id\n        name\n        nickname\n      }\n      length\n      limit\n      start\n      total\n    }\n  }\n']
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: '\n  query GetProfile {\n    me {\n      id\n      email\n      name\n      nickname\n      picture\n      preferences {\n        subscribeEventCreationEmail\n        subscribeWeeklyEmail\n      }\n    }\n  }\n  mutation UpdateMe(\n    $subscribeWeeklyEmail: Boolean!\n    $subscribeEventCreationEmail: Boolean!\n  ) {\n    updateMe(\n      input: {\n        preferences: {\n          subscribeWeeklyEmail: $subscribeWeeklyEmail\n          subscribeEventCreationEmail: $subscribeEventCreationEmail\n        }\n      }\n    ) {\n      id\n      nickname\n      name\n      preferences {\n        subscribeWeeklyEmail\n        subscribeEventCreationEmail\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query GetProfile {\n    me {\n      id\n      email\n      name\n      nickname\n      picture\n      preferences {\n        subscribeEventCreationEmail\n        subscribeWeeklyEmail\n      }\n    }\n  }\n  mutation UpdateMe(\n    $subscribeWeeklyEmail: Boolean!\n    $subscribeEventCreationEmail: Boolean!\n  ) {\n    updateMe(\n      input: {\n        preferences: {\n          subscribeWeeklyEmail: $subscribeWeeklyEmail\n          subscribeEventCreationEmail: $subscribeEventCreationEmail\n        }\n      }\n    ) {\n      id\n      nickname\n      name\n      preferences {\n        subscribeWeeklyEmail\n        subscribeEventCreationEmail\n      }\n    }\n  }\n']
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: '\n  mutation UpdateAvatar($uploadedFilename: String!) {\n    updateAvatar(uploadedFilename: $uploadedFilename)\n  }\n'
-): (typeof documents)['\n  mutation UpdateAvatar($uploadedFilename: String!) {\n    updateAvatar(uploadedFilename: $uploadedFilename)\n  }\n']
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: '\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n'
-): (typeof documents)['\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n']
+  source: "\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n"
+): (typeof documents)["\n  mutation RefreshToken($refreshToken: String!) {\n    refreshToken(refreshToken: $refreshToken) {\n      __typename\n      ...RefreshTokensFragment\n      ...RefreshErrorFragment\n    }\n  }\n  fragment RefreshTokensFragment on RefreshTokens {\n    accessToken\n    idToken\n  }\n  fragment RefreshErrorFragment on RefreshError {\n    error\n    message\n    statusCode\n  }\n"];
 
 export function graphql(source: string) {
-  return (documents as any)[source] ?? {}
+  return (documents as any)[source] ?? {};
 }
 
 export type DocumentType<TDocumentNode extends DocumentNode<any, any>> =
-  TDocumentNode extends DocumentNode<infer TType, any> ? TType : never
+  TDocumentNode extends DocumentNode<infer TType, any> ? TType : never;
