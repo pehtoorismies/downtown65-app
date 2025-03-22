@@ -9,6 +9,7 @@ import { format, formatISO, startOfToday } from 'date-fns'
 
 import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import {
+  $remove,
   DeleteItemCommand,
   GetItemCommand,
   PutItemCommand,
@@ -186,9 +187,16 @@ export const update = async (
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     type,
   }
-  //
+
+  const values = EventUpdateSchema.parse(update)
+  const removable = {
+    ...values,
+    description: values.description ?? $remove(),
+    timeStart: values.timeStart ?? $remove(),
+  }
+
   const result = await Dt65EventEntity.build(UpdateItemCommand)
-    .item(EventUpdateSchema.parse(update))
+    .item(removable)
     .options({ returnValues: 'ALL_NEW' })
     .send()
 

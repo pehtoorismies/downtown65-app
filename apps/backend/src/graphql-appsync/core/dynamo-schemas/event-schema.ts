@@ -20,7 +20,7 @@ const createGSI1SKVerifier = ({
   dateStart,
 }: {
   PK: string
-  timeStart?: string | undefined
+  timeStart?: string
   dateStart: string
 }) => {
   const id = PK.match(KeyPattern)?.groups?.id
@@ -32,7 +32,7 @@ const gs1SKErrorMessage = (value: {
   PK: string
   GSI1SK: string
   dateStart: string
-  timeStart?: string | undefined
+  timeStart?: string
 }) => {
   const id = value.PK.match(KeyPattern)?.groups?.id
   if (!id) {
@@ -61,7 +61,7 @@ const GS1SKSchema = z.string().refine(
 
 const gsi1skRefine = (value: {
   PK: string
-  timeStart?: string | undefined
+  timeStart?: string
   dateStart: string
   GSI1SK: string
 }) => {
@@ -117,30 +117,11 @@ export const EventGetSchema = Dt65EventUpdateableFields.extend({
 
 export type EventCreateSchema = z.infer<typeof EventCreateSchema>
 
-const UpdateRemoveFields = z
-  .union([z.literal('description'), z.literal('timeStart')])
-  .array()
-
-type UpdateRemoveFields = z.infer<typeof UpdateRemoveFields>
-
 export const EventUpdateSchema = Dt65EventUpdateableFields.extend({
   PK: EventKeySchema,
   SK: EventKeySchema,
   GSI1SK: GS1SKSchema,
 })
-  .transform((v) => {
-    const $remove: UpdateRemoveFields = []
-    if (v.description == null) {
-      $remove.push('description')
-    }
-    if (v.timeStart == null) {
-      $remove.push('timeStart')
-    }
-    return {
-      ...v,
-      $remove,
-    }
-  })
   .refine(
     ({ PK, SK }) => PK === SK,
     ({ PK, SK }) => ({
