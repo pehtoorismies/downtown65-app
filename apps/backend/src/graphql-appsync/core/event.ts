@@ -86,6 +86,7 @@ const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
   const parsed = result.data
   return {
     ...parsed,
+    id: parsed.eventId,
     __typename: 'Event',
     createdBy: {
       __typename: 'Creator',
@@ -150,7 +151,7 @@ export const create = async (
         createdBy,
         dateStart,
         description,
-        id: eventId,
+        eventId,
         location,
         participants: participantHashMap,
         race,

@@ -97,7 +97,7 @@ export const EventCreateSchema = Dt65EventUpdateableFields.extend({
   GSI1PK: z.literal('EVENT#FUTURE'),
   GSI1SK: GS1SKSchema,
   createdBy: Auth0UserSchema,
-  id: UlidSchema, // TODO: fix this is eventId in Dynamo
+  eventId: UlidSchema,
   participants: ParticipantsSchema,
 })
   .refine(
@@ -111,7 +111,7 @@ export const EventCreateSchema = Dt65EventUpdateableFields.extend({
 
 export const EventGetSchema = Dt65EventUpdateableFields.extend({
   createdBy: Auth0UserSchema,
-  id: UlidSchema, // TODO: fix this is eventId in Dynamo
+  eventId: UlidSchema,
   participants: ParticipantsSchema,
 })
 
