@@ -41,15 +41,6 @@ type Participant implements User @aws_api_key @aws_oidc {
   picture: String!
 }
 
-type ChallengeParticipant implements User @aws_api_key @aws_oidc {
-  id: ID!
-  nickname: String!
-  joinedAt: String!
-  picture: String!
-  # Note this is not always available
-  accomplishedDates: [AWSDate!]
-}
-
 type Creator implements User @aws_api_key @aws_oidc {
   id: ID!
   nickname: String!
@@ -68,17 +59,6 @@ type Event @aws_api_key @aws_oidc {
   subtitle: String!
   title: String!
   type: EventType!
-}
-
-type Challenge @aws_api_key @aws_oidc {
-  createdBy: Creator!
-  dateEnd: AWSDate!
-  dateStart: AWSDate!
-  description: String
-  id: ID!
-  participants: [ChallengeParticipant!]!
-  subtitle: String!
-  title: String!
 }
 
 type MeUser implements User & DetailedUser @aws_api_key @aws_oidc {
@@ -116,16 +96,6 @@ input CreateEventInput {
   title: String!
   timeStart: AWSTime
   type: EventType!
-}
-
-input CreateChallengeInput {
-  createdBy: MeInput!
-  dateStart: AWSDate!
-  dateEnd: AWSDate!
-
-  description: String
-  subtitle: String!
-  title: String!
 }
 
 type Preferences {
@@ -259,12 +229,9 @@ type UsersResponse {
 
 type Query {
   event(eventId: ID!): Event @aws_api_key
-  challenge(id: ID!): Challenge @aws_api_key
 
   # Future events
   events: [Event!]!
-  # Upcoming challenges
-  challenges(filter: ChallengeFilter): [Challenge!]!
   me: MeUser!
   users(page: Int!, perPage: Int!): UsersResponse!
   user(nickname: String!): OtherUser
@@ -276,12 +243,6 @@ type Mutation {
   deleteEvent(eventId: ID!): IDPayload
   leaveEvent(eventId: ID!): Boolean
   participateEvent(eventId: ID!, me: MeInput!): Boolean
-
-  createChallenge(input: CreateChallengeInput!): IDPayload!
-  leaveChallenge(id: ID!): Boolean!
-  participateChallenge(id: ID!, me: MeInput!): Boolean!
-  addChallengeAccomplishment(input: AccomplishmentInput!): Boolean
-  removeChallengeAccomplishment(input: AccomplishmentInput!): Boolean
 
   updateMe(input: UpdateMeInput!): MeUser!
 

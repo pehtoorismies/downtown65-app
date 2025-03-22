@@ -1,12 +1,10 @@
 import type {
-  Challenge,
   Event as Dt65Event,
   LoginResponse,
   MutationForgotPasswordArgs,
   MutationLoginArgs,
   MutationRefreshTokenArgs,
   MutationSignupArgs,
-  QueryChallengeArgs,
   QueryEventArgs,
   RefreshResponse,
   SignupResponse,
@@ -17,7 +15,6 @@ import { forgotPassword } from '~/graphql-appsync/resolvers/auth/forgot-password
 import { login } from '~/graphql-appsync/resolvers/auth/login'
 import { refreshToken } from '~/graphql-appsync/resolvers/auth/refresh-token'
 import { signup } from '~/graphql-appsync/resolvers/auth/signup'
-import { getChallengeById } from '~/graphql-appsync/resolvers/challenges/get-challenge-by-id'
 import { getEventById } from '~/graphql-appsync/resolvers/events/get-event-by-id'
 
 export type Inputs =
@@ -26,11 +23,9 @@ export type Inputs =
   | MutationRefreshTokenArgs
   | MutationSignupArgs
   | QueryEventArgs
-  | QueryChallengeArgs
 
 export type Outputs =
   | Dt65Event
-  | Challenge
   | LoginResponse
   | RefreshResponse
   | SignupResponse
@@ -39,7 +34,6 @@ export type Outputs =
   | null
 
 const PUBLIC_FIELDS = [
-  'challenge',
   'event',
   'forgotPassword',
   'login',
@@ -61,13 +55,6 @@ export const publicResolver = (
       case 'event': {
         return getEventById(
           event as AppSyncResolverEvent<QueryEventArgs>,
-          context,
-          callback,
-        )
-      }
-      case 'challenge': {
-        return getChallengeById(
-          event as AppSyncResolverEvent<QueryChallengeArgs>,
           context,
           callback,
         )

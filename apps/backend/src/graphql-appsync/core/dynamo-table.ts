@@ -56,37 +56,3 @@ export const Dt65EventEntity = new Entity({
     type: attribute.string(), // TODO: use enum
   }),
 })
-
-export const ChallengeEntity = new Entity({
-  name: EntityNames.ChallengeEntity,
-  table: DtTable,
-  schema: schema({
-    PK: attribute.string().key().hidden(),
-    SK: attribute.string().key().hidden(),
-    GSI1PK: attribute.string().hidden(),
-    GSI1SK: attribute.string().hidden(),
-    createdBy: attribute.map({
-      id: attribute.string(),
-      nickname: attribute.string(),
-      picture: attribute.string(),
-    }),
-    dateStart: attribute.string(),
-    dateEnd: attribute.string(),
-    description: attribute.string().optional(),
-    id: attribute.string().savedAs('eventId'),
-    participants: attribute.any(), // TODO: change to map
-    subtitle: attribute.string(),
-    title: attribute.string(),
-  }),
-})
-
-export const ChallengeAccomplishment = new Entity({
-  name: EntityNames.ChallengeAccomplishment,
-  table: DtTable,
-  schema: schema({
-    PK: attribute.string().key().hidden(),
-    SK: attribute.string().key().hidden(),
-    userId: attribute.string(),
-    challengeAccomplishments: attribute.set(attribute.string()),
-  }),
-})

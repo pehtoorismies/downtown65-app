@@ -76,8 +76,6 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
     resolvers: {
       'Query    event': 'gql',
       'Query    events': 'gql',
-      'Query    challenge': 'gql',
-      'Query    challenges': 'gql',
       'Query    me': 'gql',
       'Query    users': 'gql',
       'Query    user': 'gql',
@@ -92,11 +90,6 @@ export const GraphqlStack = ({ app, stack }: StackContext) => {
       'Mutation signup': 'gql',
       'Mutation refreshToken': 'gql',
       'Mutation forgotPassword': 'gql',
-      'Mutation createChallenge': 'gql',
-      'Mutation participateChallenge': 'gql',
-      'Mutation leaveChallenge': 'gql',
-      'Mutation addChallengeAccomplishment': 'gql',
-      'Mutation removeChallengeAccomplishment': 'gql',
     },
   })
 

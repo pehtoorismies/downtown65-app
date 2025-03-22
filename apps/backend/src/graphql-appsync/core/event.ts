@@ -5,19 +5,28 @@ import type {
   Event,
   UpdateEventInput,
 } from '@downtown65-app/types'
-import { format, startOfToday } from 'date-fns'
+import { format, formatISO, startOfToday } from 'date-fns'
+
+import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
+import {
+  DeleteItemCommand,
+  GetItemCommand,
+  PutItemCommand,
+  QueryCommand,
+  UpdateItemCommand,
+} from 'dynamodb-toolbox'
 import { ulid } from 'ulid'
 import {
-  getParticipationFunctions,
-  participantHashMapToList,
-} from '~/graphql-appsync/core/common'
+  ParticipantsSchema,
+  ParticipatingUserSchema,
+} from '~/graphql-appsync/core/dynamo-schemas/common'
 import type { EventUpdateSchemaInput } from './dynamo-schemas/event-schema'
 import {
   EventCreateSchema,
   EventGetSchema,
   EventUpdateSchema,
 } from './dynamo-schemas/event-schema'
-import { Dt65EventEntity } from './dynamo-table'
+import { Dt65EventEntity, DtTable } from './dynamo-table'
 
 const getExpression = (d: Date) => {
   const lt = format(
@@ -32,6 +41,36 @@ const getPrimaryKey = (eventId: string) => {
     PK: `EVENT#${eventId}`,
     SK: `EVENT#${eventId}`,
   }
+}
+
+const participantHashMapToList = (participantsHashMap: unknown) => {
+  const parsed = ParticipantsSchema.safeParse(participantsHashMap)
+  if (!parsed.success) {
+    throw new Error(
+      `Error in dynamo item participants: ${JSON.stringify(
+        participantsHashMap,
+      )}. Error: ${parsed.error}`,
+    )
+  }
+
+  return (
+    Object.entries(parsed.data)
+      // eslint-disable-next-line no-unused-vars
+      .map(([_, value]) => {
+        return {
+          ...value,
+        }
+      })
+      .sort((a, b) => {
+        if (a.joinedAt < b.joinedAt) {
+          return -1
+        }
+        if (a.joinedAt > b.joinedAt) {
+          return 1
+        }
+        return 0
+      })
+  )
 }
 
 const mapDynamoToEvent = (persistedDynamoItem: unknown): Event => {
@@ -99,27 +138,32 @@ export const create = async (
     })
   }
   logger.debug(creatableEvent, 'Creatable event')
-  await Dt65EventEntity.put(
-    EventCreateSchema.parse({
-      // add keys
-      ...getPrimaryKey(eventId),
-      GSI1PK: 'EVENT#FUTURE',
-      GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
-      // add props
-      createdBy,
-      dateStart,
-      description,
-      id: eventId,
-      location,
-      participants: participantHashMap,
-      race,
-      subtitle,
-      timeStart,
-      title,
-      type,
-    }),
-    { returnValues: 'NONE' },
-  )
+
+  await Dt65EventEntity.build(PutItemCommand)
+    .item(
+      EventCreateSchema.parse({
+        // add keys
+        ...getPrimaryKey(eventId),
+        GSI1PK: 'EVENT#FUTURE',
+        GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
+        // add props
+        createdBy,
+        dateStart,
+        description,
+        id: eventId,
+        location,
+        participants: participantHashMap,
+        race,
+        subtitle,
+        timeStart,
+        title,
+        type,
+      }),
+    )
+    .options({
+      returnValues: 'NONE',
+    })
+    .send()
 
   return eventId
 }
@@ -141,18 +185,20 @@ export const update = async (
     GSI1SK: `DATE#${gsi1sk}#${eventId.slice(0, 8)}`,
     type,
   }
-
-  const result = await Dt65EventEntity.update(EventUpdateSchema.parse(update), {
-    returnValues: 'ALL_NEW',
-  })
+  //
+  const result = await Dt65EventEntity.build(UpdateItemCommand)
+    .item(EventUpdateSchema.parse(update))
+    .options({ returnValues: 'ALL_NEW' })
+    .send()
 
   return mapDynamoToEvent(result.Attributes)
 }
 
 export const remove = async (id: string): Promise<boolean> => {
-  const results = await Dt65EventEntity.delete(getPrimaryKey(id), {
-    returnValues: 'ALL_OLD',
-  })
+  const results = await Dt65EventEntity.build(DeleteItemCommand)
+    .key(getPrimaryKey(id))
+    .options({ returnValues: 'ALL_OLD' })
+    .send()
 
   if (!results.Attributes) {
     throw new Error('Event not found')
@@ -161,7 +207,9 @@ export const remove = async (id: string): Promise<boolean> => {
 }
 
 export const getById = async (id: string): Promise<Event | null> => {
-  const result = await Dt65EventEntity.get(getPrimaryKey(id))
+  const result = await Dt65EventEntity.build(GetItemCommand)
+    .key(getPrimaryKey(id))
+    .send()
 
   if (!result.Item) {
     return null
@@ -172,10 +220,13 @@ export const getById = async (id: string): Promise<Event | null> => {
 export const getFutureEvents = async () => {
   const query = getExpression(startOfToday())
 
-  const results = await Dt65EventEntity.query('EVENT#FUTURE', {
-    index: 'GSI1',
-    gt: query,
-  })
+  const results = await DtTable.build(QueryCommand)
+    .query({
+      partition: 'EVENT#FUTURE',
+      index: 'GSI1',
+      range: { gt: query },
+    })
+    .send()
 
   return (
     results.Items?.map((dynamoEvent: unknown) =>
@@ -184,11 +235,59 @@ export const getFutureEvents = async () => {
   )
 }
 
-const participationFunctions = getParticipationFunctions({
-  documentClient: Dt65EventEntity.DocumentClient,
-  getPrimaryKey,
-  tableName: Dt65EventEntity.table?.name,
-})
+function isError(error: unknown): error is Error {
+  return (error as Error).name !== undefined
+}
 
-export const participate = participationFunctions.participate
-export const leave = participationFunctions.leave
+export const participate = async (
+  id: string,
+  user: { nickname: string; id: string; picture: string },
+) => {
+  const participatingUser: ParticipatingUserSchema = {
+    joinedAt: formatISO(new Date()).slice(0, 19),
+    ...user,
+  }
+
+  const command = new UpdateCommand({
+    Key: getPrimaryKey(id),
+    TableName: DtTable.getName(),
+    UpdateExpression: 'SET #participants.#userId = :user',
+    ConditionExpression: 'attribute_not_exists(#participants.#userId)',
+    ExpressionAttributeNames: {
+      '#participants': 'participants',
+      '#userId': user.id,
+    },
+    ExpressionAttributeValues: {
+      ':user': ParticipatingUserSchema.parse(participatingUser),
+    },
+  })
+
+  try {
+    await DtTable.getDocumentClient().send(command)
+  } catch (error) {
+    if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
+      console.error(error)
+    }
+  }
+}
+
+export const leave = async (id: string, userId: string) => {
+  const command = new UpdateCommand({
+    Key: getPrimaryKey(id),
+    TableName: DtTable.getName(),
+    UpdateExpression: 'REMOVE #participants.#userId',
+    ConditionExpression: 'attribute_exists(#participants.#userId)',
+    ExpressionAttributeNames: {
+      '#participants': 'participants',
+      '#userId': userId,
+    },
+  })
+
+  try {
+    await DtTable.getDocumentClient().send(command)
+  } catch (error) {
+    if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
+      console.error(error)
+    }
+  }
+}

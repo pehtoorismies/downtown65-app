@@ -1,22 +1,15 @@
 import type {
-  Challenge,
   Event as Dt65Event,
   IdPayload,
   MeUser,
-  MutationAddChallengeAccomplishmentArgs,
-  MutationCreateChallengeArgs,
   MutationCreateEventArgs,
   MutationDeleteEventArgs,
-  MutationLeaveChallengeArgs,
   MutationLeaveEventArgs,
-  MutationParticipateChallengeArgs,
   MutationParticipateEventArgs,
-  MutationRemoveChallengeAccomplishmentArgs,
   MutationUpdateAvatarArgs,
   MutationUpdateEventArgs,
   MutationUpdateMeArgs,
   OtherUser,
-  QueryChallengesArgs,
   QueryEventArgs as QueryEventArguments,
   QueryUserArgs,
   QueryUsersArgs,
@@ -24,12 +17,6 @@ import type {
 } from '@downtown65-app/types'
 import { assertUnreachable } from '@downtown65-app/util'
 import type { AppSyncResolverEvent, AppSyncResolverHandler } from 'aws-lambda'
-import { addChallengeAccomplishment } from '~/graphql-appsync/resolvers/challenges/add-challenge-accomplishment'
-import { createChallenge } from '~/graphql-appsync/resolvers/challenges/create-challenge'
-import { getChallenges } from '~/graphql-appsync/resolvers/challenges/get-challenges'
-import { leaveChallenge } from '~/graphql-appsync/resolvers/challenges/leave-challenge'
-import { participateChallenge } from '~/graphql-appsync/resolvers/challenges/participate-event'
-import { removeChallengeAccomplishment } from '~/graphql-appsync/resolvers/challenges/remove-challenge-accomplishment'
 import type { EmptyArgs } from '~/graphql-appsync/resolvers/empty-args'
 import { createEvent } from '~/graphql-appsync/resolvers/events/create-event'
 import { deleteEvent } from '~/graphql-appsync/resolvers/events/delete-event'
@@ -46,12 +33,9 @@ import { verifyScope } from '~/graphql-appsync/resolvers/verify-scope'
 
 export type Inputs =
   | EmptyArgs
-  | MutationCreateChallengeArgs
   | MutationCreateEventArgs
   | MutationDeleteEventArgs
-  | MutationLeaveChallengeArgs
   | MutationLeaveEventArgs
-  | MutationParticipateChallengeArgs
   | MutationParticipateEventArgs
   | MutationUpdateAvatarArgs
   | MutationUpdateEventArgs
@@ -59,7 +43,6 @@ export type Inputs =
   | QueryEventArguments
   | QueryUserArgs
   | QueryUsersArgs
-  | QueryChallengesArgs
 
 export type Outputs =
   | Dt65Event
@@ -69,7 +52,6 @@ export type Outputs =
   | OtherUser
   | OtherUser[]
   | UsersResponse
-  | Challenge[]
   | boolean
   | string
   | undefined
@@ -79,19 +61,13 @@ const PRIVATE_FIELDS = [
   'deleteEvent',
   'events',
   'leaveEvent',
-  'leaveChallenge',
   'me',
   'participateEvent',
-  'participateChallenge',
   'updateEvent',
   'updateAvatar',
   'updateMe',
   'users',
   'user',
-  'createChallenge',
-  'challenges',
-  'addChallengeAccomplishment',
-  'removeChallengeAccomplishment',
 ] as const
 type PrivateField = (typeof PRIVATE_FIELDS)[number]
 
@@ -190,54 +166,6 @@ export const privateResolver = (
         allowScopes(['write:me'])
         return updateAvatar(
           event as AppSyncResolverEvent<MutationUpdateAvatarArgs>,
-          context,
-          callback,
-        )
-      }
-      case 'createChallenge': {
-        allowScopes(['write:events'])
-        return createChallenge(
-          event as AppSyncResolverEvent<MutationCreateChallengeArgs>,
-          context,
-          callback,
-        )
-      }
-      case 'leaveChallenge': {
-        allowScopes(['write:events'])
-        return leaveChallenge(
-          event as AppSyncResolverEvent<MutationLeaveChallengeArgs>,
-          context,
-          callback,
-        )
-      }
-      case 'participateChallenge': {
-        allowScopes(['write:events'])
-        return participateChallenge(
-          event as AppSyncResolverEvent<MutationParticipateChallengeArgs>,
-          context,
-          callback,
-        )
-      }
-      case 'challenges': {
-        allowScopes(['read:events'])
-        return getChallenges(
-          event as AppSyncResolverEvent<QueryChallengesArgs>,
-          context,
-          callback,
-        )
-      }
-      case 'addChallengeAccomplishment': {
-        allowScopes(['write:events'])
-        return addChallengeAccomplishment(
-          event as AppSyncResolverEvent<MutationAddChallengeAccomplishmentArgs>,
-          context,
-          callback,
-        )
-      }
-      case 'removeChallengeAccomplishment': {
-        allowScopes(['write:events'])
-        return removeChallengeAccomplishment(
-          event as AppSyncResolverEvent<MutationRemoveChallengeAccomplishmentArgs>,
           context,
           callback,
         )
