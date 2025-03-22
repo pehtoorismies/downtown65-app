@@ -1,19 +1,15 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
-import { Entity, Table } from 'dynamodb-toolbox'
+import { Entity, Table, attribute, schema } from 'dynamodb-toolbox'
 import { Config } from 'sst/node/config'
 
-const marshallOptions = {
-  // Specify your client options as usual
-  convertEmptyValues: false,
-}
+const dynamoDBClient = new DynamoDBClient()
 
-const translateConfig = { marshallOptions }
-
-const DocumentClient = DynamoDBDocumentClient.from(
-  new DynamoDBClient(),
-  translateConfig,
-)
+const documentClient = DynamoDBDocumentClient.from(dynamoDBClient, {
+  marshallOptions: {
+    convertEmptyValues: false,
+  },
+})
 
 export const EntityNames = {
   Dt65EventEntity: 'Dt65Event',
@@ -21,68 +17,76 @@ export const EntityNames = {
   ChallengeAccomplishment: 'ChallengeAccomplishment',
 } as const
 
-const DtTable = new Table({
+export const DtTable = new Table({
   name: Config.TABLE_NAME,
-  partitionKey: 'PK',
-  sortKey: 'SK',
-  DocumentClient,
+  partitionKey: { name: 'PK', type: 'string' },
+  sortKey: { name: 'SK', type: 'string' },
+  documentClient,
   indexes: {
-    GSI1: { partitionKey: 'GSI1PK', sortKey: 'GSI1SK' },
-  },
-  attributes: {
-    PK: 'string',
-    SK: 'string',
+    GSI1: {
+      type: 'global',
+      partitionKey: { name: 'GSI1PK', type: 'string' },
+      sortKey: { name: 'GSI1SK', type: 'string' },
+    },
   },
 })
 
 export const Dt65EventEntity = new Entity({
   name: EntityNames.Dt65EventEntity,
-  attributes: {
-    PK: { partitionKey: true, hidden: true },
-    SK: { hidden: true, sortKey: true },
-    GSI1PK: { hidden: true },
-    GSI1SK: { hidden: true },
-    createdBy: { type: 'map', required: true },
-    dateStart: { type: 'string', required: true },
-    description: { type: 'string', required: false },
-    id: { type: 'string', map: 'eventId', required: true }, // map 'id' to table attribute 'eventId'
-    participants: { type: 'map', required: true },
-    race: { type: 'boolean', default: false },
-    location: { type: 'string', required: true },
-    subtitle: { type: 'string', required: true },
-    timeStart: { type: 'string', required: false },
-    title: { type: 'string', required: true },
-    type: { type: 'string', required: true },
-  },
   table: DtTable,
-} as const)
+  schema: schema({
+    PK: attribute.string().key().hidden(),
+    SK: attribute.string().key().hidden(),
+    GSI1PK: attribute.string().hidden(),
+    GSI1SK: attribute.string().hidden(),
+    createdBy: attribute.map({
+      id: attribute.string(),
+      nickname: attribute.string(),
+      picture: attribute.string(),
+    }),
+    dateStart: attribute.string(),
+    description: attribute.string().optional(),
+    id: attribute.string().savedAs('eventId'),
+    participants: attribute.any(), // TODO: change to map
+    race: attribute.boolean().default(false),
+    location: attribute.string(),
+    subtitle: attribute.string(),
+    timeStart: attribute.string().optional(),
+    title: attribute.string(),
+    type: attribute.string(), // TODO: use enum
+  }),
+})
 
 export const ChallengeEntity = new Entity({
   name: EntityNames.ChallengeEntity,
-  attributes: {
-    PK: { partitionKey: true, hidden: true },
-    SK: { hidden: true, sortKey: true },
-    GSI1PK: { hidden: true },
-    GSI1SK: { hidden: true },
-    createdBy: { type: 'map', required: true },
-    dateStart: { type: 'string', required: true },
-    dateEnd: { type: 'string', required: true },
-    description: { type: 'string', required: false },
-    id: { type: 'string', map: 'eventId', required: true }, // map 'id' to table attribute 'eventId'
-    participants: { type: 'map', required: true },
-    subtitle: { type: 'string', required: true },
-    title: { type: 'string', required: true },
-  },
   table: DtTable,
-} as const)
+  schema: schema({
+    PK: attribute.string().key().hidden(),
+    SK: attribute.string().key().hidden(),
+    GSI1PK: attribute.string().hidden(),
+    GSI1SK: attribute.string().hidden(),
+    createdBy: attribute.map({
+      id: attribute.string(),
+      nickname: attribute.string(),
+      picture: attribute.string(),
+    }),
+    dateStart: attribute.string(),
+    dateEnd: attribute.string(),
+    description: attribute.string().optional(),
+    id: attribute.string().savedAs('eventId'),
+    participants: attribute.any(), // TODO: change to map
+    subtitle: attribute.string(),
+    title: attribute.string(),
+  }),
+})
 
 export const ChallengeAccomplishment = new Entity({
   name: EntityNames.ChallengeAccomplishment,
-  attributes: {
-    PK: { partitionKey: true, hidden: true },
-    SK: { hidden: true, sortKey: true },
-    userId: { type: 'string', required: true },
-    challengeAccomplishments: { type: 'set', required: true },
-  },
   table: DtTable,
-} as const)
+  schema: schema({
+    PK: attribute.string().key().hidden(),
+    SK: attribute.string().key().hidden(),
+    userId: attribute.string(),
+    challengeAccomplishments: attribute.set(attribute.string()),
+  }),
+})
