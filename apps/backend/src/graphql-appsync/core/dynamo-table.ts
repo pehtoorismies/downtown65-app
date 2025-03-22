@@ -54,7 +54,7 @@ export const Dt65EventEntity = new Entity({
     }),
     dateStart: string(),
     description: string().optional(),
-    id: string().savedAs('eventId'),
+    eventId: string(),
     participants: any(), // TODO: change to map
     race: boolean().default(false),
     location: string(),

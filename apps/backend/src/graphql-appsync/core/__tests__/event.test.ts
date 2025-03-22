@@ -13,7 +13,7 @@ const creatableEvent = {
     id: userId,
   },
   dateStart: ISODate.parse('2018-12-13'),
-  description: '<p>some thing</p>',
+  description: '<p>something</p>',
   location: 'Sipoo',
   participants: [
     {
@@ -37,7 +37,7 @@ describe('Events', () => {
     expect(event).toBeDefined()
     expect(event?.id).toBeDefined()
     expect(event?.timeStart).toBe('09:30')
-    expect(event?.description).toBe('<p>some thing</p>')
+    expect(event?.description).toBe('<p>something</p>')
     expect(event?.participants.length).toBe(1)
 
     await Event.leave(id, userId)

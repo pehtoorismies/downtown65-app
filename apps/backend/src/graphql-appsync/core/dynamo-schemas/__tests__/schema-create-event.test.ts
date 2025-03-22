@@ -8,7 +8,7 @@ const createSchema: EventCreateSchema = {
   SK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
   GSI1PK: 'EVENT#FUTURE',
   GSI1SK: 'DATE#2023-02-02T09:30:00#01GW4MMH',
-  id: '01GW4MMH6S4RXM9GSW37CC0HXP',
+  eventId: '01GW4MMH6S4RXM9GSW37CC0HXP',
   createdBy: {
     nickname: 'some_nick',
     picture:
@@ -59,7 +59,7 @@ describe('Dt65EventSchema', () => {
         failKey: 'SK',
       },
       {
-        description: 'SK and  PK do not match',
+        description: 'SK and PK do not match',
         data: {
           ...createSchema,
           PK: 'EVENT#01GW4MMH6S4RXM9GSW37CC0HXP',
@@ -92,12 +92,12 @@ describe('Dt65EventSchema', () => {
         failKey: 'GSI1SK',
       },
       {
-        description: 'Wrong id',
+        description: 'Wrong eventId',
         data: {
           ...createSchema,
-          id: 'Kissa',
+          eventId: 'Kissa',
         },
-        failKey: 'id',
+        failKey: 'eventId',
       },
       {
         description: 'Wrong participant key',
