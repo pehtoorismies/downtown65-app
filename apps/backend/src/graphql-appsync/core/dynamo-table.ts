@@ -1,6 +1,14 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb'
-import { Entity, Table, attribute, schema } from 'dynamodb-toolbox'
+import {
+  Entity,
+  Table,
+  any,
+  boolean,
+  item,
+  map,
+  string,
+} from 'dynamodb-toolbox'
 import { Config } from 'sst/node/config'
 
 const dynamoDBClient = new DynamoDBClient()
@@ -34,25 +42,25 @@ export const DtTable = new Table({
 export const Dt65EventEntity = new Entity({
   name: EntityNames.Dt65EventEntity,
   table: DtTable,
-  schema: schema({
-    PK: attribute.string().key().hidden(),
-    SK: attribute.string().key().hidden(),
-    GSI1PK: attribute.string().hidden(),
-    GSI1SK: attribute.string().hidden(),
-    createdBy: attribute.map({
-      id: attribute.string(),
-      nickname: attribute.string(),
-      picture: attribute.string(),
+  schema: item({
+    PK: string().key().hidden(),
+    SK: string().key().hidden(),
+    GSI1PK: string().hidden(),
+    GSI1SK: string().hidden(),
+    createdBy: map({
+      id: string(),
+      nickname: string(),
+      picture: string(),
     }),
-    dateStart: attribute.string(),
-    description: attribute.string().optional(),
-    id: attribute.string().savedAs('eventId'),
-    participants: attribute.any(), // TODO: change to map
-    race: attribute.boolean().default(false),
-    location: attribute.string(),
-    subtitle: attribute.string(),
-    timeStart: attribute.string().optional(),
-    title: attribute.string(),
-    type: attribute.string(), // TODO: use enum
+    dateStart: string(),
+    description: string().optional(),
+    id: string().savedAs('eventId'),
+    participants: any(), // TODO: change to map
+    race: boolean().default(false),
+    location: string(),
+    subtitle: string(),
+    timeStart: string().optional(),
+    title: string(),
+    type: string(), // TODO: use enum
   }),
 })
