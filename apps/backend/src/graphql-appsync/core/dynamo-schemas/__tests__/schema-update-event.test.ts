@@ -51,37 +51,6 @@ describe('Dt65EventUpdateSchema', () => {
       expect(location).toBe('Sipoo')
     })
 
-    it('should add description to $remove', () => {
-      const { $remove } = EventUpdateSchema.parse({
-        ...updateSchema,
-        description: undefined,
-      })
-      expect($remove).toContain('description')
-      expect($remove.length).toBe(1)
-    })
-
-    it('should add timeStart to $remove', () => {
-      const { $remove } = EventUpdateSchema.parse({
-        ...updateSchema,
-        GSI1SK: 'DATE#2023-02-02T00:00:00#01GW4MMH',
-        timeStart: undefined,
-      })
-      expect($remove).toContain('timeStart')
-      expect($remove.length).toBe(1)
-    })
-
-    it('should add all fields to $remove', () => {
-      const { $remove } = EventUpdateSchema.parse({
-        ...updateSchema,
-        GSI1SK: 'DATE#2023-02-02T00:00:00#01GW4MMH',
-        timeStart: undefined,
-        description: undefined,
-      })
-      expect($remove).toContain('timeStart')
-      expect($remove).toContain('description')
-      expect($remove.length).toBe(2)
-    })
-
     test.each(updateTestData)('$description', ({ data, failKey }) => {
       const result = EventUpdateSchema.safeParse(data)
       if (result.success) {

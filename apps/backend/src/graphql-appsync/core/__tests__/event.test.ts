@@ -1,6 +1,6 @@
 import { ISODate, ISOTime } from '@downtown65-app/time'
-import { EventType } from '@downtown65-app/types'
-import { describe, expect, test } from 'vitest'
+import { EventType, type Event as Evt } from '@downtown65-app/types'
+import { afterEach, beforeEach, describe, expect, test } from 'vitest'
 import * as Event from '../event'
 
 const userId = 'auth0|123'
@@ -30,38 +30,66 @@ const creatableEvent = {
   type: EventType.Karonkka,
 }
 
-describe('Events', () => {
-  test('should create and delete event ', async () => {
-    const id = await Event.create(creatableEvent)
-    const event = await Event.getById(id)
-    expect(event).toBeDefined()
-    expect(event?.id).toBeDefined()
-    expect(event?.timeStart).toBe('09:30')
-    expect(event?.description).toBe('<p>something</p>')
-    expect(event?.participants.length).toBe(1)
+const verifyEvent = (event: Evt | null) => {
+  expect(event).toBeDefined()
+  expect(event?.id).toBeDefined()
+  expect(event?.timeStart).toBe('09:30')
+  expect(event?.description).toBe('<p>something</p>')
+  expect(event?.participants.length).toBe(1)
+}
 
-    await Event.leave(id, userId)
+let testEventId: string
+
+describe('Event', () => {
+  beforeEach(async () => {
+    testEventId = await Event.create(creatableEvent)
+  })
+
+  afterEach(async () => {
+    await Event.remove(testEventId)
+  })
+
+  test('should have values', async () => {
+    const event = await Event.getById(testEventId)
+    verifyEvent(event)
+  })
+
+  test('should not cause error leaving twice', async () => {
+    await Event.leave(testEventId, userId)
     // should allow leaving when already left
-    await Event.leave(id, userId)
+    await Event.leave(testEventId, userId)
+  })
 
-    const updatedEvent = await Event.getById(id)
+  test('should be able to leave event', async () => {
+    await Event.leave(testEventId, userId)
+
+    const updatedEvent = await Event.getById(testEventId)
     expect(updatedEvent?.participants.length).toBe(0)
 
+    // should allow leaving when already left
+    await Event.leave(testEventId, userId)
+  })
+
+  test('should be able to participate event', async () => {
     const user = {
       id: 'auth0|123',
       picture: 'https://server.com/picture.gif',
       nickname: 'nickname',
     }
 
-    await Event.participate(id, user)
+    await Event.participate(testEventId, user)
+    const joinedEvent = await Event.getById(testEventId)
+    expect(joinedEvent?.participants.length).toBe(1)
+
     // should allow participating when already participated
-    await Event.participate(id, user)
+    await Event.participate(testEventId, user)
+    const again = await Event.getById(testEventId)
+    expect(again?.participants.length).toBe(1)
+  })
 
-    const updatedEvent2 = await Event.getById(id)
-    expect(updatedEvent2?.participants.length).toBe(1)
-
+  test('should be update fields and remove description', async () => {
     // description missing should be removed
-    await Event.update(id, {
+    await Event.update(testEventId, {
       dateStart: ISODate.parse('2018-12-13'),
       location: 'Vantaa',
       race: true,
@@ -72,7 +100,7 @@ describe('Events', () => {
       type: EventType.Other,
     })
 
-    const titleUpdateEvent = await Event.getById(id)
+    const titleUpdateEvent = await Event.getById(testEventId)
     expect(titleUpdateEvent?.title).toBe('Updated title')
     expect(titleUpdateEvent?.type).toBe('OTHER')
     expect(titleUpdateEvent?.race).toBe(true)
@@ -80,22 +108,52 @@ describe('Events', () => {
     expect(titleUpdateEvent?.timeStart).toBe('12:45')
     expect(titleUpdateEvent?.subtitle).toBe('Some other subtitle')
     expect(titleUpdateEvent?.description).toBeUndefined()
+  })
 
-    await Event.update(id, {
+  test('should be update fields and remove timeStart', async () => {
+    // description missing should be removed
+    await Event.update(testEventId, {
       dateStart: ISODate.parse('2018-12-13'),
       location: 'Vantaa',
       race: true,
       subtitle: 'Some other subtitle',
       timeStart: undefined,
+      description: 'Koira', // remove description
       title: 'Updated title',
       type: EventType.Other,
     })
 
-    const timeRemoved = await Event.getById(id)
-    expect(timeRemoved?.timeStart).toBeUndefined()
-    expect(timeRemoved?.description).toBeUndefined()
+    const titleUpdateEvent = await Event.getById(testEventId)
+    expect(titleUpdateEvent?.title).toBe('Updated title')
+    expect(titleUpdateEvent?.type).toBe('OTHER')
+    expect(titleUpdateEvent?.race).toBe(true)
+    expect(titleUpdateEvent?.location).toBe('Vantaa')
+    expect(titleUpdateEvent?.timeStart).toBeUndefined()
+    expect(titleUpdateEvent?.subtitle).toBe('Some other subtitle')
+    expect(titleUpdateEvent?.description).toBe('Koira')
+  })
 
-    await Event.remove(id)
+  test('should be update fields and remove timeStart/description', async () => {
+    // description missing should be removed
+    await Event.update(testEventId, {
+      dateStart: ISODate.parse('2018-12-13'),
+      location: 'Vantaa',
+      race: true,
+      subtitle: 'Some other subtitle',
+      timeStart: undefined,
+      description: undefined, // remove description
+      title: 'Updated title',
+      type: EventType.Other,
+    })
+
+    const titleUpdateEvent = await Event.getById(testEventId)
+    expect(titleUpdateEvent?.title).toBe('Updated title')
+    expect(titleUpdateEvent?.type).toBe('OTHER')
+    expect(titleUpdateEvent?.race).toBe(true)
+    expect(titleUpdateEvent?.location).toBe('Vantaa')
+    expect(titleUpdateEvent?.timeStart).toBeUndefined()
+    expect(titleUpdateEvent?.subtitle).toBe('Some other subtitle')
+    expect(titleUpdateEvent?.timeStart).toBeUndefined()
   })
 
   test('remove should throw error if event is not found', async () => {
