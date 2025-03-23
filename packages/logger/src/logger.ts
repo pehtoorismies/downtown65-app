@@ -8,7 +8,8 @@ const destination = pinoLambdaDestination()
 export const logger =
   getEnvironmentVariable('APP_MODE') === 'dev'
     ? pino(
-        { level: 'trace' },
+        { level: process.env.PINO_LOG_LEVEL || 'trace' },
+
         pretty({
           colorize: true,
         }),

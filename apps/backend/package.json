@@ -7,7 +7,7 @@
   "scripts": {
     "find-deadcode": "ts-prune --ignore 'src/functions|src/appsync.gen.ts|src/test/global-setup.ts'",
     "typecheck": "tsc --noEmit",
-    "test": "sst bind vitest run",
+    "test": "PINO_LOG_LEVEL=error sst bind vitest run",
     "clean": "rm -rf dist .turbo node_modules"
   },
   "dependencies": {
