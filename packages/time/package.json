@@ -15,7 +15,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "date-fns": "3.3.1",
+    "date-fns": "4.1.0",
     "remeda": "2.21.2",
     "zod": "3.22.4"
   },
