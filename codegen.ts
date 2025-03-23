@@ -41,7 +41,9 @@ const config: CodegenConfig = {
       config: pluginConfig,
     },
   },
-  hooks: { afterOneFileWrite: ['prettier --write'] },
+  hooks: {
+    afterAllFileWrite: ['biome check ./packages/types/src/index.ts --write'],
+  },
 }
 
 export default config

@@ -213,12 +213,6 @@ input ChallengeFilter {
   dateEnd: DateFilter!
 }
 
-input AccomplishmentInput {
-  id: ID!
-  userId: ID!
-  date: AWSDate!
-}
-
 type UsersResponse {
   length: Int!
   limit: Int!
