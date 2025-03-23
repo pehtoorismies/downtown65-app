@@ -25,9 +25,9 @@
   "devDependencies": {
     "@aws-cdk/aws-appsync-alpha": "2.59.0-alpha.0",
     "@biomejs/biome": "1.9.4",
-    "@graphql-codegen/add": "5.0.0",
-    "@graphql-codegen/cli": "5.0.0",
-    "@graphql-codegen/client-preset": "4.1.0",
+    "@graphql-codegen/add": "5.0.3",
+    "@graphql-codegen/cli": "5.0.5",
+    "@graphql-codegen/client-preset": "4.7.0",
     "@tsconfig/node22": "22.0.0",
     "@yarnpkg/types": "^4.0.0",
     "aws-cdk-lib": "2.171.1",
