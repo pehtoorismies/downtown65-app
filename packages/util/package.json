@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "aws-sdk": "2.1545.0",
-    "date-fns": "3.3.1",
+    "date-fns": "4.1.0",
     "email-validator": "2.0.4",
     "mjml": "4.14.1",
     "node-fetch": "3.3.0",
