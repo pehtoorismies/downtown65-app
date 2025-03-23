@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "@types/node": "22.13.11",
-    "tsup": "8.0.1",
+    "tsup": "8.4.0",
     "typescript": "5.2.2",
     "vitest": "3.0.9"
   }

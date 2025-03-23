@@ -14,21 +14,21 @@
     "aws-sdk": "2.1545.0",
     "date-fns": "4.1.0",
     "email-validator": "2.0.4",
-    "mjml": "4.14.1",
-    "node-fetch": "3.3.0",
+    "mjml": "4.15.3",
+    "node-fetch": "3.3.2",
     "pino": "9.6.0",
     "pino-lambda": "4.4.1",
     "pino-pretty": "13.0.0",
     "remeda": "2.21.2",
     "superagent": "3.8.3",
     "superagent-proxy": "3.0.0",
-    "zod": "3.22.4"
+    "zod": "3.24.2"
   },
   "devDependencies": {
     "@downtown65-app/config-ts": "workspace:^",
     "@types/mjml": "4.7.2",
     "@types/node": "22.13.11",
-    "tsup": "8.0.1",
+    "tsup": "8.4.0",
     "typescript": "5.2.2"
   }
 }
