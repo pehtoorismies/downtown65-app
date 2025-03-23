@@ -22046,36 +22046,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.50.0":
-  version: 1.50.0
-  resolution: "playwright-core@npm:1.50.0"
-  bin:
-    playwright-core: cli.js
-  checksum: 10c0/b0cc7fadcb2db68a7b8d730b26c7a7d17baad454a0697c781e08074a619e57779a90be9b57c4c741ff4895390bdfd093d8393a746e8bf68ae57ac452f4c1cdb2
-  languageName: node
-  linkType: hard
-
 "playwright-core@npm:1.51.1":
   version: 1.51.1
   resolution: "playwright-core@npm:1.51.1"
   bin:
     playwright-core: cli.js
   checksum: 10c0/4f004d9dea5ecbd76b84c858fa4880ed955600b6cda972a3e8093ea47e150ce20bf2ea806e73e740497d34f4b61b080c208339a661fc75ad04d8f00bedcc21e0
-  languageName: node
-  linkType: hard
-
-"playwright@npm:1.50.0":
-  version: 1.50.0
-  resolution: "playwright@npm:1.50.0"
-  dependencies:
-    fsevents: "npm:2.3.2"
-    playwright-core: "npm:1.50.0"
-  dependenciesMeta:
-    fsevents:
-      optional: true
-  bin:
-    playwright: cli.js
-  checksum: 10c0/0076a536433819b7122066a07c5fcfa56d40d09cbbec0a39061bbfa832c8a1f626df5e4fe206fbeba56b3a61f0e2b26d4ad3c2b402852d6f147a266fd18e4ddf
   languageName: node
   linkType: hard
 
@@ -26522,7 +26498,7 @@ __metadata:
     graphql-request: "npm:6.1.0"
     isbot: "npm:3.8.0"
     jwt-decode: "npm:4.0.0"
-    playwright: "npm:1.50.0"
+    playwright: "npm:1.51.1"
     postcss: "npm:8.4.31"
     postcss-preset-mantine: "npm:1.17.0"
     postcss-simple-vars: "npm:7.0.1"
