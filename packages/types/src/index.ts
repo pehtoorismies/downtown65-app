@@ -31,12 +31,6 @@ export type Scalars = {
   AWSTime: { input: ISOTime; output: ISOTime }
 }
 
-export type AccomplishmentInput = {
-  date: Scalars['AWSDate']['input']
-  id: Scalars['ID']['input']
-  userId: Scalars['ID']['input']
-}
-
 export type AuthError = {
   error: Scalars['String']['output']
   message: Scalars['String']['output']
