@@ -1,3 +1,4 @@
+import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
 import { logger } from '@downtown65-app/logger'
 import { toISODate, toISODatetimeCompact } from '@downtown65-app/time'
 import type {
@@ -6,16 +7,14 @@ import type {
   UpdateEventInput,
 } from '@downtown65-app/types'
 import { format, formatISO, startOfToday } from 'date-fns'
-
-import { UpdateCommand } from '@aws-sdk/lib-dynamodb'
+import { DeleteItemCommand } from 'dynamodb-toolbox/entity/actions/delete'
+import { GetItemCommand } from 'dynamodb-toolbox/entity/actions/get'
+import { PutItemCommand } from 'dynamodb-toolbox/entity/actions/put'
 import {
   $remove,
-  DeleteItemCommand,
-  GetItemCommand,
-  PutItemCommand,
-  QueryCommand,
   UpdateItemCommand,
-} from 'dynamodb-toolbox'
+} from 'dynamodb-toolbox/entity/actions/update'
+import { QueryCommand } from 'dynamodb-toolbox/table/actions/query'
 import { ulid } from 'ulid'
 import {
   ParticipantsSchema,
