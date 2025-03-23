@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@downtown65-app/config-ts": "workspace:^",
-    "tsup": "8.0.1",
+    "tsup": "8.4.0",
     "typescript": "5.2.2"
   }
 }
