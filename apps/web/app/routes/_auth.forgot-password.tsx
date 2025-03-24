@@ -21,6 +21,7 @@ import {
   setMessage,
 } from '~/message.server'
 import { AuthTemplate } from '~/routes-common/auth/auth-template'
+import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
 
 export { loader } from '~/routes-common/auth/loader'
@@ -39,9 +40,55 @@ export const meta: MetaFunction = () => {
   ]
 }
 
+type FormDataResponse =
+  | {
+      formData: FormData
+      spam: false
+    }
+  | {
+      type: string
+      spam: true
+    }
+
+const getFormData = async (request: Request): Promise<FormDataResponse> => {
+  const type = request.headers.get('content-type')
+  if (!type?.startsWith('application/x-www-form-urlencoded')) {
+    return {
+      type: 'Content-Type is not: application/x-www-form-urlencoded',
+      spam: true,
+    }
+  }
+
+  try {
+    const formData = await request.formData()
+
+    const fromEmail = formData.get('from_email')
+    if (fromEmail) {
+      return {
+        type: 'Honeypot field filled',
+        spam: true,
+      }
+    }
+    return {
+      formData,
+      spam: false,
+    }
+  } catch (error) {
+    logger.error(error, 'Possible spam detected in forgot password form')
+    return {
+      type: 'Cannot parse form data',
+      spam: true,
+    }
+  }
+}
+
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData()
-  const email = formData.get('email')
+  const formDataResponse = await getFormData(request)
+  if (formDataResponse.spam) {
+    throw new Response('Spam detected. Try again.', { status: 400 })
+  }
+
+  const email = formDataResponse.formData.get('email')
 
   if (!validateEmail(email)) {
     return json({ error: 'Väärän muotoinen sähköpostiosoite' }, { status: 400 })
@@ -76,6 +123,20 @@ export default function ForgotPassword() {
 
       <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
         <Form method="post">
+          {/* Honeypot field */}
+          <div style={{ display: 'none' }} aria-hidden>
+            <label htmlFor="from_email">
+              Please do not fill this field
+              <input
+                type="text"
+                id="from_email"
+                name="from_email"
+                autoComplete="off"
+                tabIndex={-1}
+              />
+            </label>
+          </div>
+          {/* Rest of the form */}
           <TextInput
             name="email"
             type="email"
