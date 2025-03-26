@@ -13,6 +13,7 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconExclamationCircle } from '@tabler/icons-react'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { z } from 'zod'
 import { graphql } from '~/generated/gql'
 import { SignupDocument } from '~/generated/graphql'
@@ -22,7 +23,8 @@ import {
   getMessageSession,
   setMessage,
 } from '~/message.server'
-import { AuthTemplate } from '~/routes-common/auth/auth-template'
+import { AuthTitle } from '~/routes-common/auth/AuthTitle'
+import { getFormData } from '~/routes-common/auth/get-form-data'
 
 export { loader } from '~/routes-common/auth/loader'
 
@@ -82,7 +84,12 @@ const SignupForm = z.object({
 })
 
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData()
+  const formDataResponse = await getFormData(request)
+  if (formDataResponse.spam) {
+    throw new Response('Spam detected. Try again.', { status: 400 })
+  }
+  const formData = formDataResponse.formData
+
   const signupForm = SignupForm.parse({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -143,7 +150,8 @@ export default function Signup() {
   const navigation = useNavigation()
 
   return (
-    <AuthTemplate title="Rekisteröidy">
+    <>
+      <AuthTitle title="Rekisteröidy" />
       <Text size="sm" ta="center" mt={5}>
         Rekiteröitymiseen tarvitset seuran jäsenyyden ja liittymistunnuksen.
       </Text>
@@ -160,6 +168,7 @@ export default function Signup() {
       )}
       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
         <Form method="post">
+          <HoneypotInputs label="Please leave this field blank" />
           <TextInput
             name="email"
             type="email"
@@ -225,6 +234,6 @@ export default function Signup() {
           </Button>
         </Form>
       </Paper>
-    </AuthTemplate>
+    </>
   )
 }
