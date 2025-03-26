@@ -17,7 +17,6 @@ import { SpamError } from 'remix-utils/honeypot/server'
 import { graphql } from '~/generated/gql'
 import { ForgotPasswordDocument } from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
-import { honeypot } from '~/honeypot.server'
 import {
   commitMessageSession,
   getMessageSession,
@@ -25,7 +24,6 @@ import {
 } from '~/message.server'
 import { AuthTitle } from '~/routes-common/auth/AuthTitle'
 import { getFormData } from '~/routes-common/auth/get-form-data'
-import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
 
 export { loader } from '~/routes-common/auth/loader'

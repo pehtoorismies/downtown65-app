@@ -61,7 +61,7 @@ export const RemixStack = (stackContext: StackContext) => {
   const { stage, mode } = app
 
   const { ApiUrl, ApiKey } = use(GraphqlStack)
-  const { COOKIE_SECRET } = use(ConfigStack)
+  const { COOKIE_SECRET, HONEYPOT_SECRET } = use(ConfigStack)
   const { MEDIA_BUCKET_NAME, MEDIA_BUCKET_DOMAIN, mediaBucket } =
     use(MediaBucketStack)
 
@@ -76,7 +76,7 @@ export const RemixStack = (stackContext: StackContext) => {
   const site = new RemixSite(stack, 'Downtown65-remix', {
     path: 'apps/web',
     runtime: 'nodejs22.x',
-    bind: [COOKIE_SECRET],
+    bind: [COOKIE_SECRET, HONEYPOT_SECRET],
     warm: stage === 'production' ? 5 : undefined,
     environment: {
       API_URL: ApiUrl,
