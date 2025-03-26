@@ -33,7 +33,7 @@ export const getFormData = async (
     }
   } catch (error) {
     if (error instanceof SpamError) {
-      logger.info(error, 'Honeypot field filled')
+      logger.info(error, 'Honeypot error')
       return {
         type: 'Honeypot field filled',
         spam: true,
