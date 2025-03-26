@@ -24,6 +24,7 @@ import {
   setMessage,
 } from '~/message.server'
 import { AuthTitle } from '~/routes-common/auth/AuthTitle'
+import { getFormData } from '~/routes-common/auth/get-form-data'
 import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
 
@@ -41,50 +42,6 @@ export const meta: MetaFunction = () => {
       title: 'Dt65 - forgot password',
     },
   ]
-}
-
-type FormDataResponse =
-  | {
-      formData: FormData
-      spam: false
-    }
-  | {
-      type: string
-      spam: true
-    }
-
-const getFormData = async (request: Request): Promise<FormDataResponse> => {
-  const type = request.headers.get('content-type')
-  if (!type?.startsWith('application/x-www-form-urlencoded')) {
-    return {
-      type: 'Content-Type is not: application/x-www-form-urlencoded',
-      spam: true,
-    }
-  }
-
-  try {
-    const formData = await request.formData()
-    await honeypot.check(formData)
-
-    return {
-      formData,
-      spam: false,
-    }
-  } catch (error) {
-    if (error instanceof SpamError) {
-      logger.info(error, 'Honeypot field filled')
-      return {
-        type: 'Honeypot field filled',
-        spam: true,
-      }
-    }
-
-    logger.info(error, 'Possible spam request detected')
-    return {
-      type: 'Cannot parse form data',
-      spam: true,
-    }
-  }
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
