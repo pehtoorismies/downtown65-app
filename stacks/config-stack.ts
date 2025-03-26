@@ -34,5 +34,6 @@ export const ConfigStack = ({ app, stack }: StackContext) => {
     REGISTER_SECRET: new Config.Secret(stack, 'REGISTER_SECRET'),
     // secret setting cookies in frontend
     COOKIE_SECRET: new Config.Secret(stack, 'COOKIE_SECRET'),
+    HONEYPOT_SECRET: new Config.Secret(stack, 'HONEYPOT_SECRET'),
   }
 }
