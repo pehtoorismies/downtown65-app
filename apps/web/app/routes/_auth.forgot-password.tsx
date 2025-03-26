@@ -12,15 +12,18 @@ import type { ActionFunctionArgs, MetaFunction } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconArrowLeft } from '@tabler/icons-react'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
+import { SpamError } from 'remix-utils/honeypot/server'
 import { graphql } from '~/generated/gql'
 import { ForgotPasswordDocument } from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
+import { honeypot } from '~/honeypot.server'
 import {
   commitMessageSession,
   getMessageSession,
   setMessage,
 } from '~/message.server'
-import { AuthTemplate } from '~/routes-common/auth/auth-template'
+import { AuthTitle } from '~/routes-common/auth/AuthTitle'
 import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
 
@@ -61,20 +64,22 @@ const getFormData = async (request: Request): Promise<FormDataResponse> => {
 
   try {
     const formData = await request.formData()
+    await honeypot.check(formData)
 
-    const fromEmail = formData.get('from_email')
-    if (fromEmail) {
-      return {
-        type: 'Honeypot field filled',
-        spam: true,
-      }
-    }
     return {
       formData,
       spam: false,
     }
   } catch (error) {
-    logger.error(error, 'Possible spam detected in forgot password form')
+    if (error instanceof SpamError) {
+      logger.info(error, 'Honeypot field filled')
+      return {
+        type: 'Honeypot field filled',
+        spam: true,
+      }
+    }
+
+    logger.info(error, 'Possible spam request detected')
     return {
       type: 'Cannot parse form data',
       spam: true,
@@ -115,7 +120,8 @@ export default function ForgotPassword() {
   const navigation = useNavigation()
 
   return (
-    <AuthTemplate title="Salasana unohtunut">
+    <>
+      <AuthTitle title="Salasana unohtunut" />
       <Text c="dimmed" size="sm" ta="center">
         Syötä sähköpostiosoitteesi saadaksesi sähköpostiisi ohjeet salasanan
         resetoimiseksi.
@@ -123,20 +129,7 @@ export default function ForgotPassword() {
 
       <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
         <Form method="post">
-          {/* Honeypot field */}
-          <div style={{ display: 'none' }} aria-hidden>
-            <label htmlFor="from_email">
-              Please do not fill this field
-              <input
-                type="text"
-                id="from_email"
-                name="from_email"
-                autoComplete="off"
-                tabIndex={-1}
-              />
-            </label>
-          </div>
-          {/* Rest of the form */}
+          <HoneypotInputs label="Please leave this field blank" />
           <TextInput
             name="email"
             type="email"
@@ -164,6 +157,6 @@ export default function ForgotPassword() {
           </Group>
         </Form>
       </Paper>
-    </AuthTemplate>
+    </>
   )
 }
