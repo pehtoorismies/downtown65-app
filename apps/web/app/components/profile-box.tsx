@@ -1,6 +1,5 @@
 import { Avatar, Paper, Text } from '@mantine/core'
 import type { FC, PropsWithChildren } from 'react'
-import React from 'react'
 
 type Properties = PropsWithChildren<{
   picture: string

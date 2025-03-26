@@ -2,7 +2,6 @@ import { padTime } from '@downtown65-app/time'
 import { Button, Center, Grid, Stack, Text } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
 import type { PropsWithChildren } from 'react'
-import React from 'react'
 import { Gradient, GradientInverse } from '~/components/colors'
 import {
   NextButton,

@@ -19,7 +19,6 @@ import {
 } from '@remix-run/react'
 import { IconArrowNarrowLeft } from '@tabler/icons-react'
 import { format } from 'date-fns'
-import React from 'react'
 import invariant from 'tiny-invariant'
 import { ProfileBox } from '~/components/profile-box'
 import { graphql } from '~/generated/gql'

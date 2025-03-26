@@ -13,7 +13,6 @@ import { json } from '@remix-run/node'
 import { Link, useLoaderData } from '@remix-run/react'
 import { IconSquarePlus } from '@tabler/icons-react'
 import type { ReactNode } from 'react'
-import React from 'react'
 import { ListEventCard } from '~/components/event/list-event-card'
 import {
   ParticipatingContext,

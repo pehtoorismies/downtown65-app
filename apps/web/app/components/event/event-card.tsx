@@ -6,7 +6,6 @@ import {
   TypographyStylesProvider,
 } from '@mantine/core'
 import { IconMedal } from '@tabler/icons-react'
-import React from 'react'
 import { Participants } from '~/components/participants'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 import { Voucher } from '~/components/voucher/voucher'

@@ -27,7 +27,7 @@ import {
   IconUpload,
   IconX,
 } from '@tabler/icons-react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { graphql } from '~/generated/gql'
 import { UpdateAvatarDocument } from '~/generated/graphql'
 import { gqlClient } from '~/gql/get-gql-client.server'
