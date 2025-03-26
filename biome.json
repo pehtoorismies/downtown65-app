@@ -37,6 +37,9 @@
         "noUnusedVariables": "error",
         "noUnusedFunctionParameters": "error"
       },
+      "suspicious": {
+        "noConsole": "error"
+      },
       "complexity": {
         "useLiteralKeys": "off"
       },
