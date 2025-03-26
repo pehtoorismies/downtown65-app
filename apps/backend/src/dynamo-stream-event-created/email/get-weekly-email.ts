@@ -42,8 +42,6 @@ export const getWeeklyEmail = (properties: WeeklyMainProperties): EmailBody => {
 
   const mjml = mjml2html(template(properties))
 
-  console.error(mjml.errors)
-
   return {
     plain,
     html: mjml.html,

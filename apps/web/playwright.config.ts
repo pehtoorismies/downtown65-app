@@ -9,16 +9,14 @@ if (!process.env.CI) {
   // Check if the file is readable.
   access(file, constants.F_OK, (error) => {
     if (error) {
-      console.warn(
-        `'${file}' does not exist. Add user details to .env for local testing
+      throw new Error(`'${file}' does not exist. Add user details to .env for local testing
       TEST_USER_EMAIL=...
       TEST_USER_PASSWORD=...
       TEST_USER_NICK=...
-      REGISTER_SECRET=...`,
-      )
-    } else {
-      dotenv.config()
+      REGISTER_SECRET=...`)
     }
+
+    dotenv.config()
   })
 }
 
