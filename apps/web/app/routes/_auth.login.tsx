@@ -15,14 +15,15 @@ import { json } from '@remix-run/node'
 import { Form, Link, useActionData, useNavigation } from '@remix-run/react'
 import { IconAlertCircle } from '@tabler/icons-react'
 import * as R from 'remeda'
+import { HoneypotInputs } from 'remix-utils/honeypot/react'
 import { graphql } from '~/generated/gql'
 import { LoginDocument } from '~/generated/graphql'
 import { PUBLIC_AUTH_HEADERS, gqlClient } from '~/gql/get-gql-client.server'
-import { AuthTemplate } from '~/routes-common/auth/auth-template'
+import { AuthTitle } from '~/routes-common/auth/AuthTitle'
+import { getFormData } from '~/routes-common/auth/get-form-data'
 import { createUserSession } from '~/session.server'
 import { logger } from '~/util/logger.server'
 import { validateEmail } from '~/util/validation.server'
-
 export { loader } from '~/routes-common/auth/loader'
 
 const _GglIgnored = graphql(`
@@ -64,7 +65,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     page: { path: 'login', function: 'action' },
   })
 
-  const formData = await request.formData()
+  const formDataResponse = await getFormData(request)
+  if (formDataResponse.spam) {
+    throw new Response('Spam detected. Try again.', { status: 400 })
+  }
+
+  const formData = formDataResponse.formData
   const email = formData.get('email')
   const password = formData.get('password')
   const remember = formData.get('remember')
@@ -133,7 +139,8 @@ export default function Login() {
   const actionData = useActionData<typeof action>()
 
   return (
-    <AuthTemplate title="Kirjaudu">
+    <>
+      <AuthTitle title="Kirjaudu" />
       <Text c="dimmed" size="sm" ta="center" mt={5}>
         Rekisteröitymiseen tarvitset seuran jäsenyyden ja
         liittymistunnuksen.&nbsp;
@@ -155,6 +162,7 @@ export default function Login() {
         )}
 
         <Form method="post">
+          <HoneypotInputs label="Please leave this field blank" />
           <TextInput
             id="email"
             name="email"
@@ -202,6 +210,6 @@ export default function Login() {
           </Button>
         </Form>
       </Paper>
-    </AuthTemplate>
+    </>
   )
 }
