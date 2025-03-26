@@ -8073,6 +8073,39 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oslojs/asn1@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@oslojs/asn1@npm:1.0.0"
+  dependencies:
+    "@oslojs/binary": "npm:1.0.0"
+  checksum: 10c0/993856b931cb0087fa6a6323f09de388aa20fbab3322acdb178a7c35fcd05983c44c7a47bac7364cd96b45125c27586265e8fc9fec733d3183ffc56b6bec2634
+  languageName: node
+  linkType: hard
+
+"@oslojs/binary@npm:1.0.0":
+  version: 1.0.0
+  resolution: "@oslojs/binary@npm:1.0.0"
+  checksum: 10c0/d416a393af23f42b50c6f8412a3a6d94a84707c2006511abce1c4bed680c22ed2247ccb442b09237fa78ca06c355875573d1c08ccba2942f292ec0534310e4f8
+  languageName: node
+  linkType: hard
+
+"@oslojs/crypto@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@oslojs/crypto@npm:1.0.1"
+  dependencies:
+    "@oslojs/asn1": "npm:1.0.0"
+    "@oslojs/binary": "npm:1.0.0"
+  checksum: 10c0/a1b3e4875f3df8bf357dd2b59e1d55ced099227bbeb0975b48bf8e001002780575c5df9e7c174bcc42f89713ed9ad4a965e181e835ff569ccaa3b258781a615b
+  languageName: node
+  linkType: hard
+
+"@oslojs/encoding@npm:1.1.0":
+  version: 1.1.0
+  resolution: "@oslojs/encoding@npm:1.1.0"
+  checksum: 10c0/5553a0974dca60e1a8b247b7b97abcb141cc7ee4e22444f424a07921d6a5f76a43c316f3ee669222787fdef6549f8749cc6d68ff5a631e2542521c56fe36417f
+  languageName: node
+  linkType: hard
+
 "@peculiar/asn1-schema@npm:^2.1.6":
   version: 2.3.0
   resolution: "@peculiar/asn1-schema@npm:2.3.0"
@@ -23391,6 +23424,47 @@ __metadata:
   languageName: node
   linkType: hard
 
+"remix-utils@npm:8.5.0":
+  version: 8.5.0
+  resolution: "remix-utils@npm:8.5.0"
+  dependencies:
+    type-fest: "npm:^4.37.0"
+  peerDependencies:
+    "@edgefirst-dev/batcher": ^1.0.0
+    "@edgefirst-dev/jwt": ^1.2.0
+    "@edgefirst-dev/server-timing": ^0.0.1
+    "@oslojs/crypto": ^1.0.1
+    "@oslojs/encoding": ^1.1.0
+    intl-parse-accept-language: ^1.0.0
+    is-ip: ^5.0.1
+    react: ^18.0.0 || ^19.0.0
+    react-router: ^7.0.0
+    zod: ^3.22.4
+  peerDependenciesMeta:
+    "@edgefirst-dev/batcher":
+      optional: true
+    "@edgefirst-dev/jwt":
+      optional: true
+    "@edgefirst-dev/server-timing":
+      optional: true
+    "@oslojs/crypto":
+      optional: true
+    "@oslojs/encoding":
+      optional: true
+    intl-parse-accept-language:
+      optional: true
+    is-ip:
+      optional: true
+    react:
+      optional: true
+    react-router:
+      optional: true
+    zod:
+      optional: true
+  checksum: 10c0/1f466820f71904449d7ed818dbc69029aecce738aa7fdb87fc7911a8100e13acb2812c2605a51f2c18ed4005117d7661fb80fb2d1988900cfb68d079a5e653a1
+  languageName: node
+  linkType: hard
+
 "remove-trailing-separator@npm:^1.0.1":
   version: 1.1.0
   resolution: "remove-trailing-separator@npm:1.1.0"
@@ -26556,6 +26630,8 @@ __metadata:
     "@mantine/nprogress": "npm:7.16.3"
     "@mantine/tiptap": "npm:7.16.3"
     "@ngneat/falso": "npm:7.1.1"
+    "@oslojs/crypto": "npm:1.0.1"
+    "@oslojs/encoding": "npm:1.1.0"
     "@playwright/test": "npm:1.51.1"
     "@remix-run/css-bundle": "npm:2.1.0"
     "@remix-run/dev": "npm:2.1.0"
@@ -26588,6 +26664,7 @@ __metadata:
     react: "npm:18.2.0"
     react-dom: "npm:18.2.0"
     remeda: "npm:2.21.2"
+    remix-utils: "npm:8.5.0"
     sharp: "npm:^0.32.6"
     sst: "npm:2.47.1"
     tiny-invariant: "npm:1.3.3"

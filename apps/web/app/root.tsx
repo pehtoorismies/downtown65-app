@@ -37,6 +37,7 @@ import {
   Navbar,
 } from '~/components/navigation/navigation'
 import { UserContext } from '~/contexts/user-context'
+import { honeypot } from '~/honeypot.server'
 import type { ToastMessage } from '~/message.server'
 import { commitMessageSession, getMessageSession } from '~/message.server'
 import { theme } from '~/routes-styles/theme'
@@ -68,7 +69,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   return json(
-    { toastMessage, stage, user },
+    { toastMessage, stage, user, honeypotInputProps: honeypot.getInputProps() },
     {
       headers: {
         'Set-Cookie': await commitMessageSession(session, {
