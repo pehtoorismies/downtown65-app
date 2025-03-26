@@ -1,3 +1,4 @@
+import { logger } from '@downtown65-app/logger'
 import type { MutationForgotPasswordArgs } from '@downtown65-app/types'
 import type { AppSyncResolverHandler } from 'aws-lambda'
 import { getClient } from '~/common/auth0-clients'
@@ -14,7 +15,7 @@ export const forgotPassword: AppSyncResolverHandler<
       connection: 'Username-Password-Authentication',
     })
   } catch (error) {
-    console.error(error)
+    logger.info(error, 'Unable to change password')
   }
 
   return true

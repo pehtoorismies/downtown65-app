@@ -274,7 +274,7 @@ export const participate = async (
     await DtTable.getDocumentClient().send(command)
   } catch (error) {
     if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
-      console.error(error)
+      logger.error(error, 'Possible error when participate event')
     }
   }
 }
@@ -295,7 +295,7 @@ export const leave = async (id: string, userId: string) => {
     await DtTable.getDocumentClient().send(command)
   } catch (error) {
     if (isError(error) && error.name !== 'ConditionalCheckFailedException') {
-      console.error(error)
+      logger.error(error, 'Possible error when leave event')
     }
   }
 }

@@ -1,3 +1,4 @@
+import { logger } from '@downtown65-app/logger'
 import Handlebars from 'handlebars'
 import mjml2html from 'mjml'
 import type { EmailBody } from './email-body'
@@ -32,7 +33,7 @@ export const createEventAddedEmail = (emailParams: EmailParams): EmailBody => {
   const mjmlTemplate = handleBarsTemplate(emailParams)
   const mjml = mjml2html(mjmlTemplate)
   if (mjml.errors) {
-    console.error(mjml.errors)
+    logger.error(mjml.errors, 'MJML error')
   }
 
   return {
