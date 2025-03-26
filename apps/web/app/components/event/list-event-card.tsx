@@ -1,7 +1,6 @@
 import { Button, Grid, Group, Text } from '@mantine/core'
 import { Link } from '@remix-run/react'
 import { IconArrowNarrowRight, IconMedal } from '@tabler/icons-react'
-import React from 'react'
 import { ToggleJoinButton } from '~/components/toggle-join-button'
 import { Voucher } from '~/components/voucher/voucher'
 import type { EventType } from '~/generated/graphql'

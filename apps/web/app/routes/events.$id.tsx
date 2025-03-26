@@ -39,7 +39,7 @@ import {
   IconPencil,
 } from '@tabler/icons-react'
 import type { ChangeEvent } from 'react'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import invariant from 'tiny-invariant'
 import { EventCard } from '~/components/event/event-card'
 import { Config } from '~/config/config'

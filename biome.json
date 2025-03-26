@@ -35,7 +35,8 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "error",
-        "noUnusedFunctionParameters": "error"
+        "noUnusedFunctionParameters": "error",
+        "noUnusedImports": "error"
       },
       "suspicious": {
         "noConsole": "error"

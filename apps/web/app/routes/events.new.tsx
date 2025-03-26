@@ -20,7 +20,7 @@ import {
   IconCircleOff,
   IconCircleX,
 } from '@tabler/icons-react'
-import React, { useReducer } from 'react'
+import { useReducer } from 'react'
 import type { Context } from '~/contexts/participating-context'
 import { graphql } from '~/generated/gql'
 import { CreateEventDocument } from '~/generated/graphql'

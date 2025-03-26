@@ -25,7 +25,7 @@ import type {
 import { json, redirect } from '@remix-run/node'
 import { Link, useLoaderData, useNavigate } from '@remix-run/react'
 import { IconCircleOff, IconCircleX } from '@tabler/icons-react'
-import React, { useReducer } from 'react'
+import { useReducer } from 'react'
 import invariant from 'tiny-invariant'
 import type { Context } from '~/contexts/participating-context'
 import { graphql } from '~/generated/gql'
