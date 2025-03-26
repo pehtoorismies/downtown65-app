@@ -45,6 +45,7 @@ jobs:
           yarn sst secrets --stage $PR_NAME remove AUTH_CLIENT_SECRET
           yarn sst secrets --stage $PR_NAME remove REGISTER_SECRET
           yarn sst secrets --stage $PR_NAME remove COOKIE_SECRET
+          yarn sst secrets --stage $PR_NAME remove HONEYPOT_SECRET
       - name: Remove infra
         run: |
           yarn sst remove --stage $PR_NAME
