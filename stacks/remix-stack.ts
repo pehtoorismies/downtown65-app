@@ -102,6 +102,11 @@ export const RemixStack = (stackContext: StackContext) => {
 
   if (serverHandler) {
     serverHandler.addLayers(sharpLayer)
+    new lambda.CfnPermission(stack, 'PublicFunctionInvoke', {
+      action: 'lambda:InvokeFunction',
+      functionName: serverHandler.functionArn,
+      principal: '*',
+    })
   }
 
   // Add the site's URL to stack output

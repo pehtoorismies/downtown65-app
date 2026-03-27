@@ -65,7 +65,7 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   if (!response.user) {
     throw new Response('Not Found', {
       status: 404,
-      statusText: 'Käyttäjää ei löydy',
+      statusText: 'Käyttäjää ei löydy.',
     })
   }
 
